@@ -6,3 +6,8 @@ plugins {
 repositories {
     mavenCentral()
 }
+
+//kotlin.sourceSets.main {
+////    kotlin.srcDirs("../godot/scripts")
+//    kotlin.srcDirs("../godot/src/main/kotlin")
+//}

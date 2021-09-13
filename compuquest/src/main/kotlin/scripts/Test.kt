@@ -1,4 +1,5 @@
-import godot.Node
+package scripts
+
 import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction

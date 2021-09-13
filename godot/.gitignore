@@ -1,9 +1,5 @@
 
-.idea
-.gradle
-/build
 /jre
-/out
 
 # Godot-specific ignores
 .import/
