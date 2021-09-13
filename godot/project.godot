@@ -11,8 +11,12 @@ config_version=4
 [application]
 
 config/name="test"
-run/main_scene="res://world.tscn"
+run/main_scene="res://Levels/Main/K_Main.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://src/main/kotlin/scripts/Global.kt"
 
 [input]
 
