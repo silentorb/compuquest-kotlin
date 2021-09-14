@@ -3,11 +3,12 @@ package scripts
 import compuquest.app.AppState
 import compuquest.app.newAppState
 import compuquest.definition.newDefinitions
-import compuquest.serving.newGameState
-import compuquest.simulation.general.Command
+import compuquest.simulation.general.Hand
+import compuquest.simulation.general.newHandCommand
+import compuquest.simulation.happening.Event
+import compuquest.simulation.updating.updateWorld
 import godot.Engine
 import godot.Input
-import godot.InputEvent
 import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -19,28 +20,38 @@ class Global : Node() {
 
   companion object {
     var instance: Global? = null
-    private var commandQueue: MutableList<Command> = mutableListOf()
+    private var eventQueue: MutableList<Event> = mutableListOf()
 
-    fun addCommand(command: Command) {
-      commandQueue.add(command)
+    fun addCommand(event: Event) {
+      eventQueue.add(event)
+    }
+
+    fun newHand(hand: Hand) {
+      addCommand(newHandCommand(hand))
     }
   }
 
   init {
     instance = this
-    if (!Engine.editorHint) {
-      appState = newAppState(definitions)
-    }
   }
 
   fun restartGame() {
-    appState = newAppState(definitions)
-    getTree()?.reloadCurrentScene()
+    val tree = getTree()
+    val root = tree?.root
+    if (root != null) {
+      appState = newAppState(root, definitions)
+      tree.reloadCurrentScene()
+    }
   }
 
-  @RegisterFunction
   override fun _ready() {
-
+    if (!Engine.editorHint) {
+      val root = getTree()?.root
+      if (root != null) {
+        val state = newAppState(root, definitions)
+        appState = state
+      }
+    }
   }
 
   @RegisterFunction
@@ -50,4 +61,15 @@ class Global : Node() {
     }
   }
 
+  @RegisterFunction
+  override fun _physicsProcess(delta: Double) {
+    val state = appState
+    if (state != null) {
+      val commands = eventQueue.toList()
+      eventQueue.clear()
+      appState = state.copy(
+        world = updateWorld(commands, state.world)
+      )
+    }
+  }
 }

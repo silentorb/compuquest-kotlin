@@ -8,7 +8,7 @@ As [godot-kotlin-jvm](https://github.com/utopia-rise/godot-kotlin-jvm) is in alp
 
 ```powershell
 New-Item -Path src -ItemType SymbolicLink -Value ../compuquest/src
-New-Item -Path build/libs -ItemType SymbolicLink -Value ../../compuquest/build/libs
+New-Item -Path build/libs -ItemType SymbolicLink -Value ../compuquest/build/libs
 ```
 
 To build, run this in the `compuquest` folder:

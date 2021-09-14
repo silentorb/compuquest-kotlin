@@ -8,6 +8,28 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node",
+"class": "scripts_Global",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/Global.kt"
+}, {
+"base": "Node",
+"class": "scripts_entities_actor_AddCharacter",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/entities/actor/AddCharacter.kt"
+}, {
+"base": "Spatial",
+"class": "scripts_entities_actor_PlayerBody",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/entities/actor/PlayerBody.kt"
+} ]
+_global_script_class_icons={
+"scripts_Global": "",
+"scripts_entities_actor_AddCharacter": "",
+"scripts_entities_actor_PlayerBody": ""
+}
+
 [application]
 
 config/name="test"

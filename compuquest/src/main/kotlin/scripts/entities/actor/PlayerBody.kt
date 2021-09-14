@@ -1,11 +1,11 @@
 package scripts.entities.actor
 
-import godot.Node
+import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 
 @RegisterClass
-class PlayerBody : Node() {
+class PlayerBody : Spatial() {
 
   @RegisterFunction
   override fun _ready() {

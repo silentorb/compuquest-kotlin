@@ -1,7 +1,7 @@
 package compuquest.app
 
-import compuquest.serving.GameState
+import compuquest.simulation.general.World
 
 data class AppState(
-  val game: GameState,
+  val world: World,
 )

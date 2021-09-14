@@ -1,4 +1,4 @@
-package mythic.randomly
+package silentorb.mythic.randomly
 
 import java.util.*
 

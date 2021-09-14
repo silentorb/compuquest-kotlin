@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=1]
+
+[node name="fireball" type="Spatial"]
+
+[node name="sprite" parent="." instance=ExtResource( 1 )]
+animation = "fireball"

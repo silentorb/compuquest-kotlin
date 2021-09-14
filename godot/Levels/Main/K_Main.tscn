@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Levels/Main/L_Main.gd" type="Script" id=4]
 [ext_resource path="res://Levels/Main/Geometry/Wall.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Levels/Main/Geometry/Cube.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AddCharacter.kt" type="Script" id=7]
+[ext_resource path="res://entities/actor/ActorBody.tscn" type="PackedScene" id=8]
 
 [node name="L_Main" type="Spatial"]
 script = ExtResource( 4 )
@@ -105,3 +107,13 @@ directional_shadow_max_distance = 250.0
 
 [node name="playerBody" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27909, 0 )
+
+[node name="actor" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72753, 9.32188 )
+script = null
+
+[node name="character" type="Node" parent="actor"]
+script = ExtResource( 7 )
+health_max = 50
+depiction = "skeleton"
+health_value = 50

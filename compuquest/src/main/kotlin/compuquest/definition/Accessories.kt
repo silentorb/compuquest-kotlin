@@ -10,7 +10,7 @@ fun defineAccessories(): Map<Key, AccessoryDefinition> = mapOf(
     name = "Fireball",
     range = 15f,
     cooldown = 2f,
-    usageCost = Cost(Resources.mana, 8),
-    spawns = "fireball",
+    cost = Cost(Resources.mana, 8),
+    spawns = "effect/Fireball",
   ),
 )
