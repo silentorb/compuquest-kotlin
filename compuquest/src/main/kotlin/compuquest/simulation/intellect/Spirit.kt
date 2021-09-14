@@ -14,6 +14,12 @@ data class Spirit(
   val actionChanceAccumulator: Int = 0,
 )
 
+fun inRange(bodies: Table<Spatial>, body: Spatial, other: Character, range: Float): Boolean {
+  val otherBody = bodies[other.body]
+  return otherBody != null
+      && body.translation.distanceTo(otherBody.translation) <= range
+}
+
 fun getNextActionAndTarget(
   world: World,
   actor: Id,
@@ -22,22 +28,22 @@ fun getNextActionAndTarget(
 ): Triple<Id, Accessory, Id>? {
   val deck = world.deck
   val bodies = world.bodies
-  val body = bodies[actor]!!
+  val body = bodies[character.body]!!
   val range = actions.maxOfOrNull { it.value.range } ?: 0f
   val options = deck.characters
     .filter { (id, other) ->
       id != actor
           && other.faction != character.faction
-          && character.isAlive
-          && body.translation.distanceTo(bodies[id]!!.translation) <= range
+          && other.isAlive
+          && inRange(bodies, body, other, range)
     }
 
-  val target = options.keys.firstOrNull()
+  val target = options.entries.firstOrNull()
   return if (target != null) {
-    val targetBody = bodies[target]!!
+    val targetBody = bodies[target.value.body]!!
     val distance = body.translation.distanceTo(targetBody.translation)
     val action = actions.entries.first { it.value.range >= distance }
-    Triple(action.key, action.value, target)
+    Triple(action.key, action.value, target.key)
   } else
     null
 }

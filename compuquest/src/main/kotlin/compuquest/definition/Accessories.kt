@@ -6,7 +6,7 @@ import compuquest.simulation.definition.Resources
 import compuquest.simulation.general.Key
 
 fun defineAccessories(): Map<Key, AccessoryDefinition> = mapOf(
-  "castFireball" to AccessoryDefinition(
+  "fireball" to AccessoryDefinition(
     name = "Fireball",
     range = 15f,
     cooldown = 2f,

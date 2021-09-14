@@ -7,6 +7,8 @@ import godot.Node
 
 fun newAppState(scene: Node, definitions: Definitions): AppState {
   val world = newWorld(definitions)
+    .copy(scene = scene)
+
   val world2 = processSceneEntities(scene, world)
   return AppState(
     world = world2,

@@ -8,7 +8,7 @@ import godot.annotation.*
 
 @RegisterClass
 @Tool
-class AddCharacter : Node() {
+class AttachCharacter : Node() {
 
   @Export
   @RegisterProperty

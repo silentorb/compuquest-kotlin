@@ -1,28 +1,61 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.definition.Definitions
+import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
 import godot.Spatial
-import scripts.entities.actor.AddCharacter
-import scripts.entities.actor.PlayerBody
+import scripts.entities.actor.AttachAccessory
+import scripts.entities.actor.AttachCharacter
+import scripts.entities.actor.AttachPlayer
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.NextId
 
 const val componentGroup = "component"
 
-fun processComponentNode(body: Id, faction: Id, node: Node): Any? =
+fun processComponentNode(body: Id, faction: Id, node: Node): List<Any> =
   when (node) {
-    is AddCharacter -> Character(
-      name = node.characterName,
-      faction = faction,
-      depiction = node.depiction,
-      health = IntResource(node.healthValue, node.healthMax),
-      body = body
+    is AttachCharacter -> listOf(
+      Character(
+        name = node.characterName,
+        faction = faction,
+        depiction = node.depiction,
+        health = IntResource(node.healthValue, node.healthMax),
+        body = body
+      ),
+      Spirit(),
     )
-    else -> null
+    else -> listOf()
   }
 
-fun newPlayer(nextId: NextId, id: Id, spatial: Spatial, components: List<Node>) =
+fun processSubComponentNode(definitions: Definitions, owner: Id, node: Node): List<Any> =
+  when (node) {
+    is AttachAccessory -> {
+      val definition = definitions.accessories[node.definition]
+      if (definition != null)
+        listOf(accessoryFromDefinition(definition, owner))
+      else
+        listOf()
+    }
+    else -> listOf()
+  }
+
+fun processSubComponents(definitions: Definitions, nextId: NextId, owner: Id, components: List<Node>) =
+  components.mapNotNull {
+    val children = processSubComponentNode(definitions, owner, it)
+    if (children.any())
+      Hand(
+        id = nextId(),
+        components = children,
+      )
+    else
+      null
+  }
+
+fun newPlayer(
+  definitions: Definitions, nextId: NextId, id: Id, spatial: Spatial,
+  components: List<Node>, subComponents: List<Node>
+) =
   listOf(
     Hand(
       id = id,
@@ -32,40 +65,49 @@ fun newPlayer(nextId: NextId, id: Id, spatial: Spatial, components: List<Node>) 
         Faction(name = "Player")
       )
     )
-  ) + components.map {
-    Hand(
-      id = nextId(),
-      components = listOfNotNull(processComponentNode(id, id, it)),
-    )
+  ) + components.flatMap { child ->
+    listOf(
+      Hand(
+        id = nextId(),
+        components = processComponentNode(id, id, child),
+      )
+    ) + processSubComponents(definitions, nextId, id, subComponents.filter { it.getParent() == child })
   }
 
-fun newCharacterBody(nextId: NextId, id: Id, spatial: Spatial, components: List<Node>) =
+fun newCharacterBody(
+  definitions: Definitions, nextId: NextId, id: Id, spatial: Spatial,
+  components: List<Node>, subComponents: List<Node>
+) =
   listOf(
     Hand(
       id = id,
       components = listOf(
         spatial,
-      ) + components.mapNotNull { processComponentNode(id, 0L, it) }
+      ) + components.flatMap { processComponentNode(id, 0L, it) }
     )
-  )
+  ) + components.flatMap { child ->
+    processSubComponents(definitions, nextId, id, subComponents.filter { it.getParent() == child })
+  }
 
 fun processSceneEntities(root: Node, world: World): World {
+  val definitions = world.definitions
   val componentNodes = root.getTree()?.getNodesInGroup(componentGroup)?.filterIsInstance<Node>() ?: listOf()
-  val spatialNodes = componentNodes
+  val parents = componentNodes
     .mapNotNull { it.getParent() }
     .distinct()
-    .filterIsInstance<Spatial>()
 
+  val spatialNodes = parents.filterIsInstance<Spatial>()
+//  val subComponents = componentNodes.filter { !parents.contains(it.getParent()) }
   val nextId = world.nextId.source()
 
   val hands = spatialNodes
     .flatMap { spatial ->
       val id = nextId()
       val components = componentNodes.filter { it.getParent() == spatial }
-      if (spatial is PlayerBody)
-        newPlayer(nextId, id, spatial, components)
+      if (components.any { it is AttachPlayer })
+        newPlayer(definitions, nextId, id, spatial, components, componentNodes)
       else {
-        newCharacterBody(nextId, id, spatial, components)
+        newCharacterBody(definitions, nextId, id, spatial, components, componentNodes)
       }
     }
 

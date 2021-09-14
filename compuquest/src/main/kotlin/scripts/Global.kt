@@ -44,16 +44,6 @@ class Global : Node() {
     }
   }
 
-  override fun _ready() {
-    if (!Engine.editorHint) {
-      val root = getTree()?.root
-      if (root != null) {
-        val state = newAppState(root, definitions)
-        appState = state
-      }
-    }
-  }
-
   @RegisterFunction
   override fun _process(delta: Double) {
     if (Input.isActionJustReleased("newGame")) {
@@ -63,13 +53,20 @@ class Global : Node() {
 
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
-    val state = appState
-    if (state != null) {
-      val commands = eventQueue.toList()
-      eventQueue.clear()
-      appState = state.copy(
-        world = updateWorld(commands, state.world)
-      )
+    if (!Engine.editorHint) {
+      val state = appState
+      if (state == null) {
+        val root = getTree()?.root
+        if (root != null) {
+          appState = newAppState(root, definitions)
+        }
+      } else {
+        val commands = eventQueue.toList()
+        eventQueue.clear()
+        appState = state.copy(
+          world = updateWorld(commands, state.world)
+        )
+      }
     }
   }
 }
