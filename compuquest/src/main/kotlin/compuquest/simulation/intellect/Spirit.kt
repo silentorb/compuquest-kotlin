@@ -1,7 +1,7 @@
 package compuquest.simulation.intellect
 
 import compuquest.godoting.entityFromScene
-import compuquest.simulation.combat.Missile
+import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.general.*
 import compuquest.simulation.happening.Event
 import compuquest.simulation.happening.Events
@@ -14,7 +14,7 @@ data class Spirit(
   val actionChanceAccumulator: Int = 0,
 )
 
-fun inRange(bodies: Table<Spatial>, body: Spatial, other: Character, range: Float): Boolean {
+fun inRange(bodies: Table<Body>, body: Body, other: Character, range: Float): Boolean {
   val otherBody = bodies[other.body]
   return otherBody != null
       && body.translation.distanceTo(otherBody.translation) <= range
@@ -27,7 +27,7 @@ fun getNextActionAndTarget(
   actions: Table<Accessory>
 ): Triple<Id, Accessory, Id>? {
   val deck = world.deck
-  val bodies = world.bodies
+  val bodies = deck.bodies
   val body = bodies[character.body]!!
   val range = actions.maxOfOrNull { it.value.range } ?: 0f
   val options = deck.characters
@@ -59,14 +59,15 @@ fun tryUseAction(world: World, actor: Id, character: Character): Events {
       val (action, accessory, target) = option
       val spawns = accessory.spawns!!
       val projectileBody = entityFromScene<Spatial>(spawns)
-      val actorBody = world.bodies[actor]!!
+      val actorBody = deck.bodies[character.body]!!
       projectileBody?.translation = actorBody.translation + Vector3(0f, -1f, 0f)
       val projectile = Hand(
         components = listOfNotNull(
-          Missile(
+          HomingMissile(
             damage = 10,
             target = target,
             owner = actor,
+            speed = 15f,
           ),
           projectileBody,
         ),

@@ -55,6 +55,7 @@ anchor_bottom = 0.0
 margin_left = 303.0
 margin_right = 541.0
 margin_bottom = 152.0
+index = 1
 
 [node name="portrait3" parent="lower-third/hbox" instance=ExtResource( 2 )]
 anchor_right = 0.0
@@ -62,6 +63,7 @@ anchor_bottom = 0.0
 margin_left = 545.0
 margin_right = 782.0
 margin_bottom = 152.0
+index = 2
 
 [node name="portrait4" parent="lower-third/hbox" instance=ExtResource( 2 )]
 anchor_right = 0.0
@@ -69,3 +71,4 @@ anchor_bottom = 0.0
 margin_left = 786.0
 margin_right = 1024.0
 margin_bottom = 152.0
+index = 3

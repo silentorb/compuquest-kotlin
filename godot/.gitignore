@@ -1,5 +1,6 @@
 
 /jre
+*.log
 
 # Godot-specific ignores
 .import/

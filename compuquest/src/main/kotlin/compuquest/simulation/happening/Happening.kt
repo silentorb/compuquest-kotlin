@@ -10,7 +10,12 @@ data class Event(
 
 typealias Events = List<Event>
 
-inline fun <reified T>extractEventValues(type: Key, events: Events) =
+inline fun <reified T>filterEventValues(type: Key, events: Events) =
   events
     .filter { it.type == type}
-    .filterIsInstance<T>()
+    .mapNotNull { it.value as? T }
+
+inline fun <reified T>filterEventTargets(type: Key, events: Events) =
+  events
+    .filter { it.type == type}
+    .mapNotNull { it.target as? T }

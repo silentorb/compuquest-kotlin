@@ -6,4 +6,5 @@ const val maxPartySize = 4
 
 data class Player(
   val faction: Id,
+  val party: List<Id> = listOf(),
 )

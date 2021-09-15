@@ -4,6 +4,7 @@ import compuquest.app.AppState
 import compuquest.app.newAppState
 import compuquest.definition.newDefinitions
 import compuquest.simulation.general.Hand
+import compuquest.simulation.general.World
 import compuquest.simulation.general.newHandCommand
 import compuquest.simulation.happening.Event
 import compuquest.simulation.updating.updateWorld
@@ -29,6 +30,9 @@ class Global : Node() {
     fun newHand(hand: Hand) {
       addCommand(newHandCommand(hand))
     }
+
+    val world: World?
+      get() = instance?.appState?.world
   }
 
   init {
@@ -64,7 +68,7 @@ class Global : Node() {
         val commands = eventQueue.toList()
         eventQueue.clear()
         appState = state.copy(
-          world = updateWorld(commands, state.world)
+          world = updateWorld(commands, delta.toFloat(), state.world)
         )
       }
     }

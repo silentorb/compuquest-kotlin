@@ -4,7 +4,7 @@ import compuquest.simulation.definition.AccessoryDefinition
 import compuquest.simulation.definition.Cost
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.happening.Events
-import compuquest.simulation.happening.extractEventValues
+import compuquest.simulation.happening.filterEventValues
 import silentorb.mythic.ent.Id
 
 data class Accessory(
@@ -21,7 +21,7 @@ data class Accessory(
 const val useActionCommand = "useAction"
 
 fun updateAccessory(definitions: Definitions, events: Events): (Id, Accessory) -> Accessory {
-  val uses = extractEventValues<Id>(useActionCommand, events)
+  val uses = filterEventValues<Id>(useActionCommand, events)
   return { id, accessory ->
     val used = uses.contains(id)
     if (used) {

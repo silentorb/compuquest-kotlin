@@ -7,6 +7,9 @@ data class IntResource(
 
 typealias ResourceMap = Map<Key, IntResource>
 
+fun displayText(resource: IntResource): String =
+  "${resource.value}/${resource.max}"
+
 fun clampResource(value: Int, max: Int): Int {
   return when {
     value < 0 -> 0
@@ -19,5 +22,8 @@ fun modifyResource(value: Int, max: Int, mod: Int): Int =
   clampResource(mod + value, max)
 
 
-fun modifyResource(resource: IntResource, mod: Int): Int =
-  modifyResource(resource.value, resource.max, mod)
+fun modifyResource(mod: Int, resource: IntResource): IntResource =
+  resource.copy(
+    value = modifyResource(resource.value, resource.max, mod)
+  )
+

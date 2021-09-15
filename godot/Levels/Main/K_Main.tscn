@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachAccessory.kt" type="Script" id=9]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=10]
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=11]
 
 [node name="L_Main" type="Spatial"]
 script = ExtResource( 4 )
@@ -113,11 +114,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27909, 0 )
 [node name="player" type="Node" parent="playerBody"]
 script = ExtResource( 10 )
 
+[node name="mana" type="Node" parent="playerBody"]
+script = ExtResource( 11 )
+amount = 200
+resource = "mana"
+
 [node name="character" type="Node" parent="playerBody"]
 script = ExtResource( 7 )
-health_max = 50
+health_max = 100
 depiction = "skeleton"
-health_value = 50
+health_value = 100
 
 [node name="fireball" type="Node" parent="playerBody/character"]
 script = ExtResource( 9 )

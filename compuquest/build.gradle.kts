@@ -7,6 +7,9 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+}
 //kotlin.sourceSets.main {
 ////    kotlin.srcDirs("../godot/scripts")
 //    kotlin.srcDirs("../godot/src/main/kotlin")

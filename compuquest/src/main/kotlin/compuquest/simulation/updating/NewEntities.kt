@@ -17,10 +17,31 @@ inline fun <reified T> extractComponents(nextId: NextId, hands: List<Hand>): Tab
     }
     .associate { it }
 
+
+inline fun <reified T> extractComponents(hands: List<Hand>): Table<T> =
+  hands
+    .mapNotNull { hand ->
+      if (hand.id != null) {
+        val component = hand.components.filterIsInstance<T>().firstOrNull()
+        if (component != null)
+          hand.id to component
+        else
+          null
+      } else
+        null
+    }
+    .associate { it }
+
 fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
   val nextId = world.nextId.source()
   val deck = world.deck
-  val bodies = extractComponents<Spatial>(nextId, hands)
+  val idHands = hands.map { hand ->
+    if (hand.id == null)
+      hand.copy(id = nextId())
+    else
+      hand
+  }
+  val bodies = extractComponents<Spatial>(idHands)
   if (world.scene != null) {
     for (body in bodies.values) {
       if (body.getParent() == null)
@@ -30,12 +51,12 @@ fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
   return world.copy(
     bodies = world.bodies + bodies,
     deck = deck.copy(
-      accessories = deck.accessories + extractComponents(nextId, hands),
-      characters = deck.characters + extractComponents(nextId, hands),
-      factions = deck.factions + extractComponents(nextId, hands),
-      missiles = deck.missiles + extractComponents(nextId, hands),
-      players = deck.players + extractComponents(nextId, hands),
-      spirits = deck.spirits + extractComponents(nextId, hands),
+      accessories = deck.accessories + extractComponents(idHands),
+      characters = deck.characters + extractComponents(idHands),
+      factions = deck.factions + extractComponents(idHands),
+      homingMissiles = deck.homingMissiles + extractComponents(idHands),
+      players = deck.players + extractComponents(idHands),
+      spirits = deck.spirits + extractComponents(idHands),
     )
   )
 }

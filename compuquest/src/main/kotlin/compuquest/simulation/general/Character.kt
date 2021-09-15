@@ -1,5 +1,7 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.happening.Events
+import compuquest.simulation.happening.filterEventValues
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
 
@@ -24,4 +26,16 @@ fun canUse(world: World, accessory: Accessory): Boolean {
   return accessory.cooldown == 0f && (faction == null ||
       (cost == null || faction.resources[cost.resource] ?: 0 >= cost.amount)
       )
+}
+
+const val modifyHealthCommand = "modifyHealth"
+
+fun updateCharacter(events: Events, world: World): (Id, Character) -> Character = { actor, character ->
+  val characterEvents = events.filter { it.target == actor }
+  val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
+    .sum()
+
+  character.copy(
+    health = modifyResource(healthMod, character.health),
+  )
 }

@@ -8,6 +8,7 @@ import godot.Spatial
 import scripts.entities.actor.AttachAccessory
 import scripts.entities.actor.AttachCharacter
 import scripts.entities.actor.AttachPlayer
+import scripts.entities.actor.AttachResource
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.NextId
 
@@ -55,24 +56,43 @@ fun processSubComponents(definitions: Definitions, nextId: NextId, owner: Id, co
 fun newPlayer(
   definitions: Definitions, nextId: NextId, id: Id, spatial: Spatial,
   components: List<Node>, subComponents: List<Node>
-) =
-  listOf(
+): List<Hand> {
+  val members = components
+    .flatMap { child ->
+      val childId = nextId()
+      listOf(
+        Hand(
+          id = childId,
+          components = processComponentNode(id, id, child),
+        )
+      ) + processSubComponents(
+        definitions,
+        nextId,
+        childId,
+        subComponents.filter { it.getParent() == child })
+    }
+
+  return listOf(
     Hand(
       id = id,
       components = listOf(
         spatial,
-        Player(id),
-        Faction(name = "Player")
+        Player(
+          faction = id,
+          party = members
+            .filter { hand -> hand.components.any { it is Character } }
+            .mapNotNull { it.id }
+        ),
+        Faction(
+          name = "Player",
+          resources = components
+            .filterIsInstance<AttachResource>()
+            .associate { it.resource to it.amount }
+        )
       )
     )
-  ) + components.flatMap { child ->
-    listOf(
-      Hand(
-        id = nextId(),
-        components = processComponentNode(id, id, child),
-      )
-    ) + processSubComponents(definitions, nextId, id, subComponents.filter { it.getParent() == child })
-  }
+  ) + members
+}
 
 fun newCharacterBody(
   definitions: Definitions, nextId: NextId, id: Id, spatial: Spatial,

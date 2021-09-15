@@ -24,16 +24,34 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/entities/actor/AttachCharacter.kt"
 }, {
+"base": "Node",
+"class": "scripts_entities_actor_AttachPlayer",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt"
+}, {
+"base": "Node",
+"class": "scripts_entities_actor_AttachResource",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/entities/actor/AttachResource.kt"
+}, {
 "base": "Spatial",
 "class": "scripts_entities_actor_PlayerBody",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/entities/actor/PlayerBody.kt"
+}, {
+"base": "Node",
+"class": "scripts_gui_Portrait",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/gui/Portrait.kt"
 } ]
 _global_script_class_icons={
 "scripts_Global": "",
 "scripts_entities_actor_AttachAccessory": "",
 "scripts_entities_actor_AttachCharacter": "",
-"scripts_entities_actor_PlayerBody": ""
+"scripts_entities_actor_AttachPlayer": "",
+"scripts_entities_actor_AttachResource": "",
+"scripts_entities_actor_PlayerBody": "",
+"scripts_gui_Portrait": ""
 }
 
 [application]
