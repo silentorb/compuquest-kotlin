@@ -8,7 +8,6 @@ import silentorb.mythic.ent.Table
 data class Character(
   val name: String,
   val faction: Id,
-  val depiction: Key,
   val health: IntResource,
   val body: Id? = null,
 ) {

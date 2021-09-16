@@ -22,6 +22,19 @@ fun syncMythicToGodot(world: World): World {
   )
 }
 
+fun updateDepictions(previous: World, next: World) {
+  for (after in next.deck.depictions) {
+    val before = previous.deck.depictions[after.key]
+    val animation = after.value.animation
+    if (before?.animation != animation) {
+      val node = next.sprites[after.key]
+      if (node != null) {
+        tempCatch { node.set("animation", animation) }
+      }
+    }
+  }
+}
+
 fun updateWorld(events: Events, delta: Float, world: World): World {
   val world2 = syncMythicToGodot(world)
   val events2 = events + gatherEvents(world2, delta)
@@ -29,6 +42,7 @@ fun updateWorld(events: Events, delta: Float, world: World): World {
   val world3 = world2.copy(
     deck = deck
   )
+  updateDepictions(world, world3)
   val world4 = deleteEntities(events2, world3)
   return newEntities(events2, world4)
 }

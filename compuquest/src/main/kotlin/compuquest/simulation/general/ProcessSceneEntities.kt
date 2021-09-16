@@ -16,14 +16,17 @@ const val componentGroup = "component"
 
 fun processComponentNode(body: Id, faction: Id, node: Node): List<Any> =
   when (node) {
-    is AttachCharacter -> listOf(
+    is AttachCharacter -> listOfNotNull(
       Character(
         name = node.characterName,
         faction = faction,
-        depiction = node.depiction,
         health = IntResource(node.healthValue, node.healthMax),
         body = body
       ),
+      Depiction(
+        animation = node.depiction,
+      ),
+      node.getParent()?.findNode("sprite"),
       Spirit(),
     )
     else -> listOf()

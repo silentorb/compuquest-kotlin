@@ -45,8 +45,14 @@ class Global : Node() {
     val tree = getTree()
     val root = tree?.root
     if (root != null) {
-      for (body in appState!!.world.bodies.values) {
-        body.queueFree()
+      val world = appState?.world
+      if (world != null) {
+        for (body in world.bodies.values) {
+          body.queueFree()
+        }
+        for (sprites in world.sprites.values) {
+          sprites.queueFree()
+        }
       }
       // Wait until the frame has finished processing and the queued nodes are freed before
       // continuing with the restarting process

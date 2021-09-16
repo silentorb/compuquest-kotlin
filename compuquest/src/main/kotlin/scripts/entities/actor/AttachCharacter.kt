@@ -1,9 +1,7 @@
 package scripts.entities.actor
 
-import compuquest.simulation.general.*
-import godot.Engine
+import compuquest.simulation.general.componentGroup
 import godot.Node
-import godot.Sprite
 import godot.annotation.*
 
 @RegisterClass
@@ -17,6 +15,7 @@ class AttachCharacter : Node() {
   @Export
   @RegisterProperty
   var depiction: String = ""
+  var lastDepiction: String = ""
 
   @Export
   @RegisterProperty
@@ -37,9 +36,10 @@ class AttachCharacter : Node() {
 
   @RegisterFunction
   override fun _process(delta: Double) {
-    if (depiction != "") {
+    if (depiction != "" && depiction != lastDepiction) {
       val sprite = getParent()?.findNode("sprite")
       sprite?.set("animation", depiction)
+      lastDepiction = depiction
     }
   }
 }

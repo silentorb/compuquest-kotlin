@@ -9,10 +9,7 @@ import silentorb.mythic.randomly.Dice
 fun newWorld(definitions: Definitions): World {
   return World(
     definitions = definitions,
-    bodies = mapOf(),
-    zones = mapOf(),
     nextId = SharedNextId(),
-    step = 0L,
     dice = Dice(),
   )
 }

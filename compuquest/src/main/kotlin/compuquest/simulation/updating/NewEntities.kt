@@ -41,23 +41,21 @@ fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
     else
       hand
   }
-  val bodies = extractComponents<Spatial>(idHands)
+  val nodes = extractComponents<Spatial>(idHands)
+  val bodies = nodes.filter { it.value.name != "sprite" }
+  val sprites = nodes.filter { it.value.name == "sprite" }
+
   if (world.scene != null) {
     for (body in bodies.values) {
       if (body.getParent() == null)
         world.scene.addChild(body)
     }
   }
+
   return world.copy(
     bodies = world.bodies + bodies,
-    deck = deck.copy(
-      accessories = deck.accessories + extractComponents(idHands),
-      characters = deck.characters + extractComponents(idHands),
-      factions = deck.factions + extractComponents(idHands),
-      homingMissiles = deck.homingMissiles + extractComponents(idHands),
-      players = deck.players + extractComponents(idHands),
-      spirits = deck.spirits + extractComponents(idHands),
-    )
+    sprites = world.sprites + sprites,
+    deck = allHandsToDeck(idHands, deck),
   )
 }
 

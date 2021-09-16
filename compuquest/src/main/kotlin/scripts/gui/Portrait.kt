@@ -1,6 +1,7 @@
 package scripts.gui
 
 import compuquest.simulation.general.Character
+import compuquest.simulation.general.Depiction
 import compuquest.simulation.general.displayText
 import godot.AnimatedSprite
 import godot.Container
@@ -36,10 +37,10 @@ class Portrait : Node() {
 	verticalBox?.visible = false
   }
 
-  fun characterChanged(character: Character) {
+  fun characterChanged(character: Character, depiction: Depiction) {
 //    avatar?.frame = character.frame
-	if (character.depiction != "")
-	  avatar?.animation = character.depiction
+	if (depiction.animation != "")
+	  avatar?.animation = depiction.animation
 
 	nameLabel?.text = character.name
 	health?.text = displayText(character.health)
@@ -53,12 +54,13 @@ class Portrait : Node() {
 	if (actor == null) {
 	  lastCharacter = null
 	} else {
-		val localCharacter = lastCharacter
-		val character = deck.characters[actor]
+	  val localCharacter = lastCharacter
+	  val character = deck.characters[actor]
 	  if (localCharacter != character) {
 		lastCharacter = character
-		if (character != null)
-		  characterChanged(character)
+		val depiction = deck.depictions[actor]
+		if (character != null && depiction != null)
+		  characterChanged(character, depiction)
 	  }
 	}
 	verticalBox?.visible = lastCharacter != null
