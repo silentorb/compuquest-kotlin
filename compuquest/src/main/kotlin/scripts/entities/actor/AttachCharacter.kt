@@ -32,14 +32,14 @@ class AttachCharacter : Node() {
 
   @RegisterFunction
   override fun _ready() {
-	addToGroup(componentGroup)
+    addToGroup(componentGroup)
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-	if (Engine.editorHint) {
-	  val sprite = getParent()?.findNode("sprite") as? Sprite
-	  sprite?.set("animation", depiction)
-	}
+    if (depiction != "") {
+      val sprite = getParent()?.findNode("sprite")
+      sprite?.set("animation", depiction)
+    }
   }
 }

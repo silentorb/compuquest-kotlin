@@ -119,18 +119,19 @@ script = ExtResource( 11 )
 amount = 200
 resource = "mana"
 
-[node name="character" type="Node" parent="playerBody"]
+[node name="bob" type="Node" parent="playerBody"]
 script = ExtResource( 7 )
 health_max = 100
+character_name = "bob"
 depiction = "skeleton"
 health_value = 100
 
-[node name="fireball" type="Node" parent="playerBody/character"]
+[node name="fireball" type="Node" parent="playerBody/bob"]
 script = ExtResource( 9 )
 definition = "fireball"
 
 [node name="actor" parent="." instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72753, 9.32188 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72753, -9.55998 )
 
 [node name="character" type="Node" parent="actor"]
 script = ExtResource( 7 )

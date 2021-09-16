@@ -25,7 +25,7 @@ fun syncMythicToGodot(world: World): World {
 fun updateWorld(events: Events, delta: Float, world: World): World {
   val world2 = syncMythicToGodot(world)
   val events2 = events + gatherEvents(world2, delta)
-  val deck = updateDeck(events2, world2)
+  val deck = updateDeck(events2, world2, delta)
   val world3 = world2.copy(
     deck = deck
   )

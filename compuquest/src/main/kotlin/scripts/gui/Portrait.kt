@@ -48,13 +48,13 @@ class Portrait : Node() {
   @RegisterFunction
   override fun _process(delta: Double) {
 	val world = Global.world
-	val localCharacter = lastCharacter
 	val deck = world?.deck
 	val actor = deck?.players?.values?.firstOrNull()?.party?.getOrNull(index)
 	if (actor == null) {
 	  lastCharacter = null
 	} else {
-	  val character = deck.characters[actor]
+		val localCharacter = lastCharacter
+		val character = deck.characters[actor]
 	  if (localCharacter != character) {
 		lastCharacter = character
 		if (character != null)

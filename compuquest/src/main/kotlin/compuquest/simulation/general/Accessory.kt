@@ -4,8 +4,10 @@ import compuquest.simulation.definition.AccessoryDefinition
 import compuquest.simulation.definition.Cost
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.happening.Events
+import compuquest.simulation.happening.filterEventTargets
 import compuquest.simulation.happening.filterEventValues
 import silentorb.mythic.ent.Id
+import kotlin.math.max
 
 data class Accessory(
   val owner: Id,
@@ -20,16 +22,18 @@ data class Accessory(
 
 const val useActionCommand = "useAction"
 
-fun updateAccessory(definitions: Definitions, events: Events): (Id, Accessory) -> Accessory {
-  val uses = filterEventValues<Id>(useActionCommand, events)
+fun updateAccessory(definitions: Definitions, events: Events, delta: Float): (Id, Accessory) -> Accessory {
+  val uses = filterEventTargets<Id>(useActionCommand, events)
   return { id, accessory ->
     val used = uses.contains(id)
-    if (used) {
-      accessory.copy(
-        cooldown = accessory.maxCooldown,
-      )
-    } else
-      accessory
+    val cooldown = if (used)
+      accessory.maxCooldown
+    else
+      max(0f, accessory.cooldown - delta)
+
+    accessory.copy(
+      cooldown = cooldown
+    )
   }
 }
 
