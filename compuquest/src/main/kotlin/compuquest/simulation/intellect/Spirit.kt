@@ -28,7 +28,8 @@ fun getNextActionAndTarget(
 ): Triple<Id, Accessory, Id>? {
   val deck = world.deck
   val bodies = deck.bodies
-  val body = bodies[character.body]!!
+  val body = bodies[character.body] ?: return null
+
   val range = actions.maxOfOrNull { it.value.range } ?: 0f
   val options = deck.characters
     .filter { (id, other) ->

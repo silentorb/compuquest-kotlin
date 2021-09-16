@@ -39,19 +39,27 @@ class Global : Node() {
     instance = this
   }
 
+  var restarting = false
+
   fun restartGame() {
     val tree = getTree()
     val root = tree?.root
     if (root != null) {
-      appState = newAppState(root, definitions)
-      tree.reloadCurrentScene()
+      for (body in appState!!.world.bodies.values) {
+        body.queueFree()
+      }
+      // Wait until the frame has finished processing and the queued nodes are freed before
+      // continuing with the restarting process
+      restarting = true
     }
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-    if (Input.isActionJustReleased("newGame")) {
-      restartGame()
+    if (!Engine.editorHint) {
+      if (Input.isActionJustReleased("newGame")) {
+        restartGame()
+      }
     }
   }
 
@@ -59,7 +67,15 @@ class Global : Node() {
   override fun _physicsProcess(delta: Double) {
     if (!Engine.editorHint) {
       val state = appState
-      if (state == null) {
+      if (restarting) {
+        val tree = getTree()
+        val root = tree?.root
+        tree!!.reloadCurrentScene()
+        // This needs to happen after the scene is reloaded
+        appState = newAppState(root!!, definitions)
+        restarting = false
+      }
+      else if (state == null) {
         val root = getTree()?.root
         if (root != null) {
           appState = newAppState(root, definitions)

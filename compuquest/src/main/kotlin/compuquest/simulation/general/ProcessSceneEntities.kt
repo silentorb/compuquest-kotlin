@@ -101,7 +101,7 @@ fun newCharacterBody(
   listOf(
     Hand(
       id = id,
-      components = listOf(
+      components = listOf<Any>(
         spatial,
       ) + components.flatMap { processComponentNode(id, 0L, it) }
     )
