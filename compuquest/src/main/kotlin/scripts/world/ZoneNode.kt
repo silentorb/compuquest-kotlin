@@ -6,6 +6,8 @@ import godot.PackedScene
 import godot.annotation.*
 import godot.global.GD
 
+const val zoneGroup = "zone"
+
 @Tool
 @RegisterClass
 class ZoneNode : Node() {
@@ -24,6 +26,7 @@ class ZoneNode : Node() {
   @RegisterProperty
   var active: Boolean = true
     set(value) {
+      GD.print("foo")
       if (field != value) {
         field = value
         onActiveChanged()

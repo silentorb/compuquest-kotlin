@@ -18,7 +18,6 @@ func _ready():
 
 func _process(delta):
 	var nextDimensions = parentDimensions()
-	var p = get_parent().get_parent()
 	if (nextDimensions != dimensions):
 	  updateTransform(nextDimensions)
 	
