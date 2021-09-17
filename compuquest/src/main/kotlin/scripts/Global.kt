@@ -1,12 +1,11 @@
 package scripts
 
-import compuquest.app.AppState
 import compuquest.app.newAppState
 import compuquest.definition.newDefinitions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
 import compuquest.simulation.general.newHandCommand
-import compuquest.simulation.happening.Event
+import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.Engine
 import godot.Input
@@ -16,7 +15,7 @@ import godot.annotation.RegisterFunction
 
 @RegisterClass
 class Global : Node() {
-  var appState: AppState? = null
+  var worlds: List<World> = listOf()
   val definitions = newDefinitions()
 
   companion object {
@@ -32,7 +31,7 @@ class Global : Node() {
     }
 
     val world: World?
-      get() = instance?.appState?.world
+      get() = instance?.worlds?.lastOrNull()
   }
 
   init {
@@ -45,7 +44,7 @@ class Global : Node() {
     val tree = getTree()
     val root = tree?.root
     if (root != null) {
-      val world = appState?.world
+      val world = worlds.lastOrNull()
       if (world != null) {
         for (body in world.bodies.values) {
           body.queueFree()
@@ -72,26 +71,23 @@ class Global : Node() {
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
     if (!Engine.editorHint) {
-      val state = appState
+      val localWorlds = worlds
       if (restarting) {
         val tree = getTree()
         val root = tree?.root
         tree!!.reloadCurrentScene()
         // This needs to happen after the scene is reloaded
-        appState = newAppState(root!!, definitions)
+        worlds = listOf(newAppState(root!!, definitions))
         restarting = false
-      }
-      else if (state == null) {
+      } else if (localWorlds.none()) {
         val root = getTree()?.root
         if (root != null) {
-          appState = newAppState(root, definitions)
+          worlds = listOf(newAppState(root, definitions))
         }
       } else {
         val commands = eventQueue.toList()
         eventQueue.clear()
-        appState = state.copy(
-          world = updateWorld(commands, delta.toFloat(), state.world)
-        )
+        worlds = worlds.plus(updateWorld(commands, delta.toFloat(), localWorlds)).takeLast(2)
       }
     }
   }

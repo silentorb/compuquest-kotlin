@@ -2,15 +2,13 @@ package compuquest.app
 
 import compuquest.serving.newWorld
 import compuquest.simulation.definition.Definitions
+import compuquest.simulation.general.World
 import compuquest.simulation.general.processSceneEntities
 import godot.Node
 
-fun newAppState(scene: Node, definitions: Definitions): AppState {
+fun newAppState(scene: Node, definitions: Definitions): World {
   val world = newWorld(definitions)
     .copy(scene = scene)
 
-  val world2 = processSceneEntities(scene, world)
-  return AppState(
-    world = world2,
-  )
+  return processSceneEntities(scene, world)
 }

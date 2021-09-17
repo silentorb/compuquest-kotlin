@@ -3,7 +3,7 @@ package compuquest.simulation.updating
 import compuquest.godoting.tempCatch
 import compuquest.simulation.general.Body
 import compuquest.simulation.general.World
-import compuquest.simulation.happening.Events
+import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import godot.core.Vector3
 
@@ -23,10 +23,10 @@ fun syncMythicToGodot(world: World): World {
 }
 
 fun updateDepictions(previous: World, next: World) {
-  for (after in next.deck.depictions) {
-    val before = previous.deck.depictions[after.key]
-    val animation = after.value.animation
-    if (before?.animation != animation) {
+  for (after in next.deck.characters) {
+    val before = previous.deck.characters[after.key]
+    val animation = after.value.depiction
+    if (before?.depiction != animation) {
       val node = next.sprites[after.key]
       if (node != null) {
         tempCatch { node.set("animation", animation) }
@@ -35,9 +35,10 @@ fun updateDepictions(previous: World, next: World) {
   }
 }
 
-fun updateWorld(events: Events, delta: Float, world: World): World {
+fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
+  val world = worlds.last()
   val world2 = syncMythicToGodot(world)
-  val events2 = events + gatherEvents(world2, delta)
+  val events2 = events + gatherEvents(world2, worlds.dropLast(1).firstOrNull(), delta)
   val deck = updateDeck(events2, world2, delta)
   val world3 = world2.copy(
     deck = deck

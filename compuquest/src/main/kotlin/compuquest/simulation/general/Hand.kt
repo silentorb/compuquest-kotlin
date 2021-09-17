@@ -1,6 +1,6 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.happening.Event
+import silentorb.mythic.happening.Event
 import silentorb.mythic.ent.Id
 
 data class Hand(

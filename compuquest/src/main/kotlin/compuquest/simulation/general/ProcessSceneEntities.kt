@@ -18,13 +18,11 @@ fun processComponentNode(body: Id, faction: Id, node: Node): List<Any> =
   when (node) {
     is AttachCharacter -> listOfNotNull(
       Character(
-        name = node.characterName,
+        name = node.name,
         faction = faction,
         health = IntResource(node.healthValue, node.healthMax),
-        body = body
-      ),
-      Depiction(
-        animation = node.depiction,
+        body = body,
+        depiction = node.depiction,
       ),
       node.getParent()?.findNode("sprite"),
       Spirit(),
@@ -62,17 +60,21 @@ fun newPlayer(
 ): List<Hand> {
   val members = components
     .flatMap { child ->
-      val childId = nextId()
-      listOf(
-        Hand(
-          id = childId,
-          components = processComponentNode(id, id, child),
-        )
-      ) + processSubComponents(
-        definitions,
-        nextId,
-        childId,
-        subComponents.filter { it.getParent() == child })
+      val childComponents = processComponentNode(id, id, child)
+      if (childComponents.any()) {
+        val childId = nextId()
+        listOf(
+          Hand(
+            id = childId,
+            components = childComponents,
+          )
+        ) + processSubComponents(
+          definitions,
+          nextId,
+          childId,
+          subComponents.filter { it.getParent() == child })
+      } else
+        listOf()
     }
 
   return listOf(

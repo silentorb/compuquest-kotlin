@@ -3,8 +3,8 @@ package compuquest.simulation.combat
 import compuquest.simulation.general.World
 import compuquest.simulation.general.deleteEntityCommand
 import compuquest.simulation.general.modifyHealthCommand
-import compuquest.simulation.happening.Event
-import compuquest.simulation.happening.Events
+import silentorb.mythic.happening.Event
+import silentorb.mythic.happening.Events
 import silentorb.mythic.ent.Id
 
 data class HomingMissile(

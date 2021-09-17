@@ -1,7 +1,6 @@
 package scripts.gui
 
 import compuquest.simulation.general.Character
-import compuquest.simulation.general.Depiction
 import compuquest.simulation.general.displayText
 import godot.AnimatedSprite
 import godot.Container
@@ -12,7 +11,6 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import scripts.Global
-import silentorb.mythic.ent.Id
 
 @RegisterClass
 class Portrait : Node() {
@@ -37,10 +35,10 @@ class Portrait : Node() {
 	verticalBox?.visible = false
   }
 
-  fun characterChanged(character: Character, depiction: Depiction) {
+  fun characterChanged(character: Character) {
 //    avatar?.frame = character.frame
-	if (depiction.animation != "")
-	  avatar?.animation = depiction.animation
+	if (character.depiction != "")
+	  avatar?.animation = character.depiction
 
 	nameLabel?.text = character.name
 	health?.text = displayText(character.health)
@@ -58,9 +56,8 @@ class Portrait : Node() {
 	  val character = deck.characters[actor]
 	  if (localCharacter != character) {
 		lastCharacter = character
-		val depiction = deck.depictions[actor]
-		if (character != null && depiction != null)
-		  characterChanged(character, depiction)
+		if (character != null)
+		  characterChanged(character)
 	  }
 	}
 	verticalBox?.visible = lastCharacter != null

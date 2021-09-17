@@ -1,7 +1,7 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.happening.Events
-import compuquest.simulation.happening.filterEventValues
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
 
@@ -10,7 +10,9 @@ data class Character(
   val faction: Id,
   val health: IntResource,
   val body: Id? = null,
-) {
+  override val depiction: String,
+  override val frame: Int = 0,
+) : SpriteState {
   val isAlive: Boolean = health.value > 0
 }
 
@@ -29,12 +31,31 @@ fun canUse(world: World, accessory: Accessory): Boolean {
 
 const val modifyHealthCommand = "modifyHealth"
 
+//fun eventsFromCharacter(world: World, previous: World?): (Id, Character) -> Events = { actor, character ->
+//  if (previous != null) {
+//    val a = previous.deck.characters[actor]
+//    if (a?.isAlive ?: true && !character.isAlive)
+//      listOf(setDepiction)
+//    else
+//      listOf()
+//  } else
+//    listOf()
+//}
+
 fun updateCharacter(events: Events, world: World): (Id, Character) -> Character = { actor, character ->
   val characterEvents = events.filter { it.target == actor }
   val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
     .sum()
 
+  val health = modifyResource(healthMod, character.health)
+
+  val depiction = if (health.value == 0)
+    "sprites"
+  else
+    character.depiction
+
   character.copy(
-    health = modifyResource(healthMod, character.health),
+    health = health,
+    depiction = depiction
   )
 }

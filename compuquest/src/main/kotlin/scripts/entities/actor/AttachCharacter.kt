@@ -4,15 +4,10 @@ import compuquest.simulation.general.componentGroup
 import godot.Node
 import godot.annotation.*
 
-@RegisterClass
 @Tool
+@RegisterClass
 class AttachCharacter : Node() {
 
-  @Export
-  @RegisterProperty
-  var characterName: String = ""
-
-  @Export
   @RegisterProperty
   var depiction: String = ""
   var lastDepiction: String = ""

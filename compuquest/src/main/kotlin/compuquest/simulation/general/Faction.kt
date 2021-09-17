@@ -1,6 +1,6 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.happening.Events
+import silentorb.mythic.happening.Events
 import silentorb.mythic.ent.Id
 import kotlin.math.max
 

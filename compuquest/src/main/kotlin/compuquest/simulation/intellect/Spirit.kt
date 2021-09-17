@@ -3,8 +3,8 @@ package compuquest.simulation.intellect
 import compuquest.godoting.entityFromScene
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.general.*
-import compuquest.simulation.happening.Event
-import compuquest.simulation.happening.Events
+import silentorb.mythic.happening.Event
+import silentorb.mythic.happening.Events
 import godot.Spatial
 import godot.core.Vector3
 import silentorb.mythic.ent.Id

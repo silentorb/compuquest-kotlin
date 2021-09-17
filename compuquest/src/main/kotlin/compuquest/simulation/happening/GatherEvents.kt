@@ -5,13 +5,15 @@ import compuquest.simulation.general.World
 import compuquest.simulation.intellect.updateSpirit
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
+import silentorb.mythic.happening.Events
 
 fun <T> tableEvents(transform: (Id, T) -> Events, table: Table<T>): Events =
   table.flatMap { (id, record) -> transform(id, record) }
 
-fun gatherEvents(world: World, delta: Float): Events {
+fun gatherEvents(world: World, previous: World?, delta: Float): Events {
   val deck = world.deck
   val commands = deck.spirits.flatMap { updateSpirit(world, it.key) } +
+//      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
       tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles)
 
   return commands

@@ -1,35 +1,25 @@
 package compuquest.simulation.updating
 
+import compuquest.godoting.tempCatch
 import compuquest.simulation.general.*
-import compuquest.simulation.happening.Events
+import silentorb.mythic.happening.Events
 import godot.Spatial
-import silentorb.mythic.ent.NextId
+import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
 
-inline fun <reified T> extractComponents(nextId: NextId, hands: List<Hand>): Table<T> =
+inline fun <reified T> extractComponentsRaw(hands: List<Hand>): List<Pair<Id, T>> =
   hands
-    .mapNotNull { hand ->
-      val component = hand.components.filterIsInstance<T>().firstOrNull()
-      if (component != null)
-        (hand.id ?: nextId()) to component
+    .flatMap { hand ->
+      if (hand.id != null)
+        hand.components
+          .filterIsInstance<T>()
+          .map { hand.id to it }
       else
-        null
+        listOf()
     }
-    .associate { it }
-
 
 inline fun <reified T> extractComponents(hands: List<Hand>): Table<T> =
-  hands
-    .mapNotNull { hand ->
-      if (hand.id != null) {
-        val component = hand.components.filterIsInstance<T>().firstOrNull()
-        if (component != null)
-          hand.id to component
-        else
-          null
-      } else
-        null
-    }
+  extractComponentsRaw<T>(hands)
     .associate { it }
 
 fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
@@ -41,14 +31,17 @@ fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
     else
       hand
   }
-  val nodes = extractComponents<Spatial>(idHands)
-  val bodies = nodes.filter { it.value.name != "sprite" }
-  val sprites = nodes.filter { it.value.name == "sprite" }
+  val nodes = extractComponentsRaw<Spatial>(idHands)
+  val (spritesList, bodiesList) = nodes.partition { it.second.name == "sprite" }
+  val sprites = spritesList.associate { it }
+  val bodies = bodiesList.associate { it }
 
-  if (world.scene != null) {
-    for (body in bodies.values) {
-      if (body.getParent() == null)
-        world.scene.addChild(body)
+  tempCatch {
+    if (world.scene != null) {
+      for (body in bodies.values) {
+        if (body.getParent() == null)
+          world.scene.addChild(body)
+      }
     }
   }
 

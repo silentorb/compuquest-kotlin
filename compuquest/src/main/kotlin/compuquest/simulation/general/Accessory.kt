@@ -3,9 +3,8 @@ package compuquest.simulation.general
 import compuquest.simulation.definition.AccessoryDefinition
 import compuquest.simulation.definition.Cost
 import compuquest.simulation.definition.Definitions
-import compuquest.simulation.happening.Events
-import compuquest.simulation.happening.filterEventTargets
-import compuquest.simulation.happening.filterEventValues
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventTargets
 import silentorb.mythic.ent.Id
 import kotlin.math.max
 

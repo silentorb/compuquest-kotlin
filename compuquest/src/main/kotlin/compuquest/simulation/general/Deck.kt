@@ -11,7 +11,6 @@ data class Deck(
   val accessories: Table<Accessory> = mapOf(),
   val bodies: Table<Body> = mapOf(),
   val characters: Table<Character> = mapOf(),
-  val depictions: Table<Depiction> = mapOf(),
   val factions: Table<Faction> = mapOf(),
   val homingMissiles: Table<HomingMissile> = mapOf(),
   val players: Table<Player> = mapOf(),
@@ -27,7 +26,6 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck) =
   deck.copy(
     accessories = deck.accessories + extractComponents(idHands),
     characters = deck.characters + extractComponents(idHands),
-    depictions = deck.depictions + extractComponents(idHands),
     factions = deck.factions + extractComponents(idHands),
     homingMissiles = deck.homingMissiles + extractComponents(idHands),
     players = deck.players + extractComponents(idHands),

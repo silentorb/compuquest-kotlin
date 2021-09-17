@@ -4,8 +4,8 @@ import compuquest.godoting.deleteNode
 import compuquest.simulation.general.World
 import compuquest.simulation.general.deleteEntityCommand
 import compuquest.simulation.general.removeEntities
-import compuquest.simulation.happening.Events
-import compuquest.simulation.happening.filterEventTargets
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventTargets
 import silentorb.mythic.ent.Id
 
 fun deleteEntities(events: Events, world: World): World {
