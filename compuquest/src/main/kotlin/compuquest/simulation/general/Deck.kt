@@ -3,6 +3,7 @@ package compuquest.simulation.general
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.updating.extractComponents
+import silentorb.mythic.ent.KeyTable
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.genericRemoveEntities
 import silentorb.mythic.ent.newDeckReflection
@@ -11,7 +12,7 @@ data class Deck(
   val accessories: Table<Accessory> = mapOf(),
   val bodies: Table<Body> = mapOf(),
   val characters: Table<Character> = mapOf(),
-  val factions: Table<Faction> = mapOf(),
+  val factions: KeyTable<Faction> = mapOf(),
   val homingMissiles: Table<HomingMissile> = mapOf(),
   val players: Table<Player> = mapOf(),
   val spirits: Table<Spirit> = mapOf(),
@@ -26,7 +27,7 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck) =
   deck.copy(
     accessories = deck.accessories + extractComponents(idHands),
     characters = deck.characters + extractComponents(idHands),
-    factions = deck.factions + extractComponents(idHands),
+    factions = deck.factions + extractFactions(idHands),
     homingMissiles = deck.homingMissiles + extractComponents(idHands),
     players = deck.players + extractComponents(idHands),
     spirits = deck.spirits + extractComponents(idHands),

@@ -8,7 +8,7 @@ fun updateDeck(events: Events, world: World, delta: Float): Deck {
   val deck = world.deck
   val definitions = world.definitions
   return deck.copy(
-    accessories = mapTable(deck.accessories, updateAccessory(definitions, events, delta)),
+    accessories = mapTable(deck.accessories, updateAccessory(events, delta)),
     characters = mapTable(deck.characters, updateCharacter(events, world)),
     factions = mapTable(deck.factions, updateFaction(world, events)),
   )

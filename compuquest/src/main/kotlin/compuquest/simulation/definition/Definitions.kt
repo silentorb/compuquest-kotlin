@@ -1,6 +1,6 @@
 package compuquest.simulation.definition
 
-import compuquest.simulation.general.Key
+import silentorb.mythic.ent.Key
 
 data class Definitions(
   val accessories: Map<Key, AccessoryDefinition>,

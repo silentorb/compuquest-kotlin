@@ -1,7 +1,7 @@
 package compuquest.definition
 
 import compuquest.simulation.definition.ZoneDefinition
-import compuquest.simulation.general.Key
+import silentorb.mythic.ent.Key
 
 fun defineZones(): Map<Key, ZoneDefinition> = mapOf(
 

@@ -1,12 +1,14 @@
 package compuquest.simulation.intellect
 
-import compuquest.godoting.entityFromScene
+import compuquest.godoting.instantiateScene
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.general.*
+import godot.PhysicsDirectSpaceState
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import godot.Spatial
 import godot.core.Vector3
+import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
 
@@ -14,10 +16,12 @@ data class Spirit(
   val actionChanceAccumulator: Int = 0,
 )
 
-fun inRange(bodies: Table<Body>, body: Body, other: Character, range: Float): Boolean {
-  val otherBody = bodies[other.body]
+fun inRangeAndVisible(space: PhysicsDirectSpaceState, world: World, bodyId: Id, body: Body, other: Character, range: Float): Boolean {
+  val otherBody = world.bodies[other.body]
+
   return otherBody != null
       && body.translation.distanceTo(otherBody.translation) <= range
+      && space.intersectRay(body.translation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody)).none()
 }
 
 fun getNextActionAndTarget(
@@ -29,6 +33,7 @@ fun getNextActionAndTarget(
   val deck = world.deck
   val bodies = deck.bodies
   val body = bodies[character.body] ?: return null
+  val space = world.bodies.values.firstOrNull()?.getWorld()?.directSpaceState ?: return null
 
   val range = actions.maxOfOrNull { it.value.range } ?: 0f
   val options = deck.characters
@@ -36,7 +41,7 @@ fun getNextActionAndTarget(
       id != actor
           && other.faction != character.faction
           && other.isAlive
-          && inRange(bodies, body, other, range)
+          && inRangeAndVisible(space, world, character.body!!, body, other, range)
     }
 
   val target = options.entries.firstOrNull()
@@ -59,7 +64,7 @@ fun tryUseAction(world: World, actor: Id, character: Character): Events {
     if (option != null) {
       val (action, accessory, target) = option
       val spawns = accessory.spawns!!
-      val projectileBody = entityFromScene<Spatial>(spawns)
+      val projectileBody = instantiateScene<Spatial>(spawns)
       val actorBody = deck.bodies[character.body]!!
       projectileBody?.translation = actorBody.translation + Vector3(0f, -1f, 0f)
       val projectile = Hand(

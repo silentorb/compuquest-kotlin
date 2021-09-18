@@ -1,7 +1,9 @@
 package compuquest.godoting
 
 import godot.Node
+import godot.Object
 import godot.PackedScene
+import godot.core.VariantArray
 import godot.global.GD
 
 inline fun <reified T> instantiateScene(path: String): T? {
@@ -28,6 +30,9 @@ fun deleteNode(node: Node) {
     node.queueFree()
   }
 }
+
+inline fun <reified T>getVariantArray(property: String, value: Object?): List<T> =
+  (value?.get(property) as? VariantArray<*>)?.filterIsInstance<T>() ?: listOf()
 
 fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
   node

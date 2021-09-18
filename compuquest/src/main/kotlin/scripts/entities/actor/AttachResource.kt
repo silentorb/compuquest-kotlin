@@ -1,5 +1,6 @@
 package scripts.entities.actor
 
+import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.componentGroup
 import godot.Node
 import godot.annotation.*
@@ -9,7 +10,7 @@ class AttachResource : Node() {
 
   @Export
   @RegisterProperty
-  var resource: String = ""
+  var resource: ResourceType = ResourceType.mana
 
   @Export
   @RegisterProperty

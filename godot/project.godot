@@ -50,6 +50,16 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/scripts/gui/Portrait.kt"
 }, {
 "base": "Node",
+"class": "scripts_world_AccessoryDefinition",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/world/AccessoryDefinition.kt"
+}, {
+"base": "Node",
+"class": "scripts_world_CharacterDefinition",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/world/CharacterDefinition.kt"
+}, {
+"base": "Node",
 "class": "scripts_world_ZoneNode",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/world/ZoneNode.kt"
@@ -63,6 +73,8 @@ _global_script_class_icons={
 "scripts_entities_actor_PlayerBody": "",
 "scripts_gui_PlayerInfo": "",
 "scripts_gui_Portrait": "",
+"scripts_world_AccessoryDefinition": "",
+"scripts_world_CharacterDefinition": "",
 "scripts_world_ZoneNode": ""
 }
 

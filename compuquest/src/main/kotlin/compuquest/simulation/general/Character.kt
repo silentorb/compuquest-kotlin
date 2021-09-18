@@ -3,11 +3,12 @@ package compuquest.simulation.general
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.Table
 
 data class Character(
   val name: String,
-  val faction: Id,
+  val faction: Key? = null,
   val health: IntResource,
   val body: Id? = null,
   override val depiction: String,

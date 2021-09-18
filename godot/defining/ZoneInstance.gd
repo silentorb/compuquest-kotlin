@@ -3,9 +3,9 @@ extends Spatial
 
 export(PackedScene) var scene setget setScene
 
-export(bool) var active = true setget setActive
+export(Resource) var faction
 
-export(Array, PackedScene) var creatures
+export(bool) var active = true setget setActive
 
 func setScene(value):
 	if scene != value:

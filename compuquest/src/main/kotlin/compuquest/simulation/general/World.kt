@@ -5,6 +5,7 @@ import compuquest.simulation.definition.Zone
 import godot.Node
 import godot.Spatial
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.SharedNextId
 import silentorb.mythic.randomly.Dice
 

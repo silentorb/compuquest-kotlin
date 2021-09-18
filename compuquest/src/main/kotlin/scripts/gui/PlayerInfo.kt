@@ -28,7 +28,7 @@ class PlayerInfo : Node() {
 		for (resource in faction.resources) {
 		  val a = Label()
 		  val b = Label()
-		  a.text = resource.key.capitalize()
+		  a.text = resource.key.name.capitalize()
 		  b.text = resource.value.toString()
 		  resources.addChild(a)
 		  resources.addChild(b)

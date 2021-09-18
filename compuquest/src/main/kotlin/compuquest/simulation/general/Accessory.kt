@@ -6,6 +6,7 @@ import compuquest.simulation.definition.Definitions
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventTargets
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 import kotlin.math.max
 
 data class Accessory(
@@ -21,7 +22,7 @@ data class Accessory(
 
 const val useActionCommand = "useAction"
 
-fun updateAccessory(definitions: Definitions, events: Events, delta: Float): (Id, Accessory) -> Accessory {
+fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
   val uses = filterEventTargets<Id>(useActionCommand, events)
   return { id, accessory ->
     val used = uses.contains(id)

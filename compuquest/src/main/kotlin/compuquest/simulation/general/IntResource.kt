@@ -1,5 +1,7 @@
 package compuquest.simulation.general
 
+import silentorb.mythic.ent.Key
+
 data class IntResource(
   val value: Int,
   val max: Int = value

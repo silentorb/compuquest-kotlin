@@ -1,6 +1,6 @@
 package silentorb.mythic.happening
 
-import compuquest.simulation.general.Key
+import silentorb.mythic.ent.Key
 
 data class Event(
   val type: Key,
