@@ -5,6 +5,8 @@ export(PackedScene) var scene setget setScene
 
 export(bool) var active = true setget setActive
 
+export(Array, PackedScene) var creatures
+
 func setScene(value):
 	if scene != value:
 		scene = value

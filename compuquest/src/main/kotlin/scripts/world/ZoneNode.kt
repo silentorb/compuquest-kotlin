@@ -7,6 +7,7 @@ import godot.annotation.*
 import godot.global.GD
 
 const val zoneGroup = "zone"
+const val slotGroup = "slot"
 
 @Tool
 @RegisterClass

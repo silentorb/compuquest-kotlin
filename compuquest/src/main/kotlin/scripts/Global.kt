@@ -1,6 +1,6 @@
 package scripts
 
-import compuquest.app.newAppState
+import compuquest.app.newGame
 import compuquest.definition.newDefinitions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
@@ -77,12 +77,12 @@ class Global : Node() {
         val root = tree?.root
         tree!!.reloadCurrentScene()
         // This needs to happen after the scene is reloaded
-        worlds = listOf(newAppState(root!!, definitions))
+        worlds = listOf(newGame(root!!, definitions))
         restarting = false
       } else if (localWorlds.none()) {
         val root = getTree()?.root
         if (root != null) {
-          worlds = listOf(newAppState(root, definitions))
+          worlds = listOf(newGame(root, definitions))
         }
       } else {
         val commands = eventQueue.toList()

@@ -28,3 +28,16 @@ fun deleteNode(node: Node) {
     node.queueFree()
   }
 }
+
+fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
+  node
+    .getChildren()
+    .filterIsInstance<Node>()
+    .flatMap { child ->
+      val selfList = if (predicate(child))
+        listOf(child)
+      else
+        listOf()
+
+      selfList + findChildren(child, predicate)
+    }

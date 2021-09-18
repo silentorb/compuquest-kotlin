@@ -8,6 +8,7 @@ import godot.annotation.*
 @RegisterClass
 class AttachCharacter : Node() {
 
+  @Export
   @RegisterProperty
   var depiction: String = ""
   var lastDepiction: String = ""
@@ -26,15 +27,15 @@ class AttachCharacter : Node() {
 
   @RegisterFunction
   override fun _ready() {
-    addToGroup(componentGroup)
+	addToGroup(componentGroup)
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-    if (depiction != "" && depiction != lastDepiction) {
-      val sprite = getParent()?.findNode("sprite")
-      sprite?.set("animation", depiction)
-      lastDepiction = depiction
-    }
+	if (depiction != "" && depiction != lastDepiction) {
+	  val sprite = getParent()?.findNode("sprite")
+	  sprite?.set("animation", depiction)
+	  lastDepiction = depiction
+	}
   }
 }
