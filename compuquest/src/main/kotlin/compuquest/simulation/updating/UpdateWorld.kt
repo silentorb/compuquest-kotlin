@@ -41,7 +41,7 @@ fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
   val events2 = events + gatherEvents(world2, worlds.dropLast(1).firstOrNull(), delta)
   val deck = updateDeck(events2, world2, delta)
   val world3 = world2.copy(
-    deck = deck
+    deck = deck,
   )
   updateDepictions(world, world3)
   val world4 = deleteEntities(events2, world3)

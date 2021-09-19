@@ -44,6 +44,7 @@ const val modifyHealthCommand = "modifyHealth"
 //}
 
 fun updateCharacter(events: Events, world: World): (Id, Character) -> Character = { actor, character ->
+  val deck = world.deck
   val characterEvents = events.filter { it.target == actor }
   val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
     .sum()

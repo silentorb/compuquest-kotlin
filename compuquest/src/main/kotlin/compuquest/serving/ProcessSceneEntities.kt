@@ -25,6 +25,9 @@ fun processComponentNode(nextId: NextId, body: Id, faction: Key?, node: Node): L
         listOf()
       else {
         val id = nextId()
+        val sprite = node.getParent()?.findNode("sprite")
+        val depiction = creature.get("depiction") as? String ?: ""
+        sprite?.set("animation", depiction)
         listOf(
           Hand(
             id = id,
@@ -35,9 +38,9 @@ fun processComponentNode(nextId: NextId, body: Id, faction: Key?, node: Node): L
                 faction = faction ?: node.faction,
                 health = IntResource(node.healthValue, (creature.get("health") as? Long)?.toInt() ?: 1),
                 body = body,
-                depiction = creature.get("depiction") as? String ?: "",
+                depiction = depiction,
               ),
-              node.getParent()?.findNode("sprite"),
+              sprite,
               Spirit(),
             )
           )

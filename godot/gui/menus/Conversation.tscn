@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://gui/style/Theme.tres" type="Theme" id=1]
+
+[node name="conversation" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="background" type="Panel" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="vbox" type="VBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="message" type="Label" parent="vbox"]
+margin_right = 1024.0
+margin_bottom = 25.0
+text = "Hey, friend!  You wanna make more money?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buttons" type="VBoxContainer" parent="vbox"]
+margin_top = 29.0
+margin_right = 1024.0
+margin_bottom = 95.0
+
+[node name="hire" type="Button" parent="vbox/buttons"]
+margin_right = 1024.0
+margin_bottom = 31.0
+text = "Hire"
+
+[node name="back" type="Button" parent="vbox/buttons"]
+margin_top = 35.0
+margin_right = 1024.0
+margin_bottom = 66.0
+text = "Leave"

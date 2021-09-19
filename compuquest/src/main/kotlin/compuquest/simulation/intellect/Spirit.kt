@@ -16,12 +16,20 @@ data class Spirit(
   val actionChanceAccumulator: Int = 0,
 )
 
-fun inRangeAndVisible(space: PhysicsDirectSpaceState, world: World, bodyId: Id, body: Body, other: Character, range: Float): Boolean {
+fun inRangeAndVisible(
+  space: PhysicsDirectSpaceState,
+  world: World,
+  bodyId: Id,
+  body: Body,
+  other: Character,
+  range: Float
+): Boolean {
   val otherBody = world.bodies[other.body]
 
   return otherBody != null
       && body.translation.distanceTo(otherBody.translation) <= range
-      && space.intersectRay(body.translation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody)).none()
+      && space.intersectRay(body.translation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody))
+    .none()
 }
 
 fun getNextActionAndTarget(
@@ -33,14 +41,14 @@ fun getNextActionAndTarget(
   val deck = world.deck
   val bodies = deck.bodies
   val body = bodies[character.body] ?: return null
-  val space = world.bodies.values.firstOrNull()?.getWorld()?.directSpaceState ?: return null
+  val space = getSpace(world) ?: return null
 
   val range = actions.maxOfOrNull { it.value.range } ?: 0f
   val options = deck.characters
     .filter { (id, other) ->
       id != actor
-          && other.faction != character.faction
           && other.isAlive
+          && isEnemy(world.factionRelationships, other.faction, character.faction)
           && inRangeAndVisible(space, world, character.body!!, body, other, range)
     }
 
@@ -73,7 +81,7 @@ fun tryUseAction(world: World, actor: Id, character: Character): Events {
             damage = 10,
             target = target,
             owner = actor,
-            speed = 15f,
+            speed = 30f,
           ),
           projectileBody,
         ),

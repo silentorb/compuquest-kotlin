@@ -55,7 +55,7 @@ fun populateZone(bodyScene: PackedScene, dice: Dice, zone: Node) {
 
 fun populateZones(dice: Dice, scene: Node) {
   tempCatch {
-    val bodyScene = GD.load<PackedScene>("res://entities/actor/ActorBody.tscn")!!
+    val bodyScene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
     val zones = scene.getTree()?.getNodesInGroup(zoneGroup)?.filterIsInstance<Spatial>() ?: listOf()
     for (zone in zones) {
       populateZone(bodyScene, dice, zone)

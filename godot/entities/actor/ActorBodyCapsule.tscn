@@ -5,9 +5,10 @@
 [sub_resource type="CapsuleShape" id=1]
 
 [node name="actor" type="KinematicBody"]
+collision/safe_margin = 0.005
 
 [node name="shape" type="CollisionShape" parent="."]
-transform = Transform( 1.04893, 0, 0, 0, -4.58503e-08, -1.04893, 0, 1.04893, -4.58503e-08, 0, 4.76837e-07, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 4.76837e-07, 0 )
 shape = SubResource( 1 )
 
 [node name="sprite" parent="." instance=ExtResource( 1 )]

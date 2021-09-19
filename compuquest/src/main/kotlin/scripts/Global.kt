@@ -2,6 +2,7 @@ package scripts
 
 import compuquest.app.newGame
 import compuquest.definition.newDefinitions
+import compuquest.godoting.tempCatch
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
 import compuquest.simulation.general.newHandCommand
@@ -38,7 +39,7 @@ class Global : Node() {
     instance = this
   }
 
-  var restarting = false
+  var restarting = 0
 
   fun restartGame() {
     val tree = getTree()
@@ -55,7 +56,7 @@ class Global : Node() {
       }
       // Wait until the frame has finished processing and the queued nodes are freed before
       // continuing with the restarting process
-      restarting = true
+      restarting = 1
     }
   }
 
@@ -71,23 +72,28 @@ class Global : Node() {
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
     if (!Engine.editorHint) {
-      val localWorlds = worlds
-      if (restarting) {
-        val tree = getTree()
-        val root = tree?.root
-        tree!!.reloadCurrentScene()
-        // This needs to happen after the scene is reloaded
-        worlds = listOf(newGame(root!!, definitions))
-        restarting = false
-      } else if (localWorlds.none()) {
-        val root = getTree()?.root
-        if (root != null) {
-          worlds = listOf(newGame(root, definitions))
+      tempCatch {
+        val localWorlds = worlds
+        if (restarting == 1) {
+          val tree = getTree()
+          tree!!.reloadCurrentScene()
+          restarting = 2
+        } else if (restarting == 2) {
+          val tree = getTree()
+          val root = tree?.root
+          // This needs to happen after the scene is reloaded
+          worlds = listOf(newGame(root!!, definitions))
+          restarting = 0
+        } else if (localWorlds.none()) {
+          val root = getTree()?.root
+          if (root != null) {
+            worlds = listOf(newGame(root, definitions))
+          }
+        } else {
+          val commands = eventQueue.toList()
+          eventQueue.clear()
+          worlds = localWorlds.plus(updateWorld(commands, delta.toFloat(), localWorlds)).takeLast(2)
         }
-      } else {
-        val commands = eventQueue.toList()
-        eventQueue.clear()
-        worlds = worlds.plus(updateWorld(commands, delta.toFloat(), localWorlds)).takeLast(2)
       }
     }
   }
