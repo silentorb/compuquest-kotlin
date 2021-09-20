@@ -22,7 +22,7 @@ fun deleteEntities(events: Events, world: World): World {
     }
   }
   return world.copy(
-    bodies = world.bodies - deletions,
+    bodies = world.bodies - distinctBodyDeletions,
     deck = removeEntities(deletions)(deck),
   )
 }

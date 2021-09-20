@@ -1,5 +1,6 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.definition.Factions
 import silentorb.mythic.ent.Id
 
 object InteractionActions {
@@ -34,8 +35,8 @@ private const val interactableMaxDistance = 4f
 fun getInteractable(world: World, actor: Id): Interactable? {
   val target = castCharacterRay(world, actor, interactableMaxDistance)
   return if (target != null) {
-    val faction = world.deck.characters[target]?.faction
-    if (faction == null)
+    val faction = world.deck.characters[target]?.faction ?: Factions.neutral
+    if (faction == Factions.neutral)
       Interactable(
         target = target,
         action = InteractionActions.talk,

@@ -1,7 +1,7 @@
 package compuquest.simulation.definition
 
 object Factions {
-  val undead = "undead"
-  val player = "player"
-  val neutral = "neutral"
+  const val undead = "undead"
+  const val player = "player"
+  const val neutral = "neutral"
 }

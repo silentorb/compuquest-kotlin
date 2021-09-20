@@ -51,9 +51,10 @@ creature = ExtResource( 3 )
 health_value = 100
 
 [node name="actor" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 2.18458, -3.05739 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, -3.05739 )
 
 [node name="char" type="Node" parent="actor"]
 script = ExtResource( 4 )
 creature = ExtResource( 3 )
+faction = "neutral"
 health_value = 50

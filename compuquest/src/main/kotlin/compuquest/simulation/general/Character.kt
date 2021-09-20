@@ -10,7 +10,7 @@ import silentorb.mythic.happening.handleEvents
 
 data class Character(
   val name: String,
-  val faction: Key? = null,
+  val faction: Key,
   val health: IntResource,
   val body: Id? = null,
   override val depiction: String,

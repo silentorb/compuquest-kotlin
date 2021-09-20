@@ -1,7 +1,7 @@
 package scripts.entities.actor
 
 import compuquest.simulation.definition.ResourceType
-import compuquest.serving.componentGroup
+import compuquest.simulation.general.componentGroup
 import godot.Node
 import godot.annotation.*
 

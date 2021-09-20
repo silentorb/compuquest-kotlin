@@ -1,6 +1,6 @@
 package scripts.entities.actor
 
-import compuquest.serving.componentGroup
+import compuquest.simulation.general.componentGroup
 import godot.Node
 import godot.annotation.*
 

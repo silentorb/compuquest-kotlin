@@ -1,9 +1,9 @@
-package compuquest.serving
+package compuquest.simulation.general
 
 import silentorb.mythic.godoting.getVariantArray
 import compuquest.simulation.definition.Cost
+import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
-import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
@@ -29,6 +29,12 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
         val sprite = node.getParent()?.findNode("sprite")
         val depiction = creature.get("depiction") as? String ?: ""
         sprite?.set("animation", depiction)
+        val rawFaction = faction ?: node.faction
+        val refinedFaction = if (rawFaction == "")
+          Factions.neutral
+        else
+          rawFaction
+
         listOf(
           Hand(
             id = id,
@@ -36,12 +42,13 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
             listOfNotNull(
               Character(
                 name = node.name,
-                faction = faction ?: node.faction,
+                faction = refinedFaction,
                 health = IntResource(node.healthValue, (creature.get("health") as? Long)?.toInt() ?: 1),
                 body = body ?: id,
                 depiction = depiction,
               ),
               sprite,
+              spatial,
               Spirit(),
             )
           )
