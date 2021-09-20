@@ -1,6 +1,6 @@
 package scripts.entities.actor
 
-import compuquest.simulation.general.componentGroup
+import compuquest.serving.componentGroup
 import godot.Node
 import godot.Resource
 import godot.annotation.*
@@ -19,7 +19,7 @@ class AttachCharacter : Node() {
 
   @Export
   @RegisterProperty
-  var healthValue: Int = 0
+  var healthValue: Int = 1
 
   @RegisterFunction
   override fun _ready() {

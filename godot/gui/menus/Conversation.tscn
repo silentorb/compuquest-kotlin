@@ -1,11 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://gui/style/Theme.tres" type="Theme" id=1]
+[ext_resource path="res://src/main/kotlin/scripts/gui/Conversation.kt" type="Script" id=2]
 
 [node name="conversation" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -20,29 +22,29 @@ __meta__ = {
 }
 
 [node name="vbox" type="VBoxContainer" parent="."]
+margin_top = 265.0
 margin_right = 1024.0
-margin_bottom = 600.0
+margin_bottom = 334.0
+size_flags_vertical = 4
 
-[node name="message" type="Label" parent="vbox"]
+[node name="margin" type="MarginContainer" parent="vbox"]
 margin_right = 1024.0
-margin_bottom = 25.0
-text = "Hey, friend!  You wanna make more money?"
+margin_bottom = 65.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="message" type="Label" parent="vbox/margin"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1004.0
+margin_bottom = 45.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="buttons" type="VBoxContainer" parent="vbox"]
-margin_top = 29.0
+margin_top = 69.0
 margin_right = 1024.0
-margin_bottom = 95.0
-
-[node name="hire" type="Button" parent="vbox/buttons"]
-margin_right = 1024.0
-margin_bottom = 31.0
-text = "Hire"
-
-[node name="back" type="Button" parent="vbox/buttons"]
-margin_top = 35.0
-margin_right = 1024.0
-margin_bottom = 66.0
-text = "Leave"
+margin_bottom = 69.0

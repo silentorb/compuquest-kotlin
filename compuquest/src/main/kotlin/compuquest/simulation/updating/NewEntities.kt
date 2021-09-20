@@ -1,6 +1,6 @@
 package compuquest.simulation.updating
 
-import compuquest.godoting.tempCatch
+import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.*
 import silentorb.mythic.happening.Events
 import godot.Spatial

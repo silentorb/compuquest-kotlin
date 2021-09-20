@@ -8,6 +8,7 @@ import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import scripts.Global
+import silentorb.mythic.godoting.clearChildren
 
 @RegisterClass
 class PlayerInfo : Node() {
@@ -19,10 +20,7 @@ class PlayerInfo : Node() {
   fun updateResources(faction: Faction?) {
 	val resources = resourcesGrid
 	if (resources != null) {
-	  for (child in resources.getChildren()) {
-		resources.removeChild(child as Node)
-		child.queueFree()
-	  }
+		clearChildren(resources)
 
 	  if (faction != null) {
 		for (resource in faction.resources) {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://world/test/test-zone.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://entities/world/Zone.tscn" type="PackedScene" id=7]
 [ext_resource path="res://world/factions/undead.tres" type="Resource" id=8]
 [ext_resource path="res://world/factions/microcorp.tres" type="Resource" id=9]
+[ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=10]
 
 [node name="root" type="Spatial"]
 
@@ -48,3 +49,11 @@ amount = 200
 script = ExtResource( 4 )
 creature = ExtResource( 3 )
 health_value = 100
+
+[node name="actor" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 2.18458, -3.05739 )
+
+[node name="char" type="Node" parent="actor"]
+script = ExtResource( 4 )
+creature = ExtResource( 3 )
+health_value = 50

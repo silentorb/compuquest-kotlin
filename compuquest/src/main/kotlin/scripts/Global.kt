@@ -2,8 +2,9 @@ package scripts
 
 import compuquest.app.newGame
 import compuquest.definition.newDefinitions
-import compuquest.godoting.tempCatch
+import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Hand
+import compuquest.simulation.general.Player
 import compuquest.simulation.general.World
 import compuquest.simulation.general.newHandCommand
 import silentorb.mythic.happening.Event
@@ -13,6 +14,9 @@ import godot.Input
 import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import godot.annotation.RegisterProperty
+import silentorb.mythic.ent.Id
+import silentorb.mythic.godoting.instantiateScene
 
 @RegisterClass
 class Global : Node() {
@@ -27,12 +31,20 @@ class Global : Node() {
       eventQueue.add(event)
     }
 
+    fun addPlayerCommand(type: String, value: Any? = null) {
+      val player = world?.deck?.players?.keys?.firstOrNull()
+      addCommand((Event(type, player, value)))
+    }
+
     fun newHand(hand: Hand) {
       addCommand(newHandCommand(hand))
     }
 
     val world: World?
       get() = instance?.worlds?.lastOrNull()
+
+    fun getPlayer(): Map.Entry<Id, Player>? =
+      world?.deck?.players?.entries?.firstOrNull()
   }
 
   init {
@@ -58,6 +70,12 @@ class Global : Node() {
       // continuing with the restarting process
       restarting = 1
     }
+  }
+
+  @RegisterFunction
+  override fun _ready() {
+    val hud = instantiateScene<Node>("res://gui/hud/Hud.tscn")!!
+    addChild(hud)
   }
 
   @RegisterFunction
@@ -93,6 +111,13 @@ class Global : Node() {
           val commands = eventQueue.toList()
           eventQueue.clear()
           worlds = localWorlds.plus(updateWorld(commands, delta.toFloat(), localWorlds)).takeLast(2)
+          val nextWorld = worlds.lastOrNull()
+          val player = nextWorld?.deck?.players?.entries?.firstOrNull()
+          if (player != null) {
+            val playerRigIsActive = player.value.interactingWith == null
+            val body = nextWorld.bodies[player.key]
+            body?.set("isActive", playerRigIsActive)
+          }
         }
       }
     }

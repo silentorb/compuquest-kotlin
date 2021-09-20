@@ -1,8 +1,8 @@
 package compuquest.serving
 
-import compuquest.godoting.findChildren
-import compuquest.godoting.getVariantArray
-import compuquest.godoting.tempCatch
+import silentorb.mythic.godoting.findChildren
+import silentorb.mythic.godoting.getVariantArray
+import silentorb.mythic.godoting.tempCatch
 import godot.Node
 import godot.PackedScene
 import godot.Resource

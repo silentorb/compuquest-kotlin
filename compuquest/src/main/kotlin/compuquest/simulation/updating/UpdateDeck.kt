@@ -10,6 +10,6 @@ fun updateDeck(events: Events, world: World, delta: Float): Deck {
     accessories = mapTable(deck.accessories, updateAccessory(events, delta)),
     characters = mapTable(deck.characters, updateCharacter(events, world)),
     factions = mapTable(deck.factions, updateFaction(world, events)),
-    players = mapTable(deck.players, updatePlayer(world)),
+    players = mapTable(deck.players, updatePlayer(world, events)),
   )
 }

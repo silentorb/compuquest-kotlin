@@ -1,10 +1,9 @@
 package scripts.entities.actor
 
-import compuquest.simulation.general.componentGroup
+import compuquest.serving.componentGroup
 import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
-import godot.annotation.Tool
 
 @RegisterClass
 class AttachPlayer : Node() {

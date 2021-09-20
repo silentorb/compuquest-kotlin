@@ -1,4 +1,4 @@
-package compuquest.godoting
+package silentorb.mythic.godoting
 
 import godot.Node
 import godot.Object
@@ -46,3 +46,10 @@ fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
 
       selfList + findChildren(child, predicate)
     }
+
+fun clearChildren(node: Node) {
+  for (child in node.getChildren()) {
+    node.removeChild(child as Node)
+    child.queueFree()
+  }
+}

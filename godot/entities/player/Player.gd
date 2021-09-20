@@ -30,6 +30,8 @@ var _speed: int
 var _is_sprinting_input := false
 var _is_jumping_input := false
 
+var isActive = true
+
 ##################################################
 
 # Called when the node enters the scene tree
@@ -40,26 +42,32 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame
 func _process(_delta: float) -> void:
-	move_axis.x = Input.get_action_strength("move_forward") - Input.get_action_strength("move_backward")
-	move_axis.y = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	
-	if Input.is_action_just_pressed("move_jump"):
-		_is_jumping_input = true
-	
-	if Input.is_action_pressed("move_sprint"):
-		_is_sprinting_input = true
+	if isActive:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		move_axis.x = Input.get_action_strength("move_forward") - Input.get_action_strength("move_backward")
+		move_axis.y = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+
+		if Input.is_action_just_pressed("move_jump"):
+			_is_jumping_input = true
+
+		if Input.is_action_pressed("move_sprint"):
+			_is_sprinting_input = true
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 # Called every physics tick. 'delta' is constant
 func _physics_process(delta: float) -> void:
-	walk(delta)
+	if isActive:
+		walk(delta)
 
 
 # Called when there is an input event
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		mouse_axis = event.relative
-		camera_rotation()
+	if isActive:
+		if event is InputEventMouseMotion:
+			mouse_axis = event.relative
+			camera_rotation()
 
 
 func walk(delta: float) -> void:

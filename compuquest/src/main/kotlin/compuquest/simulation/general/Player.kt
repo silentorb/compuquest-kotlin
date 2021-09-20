@@ -1,7 +1,10 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.handleEvents
 
 const val maxPartySize = 4
 const val playerFaction = "player"
@@ -13,18 +16,34 @@ data class Player(
   val interactingWith: Id? = null,
 )
 
-fun updatePlayer(world: World): (Id, Player) -> Player = { actor, player ->
-  val deck = world.deck
+fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
+  when (event.type) {
+    Commands.interact -> player.canInteractWith?.target
+    Commands.finishInteraction -> null
+    else -> value
+  }
+}
+
+fun updateParty() = handleEvents<List<Id>> { event, value ->
+  when (event.type) {
+    Commands.hiredNpc -> value + event.value as Id
+    else -> value
+  }
+}
+
+fun updatePlayer(world: World, events: Events): (Id, Player) -> Player = { actor, player ->
   val canInteractWith = if (player.interactingWith == null)
     getInteractable(world, actor)
   else
-    player.canInteractWith
+    null
 
-//  val interactingWith = if (player.interactingWith == null && deck.players.containsKey(actor))
-//    updateInteracting(world, actor)
-//  else
-//    player.interactingWith
+  val playerEvents = events.filter { it.target == actor }
+  val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
+  val party = updateParty()(playerEvents, player.party)
+
   player.copy(
     canInteractWith = canInteractWith,
+    interactingWith = interactingWith,
+    party = party,
   )
 }

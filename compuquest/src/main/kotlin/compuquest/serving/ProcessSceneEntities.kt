@@ -1,8 +1,9 @@
-package compuquest.simulation.general
+package compuquest.serving
 
-import compuquest.godoting.getVariantArray
+import silentorb.mythic.godoting.getVariantArray
 import compuquest.simulation.definition.Cost
 import compuquest.simulation.definition.ResourceType
+import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
@@ -17,7 +18,7 @@ import silentorb.mythic.ent.NextId
 
 const val componentGroup = "component"
 
-fun processComponentNode(nextId: NextId, body: Id, faction: Key?, node: Node): List<Hand> =
+fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: Key?, node: Node): List<Hand> =
   when (node) {
     is AttachCharacter -> {
       val creature = node.creature
@@ -37,7 +38,7 @@ fun processComponentNode(nextId: NextId, body: Id, faction: Key?, node: Node): L
                 name = node.name,
                 faction = faction ?: node.faction,
                 health = IntResource(node.healthValue, (creature.get("health") as? Long)?.toInt() ?: 1),
-                body = body,
+                body = body ?: id,
                 depiction = depiction,
               ),
               sprite,
@@ -76,7 +77,7 @@ fun newPlayer(
   val id = nextId()
   val memberHands = components
     .flatMap { child ->
-      processComponentNode(nextId, id, faction, child)
+      processComponentNode(nextId, null, id, faction, child)
     }
 
   return listOf(
@@ -106,15 +107,7 @@ fun newPlayer(
 fun newCharacterBody(
   nextId: NextId, spatial: Spatial, components: List<Node>
 ): List<Hand> {
-  val id = nextId()
-  return listOf(
-    Hand(
-      id = id,
-      components = listOf<Any>(
-        spatial,
-      )
-    )
-  ) + components.flatMap { processComponentNode(nextId, id, null, it) }
+  return components.flatMap { processComponentNode(nextId, spatial, null, null, it) }
 }
 
 fun processSceneEntities(root: Node, world: World): World {

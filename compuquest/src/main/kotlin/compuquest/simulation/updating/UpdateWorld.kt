@@ -1,6 +1,6 @@
 package compuquest.simulation.updating
 
-import compuquest.godoting.tempCatch
+import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Body
 import compuquest.simulation.general.World
 import silentorb.mythic.happening.Events
@@ -38,7 +38,7 @@ fun updateDepictions(previous: World, next: World) {
 fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
   val world = worlds.last()
   val world2 = syncMythicToGodot(world)
-  val events2 = events + gatherEvents(world2, worlds.dropLast(1).firstOrNull(), delta)
+  val events2 = events + gatherEvents(world2, worlds.dropLast(1).firstOrNull(), delta, events)
   val deck = updateDeck(events2, world2, delta)
   val world3 = world2.copy(
     deck = deck,

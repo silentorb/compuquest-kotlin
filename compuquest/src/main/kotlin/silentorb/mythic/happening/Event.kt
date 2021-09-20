@@ -19,3 +19,7 @@ inline fun <reified T>filterEventTargets(type: Key, events: Events) =
   events
     .filter { it.type == type}
     .mapNotNull { it.target as? T }
+
+fun <T> handleEvents(handler: (Event, T) -> T): (Events, T) -> T = { events, initial ->
+  events.fold(initial) { a, b -> handler(b, a) }
+}

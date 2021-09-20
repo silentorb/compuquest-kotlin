@@ -1,10 +1,12 @@
 package compuquest.simulation.general
 
-import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventValues
+import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.Table
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventValues
+import silentorb.mythic.happening.handleEvents
 
 data class Character(
   val name: String,
@@ -43,6 +45,13 @@ const val modifyHealthCommand = "modifyHealth"
 //    listOf()
 //}
 
+fun updateCharacterBody() = handleEvents<Id?> { event, value ->
+  when (event.type) {
+    Commands.joinedPlayer -> event.value as Id
+    else -> value
+  }
+}
+
 fun updateCharacter(events: Events, world: World): (Id, Character) -> Character = { actor, character ->
   val deck = world.deck
   val characterEvents = events.filter { it.target == actor }
@@ -58,6 +67,7 @@ fun updateCharacter(events: Events, world: World): (Id, Character) -> Character 
 
   character.copy(
     health = health,
-    depiction = depiction
+    depiction = depiction,
+    body = updateCharacterBody()(characterEvents, character.body)
   )
 }

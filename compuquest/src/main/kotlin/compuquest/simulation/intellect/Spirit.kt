@@ -1,6 +1,6 @@
 package compuquest.simulation.intellect
 
-import compuquest.godoting.instantiateScene
+import silentorb.mythic.godoting.instantiateScene
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.general.*
 import godot.PhysicsDirectSpaceState
