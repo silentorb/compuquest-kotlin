@@ -24,9 +24,11 @@ data class Accessory(
   val attributes: Set<Key>,
   val effect: Key,
   val strength: Float = 0f,
-)
+) {
+  val strengthInt: Int get() = strength.toInt()
+}
 
-object AccessoryAttributes {
+object AccessoryEffects {
   val attack = "attack"
   val heal = "heal"
 }

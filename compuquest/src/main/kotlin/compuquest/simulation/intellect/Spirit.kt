@@ -1,16 +1,16 @@
 package compuquest.simulation.intellect
 
 import compuquest.simulation.combat.attack
+import compuquest.simulation.combat.heal
 import compuquest.simulation.general.*
 import godot.PhysicsDirectSpaceState
 import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
-import silentorb.mythic.ent.Table
 import silentorb.mythic.happening.Events
 
 data class Spirit(
   val actionChanceAccumulator: Int = 0,
-  val lastTriedAction: Id? = null,
+  val focusedAction: Id? = null,
 )
 
 fun inRangeAndVisible(
@@ -33,13 +33,13 @@ fun filterEnemyTargets(
   world: World,
   actor: Id,
   character: Character,
-  actions: Table<Accessory>
+  action: Accessory
 ): Map<Id, Character> {
   val deck = world.deck
   val bodies = deck.bodies
   val body = bodies[character.body] ?: return mapOf()
   val space = getSpace(world) ?: return mapOf()
-  val range = actions.maxOfOrNull { it.value.range } ?: 0f
+  val range = action.range
   return deck.characters
     .filter { (id, other) ->
       id != actor
@@ -68,49 +68,63 @@ fun getNextActionAndTarget(
   world: World,
   actor: Id,
   character: Character,
-  actions: Table<Accessory>
-): Triple<Id, Accessory, Id>? {
-  val deck = world.deck
-  val bodies = deck.bodies
-  val body = bodies[character.body] ?: return null
-  val options = filterEnemyTargets(world, actor, character, actions)
-
-  return if (options.any()) {
-    val target = world.dice.takeOne(options.entries)
-    val targetBody = bodies[target.value.body]!!
-    val distance = body.translation.distanceTo(targetBody.translation)
-    val action = actions.entries.first { it.value.range >= distance }
-    Triple(action.key, action.value, target.key)
-  } else
-    null
+  accessory: Accessory
+): Id? {
+  val options = filterEnemyTargets(world, actor, character, accessory)
+  return world.dice.takeOneOrNull(options.entries)?.key
 }
 
-fun tryUseAction(world: World, actor: Id, character: Character): Events {
-  val deck = world.deck
-  val readyActions = getAccessories(deck.accessories, actor)
-    .filter { canUse(world, it.value) }
+fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit): Events {
+  val action = spirit.focusedAction
+  val accessory = world.deck.accessories[action]
+  return if (action != null && accessory != null) {
+    when (accessory.effect) {
+      AccessoryEffects.attack -> {
+        val target = getNextActionAndTarget(world, actor, character, accessory)
+        if (target != null) {
+          attack(world, actor, character, action, accessory, target)
+        } else
+          listOf()
+      }
+      AccessoryEffects.heal -> {
+        val strength = accessory.strengthInt
+        val targets = filterAllyTargets(world, actor, character)
+          .filterValues {
+            it.isAlive &&
+                (it.health.value <= it.health.max - strength || it.health.value < it.health.max / 2)
+          }
 
-  return if (readyActions.any()) {
-    val option = getNextActionAndTarget(world, actor, character, readyActions)
-    if (option != null) {
-      val (action, accessory, target) = option
-      attack(world, actor, character, action, accessory, target)
-    } else
-      listOf()
+        val target = world.dice.takeOneOrNull(targets.keys)
+        if (target != null) {
+          heal(action, accessory, target)
+        } else
+          listOf()
+      }
+      else -> listOf()
+    }
   } else
     listOf()
 }
 
-fun eventsFromSpirit(world: World, actor: Id): Events {
+fun pursueGoals(world: World, actor: Id): Events {
   val deck = world.deck
   val character = deck.characters[actor]!!
-  return if (character.isAlive)
-    tryUseAction(world, actor, character)
+  val spirit = world.deck.spirits[actor]
+  return if (character.isAlive && spirit != null)
+    tryUseAction(world, actor, character, spirit)
   else
     listOf()
 }
 
-fun updateSpirit(world: World, events: Events): (Id, Spirit): Spirit = { actor, spirit ->
-  val characterEvents = events.filter { it.target == actor }
-  val 
+fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
+  // Ensure the same action is never immediately tried twice in a row.
+  // With the current setup, that situation could lead to race conditions.
+  val readyActions = getReadyAccessories(world, actor)
+    .minus(spirit.focusedAction ?: 0L) // Branching shortcut.  Assuming 0L is never a valid key.
+
+  val focusedAction = world.dice.takeOneOrNull(readyActions.keys)
+
+  spirit.copy(
+    focusedAction = focusedAction,
+  )
 }

@@ -50,6 +50,11 @@ script = ExtResource( 4 )
 creature = ExtResource( 3 )
 health_value = 100
 
+[node name="joe" type="Node" parent="player"]
+script = ExtResource( 4 )
+creature = ExtResource( 3 )
+health_value = 100
+
 [node name="actor" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, -3.05739 )
 

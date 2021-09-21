@@ -5,6 +5,7 @@ import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.Table
+import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.happening.handleEvents
@@ -23,6 +24,10 @@ data class Character(
 fun getAccessories(accessories: Table<Accessory>, actor: Id) =
   accessories.filterValues { it.owner == actor }
 
+fun getReadyAccessories(world: World, actor: Id) =
+  getAccessories(world.deck.accessories, actor)
+    .filter { canUse(world, it.value) }
+
 fun canUse(world: World, accessory: Accessory): Boolean {
   val deck = world.deck
   val actor = deck.characters[accessory.owner]
@@ -34,6 +39,9 @@ fun canUse(world: World, accessory: Accessory): Boolean {
 }
 
 const val modifyHealthCommand = "modifyHealth"
+
+fun modifyHealth(target: Id, amount: Int) =
+  Event(modifyHealthCommand, target, amount)
 
 //fun eventsFromCharacter(world: World, previous: World?): (Id, Character) -> Events = { actor, character ->
 //  if (previous != null) {
@@ -60,7 +68,7 @@ val updateCharacterFaction = handleEvents<Key> { event, value ->
   }
 }
 
-fun updateCharacter(events: Events, world: World): (Id, Character) -> Character = { actor, character ->
+fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
   val deck = world.deck
   val characterEvents = events.filter { it.target == actor }
   val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)

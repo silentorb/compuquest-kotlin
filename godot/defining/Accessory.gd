@@ -1,6 +1,6 @@
 extends Resource
 
-export(String, "attack", "heal") var effect
+export(String, "none", "attack", "heal") var effect
 export(float) var strength
 export(float) var Range
 export(String, "mana", "money") var costResource
