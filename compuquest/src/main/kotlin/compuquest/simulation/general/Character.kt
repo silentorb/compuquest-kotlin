@@ -1,5 +1,6 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.definition.Factions
 import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -45,9 +46,16 @@ const val modifyHealthCommand = "modifyHealth"
 //    listOf()
 //}
 
-fun updateCharacterBody() = handleEvents<Id?> { event, value ->
+val updateCharacterBody = handleEvents<Id?> { event, value ->
   when (event.type) {
     Commands.joinedPlayer -> event.value as Id
+    else -> value
+  }
+}
+
+val updateCharacterFaction = handleEvents<Key> { event, value ->
+  when (event.type) {
+    Commands.joinedPlayer -> Factions.player
     else -> value
   }
 }
@@ -68,6 +76,7 @@ fun updateCharacter(events: Events, world: World): (Id, Character) -> Character 
   character.copy(
     health = health,
     depiction = depiction,
-    body = updateCharacterBody()(characterEvents, character.body)
+    body = updateCharacterBody(characterEvents, character.body),
+    faction = updateCharacterFaction(characterEvents, character.faction)
   )
 }

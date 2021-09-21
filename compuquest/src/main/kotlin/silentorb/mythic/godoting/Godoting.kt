@@ -31,7 +31,7 @@ fun deleteNode(node: Node) {
   }
 }
 
-inline fun <reified T>getVariantArray(property: String, value: Object?): List<T> =
+inline fun <reified T> getVariantArray(property: String, value: Object?): List<T> =
   (value?.get(property) as? VariantArray<*>)?.filterIsInstance<T>() ?: listOf()
 
 fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
@@ -53,3 +53,21 @@ fun clearChildren(node: Node) {
     child.queueFree()
   }
 }
+
+fun getFloat(value: Object, property: String): Float =
+  (value.get(property) as? Double?)?.toFloat() ?: 0f
+
+fun getFloatOrNull(value: Object, property: String): Float? =
+  (value.get(property) as? Double?)?.toFloat()
+
+fun getString(value: Object, property: String): String =
+  value.get(property) as? String ?: ""
+
+fun getIntOrNull(value: Object, property: String): Int? =
+  (value.get(property) as? Long?)?.toInt()
+
+fun getInt(value: Object, property: String): Int =
+  getIntOrNull(value, property) ?: 0
+
+inline fun <reified T> getList(value: Object, property: String): List<T> =
+  (value.get(property) as? VariantArray<*>)?.filterIsInstance<T>() ?: listOf()

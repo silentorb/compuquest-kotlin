@@ -40,6 +40,9 @@ fun isEnemy(relationships: RelationshipTable, first: Key?, second: Key?): Boolea
   else
     getRelationshipCategory(relationships, first, second) == RelationshipCategory.war
 
+fun isAlly(relationships: RelationshipTable, first: Key?, second: Key?): Boolean =
+  !isEnemy(relationships, first, second)
+
 data class NewFaction(
   val key: String,
   val data: Faction,

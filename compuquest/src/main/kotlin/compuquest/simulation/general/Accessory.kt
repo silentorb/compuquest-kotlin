@@ -1,13 +1,16 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.definition.AccessoryDefinition
 import compuquest.simulation.definition.Cost
-import compuquest.simulation.definition.Definitions
-import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventTargets
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventTargets
 import kotlin.math.max
+
+//data class ActionEffect(
+//  val type: String,
+//  val strength: Float = 0f,
+//)
 
 data class Accessory(
   val owner: Id,
@@ -18,7 +21,15 @@ data class Accessory(
   val range: Float = 0f,
   val cost: Cost? = null,
   val spawns: Key? = null,
+  val attributes: Set<Key>,
+  val effect: Key,
+  val strength: Float = 0f,
 )
+
+object AccessoryAttributes {
+  val attack = "attack"
+  val heal = "heal"
+}
 
 const val useActionCommand = "useAction"
 
@@ -37,12 +48,12 @@ fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory 
   }
 }
 
-fun accessoryFromDefinition(definition: AccessoryDefinition, owner: Id) =
-  Accessory(
-    owner = owner,
-    maxCooldown = definition.cooldown,
-    name = definition.name,
-    range = definition.range,
-    cost = definition.cost,
-    spawns = definition.spawns,
-  )
+//fun accessoryFromDefinition(definition: AccessoryDefinition, owner: Id) =
+//  Accessory(
+//    owner = owner,
+//    maxCooldown = definition.cooldown,
+//    name = definition.name,
+//    range = definition.range,
+//    cost = definition.cost,
+//    spawns = definition.spawns,
+//  )

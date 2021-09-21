@@ -1,6 +1,5 @@
 package compuquest.simulation.general
 
-import silentorb.mythic.godoting.getVariantArray
 import compuquest.simulation.definition.Cost
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
@@ -15,6 +14,7 @@ import scripts.entities.actor.AttachResource
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
+import silentorb.mythic.godoting.*
 
 const val componentGroup = "component"
 
@@ -27,7 +27,7 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
       else {
         val id = nextId()
         val sprite = node.getParent()?.findNode("sprite")
-        val depiction = creature.get("depiction") as? String ?: ""
+        val depiction = getString(creature, "depiction")
         sprite?.set("animation", depiction)
         val rawFaction = faction ?: node.faction
         val refinedFaction = if (rawFaction == "")
@@ -43,7 +43,7 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
               Character(
                 name = node.name,
                 faction = refinedFaction,
-                health = IntResource(node.healthValue, (creature.get("health") as? Long)?.toInt() ?: 1),
+                health = IntResource(node.healthValue, getIntOrNull(creature, "health") ?: 1),
                 body = body ?: id,
                 depiction = depiction,
               ),
@@ -54,20 +54,23 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
           )
         ) + getVariantArray<Resource>("accessories", creature)
           .map { accessory ->
-            val costResource = accessory.get("costResource") as? String ?: ""
+            val costResource = getString(accessory, "costResource")
             Hand(
               id = nextId(),
               components = listOf(
                 Accessory(
                   owner = id,
-                  name = accessory.get("name") as? String ?: "",
-                  maxCooldown = (accessory.get("cooldown") as? Double)?.toFloat() ?: 0f,
-                  range = (accessory.get("Range") as? Double?)?.toFloat() ?: 0f,
+                  name = getString(accessory, "name"),
+                  maxCooldown = getFloat(accessory, "cooldown"),
+                  range = getFloat(accessory, "Range"),
                   cost = Cost(
                     resource = ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana,
-                    amount = (accessory.get("costAmount") as? Long)?.toInt() ?: 0,
+                    amount = getInt(accessory, "costAmount"),
                   ),
                   spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
+                  effect = getString(accessory, "effect"),
+                  strength = getFloat(accessory, "strength"),
+                  attributes = getList<Key>(accessory, "attributes").toSet()
                 )
               )
             )
