@@ -35,13 +35,17 @@ class Portrait : Node() {
 	verticalBox?.visible = false
   }
 
-  fun characterChanged(character: Character) {
+  fun characterChanged(character: Character, previous: Character?) {
 //    avatar?.frame = character.frame
 	if (character.depiction != "")
 	  avatar?.animation = character.depiction
 
 	nameLabel?.text = character.name
-	health?.text = displayText(character.health)
+	val localHealth = health
+	if (localHealth != null) {
+	  localHealth.text = displayText(character.health)
+	  numberChangedEffect(localHealth, character.health.value, previous?.health?.value)
+	}
   }
 
   @RegisterFunction
@@ -55,9 +59,10 @@ class Portrait : Node() {
 	  val localCharacter = lastCharacter
 	  val character = deck.characters[actor]
 	  if (localCharacter != character) {
-		lastCharacter = character
 		if (character != null)
-		  characterChanged(character)
+		  characterChanged(character, localCharacter)
+
+		lastCharacter = character
 	  }
 	}
 	verticalBox?.visible = lastCharacter != null

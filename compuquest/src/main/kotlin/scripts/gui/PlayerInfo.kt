@@ -17,10 +17,10 @@ class PlayerInfo : Node() {
   private var lastFaction: Faction? = null
   private var resourcesGrid: GridContainer? = null
 
-  fun updateResources(faction: Faction?) {
+  fun updateResources(faction: Faction?, previousFaction: Faction? = null) {
 	val resources = resourcesGrid
 	if (resources != null) {
-		clearChildren(resources)
+	  clearChildren(resources)
 
 	  if (faction != null) {
 		for (resource in faction.resources) {
@@ -28,8 +28,10 @@ class PlayerInfo : Node() {
 		  val b = Label()
 		  a.text = resource.key.name.capitalize()
 		  b.text = resource.value.toString()
+			b.name = "player_resource"
 		  resources.addChild(a)
 		  resources.addChild(b)
+		  numberChangedEffect(b, resource.value, previousFaction?.resources?.getOrElse(resource.key) { null })
 		}
 	  }
 	}
@@ -50,13 +52,13 @@ class PlayerInfo : Node() {
 	  factions[player.faction]
 	else
 	  null
-	
+
 	if (lastPlayer != player) {
 	  lastPlayer = player
 	}
 	if (lastFaction != faction) {
+	  updateResources(faction, lastFaction)
 	  lastFaction = faction
-	  updateResources(faction)
 	}
   }
 }
