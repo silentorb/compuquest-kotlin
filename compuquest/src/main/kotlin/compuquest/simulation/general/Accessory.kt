@@ -34,6 +34,7 @@ object AccessoryEffects {
 }
 
 const val useActionCommand = "useAction"
+const val detrimentalEffectCommand = "detrementalEffect"
 
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
   val uses = filterEventTargets<Id>(useActionCommand, events)

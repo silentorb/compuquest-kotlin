@@ -25,3 +25,6 @@ data class World(
 
 fun getSpace(world: World): PhysicsDirectSpaceState? =
   world.bodies.values.firstOrNull()?.getWorld()?.directSpaceState
+
+fun getPlayer(world: World?) =
+  world?.deck?.players?.entries?.firstOrNull()

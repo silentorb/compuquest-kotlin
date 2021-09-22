@@ -5,6 +5,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
+import kotlin.math.max
 
 const val maxPartySize = 4
 const val playerFaction = "player"
@@ -31,7 +32,10 @@ fun updateParty() = handleEvents<List<Id>> { event, value ->
   }
 }
 
-fun updatePlayer(world: World, events: Events): (Id, Player) -> Player = { actor, player ->
+fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
+  events.any { it.type == detrimentalEffectCommand && player.party.contains(it.target)}
+
+fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
   val canInteractWith = if (player.interactingWith == null)
     getInteractable(world, actor)
   else
@@ -40,7 +44,6 @@ fun updatePlayer(world: World, events: Events): (Id, Player) -> Player = { actor
   val playerEvents = events.filter { it.target == actor }
   val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
   val party = updateParty()(playerEvents, player.party)
-
   player.copy(
     canInteractWith = canInteractWith,
     interactingWith = interactingWith,

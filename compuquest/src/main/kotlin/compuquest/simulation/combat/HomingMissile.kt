@@ -2,6 +2,7 @@ package compuquest.simulation.combat
 
 import compuquest.simulation.general.World
 import compuquest.simulation.general.deleteEntityCommand
+import compuquest.simulation.general.detrimentalEffectCommand
 import compuquest.simulation.general.modifyHealthCommand
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -25,7 +26,8 @@ fun eventsFromHomingMissile(world: World, delta: Float): (Id, HomingMissile) -> 
     if (distance < 1f)
       listOf(
         Event(modifyHealthCommand, missile.target, -missile.damage),
-        Event(deleteEntityCommand, actor)
+        Event(deleteEntityCommand, actor),
+        Event(detrimentalEffectCommand, missile.target)
       )
     else {
       val offset = vector.normalized() * missile.speed * delta;

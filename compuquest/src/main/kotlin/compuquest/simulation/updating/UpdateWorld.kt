@@ -3,11 +3,13 @@ package compuquest.simulation.updating
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Body
 import compuquest.simulation.general.World
+import compuquest.simulation.general.getPlayer
+import compuquest.simulation.general.shouldRefreshPlayerSlowdown
 import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import godot.core.Vector3
 
-fun syncMythicToGodot(world: World): World {
+fun syncMythic(world: World): World {
   val deck = world.deck
   val bodies = world.bodies.mapValues { spatial ->
     Body(
@@ -20,6 +22,20 @@ fun syncMythicToGodot(world: World): World {
       bodies = bodies,
     )
   )
+}
+
+fun syncGodot(world: World, events: Events) {
+  val player = getPlayer(world)
+  if (player != null) {
+    val playerRigIsActive = player.value.interactingWith == null
+    val body = world.bodies[player.key]
+    if (body != null) {
+      body.set("isActive", playerRigIsActive)
+      if (shouldRefreshPlayerSlowdown(player.value, events)) {
+        body.set("isSlowed", true)
+      }
+    }
+  }
 }
 
 fun updateDepictions(previous: World, next: World) {
@@ -37,7 +53,7 @@ fun updateDepictions(previous: World, next: World) {
 
 fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
   val world = worlds.last()
-  val world2 = syncMythicToGodot(world)
+  val world2 = syncMythic(world)
   val events2 = events + gatherEvents(world2, worlds.dropLast(1).firstOrNull(), delta, events)
   val deck = updateDeck(events2, world2, delta)
   val world3 = world2.copy(
@@ -45,5 +61,7 @@ fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
   )
   updateDepictions(world, world3)
   val world4 = deleteEntities(events2, world3)
-  return newEntities(events2, world4)
+  val world5 = newEntities(events2, world4)
+  syncGodot(world5, events2)
+  return world5
 }

@@ -6,7 +6,9 @@ import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Player
 import compuquest.simulation.general.World
+import compuquest.simulation.general.getPlayer
 import compuquest.simulation.general.newHandCommand
+import compuquest.simulation.updating.syncGodot
 import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.Engine
@@ -44,7 +46,7 @@ class Global : Node() {
       get() = instance?.worlds?.lastOrNull()
 
     fun getPlayer(): Map.Entry<Id, Player>? =
-      world?.deck?.players?.entries?.firstOrNull()
+        getPlayer(world)
   }
 
   init {
@@ -111,13 +113,6 @@ class Global : Node() {
           val commands = eventQueue.toList()
           eventQueue.clear()
           worlds = localWorlds.plus(updateWorld(commands, delta.toFloat(), localWorlds)).takeLast(2)
-          val nextWorld = worlds.lastOrNull()
-          val player = nextWorld?.deck?.players?.entries?.firstOrNull()
-          if (player != null) {
-            val playerRigIsActive = player.value.interactingWith == null
-            val body = nextWorld.bodies[player.key]
-            body?.set("isActive", playerRigIsActive)
-          }
         }
       }
     }

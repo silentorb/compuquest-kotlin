@@ -15,6 +15,7 @@
 
 [node name="Forest" parent="." instance=ExtResource( 7 )]
 scene = ExtResource( 1 )
+faction = ExtResource( 8 )
 active = true
 
 [node name="City" parent="." instance=ExtResource( 7 )]

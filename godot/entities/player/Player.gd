@@ -20,15 +20,16 @@ var sprinting := false
 # Walk
 const FLOOR_MAX_ANGLE: float = deg2rad(46.0)
 export(float) var gravity = 30.0
-export(int) var walk_speed = 10
-export(int) var sprint_speed = 16
-export(int) var acceleration = 8
-export(int) var deacceleration = 10
+export(float) var walk_speed = 10
+export(float) var sprint_speed = 16
+export(float) var acceleration = 8
+export(float) var deacceleration = 10
 export(float, 0.0, 1.0, 0.05) var air_control = 0.3
-export(int) var jump_height = 10
-var _speed: int
+export(float) var jump_height = 10
+var _speed: float
 var _is_sprinting_input := false
 var _is_jumping_input := false
+var isSlowed = false
 
 var isActive = true
 
@@ -38,6 +39,7 @@ var isActive = true
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	cam.fov = FOV
+	_speed = walk_speed
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame
@@ -90,7 +92,8 @@ func walk(delta: float) -> void:
 		
 		velocity.y -= gravity * delta
 	
-	sprint(delta)
+	#sprint(delta)
+	updateSpeed()
 	
 	accelerate(delta)
 	
@@ -170,15 +173,26 @@ func jump() -> void:
 
 
 func sprint(delta: float) -> void:
-	if can_sprint():
-		_speed = sprint_speed
-		cam.set_fov(lerp(cam.fov, FOV * 1.05, delta * 8))
-		sprinting = true
-		
+	var previousSpeed = _speed
+#	if can_sprint():
+#		_speed = sprint_speed
+#		cam.set_fov(lerp(cam.fov, FOV * 1.05, delta * 8))
+#		sprinting = true
+#
+#	else:
+#		_speed = walk_speed
+#		cam.set_fov(lerp(cam.fov, FOV, delta * 8))
+#		sprinting = false
+
+func updateSpeed():
+	if isSlowed:
+		var targetSpeed = walk_speed / 2.5
+		_speed = lerp(_speed, targetSpeed, 0.1)
+		if (_speed < targetSpeed + 0.01):
+			isSlowed = false
 	else:
-		_speed = walk_speed
-		cam.set_fov(lerp(cam.fov, FOV, delta * 8))
-		sprinting = false
+		if (_speed < walk_speed):
+			_speed = lerp(_speed, walk_speed, 0.05)
 
 
 func can_sprint() -> bool:
