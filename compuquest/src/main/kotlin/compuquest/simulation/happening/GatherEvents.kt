@@ -19,11 +19,11 @@ fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): 
   else
     listOf()
 
-  val commands = input +
+  val nextEvents = input +
       deck.spirits.flatMap { pursueGoals(world, it.key) } +
 //      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
       tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
-      eventsFromEvents(events)
+      eventsFromEvents(world, previous, events)
 
-  return commands
+  return nextEvents
 }

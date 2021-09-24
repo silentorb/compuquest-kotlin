@@ -1,15 +1,26 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.definition.TypedResource
 import compuquest.simulation.definition.ResourceType
-import silentorb.mythic.happening.Events
+import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.KeyTable
-import kotlin.math.max
+import silentorb.mythic.happening.Events
+import silentorb.mythic.randomly.Dice
 
 data class Faction(
   val name: String,
-  val resources: Map<ResourceType, Int> = mapOf(),
-)
+  val resources: ResourceMap = mapOf(),
+  val paysFees: Boolean = true,
+  val nextInvoiceNumber: Long = 1L,
+) {
+  fun getResource(type: ResourceType): Int =
+    resources[type] ?: 0
+
+  val gold: Int = getResource(ResourceType.gold)
+}
+
+const val removeFactionMemberEvent = "removeFactionMember"
 
 enum class RelationshipCategory {
   war,
@@ -56,30 +67,95 @@ fun extractFactions(idHands: List<Hand>): KeyTable<Faction> =
     }
     .associate { it }
 
-fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
-  val definitions = world.definitions
+data class Invoice(
+  val number: Long,
+  val employee: Id,
+  val amountDue: Int,
+)
+
+typealias Invoices = List<Invoice>
+
+fun paydayInvoices(world: World, key: Key, nextInvoiceNumber: Long): Invoices {
   val deck = world.deck
-  val uses = events
+  return deck.characters
+    .filterValues { it.faction == key && it.fee > 0 }
+    .entries.mapIndexed { index, entry ->
+      Invoice(
+        number = nextInvoiceNumber + index,
+        employee = entry.key,
+        amountDue = entry.value.fee
+      )
+    }
+}
+
+tailrec fun payInvoices(dice: Dice, gold: Int, invoices: Invoices, accumulator: Invoices): Invoices =
+  if (invoices.none())
+    accumulator
+  else {
+    val next = dice.takeOneOrNull(invoices.filter { it.amountDue <= gold })
+    if (next == null)
+      accumulator
+    else
+      payInvoices(dice, gold - next.amountDue, invoices.drop(1), accumulator + next)
+  }
+
+fun payInvoices(dice: Dice, gold: Int, invoices: Invoices): Invoices =
+  if (invoices.sumBy { it.amountDue } < gold)
+    invoices
+  else
+    payInvoices(dice, gold, invoices, listOf())
+
+fun updateFactionResources(
+  adjustments: List<TypedResource>,
+  resources: ResourceMap,
+): ResourceMap {
+  return resources.mapValues { (resourceType, amount) ->
+    val adjustment = adjustments
+      .filter { cost -> cost.resource == resourceType }
+      .sumBy { cost -> cost.amount }
+
+    amount + adjustment
+  }
+}
+
+fun getUseEvents(deck: Deck, events: Events) =
+  events
     .filter { it.type == useActionCommand }
     .mapNotNull { event ->
       val accessory = deck.accessories[event.target]
-      val character = world.deck.characters[accessory?.owner]
+      val character = deck.characters[accessory?.owner]
       if (accessory?.cost != null && character != null) {
-        Pair(character.faction, accessory.cost)
+        Pair(character.faction, accessory.cost.copy(amount = -accessory.cost.amount))
       } else
         null
     }
 
-  return { id, faction ->
-    val factionUses = uses.filter { f -> f.first == id }
-    faction.copy(
-      resources = faction.resources.mapValues { (resourceType, amount) ->
-        val expense = factionUses
-          .filter { (_, cost) -> cost.resource == resourceType }
-          .sumBy { (_, cost) -> cost.amount }
+fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
+  val dice = world.dice
+  val uses = getUseEvents(world.deck, events)
+  val isPayday = events.any { it.type == newDayEvent }
 
-        max(0, amount - expense)
-      }
+  return { key, faction ->
+    val invoices = if (isPayday)
+      paydayInvoices(world, key, faction.nextInvoiceNumber)
+    else
+      listOf()
+
+    val gold = faction.gold
+    val paidInvoices = payInvoices(dice, gold, invoices)
+    val unpaidInvoices = invoices - paidInvoices
+
+    val adjustments = uses
+      .filter { f -> f.first == key }
+      .map { it.second } +
+        if (paidInvoices.any())
+          listOf(TypedResource(ResourceType.gold, -paidInvoices.sumBy { it.amountDue }))
+        else
+          listOf()
+
+    faction.copy(
+      resources = updateFactionResources(adjustments, faction.resources),
+      nextInvoiceNumber = faction.nextInvoiceNumber + invoices.size,
     )
   }
 }

@@ -4,6 +4,5 @@ import compuquest.simulation.definition.Definitions
 
 fun newDefinitions() =
   Definitions(
-    accessories = defineAccessories(),
     zones = defineZones(),
   )

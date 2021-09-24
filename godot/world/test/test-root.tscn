@@ -17,6 +17,7 @@
 scene = ExtResource( 1 )
 faction = ExtResource( 8 )
 active = true
+populate = false
 
 [node name="City" parent="." instance=ExtResource( 7 )]
 transform = Transform( 0.029265, 0, -0.999572, 0, 1, 0, 0.999572, 0, 0.029265, 0, 0, -40.0177 )
@@ -45,6 +46,12 @@ script = ExtResource( 5 )
 [node name="mana" type="Node" parent="player"]
 script = ExtResource( 6 )
 amount = 200
+resource = "mana"
+
+[node name="gold" type="Node" parent="player"]
+script = ExtResource( 6 )
+amount = 200
+resource = "gold"
 
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 4 )

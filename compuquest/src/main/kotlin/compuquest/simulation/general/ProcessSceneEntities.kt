@@ -1,6 +1,6 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.definition.Cost
+import compuquest.simulation.definition.TypedResource
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.intellect.Spirit
@@ -46,6 +46,7 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
                 health = IntResource(node.healthValue, getIntOrNull(creature, "health") ?: 1),
                 body = body ?: id,
                 depiction = depiction,
+                fee = if (node.includeFees) getInt(creature, "fee") else 0,
               ),
               sprite,
               spatial,
@@ -63,7 +64,7 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
                   name = getString(accessory, "name"),
                   maxCooldown = getFloat(accessory, "cooldown"),
                   range = getFloat(accessory, "Range"),
-                  cost = Cost(
+                  cost = TypedResource(
                     resource = ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana,
                     amount = getInt(accessory, "costAmount"),
                   ),
@@ -106,7 +107,9 @@ fun newPlayer(
             name = "Player",
             resources = components
               .filterIsInstance<AttachResource>()
-              .associate { it.resource to it.amount }
+              .associate { attachment ->
+                (ResourceType.values().firstOrNull { it.name == attachment.resource } ?: ResourceType.none) to attachment.amount
+              }
           )
         )
       )

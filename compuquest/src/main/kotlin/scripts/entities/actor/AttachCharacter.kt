@@ -21,17 +21,12 @@ class AttachCharacter : Node() {
   @RegisterProperty
   var healthValue: Int = 1
 
+  @Export
+  @RegisterProperty
+  var includeFees: Boolean = true
+
   @RegisterFunction
   override fun _ready() {
 	addToGroup(componentGroup)
   }
-
-//  @RegisterFunction
-//  override fun _process(delta: Double) {
-//	if (depiction != "" && depiction != lastDepiction) {
-//	  val sprite = getParent()?.findNode("sprite")
-//	  sprite?.set("animation", depiction)
-//	  lastDepiction = depiction
-//	}
-//  }
 }

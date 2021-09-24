@@ -15,6 +15,7 @@ data class Character(
   val faction: Key,
   val health: IntResource,
   val body: Id? = null,
+  val fee: Int = 0,
   override val depiction: String,
   override val frame: Int = 0,
 ) : SpriteState {

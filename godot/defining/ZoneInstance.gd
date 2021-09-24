@@ -7,6 +7,9 @@ export(Resource) var faction
 
 export(bool) var active = true setget setActive
 
+# For debug purposes
+export(bool) var populate = true
+
 func setScene(value):
 	if scene != value:
 		scene = value

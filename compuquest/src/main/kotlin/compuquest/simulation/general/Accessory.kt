@@ -1,16 +1,11 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.definition.Cost
+import compuquest.simulation.definition.TypedResource
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventTargets
 import kotlin.math.max
-
-//data class ActionEffect(
-//  val type: String,
-//  val strength: Float = 0f,
-//)
 
 data class Accessory(
   val owner: Id,
@@ -19,7 +14,7 @@ data class Accessory(
   val maxCooldown: Float = 0f,
   val name: String,
   val range: Float = 0f,
-  val cost: Cost? = null,
+  val cost: TypedResource? = null,
   val spawns: Key? = null,
   val attributes: Set<Key>,
   val effect: Key,

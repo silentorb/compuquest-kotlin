@@ -2,6 +2,7 @@ package scripts.gui
 
 import silentorb.mythic.godoting.instantiateScene
 import godot.Control
+import godot.Label
 import godot.Node
 import godot.PackedScene
 import godot.annotation.RegisterClass
@@ -14,11 +15,13 @@ import silentorb.mythic.godoting.tempCatch
 class Hud : Node() {
   var slot: Node? = null
   var interact: Control? = null
+	var debugText: Label? = null
 
   @RegisterFunction
   override fun _ready() {
 	slot = findNode("slot")
 	interact = findNode("interact") as? Control
+		debugText = findNode("debug") as? Label
   }
 
   fun launchMenu() {
@@ -39,6 +42,7 @@ class Hud : Node() {
 	  val canInteractWith = player?.canInteractWith
 	  val interactingWith = player?.interactingWith
 	  interact!!.visible = canInteractWith != null
+		debugText?.text = Global.instance?.debugText ?: ""
 	  val localSlot = slot
 	  if (localSlot != null) {
 		val hasMenu = localSlot.getChildCount() > 0

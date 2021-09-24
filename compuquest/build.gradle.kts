@@ -9,6 +9,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("io.github.cdimascio:java-dotenv:5.1.3")
 }
 //kotlin.sourceSets.main {
 ////    kotlin.srcDirs("../godot/scripts")

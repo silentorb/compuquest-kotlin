@@ -1,6 +1,6 @@
 package compuquest.simulation.definition
 
-data class Cost(
+data class TypedResource(
   val resource: ResourceType,
   val amount: Int,
 )

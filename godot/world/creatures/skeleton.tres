@@ -8,3 +8,4 @@ script = ExtResource( 1 )
 depiction = "skeleton"
 health = 50
 accessories = [ ExtResource( 2 ) ]
+fee = 10

@@ -1,13 +1,13 @@
 package compuquest.simulation.general
 
-import silentorb.mythic.ent.Key
+import compuquest.simulation.definition.ResourceType
 
 data class IntResource(
   val value: Int,
   val max: Int = value
 )
 
-typealias ResourceMap = Map<Key, IntResource>
+typealias ResourceMap = Map<ResourceType, Int>
 
 fun displayText(resource: IntResource): String =
   "${resource.value}/${resource.max}"

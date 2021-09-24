@@ -10,7 +10,8 @@ class AttachResource : Node() {
 
   @Export
   @RegisterProperty
-  var resource: ResourceType = ResourceType.mana
+//  var resource: ResourceType = ResourceType.mana
+  var resource: String = ""
 
   @Export
   @RegisterProperty

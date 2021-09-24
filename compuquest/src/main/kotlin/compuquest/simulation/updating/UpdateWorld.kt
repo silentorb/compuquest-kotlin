@@ -1,10 +1,7 @@
 package compuquest.simulation.updating
 
+import compuquest.simulation.general.*
 import silentorb.mythic.godoting.tempCatch
-import compuquest.simulation.general.Body
-import compuquest.simulation.general.World
-import compuquest.simulation.general.getPlayer
-import compuquest.simulation.general.shouldRefreshPlayerSlowdown
 import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import godot.core.Vector3
@@ -51,10 +48,18 @@ fun updateDepictions(previous: World, next: World) {
   }
 }
 
+fun updateWorldDay(world: World): World =
+  world.copy(
+    day = updateDay(world.day),
+    step = world.step + 1
+  )
+
 fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
-  val world = worlds.last()
+  val previousWorld = worlds.last()
+  val world = updateWorldDay(previousWorld)
+
   val world2 = syncMythic(world)
-  val events2 = events + gatherEvents(world2, worlds.dropLast(1).firstOrNull(), delta, events)
+  val events2 = gatherEvents(world2, previousWorld, delta, events)
   val deck = updateDeck(events2, world2, delta)
   val world3 = world2.copy(
     deck = deck,

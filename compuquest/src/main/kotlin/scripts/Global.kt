@@ -17,6 +17,8 @@ import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
+import silentorb.mythic.debugging.checkDotEnvChanged
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene
 
@@ -24,6 +26,9 @@ import silentorb.mythic.godoting.instantiateScene
 class Global : Node() {
   var worlds: List<World> = listOf()
   val definitions = newDefinitions()
+
+  @RegisterProperty
+  var debugText: String = ""
 
   companion object {
     var instance: Global? = null
@@ -92,6 +97,10 @@ class Global : Node() {
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
     if (!Engine.editorHint) {
+      if (getDebugBoolean("WATCH_DOT_ENV"))
+        checkDotEnvChanged()
+
+      debugText =""
       tempCatch {
         val localWorlds = worlds
         if (restarting == 1) {
@@ -117,4 +126,9 @@ class Global : Node() {
       }
     }
   }
+}
+
+fun debugLog(message: String) {
+  val previous = Global.instance?.debugText ?: ""
+  Global.instance?.debugText = listOf(previous, message).joinToString("\n")
 }

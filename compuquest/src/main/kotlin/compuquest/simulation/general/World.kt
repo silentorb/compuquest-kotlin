@@ -21,6 +21,7 @@ data class World(
   val dice: Dice,
   val scene: Node? = null,
   val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
+  val day: DayState,
 )
 
 fun getSpace(world: World): PhysicsDirectSpaceState? =
