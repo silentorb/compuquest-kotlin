@@ -36,14 +36,23 @@ fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
   events.any { it.type == detrimentalEffectCommand && player.party.contains(it.target)}
 
 fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
+  val deck = world.deck
   val canInteractWith = if (player.interactingWith == null)
     getInteractable(world, actor)
   else
     null
 
+  val removedCharacters = events.filter { it.type == removeFactionMemberEvent }
+    .mapNotNull {
+     if (deck.characters[it.target]?.faction == player.faction)
+       it.target as? Id
+      else
+        null
+    }
+
   val playerEvents = events.filter { it.target == actor }
   val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
-  val party = updateParty()(playerEvents, player.party)
+  val party = updateParty()(playerEvents, player.party) - removedCharacters
   player.copy(
     canInteractWith = canInteractWith,
     interactingWith = interactingWith,

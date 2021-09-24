@@ -65,18 +65,17 @@ val updateCharacterBody = handleEvents<Id?> { event, value ->
 val updateCharacterFaction = handleEvents<Key> { event, value ->
   when (event.type) {
     Commands.joinedPlayer -> Factions.player
+    removeFactionMemberEvent -> Factions.neutral
     else -> value
   }
 }
 
 fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
-  val deck = world.deck
   val characterEvents = events.filter { it.target == actor }
   val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
     .sum()
 
   val health = modifyResource(healthMod, character.health)
-
   val depiction = if (health.value == 0)
     "sprites"
   else

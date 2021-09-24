@@ -5,6 +5,7 @@ import compuquest.simulation.definition.ResourceType
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.KeyTable
+import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.randomly.Dice
 
@@ -13,6 +14,8 @@ data class Faction(
   val resources: ResourceMap = mapOf(),
   val paysFees: Boolean = true,
   val nextInvoiceNumber: Long = 1L,
+  val newUnpaidInvoices: List<Invoice> = listOf(),
+  val oldUnpaidInvoices: List<Invoice> = listOf(),
 ) {
   fun getResource(type: ResourceType): Int =
     resources[type] ?: 0
@@ -156,6 +159,14 @@ fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
     faction.copy(
       resources = updateFactionResources(adjustments, faction.resources),
       nextInvoiceNumber = faction.nextInvoiceNumber + invoices.size,
+      newUnpaidInvoices = unpaidInvoices,
+      oldUnpaidInvoices = faction.oldUnpaidInvoices + faction.newUnpaidInvoices
     )
   }
+}
+
+fun eventsFromFaction(): (Key, Faction) -> Events = { _, faction ->
+  faction.newUnpaidInvoices
+    .groupBy { it.employee }
+    .map { Event(removeFactionMemberEvent, it.key, it) }
 }
