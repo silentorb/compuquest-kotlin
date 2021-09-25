@@ -1,5 +1,7 @@
 package compuquest.simulation.input
 
+import compuquest.simulation.general.World
+import compuquest.simulation.general.getPlayer
 import godot.Input
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
@@ -14,3 +16,11 @@ val keyStrokes = setOf(
 fun gatherUserInput(player: Id): Events =
   keyStrokes.filter { Input.isActionJustReleased(it) }
     .map { Event(it, player) }
+
+fun gatherDefaultPlayerInput(world: World): Events {
+  val player = getPlayer(world)?.key
+  return if (player != null)
+    gatherUserInput(player)
+  else
+    listOf()
+}

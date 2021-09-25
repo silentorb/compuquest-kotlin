@@ -21,12 +21,18 @@ class Hud : Node() {
 	debugText = findNode("debug") as? Label
   }
 
+	fun launchMenu(menu: Node) {
+		val localSlot = slot
+		if (localSlot != null) {
+			clearChildren(localSlot)
+			localSlot.addChild(menu)
+		}
+	}
+
   fun launchMenu(scenePath: String) {
 	val menu = instantiateScene<Node>(scenePath)
-	val localSlot = slot
-	if (menu != null && localSlot != null) {
-	  clearChildren(localSlot)
-	  localSlot.addChild(menu)
+	if (menu != null) {
+		launchMenu(menu)
 	}
   }
 
@@ -38,7 +44,7 @@ class Hud : Node() {
 	  val player = deck?.players?.values?.firstOrNull()
 	  val canInteractWith = player?.canInteractWith
 	  val interactingWith = player?.interactingWith
-	  val managementMenu = player?.managementMenu
+	  val managementMenu = player?.menu
 	  interact!!.visible = canInteractWith != null
 	  debugText?.text = Global.instance?.debugText ?: ""
 	  val localSlot = slot
@@ -48,8 +54,12 @@ class Hud : Node() {
 		  if (!slotHasMenu)
 			launchMenu("res://gui/menus/Conversation.tscn")
 		} else if (managementMenu != null) {
-		  if (!slotHasMenu)
-			launchMenu("res://gui/menus/$managementMenu.tscn")
+		  if (!slotHasMenu) {
+			if (managementMenu == gameOverScreen) {
+				launchMenu(showGameOverScreen())
+			} else
+			  launchMenu("res://gui/menus/$managementMenu.tscn")
+		  }
 		} else {
 		  if (slotHasMenu)
 			localSlot.getChild(0)?.queueFree()

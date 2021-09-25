@@ -58,7 +58,7 @@ class Portrait : Node() {
 	  else
 		addMemberToParty
 
-	  Global.addPlayerCommand(eventType, actor)
+	  Global.addPlayerEvent(eventType, actor)
 	}
   }
 
@@ -66,7 +66,7 @@ class Portrait : Node() {
   fun on_fire_pressed() {
 	val actor = lastActor
 	if (actor != null) {
-	  Global.addCommand(Event(removeFactionMemberEvent, actor))
+	  Global.addEvent(Event(removeFactionMemberEvent, actor))
 	}
   }
 
@@ -109,7 +109,7 @@ class Portrait : Node() {
 	  verticalBox?.visible = lastCharacter != null
 
 	  val currentIsManaging = player != null
-		  && player.managementMenu == memberManagementView
+		  && player.menu == memberManagementView
 		  && lastCharacter != null &&
 		  (player.party.size > 1 || !player.party.contains(actor))
 

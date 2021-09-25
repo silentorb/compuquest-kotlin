@@ -4,4 +4,5 @@ object Commands {
   val interact = "interact"
   val menuBack = "ui_cancel"
   val managementMenu = "managementMenu"
+  val newGame = "newGame"
 }

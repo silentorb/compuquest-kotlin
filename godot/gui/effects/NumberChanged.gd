@@ -9,7 +9,7 @@ var color
 
 func _process(delta):
 	if !xSet:
-		if original.get_tree() != null:
+		if original != null && original.get_tree() != null:
 			rect_position = original.rect_global_position
 			xSet = true
 	else:

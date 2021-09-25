@@ -21,10 +21,10 @@ class Conversation : Node() {
 	val player = Global.getPlayer()!!
 	val other = player.value.interactingWith!!
 	if (index == 0) {
-	  Global.addCommand(Event(hiredNpc, player.key, other))
-	  Global.addCommand(Event(joinedPlayer, other, player.key))
+	  Global.addEvent(Event(hiredNpc, player.key, other))
+	  Global.addEvent(Event(joinedPlayer, other, player.key))
 	}
-	Global.addPlayerCommand(Commands.menuBack)
+	Global.addPlayerEvent(Commands.menuBack)
   }
 
   @RegisterFunction

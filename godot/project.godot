@@ -50,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/scripts/gui/Hud.kt"
 }, {
 "base": "Node",
+"class": "scripts_gui_MemberManagement",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/gui/MemberManagement.kt"
+}, {
+"base": "Node",
 "class": "scripts_gui_PlayerInfo",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/gui/PlayerInfo.kt"
@@ -83,6 +88,7 @@ _global_script_class_icons={
 "scripts_entities_actor_PlayerBody": "",
 "scripts_gui_Conversation": "",
 "scripts_gui_Hud": "",
+"scripts_gui_MemberManagement": "",
 "scripts_gui_PlayerInfo": "",
 "scripts_gui_Portrait": "",
 "scripts_world_AccessoryDefinition": "",

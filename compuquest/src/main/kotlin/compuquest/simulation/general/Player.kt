@@ -1,6 +1,7 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.input.Commands
+import scripts.gui.gameOverScreen
 import scripts.gui.memberManagementView
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -20,7 +21,8 @@ data class Player(
   val party: List<Id> = listOf(),
   val canInteractWith: Interactable? = null,
   val interactingWith: Id? = null,
-  val managementMenu: String? = null,
+  val menu: String? = null,
+  val isPlaying: Boolean = true,
 )
 
 fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
@@ -65,7 +67,7 @@ fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
 
 fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
   val deck = world.deck
-  val canInteractWith = if (player.interactingWith == null)
+  val canInteractWith = if (player.interactingWith == null && player.isPlaying)
     getInteractable(world, actor)
   else
     null
@@ -81,11 +83,20 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
   val playerEvents = events.filter { it.target == actor }
   val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
   val party = updateParty()(playerEvents, player.party) - removedCharacters
+
+  val isPlaying = party.any { deck.characters[it]?.isAlive ?: false }
+
+  val menu = if (!isPlaying && player.isPlaying)
+    gameOverScreen
+  else
+    updateManagementMenu(events, player.menu)
+
   player.copy(
     canInteractWith = canInteractWith,
     interactingWith = interactingWith,
-    managementMenu = updateManagementMenu(events, player.managementMenu),
+    menu = menu,
     party = party,
+    isPlaying = isPlaying,
   )
 }
 

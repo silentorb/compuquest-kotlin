@@ -3,12 +3,11 @@ package scripts
 import compuquest.app.newGame
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
-import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Player
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getPlayer
-import compuquest.simulation.general.newHandCommand
-import compuquest.simulation.updating.syncGodot
+import compuquest.simulation.input.Commands
+import compuquest.simulation.input.gatherDefaultPlayerInput
 import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.Engine
@@ -34,24 +33,20 @@ class Global : Node() {
     var instance: Global? = null
     private var eventQueue: MutableList<Event> = mutableListOf()
 
-    fun addCommand(event: Event) {
+    fun addEvent(event: Event) {
       eventQueue.add(event)
     }
 
-    fun addPlayerCommand(type: String, value: Any? = null) {
+    fun addPlayerEvent(type: String, value: Any? = null) {
       val player = world?.deck?.players?.keys?.firstOrNull()
-      addCommand((Event(type, player, value)))
-    }
-
-    fun newHand(hand: Hand) {
-      addCommand(newHandCommand(hand))
+      addEvent((Event(type, player, value)))
     }
 
     val world: World?
       get() = instance?.worlds?.lastOrNull()
 
     fun getPlayer(): Map.Entry<Id, Player>? =
-        getPlayer(world)
+      getPlayer(world)
   }
 
   init {
@@ -85,12 +80,14 @@ class Global : Node() {
     addChild(hud)
   }
 
-  @RegisterFunction
-  override fun _process(delta: Double) {
-    if (!Engine.editorHint) {
-      if (Input.isActionJustReleased("newGame")) {
-        restartGame()
-      }
+  fun updateWorlds(worlds: List<World>, delta: Float) {
+    val events = eventQueue.toList() + gatherDefaultPlayerInput(worlds.last())
+    eventQueue.clear()
+    if (events.any { it.type == Commands.newGame }) {
+      restartGame()
+    } else {
+      val nextWorld = updateWorld(events, delta, worlds)
+      this.worlds = worlds.plus(nextWorld).takeLast(2)
     }
   }
 
@@ -100,7 +97,7 @@ class Global : Node() {
       if (getDebugBoolean("WATCH_DOT_ENV"))
         checkDotEnvChanged()
 
-      debugText =""
+      debugText = ""
       tempCatch {
         val localWorlds = worlds
         if (restarting == 1) {
@@ -110,7 +107,7 @@ class Global : Node() {
         } else if (restarting == 2) {
           val tree = getTree()
           val root = tree?.root
-          // This needs to happen after the scene is reloaded
+          // This needs to happen *after* the scene is reloaded
           worlds = listOf(newGame(root!!, definitions))
           restarting = 0
         } else if (localWorlds.none()) {
@@ -119,9 +116,7 @@ class Global : Node() {
             worlds = listOf(newGame(root, definitions))
           }
         } else {
-          val commands = eventQueue.toList()
-          eventQueue.clear()
-          worlds = localWorlds.plus(updateWorld(commands, delta.toFloat(), localWorlds)).takeLast(2)
+          updateWorlds(localWorlds, delta.toFloat())
         }
       }
     }

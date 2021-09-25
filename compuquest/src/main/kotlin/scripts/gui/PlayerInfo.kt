@@ -28,7 +28,7 @@ class PlayerInfo : Node() {
 		  val b = Label()
 		  a.text = resource.key.name.capitalize()
 		  b.text = resource.value.toString()
-			b.name = "player_resource"
+		  b.name = "player_resource"
 		  resources.addChild(a)
 		  resources.addChild(b)
 		  numberChangedEffect(b, resource.value, previousFaction?.resources?.getOrElse(resource.key) { null })

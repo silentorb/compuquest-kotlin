@@ -15,7 +15,7 @@ private var overrides: MutableMap<String, Any>? = null
 private var lastModified: Long = 0L
 
 fun getDotEnvDirectory(): String =
-    System.getenv("DOTENV_DIRECTORY") ?: ""
+    System.getenv("DOTENV_DIRECTORY") ?: File("../compuquest").canonicalPath
 
 fun newDotEnv() = dotenv {
   directory = getDotEnvDirectory()

@@ -11,9 +11,6 @@ inline fun <reified T> instantiateScene(path: String): T? {
   return scene?.instance() as? T
 }
 
-inline fun <reified T> entityFromScene(name: String): T? =
-  instantiateScene("res://entities/$name.tscn")
-
 // Godot-JVM raises warnings and sometimes becomes unstable around JNI calls that are
 // not wrapped in exception handling.
 // Hopefully this is a temporary solution and Godot-JVM will no longer need these

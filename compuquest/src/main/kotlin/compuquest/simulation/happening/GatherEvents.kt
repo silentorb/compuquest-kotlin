@@ -14,14 +14,8 @@ fun <K, V> tableEvents(transform: (K, V) -> Events, table: Map<K, V>): Events =
 
 fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): Events {
   val deck = world.deck
-  val player = world.deck.players.keys.firstOrNull()
-  val input = if (player != null)
-    gatherUserInput(player)
-  else
-    listOf()
 
-  val nextEvents = input +
-      deck.spirits.flatMap { pursueGoals(world, it.key) } +
+  val nextEvents = deck.spirits.flatMap { pursueGoals(world, it.key) } +
 //      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
       tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
       tableEvents(eventsFromFaction(), deck.factions) +
