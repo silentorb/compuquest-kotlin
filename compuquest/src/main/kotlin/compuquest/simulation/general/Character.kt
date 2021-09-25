@@ -1,7 +1,6 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.definition.Factions
-import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.Table
@@ -57,14 +56,14 @@ fun modifyHealth(target: Id, amount: Int) =
 
 val updateCharacterBody = handleEvents<Id?> { event, value ->
   when (event.type) {
-    Commands.joinedPlayer -> event.value as Id
+    joinedPlayer -> event.value as Id
     else -> value
   }
 }
 
 val updateCharacterFaction = handleEvents<Key> { event, value ->
   when (event.type) {
-    Commands.joinedPlayer -> Factions.player
+    joinedPlayer -> Factions.player
     removeFactionMemberEvent -> Factions.neutral
     else -> value
   }

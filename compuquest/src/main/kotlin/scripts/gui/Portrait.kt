@@ -1,70 +1,124 @@
 package scripts.gui
 
-import compuquest.simulation.general.Character
-import compuquest.simulation.general.displayText
-import godot.AnimatedSprite
-import godot.Container
-import godot.Label
-import godot.Node
+import compuquest.simulation.general.*
+import godot.*
 import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import scripts.Global
+import silentorb.mythic.ent.Id
+import silentorb.mythic.godoting.tempCatch
+import silentorb.mythic.happening.Event
 
 @RegisterClass
 class Portrait : Node() {
 
+  private var lastActor: Id? = null
   private var lastCharacter: Character? = null
+  private var isManaging: Boolean = false
 
   @Export
   @RegisterProperty
   var index: Int = 0
 
+  var member: Id? = null
+
   private var avatar: AnimatedSprite? = null
   private var verticalBox: Container? = null
   private var nameLabel: Label? = null
   private var health: Label? = null
+  private var moveButton: Button? = null
+  private var fireButton: Button? = null
 
   @RegisterFunction
   override fun _ready() {
-	avatar = findNode("avatar") as AnimatedSprite
-	verticalBox = findNode("vbox") as Container
-	nameLabel = findNode("name") as Label
-	health = findNode("health") as Label
-	verticalBox?.visible = false
+	tempCatch {
+	  avatar = findNode("avatar") as AnimatedSprite
+	  verticalBox = findNode("vbox") as Container
+	  nameLabel = findNode("name") as Label
+	  health = findNode("health") as Label
+	  moveButton = findNode("move") as Button
+	  fireButton = findNode("fire") as Button
+	  verticalBox?.visible = false
+	  moveButton?.visible = false
+	  fireButton?.visible = false
+	  moveButton?.connect("pressed", this, "on_move_pressed")
+	  fireButton?.connect("pressed", this, "on_fire_pressed")
+	}
+  }
+
+  @RegisterFunction
+  fun on_move_pressed() {
+	val actor = lastActor
+	if (actor != null) {
+	  val player = Global.getPlayer()!!
+	  val eventType = if (player.value.party.contains(actor))
+		removeMemberFromParty
+	  else
+		addMemberToParty
+
+	  Global.addPlayerCommand(eventType, actor)
+	}
+  }
+
+  @RegisterFunction
+  fun on_fire_pressed() {
+	val actor = lastActor
+	if (actor != null) {
+	  Global.addCommand(Event(removeFactionMemberEvent, actor))
+	}
   }
 
   fun characterChanged(character: Character, previous: Character?) {
 //    avatar?.frame = character.frame
-	if (character.depiction != "")
-	  avatar?.animation = character.depiction
+	tempCatch {
+	  if (character.depiction != "")
+		avatar?.animation = character.depiction
 
-	nameLabel?.text = character.name
-	val localHealth = health
-	if (localHealth != null) {
-	  localHealth.text = displayText(character.health)
-	  numberChangedEffect(localHealth, character.health.value, previous?.health?.value)
+	  nameLabel?.text = character.name
+	  val localHealth = health
+	  if (localHealth != null) {
+		localHealth.text = displayText(character.health)
+		numberChangedEffect(localHealth, character.health.value, previous?.health?.value)
+	  }
 	}
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-	val world = Global.world
-	val deck = world?.deck
-	val actor = deck?.players?.values?.firstOrNull()?.party?.getOrNull(index)
-	if (actor == null) {
-	  lastCharacter = null
-	} else {
-	  val localCharacter = lastCharacter
-	  val character = deck.characters[actor]
-	  if (localCharacter != character) {
-		if (character != null)
-		  characterChanged(character, localCharacter)
+	tempCatch {
+	  val world = Global.world
+	  val deck = world?.deck
+	  val player = getPlayer(world)?.value
+	  val actor = member ?: player?.party?.getOrNull(index)
+	  if (actor == null) {
+		lastActor = null
+		lastCharacter = null
+	  } else {
+		val localCharacter = lastCharacter
+		val character = deck!!.characters[actor]
+		if (localCharacter != character) {
+		  if (character != null)
+			characterChanged(character, localCharacter)
 
-		lastCharacter = character
+		  lastActor = actor
+		  lastCharacter = character
+		}
+	  }
+	  verticalBox?.visible = lastCharacter != null
+
+	  val currentIsManaging = player != null
+		  && player.managementMenu == memberManagementView
+		  && lastCharacter != null &&
+		  (player.party.size > 1 || !player.party.contains(actor))
+
+	  if (isManaging != currentIsManaging) {
+		isManaging = currentIsManaging
+		moveButton?.visible =
+		  currentIsManaging && player != null && (player.party.size < maxPartySize || player.party.contains(actor))
+		fireButton?.visible = currentIsManaging
 	  }
 	}
-	verticalBox?.visible = lastCharacter != null
   }
 }

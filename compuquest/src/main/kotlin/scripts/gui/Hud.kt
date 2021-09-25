@@ -1,10 +1,7 @@
 package scripts.gui
 
+import godot.*
 import silentorb.mythic.godoting.instantiateScene
-import godot.Control
-import godot.Label
-import godot.Node
-import godot.PackedScene
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import scripts.Global
@@ -15,17 +12,17 @@ import silentorb.mythic.godoting.tempCatch
 class Hud : Node() {
   var slot: Node? = null
   var interact: Control? = null
-	var debugText: Label? = null
+  var debugText: Label? = null
 
   @RegisterFunction
   override fun _ready() {
 	slot = findNode("slot")
 	interact = findNode("interact") as? Control
-		debugText = findNode("debug") as? Label
+	debugText = findNode("debug") as? Label
   }
 
-  fun launchMenu() {
-	val menu = instantiateScene<Node>("res://gui/menus/Conversation.tscn")
+  fun launchMenu(scenePath: String) {
+	val menu = instantiateScene<Node>(scenePath)
 	val localSlot = slot
 	if (menu != null && localSlot != null) {
 	  clearChildren(localSlot)
@@ -41,16 +38,20 @@ class Hud : Node() {
 	  val player = deck?.players?.values?.firstOrNull()
 	  val canInteractWith = player?.canInteractWith
 	  val interactingWith = player?.interactingWith
+	  val managementMenu = player?.managementMenu
 	  interact!!.visible = canInteractWith != null
-		debugText?.text = Global.instance?.debugText ?: ""
+	  debugText?.text = Global.instance?.debugText ?: ""
 	  val localSlot = slot
 	  if (localSlot != null) {
-		val hasMenu = localSlot.getChildCount() > 0
+		val slotHasMenu = localSlot.getChildCount() > 0
 		if (interactingWith != null) {
-		  if (!hasMenu)
-			launchMenu()
+		  if (!slotHasMenu)
+			launchMenu("res://gui/menus/Conversation.tscn")
+		} else if (managementMenu != null) {
+		  if (!slotHasMenu)
+			launchMenu("res://gui/menus/$managementMenu.tscn")
 		} else {
-		  if (hasMenu)
+		  if (slotHasMenu)
 			localSlot.getChild(0)?.queueFree()
 		}
 	  }

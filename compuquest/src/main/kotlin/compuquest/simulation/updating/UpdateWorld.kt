@@ -24,7 +24,7 @@ fun syncMythic(world: World): World {
 fun syncGodot(world: World, events: Events) {
   val player = getPlayer(world)
   if (player != null) {
-    val playerRigIsActive = player.value.interactingWith == null
+    val playerRigIsActive = player.value.interactingWith == null && player.value.managementMenu == null
     val body = world.bodies[player.key]
     if (body != null) {
       body.set("isActive", playerRigIsActive)

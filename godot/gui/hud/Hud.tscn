@@ -24,17 +24,17 @@ __meta__ = {
 
 [node name="overlay" type="MarginContainer" parent="vbox"]
 margin_right = 1024.0
-margin_bottom = 397.0
+margin_bottom = 396.0
 size_flags_vertical = 3
 
 [node name="slot" type="MarginContainer" parent="vbox/overlay"]
 margin_right = 1024.0
-margin_bottom = 397.0
+margin_bottom = 396.0
 
 [node name="margin" type="MarginContainer" parent="vbox/overlay"]
-margin_top = 352.0
+margin_top = 351.0
 margin_right = 1024.0
-margin_bottom = 397.0
+margin_bottom = 396.0
 size_flags_vertical = 8
 custom_constants/margin_top = 10
 custom_constants/margin_bottom = 10
@@ -48,7 +48,7 @@ align = 1
 valign = 1
 
 [node name="lower-third" type="MarginContainer" parent="vbox"]
-margin_top = 401.0
+margin_top = 400.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
@@ -60,12 +60,12 @@ __meta__ = {
 
 [node name="panel" type="Panel" parent="vbox/lower-third"]
 margin_right = 1024.0
-margin_bottom = 199.0
+margin_bottom = 200.0
 custom_styles/panel = ExtResource( 3 )
 
 [node name="hbox" type="HBoxContainer" parent="vbox/lower-third"]
 margin_right = 1024.0
-margin_bottom = 199.0
+margin_bottom = 200.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -75,29 +75,25 @@ __meta__ = {
 [node name="player-info" parent="vbox/lower-third/hbox" instance=ExtResource( 4 )]
 anchor_bottom = 0.0
 margin_right = 76.0
-margin_bottom = 199.0
+margin_bottom = 200.0
 
 [node name="portrait1" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
 margin_left = 80.0
 margin_right = 313.0
-margin_bottom = 199.0
 
 [node name="portrait2" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
 margin_left = 317.0
 margin_right = 550.0
-margin_bottom = 199.0
 index = 1
 
 [node name="portrait3" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
 margin_left = 554.0
 margin_right = 787.0
-margin_bottom = 199.0
 index = 2
 
 [node name="portrait4" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
 margin_left = 791.0
 margin_right = 1024.0
-margin_bottom = 199.0
 index = 3
 
 [node name="debug" type="Label" parent="."]

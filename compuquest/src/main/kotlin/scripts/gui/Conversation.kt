@@ -1,5 +1,7 @@
 package scripts.gui
 
+import compuquest.simulation.general.hiredNpc
+import compuquest.simulation.general.joinedPlayer
 import compuquest.simulation.input.Commands
 import godot.Button
 import godot.Label
@@ -19,10 +21,10 @@ class Conversation : Node() {
 	val player = Global.getPlayer()!!
 	val other = player.value.interactingWith!!
 	if (index == 0) {
-	  Global.addCommand(Event(Commands.hiredNpc, player.key, other))
-	  Global.addCommand(Event(Commands.joinedPlayer, other, player.key))
+	  Global.addCommand(Event(hiredNpc, player.key, other))
+	  Global.addCommand(Event(joinedPlayer, other, player.key))
 	}
-	Global.addPlayerCommand(Commands.finishInteraction)
+	Global.addPlayerCommand(Commands.menuBack)
   }
 
   @RegisterFunction
