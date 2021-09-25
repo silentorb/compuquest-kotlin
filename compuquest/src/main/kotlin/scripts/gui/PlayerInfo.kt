@@ -1,5 +1,6 @@
 package scripts.gui
 
+import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.Faction
 import compuquest.simulation.general.Player
 import godot.GridContainer
@@ -8,7 +9,6 @@ import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import scripts.Global
-import silentorb.mythic.godoting.clearChildren
 
 @RegisterClass
 class PlayerInfo : Node() {
@@ -16,22 +16,28 @@ class PlayerInfo : Node() {
   private var lastPlayer: Player? = null
   private var lastFaction: Faction? = null
   private var resourcesGrid: GridContainer? = null
+	private val resourceIntLabels: MutableMap<ResourceType, IntLabel> = mutableMapOf()
 
   fun updateResources(faction: Faction?, previousFaction: Faction? = null) {
 	val resources = resourcesGrid
 	if (resources != null) {
-	  clearChildren(resources)
+//	  clearChildren(resources)
 
 	  if (faction != null) {
 		for (resource in faction.resources) {
-		  val a = Label()
-		  val b = Label()
-		  a.text = resource.key.name.capitalize()
-		  b.text = resource.value.toString()
-		  b.name = "player_resource"
-		  resources.addChild(a)
-		  resources.addChild(b)
-		  numberChangedEffect(b, resource.value, previousFaction?.resources?.getOrElse(resource.key) { null })
+			val existing = resourceIntLabels[resource.key]
+			if (existing == null) {
+				val a = Label()
+				val valueLabel = newIntegerLabel(resource.value)
+				a.text = resource.key.name.capitalize()
+				valueLabel.name = "player_resource"
+				resources.addChild(a)
+				resources.addChild(valueLabel)
+				resourceIntLabels[resource.key] = valueLabel
+			}
+			else {
+				existing.value = resource.value
+			}
 		}
 	  }
 	}

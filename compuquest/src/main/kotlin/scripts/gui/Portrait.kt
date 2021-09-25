@@ -27,7 +27,7 @@ class Portrait : Node() {
   private var avatar: AnimatedSprite? = null
   private var verticalBox: Container? = null
   private var nameLabel: Label? = null
-  private var health: Label? = null
+  private var health: ValueMax? = null
   private var moveButton: Button? = null
   private var fireButton: Button? = null
 
@@ -37,7 +37,7 @@ class Portrait : Node() {
 	  avatar = findNode("avatar") as AnimatedSprite
 	  verticalBox = findNode("vbox") as Container
 	  nameLabel = findNode("name") as Label
-	  health = findNode("health") as Label
+	  health = findNode("health") as ValueMax
 	  moveButton = findNode("move") as Button
 	  fireButton = findNode("fire") as Button
 	  verticalBox?.visible = false
@@ -79,8 +79,8 @@ class Portrait : Node() {
 	  nameLabel?.text = character.name
 	  val localHealth = health
 	  if (localHealth != null) {
-		localHealth.text = displayText(character.health)
-		numberChangedEffect(localHealth, character.health.value, previous?.health?.value)
+			localHealth.value = character.health.value
+			localHealth.max = character.health.max
 	  }
 	}
   }

@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://gui/SpriteFill.gd" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/gui/Portrait.kt" type="Script" id=2]
 [ext_resource path="res://assets/images/sprites.tres" type="SpriteFrames" id=3]
 [ext_resource path="res://gui/hud/Portrait.tres" type="StyleBox" id=4]
 [ext_resource path="res://gui/style/Theme.tres" type="Theme" id=5]
+[ext_resource path="res://gui/components/ValueMax.tscn" type="PackedScene" id=6]
 
 [node name="member-portrait" type="MarginContainer"]
 margin_right = 425.0
@@ -84,14 +85,14 @@ size_flags_vertical = 0
 custom_constants/margin_top = 10
 custom_constants/margin_bottom = 10
 
-[node name="health" type="Label" parent="margin/vbox/health-margin"]
+[node name="health" parent="margin/vbox/health-margin" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 177.0
 margin_top = 10.0
-margin_right = 405.0
+margin_right = 227.0
 margin_bottom = 35.0
-size_flags_vertical = 1
-text = "Name"
-align = 1
-valign = 1
+size_flags_horizontal = 4
 
 [node name="move-margin" type="MarginContainer" parent="."]
 margin_right = 88.0

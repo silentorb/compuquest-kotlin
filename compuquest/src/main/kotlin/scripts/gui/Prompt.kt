@@ -16,30 +16,30 @@ class Prompt : Node() {
 
   @RegisterFunction
   fun on_okay_pressed() {
-    onOkay()
-    queueFree()
+	onOkay()
+	queueFree()
   }
 
   @RegisterFunction
   override fun _ready() {
-    (findNode("title") as? Label)?.text = title
-    (findNode("body") as? Label)?.text = body
-    findNode("okay")?.connect("pressed", this, "on_okay_pressed")
+	(findNode("title") as? Label)?.text = title
+	(findNode("body") as? Label)?.text = body
+	findNode("okay")?.connect("pressed", this, "on_okay_pressed")
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-    tempCatch {
-    }
+	tempCatch {
+	}
   }
 }
 
 fun newPrompt(title: String, body: String, onOkay: () -> Unit): Prompt {
   return tempCatch {
-    val prompt = instantiateScene<Prompt>("res://gui/menus/Prompt.tscn")!!
-    prompt.title = title
-    prompt.body = body
-    prompt.onOkay = onOkay
-    prompt
+	val prompt = instantiateScene<Prompt>("res://gui/menus/Prompt.tscn")!!
+	prompt.title = title
+	prompt.body = body
+	prompt.onOkay = onOkay
+	prompt
   }!!
 }
