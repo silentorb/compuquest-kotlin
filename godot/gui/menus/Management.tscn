@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://gui/menus/QuestManagement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://gui/menus/MemberManagement.tscn" type="PackedScene" id=2]
+[ext_resource path="res://gui/style/Theme.tres" type="Theme" id=3]
+[ext_resource path="res://src/main/kotlin/scripts/gui/Management.kt" type="Script" id=4]
+
+[node name="management" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="tab-container" type="TabContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="Members" parent="tab-container" instance=ExtResource( 2 )]
+margin_left = 4.0
+margin_top = 43.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Quests" parent="tab-container" instance=ExtResource( 1 )]
+visible = false
+margin_left = 4.0
+margin_top = 43.0
+margin_right = -4.0
+margin_bottom = -4.0

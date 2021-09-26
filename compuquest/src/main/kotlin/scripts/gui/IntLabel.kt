@@ -18,39 +18,39 @@ class IntLabel : Label() {
   @Export
   @RegisterProperty
   var value: Int = 0
-    set(value) {
-      if (field != value) {
-        tempCatch {
-          if (spawnFloatingText) {
-            if (floatingTextGap <= 0f) {
-              numberChangedEffect(this, value, field)
-              floatingTextGap = 0.5f
-            }
-          }
+	set(value) {
+	  if (field != value) {
+		tempCatch {
+		  if (spawnFloatingText) {
+			if (floatingTextGap <= 0f) {
+			  numberChangedEffect(this, value, field)
+			  floatingTextGap = 0.5f
+			}
+		  }
 
-          field = value
-          text = value.toString()
-        }
-      }
-    }
+		  field = value
+		  text = value.toString()
+		}
+	  }
+	}
 
   @RegisterFunction
   override fun _ready() {
-    spawnFloatingText = true
+	spawnFloatingText = true
   }
 
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
-    if (floatingTextGap > 0f) {
-      floatingTextGap = max(0f, floatingTextGap - delta.toFloat())
-    }
+	if (floatingTextGap > 0f) {
+	  floatingTextGap = max(0f, floatingTextGap - delta.toFloat())
+	}
   }
 }
 
 fun newIntegerLabel(value: Int): IntLabel {
   return tempCatch {
-    val label = instantiateScene<IntLabel>("res://gui/components/IntegerLabel.tscn")!!
-    label.value = value
-    label
+	val label = instantiateScene<IntLabel>("res://gui/components/IntegerLabel.tscn")!!
+	label.value = value
+	label
   }!!
 }

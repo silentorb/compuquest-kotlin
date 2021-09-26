@@ -49,6 +49,11 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/gui/Hud.kt"
 }, {
+"base": "Label",
+"class": "scripts_gui_IntLabel",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/gui/IntLabel.kt"
+}, {
 "base": "Node",
 "class": "scripts_gui_MemberManagement",
 "language": "Kotlin",
@@ -68,6 +73,11 @@ _global_script_classes=[ {
 "class": "scripts_gui_Prompt",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/gui/Prompt.kt"
+}, {
+"base": "Node",
+"class": "scripts_gui_ValueMax",
+"language": "Kotlin",
+"path": "res://src/main/kotlin/scripts/gui/ValueMax.kt"
 }, {
 "base": "Node",
 "class": "scripts_world_AccessoryDefinition",
@@ -93,10 +103,12 @@ _global_script_class_icons={
 "scripts_entities_actor_PlayerBody": "",
 "scripts_gui_Conversation": "",
 "scripts_gui_Hud": "",
+"scripts_gui_IntLabel": "",
 "scripts_gui_MemberManagement": "",
 "scripts_gui_PlayerInfo": "",
 "scripts_gui_Portrait": "",
 "scripts_gui_Prompt": "",
+"scripts_gui_ValueMax": "",
 "scripts_world_AccessoryDefinition": "",
 "scripts_world_CharacterDefinition": "",
 "scripts_world_ZoneNode": ""
@@ -111,6 +123,29 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://src/main/kotlin/scripts/Global.kt"
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 1,
+"compress/lossy_quality": 0.7,
+"compress/mode": 3,
+"compress/normal_map": 2,
+"detect_3d": false,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 1,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": false,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
 
 [input]
 
@@ -171,9 +206,14 @@ interact={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":69,"unicode":0,"echo":false,"script":null)
  ]
 }
-managementMenu={
+manageMembers={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":77,"unicode":0,"echo":false,"script":null)
+ ]
+}
+manageQuests={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":81,"unicode":0,"echo":false,"script":null)
  ]
 }
 

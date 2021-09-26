@@ -1,5 +1,6 @@
 package compuquest.simulation.general
 
+import compuquest.population.addCharacter
 import compuquest.simulation.definition.TypedResource
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
@@ -24,59 +25,8 @@ fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: 
       val creature = node.creature
       if (creature == null)
         listOf()
-      else {
-        val id = nextId()
-        val sprite = node.getParent()?.findNode("sprite")
-        val depiction = getString(creature, "depiction")
-        sprite?.set("animation", depiction)
-        val rawFaction = faction ?: node.faction
-        val refinedFaction = if (rawFaction == "")
-          Factions.neutral
-        else
-          rawFaction
-
-        listOf(
-          Hand(
-            id = id,
-            components =
-            listOfNotNull(
-              Character(
-                name = node.name,
-                faction = refinedFaction,
-                health = IntResource(node.healthValue, getIntOrNull(creature, "health") ?: 1),
-                body = body ?: id,
-                depiction = depiction,
-                fee = if (node.includeFees) getInt(creature, "fee") else 0,
-              ),
-              sprite,
-              spatial,
-              Spirit(),
-            )
-          )
-        ) + getVariantArray<Resource>("accessories", creature)
-          .map { accessory ->
-            val costResource = getString(accessory, "costResource")
-            Hand(
-              id = nextId(),
-              components = listOf(
-                Accessory(
-                  owner = id,
-                  name = getString(accessory, "name"),
-                  maxCooldown = getFloat(accessory, "cooldown"),
-                  range = getFloat(accessory, "Range"),
-                  cost = TypedResource(
-                    resource = ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana,
-                    amount = getInt(accessory, "costAmount"),
-                  ),
-                  spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
-                  effect = getString(accessory, "effect"),
-                  strength = getFloat(accessory, "strength"),
-                  attributes = getList<Key>(accessory, "attributes").toSet()
-                )
-              )
-            )
-          }
-      }
+      else
+        addCharacter(nextId, spatial, body, creature, faction, node)
     }
     else -> listOf()
   }
@@ -108,7 +58,8 @@ fun newPlayer(
             resources = components
               .filterIsInstance<AttachResource>()
               .associate { attachment ->
-                (ResourceType.values().firstOrNull { it.name == attachment.resource } ?: ResourceType.none) to attachment.amount
+                (ResourceType.values().firstOrNull { it.name == attachment.resource }
+                  ?: ResourceType.none) to attachment.amount
               }
           )
         )

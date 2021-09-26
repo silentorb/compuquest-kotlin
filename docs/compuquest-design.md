@@ -95,6 +95,11 @@
   * Though the game is increasingly looking like it will actually be more macro than micro
 * Some key aspects of the world can be randomized each playthrough
   * This may be kept to a minimum
+* Support for negative player resources
+  * It's like an abstraction for going into debt
+
+* Income mostly through quests
+* Quests need to be carefully selected for synergy and effectively form a campaign, similar to Ticket to Ride
 
 ### Less Certain Concepts
 

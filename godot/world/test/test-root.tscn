@@ -70,4 +70,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, -3.05739 )
 script = ExtResource( 4 )
 creature = ExtResource( 3 )
 faction = "neutral"
+is_for_hire = true
+health_value = 50
+
+[node name="actor2" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.90778, 1.87952, 2.74601 )
+
+[node name="char" type="Node" parent="actor2"]
+script = ExtResource( 4 )
+creature = ExtResource( 3 )
+faction = "neutral"
 health_value = 50

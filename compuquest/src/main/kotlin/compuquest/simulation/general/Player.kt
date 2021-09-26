@@ -1,8 +1,8 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.input.Commands
+import scripts.gui.ManagementScreens
 import scripts.gui.gameOverScreen
-import scripts.gui.memberManagementView
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Events
@@ -35,7 +35,8 @@ fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
 
 val updateManagementMenu = handleEvents<String?> { event, value ->
   when (event.type) {
-    Commands.managementMenu -> memberManagementView
+    Commands.manageMembers -> ManagementScreens.members.name
+    Commands.manageQuests -> ManagementScreens.quests.name
     Commands.menuBack -> null
     else -> value
   }

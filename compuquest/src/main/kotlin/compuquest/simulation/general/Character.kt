@@ -14,7 +14,9 @@ data class Character(
   val faction: Key,
   val health: IntResource,
   val body: Id? = null,
+  val isForHire: Boolean = false,
   val fee: Int = 0,
+  val availableContracts: Table<ContractDefinition> = mapOf(),
   override val depiction: String,
   override val frame: Int = 0,
 ) : SpriteState {

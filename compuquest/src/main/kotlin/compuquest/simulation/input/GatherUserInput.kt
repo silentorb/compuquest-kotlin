@@ -9,8 +9,10 @@ import silentorb.mythic.happening.Events
 
 val keyStrokes = setOf(
   Commands.interact,
-  Commands.managementMenu,
+  Commands.manageMembers,
+  Commands.manageQuests,
   Commands.menuBack,
+  Commands.newGame,
 )
 
 fun gatherUserInput(player: Id): Events =

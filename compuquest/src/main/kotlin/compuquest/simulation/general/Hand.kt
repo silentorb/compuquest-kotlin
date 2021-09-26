@@ -8,6 +8,8 @@ data class Hand(
   val components: List<Any>,
 )
 
+typealias Hands = List<Hand>
+
 const val newHandCommandKey = "newHand"
 
 fun newHandCommand(hand: Hand) =

@@ -79,8 +79,8 @@ class Portrait : Node() {
 	  nameLabel?.text = character.name
 	  val localHealth = health
 	  if (localHealth != null) {
-			localHealth.value = character.health.value
-			localHealth.max = character.health.max
+		localHealth.value = character.health.value
+		localHealth.max = character.health.max
 	  }
 	}
   }
@@ -109,7 +109,7 @@ class Portrait : Node() {
 	  verticalBox?.visible = lastCharacter != null
 
 	  val currentIsManaging = player != null
-		  && player.menu == memberManagementView
+		  && ManagementScreens.values().any { it.name == player.menu }
 		  && lastCharacter != null &&
 		  (player.party.size > 1 || !player.party.contains(actor))
 
