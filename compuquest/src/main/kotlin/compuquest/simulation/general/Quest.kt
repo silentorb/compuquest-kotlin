@@ -14,6 +14,7 @@ data class Quest(
   val client: Id,
   val hero: Id? = null,
   val status: QuestStatus = QuestStatus.active,
+  val name: String,
   val type: Key,
   val reward: ResourceMap,
   val recipient: Key? = null, // For delivery quests

@@ -54,6 +54,7 @@ fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands {
         components = listOf(
           Quest(
             client = client,
+            name = getString(quest, "name"),
             type = getString(quest, "type"),
             reward = mapOf(ResourceType.gold to getInt(quest, "rewardGold")),
             recipient = getNonEmptyString(quest, "recipient"),
