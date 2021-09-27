@@ -12,5 +12,5 @@ typealias Hands = List<Hand>
 
 const val newHandCommandKey = "newHand"
 
-fun newHandCommand(hand: Hand) =
+fun newHandEvent(hand: Hand) =
   Event(newHandCommandKey, value = hand)

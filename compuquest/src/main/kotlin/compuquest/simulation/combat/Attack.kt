@@ -27,6 +27,6 @@ fun attack(world: World, actor: Id, character: Character, action: Id, accessory:
 
   return listOf(
     Event(useActionCommand, action),
-    newHandCommand(projectile),
+    newHandEvent(projectile),
   )
 }

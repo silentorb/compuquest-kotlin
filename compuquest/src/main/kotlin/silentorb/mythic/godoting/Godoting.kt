@@ -60,6 +60,10 @@ fun getFloatOrNull(value: Object, property: String): Float? =
 fun getString(value: Object, property: String): String =
   value.get(property) as? String ?: ""
 
+fun getNonEmptyString(value: Object, property: String): String? {
+  return (value.get(property) as? String)?.ifEmpty { null }
+}
+
 fun getIntOrNull(value: Object, property: String): Int? =
   (value.get(property) as? Long?)?.toInt()
 

@@ -12,11 +12,11 @@ data class Deck(
   val accessories: Table<Accessory> = mapOf(),
   val bodies: Table<Body> = mapOf(),
   val characters: Table<Character> = mapOf(),
-  val contracts: Table<Contract> = mapOf(),
   val interactables: Table<Interactable> = mapOf(),
   val factions: KeyTable<Faction> = mapOf(),
   val homingMissiles: Table<HomingMissile> = mapOf(),
   val players: Table<Player> = mapOf(),
+  val quests: Table<Quest> = mapOf(),
   val spirits: Table<Spirit> = mapOf(),
 )
 
@@ -29,10 +29,10 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck) =
   deck.copy(
     accessories = deck.accessories + extractComponents(idHands),
     characters = deck.characters + extractComponents(idHands),
-    contracts = deck.contracts + extractComponents(idHands),
     interactables = deck.interactables + extractComponents(idHands),
     factions = deck.factions + extractFactions(idHands),
     homingMissiles = deck.homingMissiles + extractComponents(idHands),
     players = deck.players + extractComponents(idHands),
+    quests = deck.quests + extractComponents(idHands),
     spirits = deck.spirits + extractComponents(idHands),
   )

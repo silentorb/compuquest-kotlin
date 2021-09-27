@@ -11,6 +11,7 @@ import scripts.entities.actor.AttachCharacter
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
+import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.*
 
 fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
@@ -23,9 +24,9 @@ fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
         name = getString(accessory, "name"),
         maxCooldown = getFloat(accessory, "cooldown"),
         range = getFloat(accessory, "Range"),
-        cost = TypedResource(
-          resource = ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana,
-          amount = getInt(accessory, "costAmount"),
+        cost = mapOf(
+          (ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana) to
+          getInt(accessory, "costAmount")
         ),
         spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
         effect = getString(accessory, "effect"),
@@ -44,18 +45,23 @@ fun parseFaction(faction: Key?, node: AttachCharacter): Key {
     rawFaction
 }
 
-//fun addContracts(node: AttachCharacter): List<ContractDefinition> =
-//  if (node.hasContracts) {
-//    val allies =
-//    listOfNotNull(
-//      ContractDefinition(
-//        type = QuestTypes.delivery,
-//        reward = mapOf(ResourceType.gold to 1000),
-//        recipient = 0L,
-//      )
-//    )
-//  } else
-//    listOf()
+fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands {
+
+  return getList<Resource>(creature, "quests")
+    .map { quest ->
+      Hand(
+        id = nextId(),
+        components = listOf(
+          Quest(
+            client = client,
+            type = getString(quest, "type"),
+            reward = mapOf(ResourceType.gold to getInt(quest, "rewardGold")),
+            recipient = getNonEmptyString(quest, "recipient"),
+          )
+        )
+      )
+    }
+}
 
 fun addCharacter(
   nextId: NextId,
@@ -83,6 +89,7 @@ fun addCharacter(
           body = body ?: id,
           depiction = depiction,
           fee = if (node.includeFees) getInt(creature, "fee") else 0,
+          key = getNonEmptyString(creature, "key"),
           isForHire = node.isForHire,
           isClient = node.isClient,
         ),
@@ -94,5 +101,5 @@ fun addCharacter(
   ) + getVariantArray<Resource>("accessories", creature)
     .map { accessory ->
       addAccessory(nextId, id, accessory)
-    }
+    } + addQuests(nextId, id, creature)
 }

@@ -1,6 +1,5 @@
 package compuquest.app
 
-import compuquest.population.populateQuests
 import compuquest.serving.newWorld
 import compuquest.serving.populateZones
 import compuquest.simulation.definition.Definitions
@@ -15,7 +14,5 @@ fun newGame(scene: Node, definitions: Definitions): World {
 
   populateZones(Dice(), scene)
 
-  val world2 = processSceneEntities(scene, world)
-
-  return populateQuests(world2)
+  return processSceneEntities(scene, world)
 }

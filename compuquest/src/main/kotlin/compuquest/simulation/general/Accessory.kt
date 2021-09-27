@@ -14,7 +14,7 @@ data class Accessory(
   val maxCooldown: Float = 0f,
   val name: String,
   val range: Float = 0f,
-  val cost: TypedResource? = null,
+  val cost: ResourceMap = mapOf(),
   val spawns: Key? = null,
   val attributes: Set<Key>,
   val effect: Key,

@@ -11,13 +11,13 @@ import silentorb.mythic.happening.handleEvents
 
 data class Character(
   val name: String,
+  val key: String? = null,
   val faction: Key,
   val health: IntResource,
   val body: Id? = null,
   val isForHire: Boolean = false,
   val fee: Int = 0,
   val isClient: Boolean = false,
-  val availableContracts: Table<ContractDefinition> = mapOf(),
   override val depiction: String,
   override val frame: Int = 0,
 ) : SpriteState {
@@ -37,8 +37,8 @@ fun canUse(world: World, accessory: Accessory): Boolean {
   val faction = deck.factions[actor?.faction]
   val cost = accessory.cost
   return accessory.cooldown == 0f && (faction == null ||
-      (cost == null || faction.resources[cost.resource] ?: 0 >= cost.amount)
-      )
+      cost.all { faction.resources[it.key] ?: 0 >= it.value })
+
 }
 
 const val modifyHealthCommand = "modifyHealth"
@@ -87,6 +87,6 @@ fun updateCharacter(world: World, events: Events): (Id, Character) -> Character 
     health = health,
     depiction = depiction,
     body = updateCharacterBody(characterEvents, character.body),
-    faction = updateCharacterFaction(characterEvents, character.faction)
+    faction = updateCharacterFaction(characterEvents, character.faction),
   )
 }

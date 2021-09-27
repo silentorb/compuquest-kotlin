@@ -24,6 +24,7 @@ data class Faction(
 }
 
 const val removeFactionMemberEvent = "removeFactionMember"
+const val modifyFactionResourcesEvent = "modifyFactionResource"
 
 enum class RelationshipCategory {
   war,
@@ -114,8 +115,8 @@ fun updateFactionResources(
 ): ResourceMap {
   return resources.mapValues { (resourceType, amount) ->
     val adjustment = adjustments
-      .filter { cost -> cost.resource == resourceType }
-      .sumBy { cost -> cost.amount }
+      .filter { cost -> cost.first == resourceType }
+      .sumBy { cost -> cost.second }
 
     amount + adjustment
   }
@@ -124,13 +125,15 @@ fun updateFactionResources(
 fun getUseEvents(deck: Deck, events: Events) =
   events
     .filter { it.type == useActionCommand }
-    .mapNotNull { event ->
+    .flatMap { event ->
       val accessory = deck.accessories[event.target]
       val character = deck.characters[accessory?.owner]
-      if (accessory?.cost != null && character != null) {
-        Pair(character.faction, accessory.cost.copy(amount = -accessory.cost.amount))
+      if (accessory != null && character != null) {
+        accessory.cost.map { cost ->
+          Pair(character.faction, cost.key to -cost.value)
+        }
       } else
-        null
+        listOf()
     }
 
 fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
@@ -148,9 +151,15 @@ fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
     val paidInvoices = payInvoices(dice, gold, invoices)
     val unpaidInvoices = invoices - paidInvoices
 
+    val basicAdjustments: List<TypedResource> = events.filter { event ->
+      event.type == modifyFactionResourcesEvent && event.target == key
+    }
+      .flatMap { event -> (event.value as ResourceMap).map { it.key to it.value } }
+
     val adjustments = uses
       .filter { f -> f.first == key }
       .map { it.second } +
+        basicAdjustments +
         if (paidInvoices.any())
           listOf(TypedResource(ResourceType.gold, -paidInvoices.sumBy { it.amountDue }))
         else
