@@ -7,7 +7,6 @@ import godot.Node
 import godot.PackedScene
 import godot.Resource
 import godot.Spatial
-import godot.core.VariantArray
 import godot.core.Vector3
 import godot.global.GD
 import scripts.entities.actor.AttachCharacter

@@ -23,7 +23,7 @@ class AttachCharacter : Node() {
 
   @Export
   @RegisterProperty
-  var hasContracts: Boolean = true
+  var isClient: Boolean = true
 
   @Export
   @RegisterProperty

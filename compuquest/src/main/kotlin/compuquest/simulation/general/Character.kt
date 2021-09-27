@@ -16,6 +16,7 @@ data class Character(
   val body: Id? = null,
   val isForHire: Boolean = false,
   val fee: Int = 0,
+  val isClient: Boolean = false,
   val availableContracts: Table<ContractDefinition> = mapOf(),
   override val depiction: String,
   override val frame: Int = 0,

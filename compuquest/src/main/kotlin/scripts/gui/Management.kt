@@ -16,7 +16,7 @@ class Management : Node() {
   }
 
   fun setActiveTab(screen: ManagementScreens) {
-    tabContainer?.currentTab = screen.ordinal.toLong()
+	tabContainer?.currentTab = screen.ordinal.toLong()
   }
 
   @RegisterFunction

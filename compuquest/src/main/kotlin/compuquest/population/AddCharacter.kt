@@ -44,18 +44,18 @@ fun parseFaction(faction: Key?, node: AttachCharacter): Key {
     rawFaction
 }
 
-fun addContracts(node: AttachCharacter): List<ContractDefinition> =
-  if (node.hasContracts) {
-    val allies = 
-    listOfNotNull(
-      ContractDefinition(
-        type = QuestTypes.delivery,
-        reward = mapOf(ResourceType.gold to 1000),
-        recipient = 0L,
-      )
-    )
-  } else
-    listOf()
+//fun addContracts(node: AttachCharacter): List<ContractDefinition> =
+//  if (node.hasContracts) {
+//    val allies =
+//    listOfNotNull(
+//      ContractDefinition(
+//        type = QuestTypes.delivery,
+//        reward = mapOf(ResourceType.gold to 1000),
+//        recipient = 0L,
+//      )
+//    )
+//  } else
+//    listOf()
 
 fun addCharacter(
   nextId: NextId,
@@ -83,6 +83,8 @@ fun addCharacter(
           body = body ?: id,
           depiction = depiction,
           fee = if (node.includeFees) getInt(creature, "fee") else 0,
+          isForHire = node.isForHire,
+          isClient = node.isClient,
         ),
         sprite,
         spatial,
