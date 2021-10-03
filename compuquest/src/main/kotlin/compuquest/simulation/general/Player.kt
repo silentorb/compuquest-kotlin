@@ -21,23 +21,13 @@ data class Player(
   val party: List<Id> = listOf(),
   val canInteractWith: Interactable? = null,
   val interactingWith: Id? = null,
-  val menu: String? = null,
   val isPlaying: Boolean = true,
 )
 
 fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
   when (event.type) {
     Commands.interact -> player.canInteractWith?.target
-    Commands.menuBack -> null
-    else -> value
-  }
-}
-
-val updateManagementMenu = handleEvents<String?> { event, value ->
-  when (event.type) {
-    Commands.manageMembers -> ManagementScreens.members.name
-    Commands.manageQuests -> ManagementScreens.quests.name
-    Commands.menuBack -> null
+    Commands.finishInteraction -> null
     else -> value
   }
 }
@@ -87,15 +77,14 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 
   val isPlaying = party.any { deck.characters[it]?.isAlive ?: false }
 
-  val menu = if (!isPlaying && player.isPlaying)
-    gameOverScreen
-  else
-    updateManagementMenu(events, player.menu)
+//  val menu = if (!isPlaying && player.isPlaying)
+//    gameOverScreen
+//  else
+//    updateManagementMenu(events, player.menu)
 
   player.copy(
     canInteractWith = canInteractWith,
     interactingWith = interactingWith,
-    menu = menu,
     party = party,
     isPlaying = isPlaying,
   )

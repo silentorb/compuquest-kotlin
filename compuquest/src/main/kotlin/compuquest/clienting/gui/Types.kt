@@ -1,5 +1,7 @@
 package compuquest.clienting.gui
 
-import silentorb.mythic.ent.Key
+typealias MenuStack = List<Any>
 
-typealias MenuStack = List<Key>
+object Menus {
+  const val conversation = "conversation"
+}

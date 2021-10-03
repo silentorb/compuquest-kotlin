@@ -5,6 +5,7 @@ import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import godot.core.Vector3
+import scripts.Global
 
 fun syncMythic(world: World): World {
   val deck = world.deck
@@ -24,7 +25,7 @@ fun syncMythic(world: World): World {
 fun syncGodot(world: World, events: Events) {
   val player = getPlayer(world)
   if (player != null) {
-    val playerRigIsActive = player.value.interactingWith == null && player.value.menu == null && player.value.isPlaying
+    val playerRigIsActive = player.value.interactingWith == null && Global.getMenuStack().none() && player.value.isPlaying
     val body = world.bodies[player.key]
     if (body != null) {
       body.set("isActive", playerRigIsActive)

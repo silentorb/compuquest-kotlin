@@ -109,8 +109,10 @@ class Portrait : Node() {
 	  }
 	  verticalBox?.visible = lastCharacter != null
 
+		val menu = Global.getMenuStack().lastOrNull()
+
 	  val currentIsManaging = player != null
-		  && ManagementScreens.values().any { it.name == player.menu }
+		  && ManagementScreens.values().any { it.name == menu }
 		  && lastCharacter != null &&
 		  (player.party.size > 1 || !player.party.contains(actor))
 

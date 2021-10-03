@@ -2,6 +2,7 @@ package compuquest.simulation.input
 
 object Commands {
   val interact = "interact"
+  val finishInteraction = "finishInteraction"
   val menuBack = "ui_cancel"
   val manageMembers = "manageMembers"
   val manageQuests = "manageQuests"

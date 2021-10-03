@@ -2,6 +2,7 @@ package scripts
 
 import compuquest.app.newGame
 import compuquest.clienting.Client
+import compuquest.clienting.updateClient
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Player
@@ -21,6 +22,7 @@ import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene
+import silentorb.mythic.happening.Events
 
 @RegisterClass
 class Global : Node() {
@@ -49,6 +51,10 @@ class Global : Node() {
 
     fun getPlayer(): Map.Entry<Id, Player>? =
       getPlayer(world)
+
+    fun getMenuStack() =
+      instance!!.client.menuStack
+
   }
 
   init {
@@ -82,9 +88,13 @@ class Global : Node() {
     addChild(hud)
   }
 
-  fun updateWorlds(worlds: List<World>, delta: Float) {
+  fun updateEvents(): Events {
     val events = eventQueue.toList() + gatherDefaultPlayerInput(worlds.last())
     eventQueue.clear()
+    return events
+  }
+
+  fun updateWorlds(events: Events, worlds: List<World>, delta: Float) {
     if (events.any { it.type == Commands.newGame }) {
       restartGame()
     } else {
@@ -122,7 +132,9 @@ class Global : Node() {
             worlds = listOf(newGame(root, definitions))
           }
         } else {
-          updateWorlds(localWorlds, delta.toFloat())
+          val events = updateEvents()
+          client = updateClient(localWorlds.lastOrNull(), events, client)
+          updateWorlds(events, localWorlds, delta.toFloat())
         }
       }
     }

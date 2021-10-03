@@ -5,6 +5,7 @@ import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Events
 
 enum class QuestStatus {
+  available,
   active,
   completed,
   failed,
@@ -13,7 +14,7 @@ enum class QuestStatus {
 data class Quest(
   val client: Id,
   val hero: Id? = null,
-  val status: QuestStatus = QuestStatus.active,
+  val status: QuestStatus = QuestStatus.available,
   val name: String,
   val type: Key,
   val reward: ResourceMap,

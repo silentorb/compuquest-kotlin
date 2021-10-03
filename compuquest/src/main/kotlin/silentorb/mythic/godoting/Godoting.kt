@@ -23,6 +23,14 @@ fun <T> tempCatch(action: () -> T): T {
   }
 }
 
+fun tempCatchStatement(action: () -> Unit): Unit {
+  return try {
+    action()
+  } catch (error: Throwable) {
+    throw Error("An Error was thrown")
+  }
+}
+
 fun deleteNode(node: Node) {
   tempCatch {
     node.queueFree()

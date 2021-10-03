@@ -40,7 +40,7 @@ fun getOnInteracts(deck: Deck, target: Id, targetCharacter: Character): List<Key
     if (targetCharacter.attributes.contains("forHire")) InteractionBehaviors.jobInterview else null,
     if (getAvailableQuests(deck, target).any()) InteractionBehaviors.offerQuests else null,
     if (readyToCompleteQuests(deck, targetCharacter).any()) InteractionBehaviors.completeQuest else null,
-    if (hasAccessoryWithEffect(deck.accessories, target, AccessoryEffects.resurrect)) InteractionBehaviors.completeQuest else null,
+    if (hasAccessoryWithEffect(deck.accessories, target, AccessoryEffects.resurrect)) InteractionBehaviors.resurrect else null,
   )
 
 fun getInteractable(world: World, actor: Id): Interactable? {

@@ -12,8 +12,14 @@ data class MenuContent(
   val items: List<MenuItem> = listOf(),
 )
 
+data class MenuAddress(
+  val key: String,
+  val context: Any? = null,
+)
+
 data class MenuItem(
   val title: String,
+  val key: Any = title,
   val content: ConversationContentSource? = null,
   val events: ConversationEventSource? = null,
 )
