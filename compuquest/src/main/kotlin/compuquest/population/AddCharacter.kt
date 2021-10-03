@@ -5,6 +5,7 @@ import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.definition.TypedResource
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
+import godot.Node
 import godot.Resource
 import godot.Spatial
 import scripts.entities.actor.AttachCharacter
@@ -26,7 +27,7 @@ fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
         range = getFloat(accessory, "Range"),
         cost = mapOf(
           (ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana) to
-          getInt(accessory, "costAmount")
+              getInt(accessory, "costAmount")
         ),
         spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
         effect = getString(accessory, "effect"),
@@ -37,8 +38,8 @@ fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
   )
 }
 
-fun parseFaction(faction: Key?, node: AttachCharacter): Key {
-  val rawFaction = faction ?: node.faction
+fun parseFaction(faction: Key?, node: Node): Key {
+  val rawFaction = faction ?: getString(node, "faction")
   return if (rawFaction == "")
     Factions.neutral
   else
@@ -70,37 +71,39 @@ fun addCharacter(
   body: Id?,
   creature: Resource,
   faction: Key?,
-  node: AttachCharacter
+  node: Node
 ): Hands {
-  val id = nextId()
-  val sprite = node.getParent()?.findNode("sprite")
-  val depiction = getString(creature, "depiction")
-  sprite?.set("animation", depiction)
-  val refinedFaction = parseFaction(faction, node)
+  return tempCatch {
+    val id = nextId()
+    val sprite = node.getParent()?.findNode("sprite")
+    val depiction = getString(creature, "depiction")
+    sprite?.set("animation", depiction)
+    val refinedFaction = parseFaction(faction, node)
+    val maxHealth = getIntOrNull(creature, "health") ?: 1
 
-  return listOf(
-    Hand(
-      id = id,
-      components =
-      listOfNotNull(
-        Character(
-          name = node.name,
-          faction = refinedFaction,
-          health = IntResource(node.healthValue, getIntOrNull(creature, "health") ?: 1),
-          body = body ?: id,
-          depiction = depiction,
-          fee = if (node.includeFees) getInt(creature, "fee") else 0,
-          key = getNonEmptyString(creature, "key"),
-          isForHire = node.isForHire,
-          isClient = node.isClient,
-        ),
-        sprite,
-        spatial,
-        Spirit(),
+    listOf(
+      Hand(
+        id = id,
+        components =
+        listOfNotNull(
+          Character(
+            name = node.name,
+            faction = refinedFaction,
+            health = IntResource(maxHealth),
+            body = body ?: id,
+            depiction = depiction,
+            fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
+            key = getNonEmptyString(creature, "key"),
+            attributes = getList<String>(creature, "attributes").toSet(),
+          ),
+          sprite,
+          spatial,
+          Spirit(),
+        )
       )
-    )
-  ) + getVariantArray<Resource>("accessories", creature)
-    .map { accessory ->
-      addAccessory(nextId, id, accessory)
-    } + addQuests(nextId, id, creature)
+    ) + getVariantArray<Resource>("accessories", creature)
+      .map { accessory ->
+        addAccessory(nextId, id, accessory)
+      } + addQuests(nextId, id, creature)
+  }!!
 }

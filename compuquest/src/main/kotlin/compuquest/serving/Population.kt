@@ -12,12 +12,9 @@ import godot.global.GD
 import scripts.entities.actor.AttachCharacter
 import scripts.world.slotGroup
 import scripts.world.zoneGroup
+import silentorb.mythic.godoting.getResourceName
 import silentorb.mythic.randomly.Dice
 import java.lang.Integer.min
-
-val baseNamePattern = Regex("([\\w \\-]+)\\.\\w+$")
-fun getFactionKey(resource: Resource): String? =
-  baseNamePattern.find(resource.resourcePath)?.groupValues?.drop(1)?.firstOrNull()
 
 fun populateZone(bodyScene: PackedScene, dice: Dice, zone: Node) {
   tempCatch {
@@ -28,7 +25,7 @@ fun populateZone(bodyScene: PackedScene, dice: Dice, zone: Node) {
 
       val factionResource = zone.get("faction") as? Resource
       val faction = if (factionResource != null)
-        getFactionKey(factionResource)
+        getResourceName(factionResource)
       else
         null
 

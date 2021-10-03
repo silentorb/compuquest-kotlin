@@ -26,6 +26,7 @@ data class Accessory(
 object AccessoryEffects {
   val attack = "attack"
   val heal = "heal"
+  val resurrect = "resurrect"
 }
 
 const val useActionCommand = "useAction"

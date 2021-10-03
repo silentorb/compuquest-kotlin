@@ -12,3 +12,4 @@ accessories = [ ExtResource( 2 ), ExtResource( 3 ) ]
 fee = 10
 quests = [  ]
 key = ""
+attributes = [  ]

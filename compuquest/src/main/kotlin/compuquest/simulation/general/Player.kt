@@ -1,7 +1,7 @@
 package compuquest.simulation.general
 
+import compuquest.clienting.gui.ManagementScreens
 import compuquest.simulation.input.Commands
-import scripts.gui.ManagementScreens
 import scripts.gui.gameOverScreen
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key

@@ -1,9 +1,9 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://world/test/test-zone.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
 [ext_resource path="res://world/creatures/viking.tres" type="Resource" id=3]
-[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachCharacter.kt" type="Script" id=4]
+[ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=4]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=5]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=6]
 [ext_resource path="res://entities/world/Zone.tscn" type="PackedScene" id=7]
@@ -14,6 +14,17 @@
 [ext_resource path="res://world/accessories/heal.tres" type="Resource" id=12]
 [ext_resource path="res://defining/Creature.gd" type="Script" id=13]
 [ext_resource path="res://defining/Quest.gd" type="Script" id=14]
+[ext_resource path="res://world/accessories/resurrect.tres" type="Resource" id=15]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 13 )
+depiction = "viking"
+health = 50
+accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
+fee = 10
+quests = [  ]
+key = "vik"
+attributes = [ "forHire" ]
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 14 )
@@ -23,16 +34,17 @@ description = "I need you to deliver something."
 recipient = "deevee"
 rewardGold = 1000
 
-[sub_resource type="Resource" id=1]
+[sub_resource type="Resource" id=3]
 script = ExtResource( 13 )
 depiction = "orc"
 health = 50
-accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
+accessories = [ ExtResource( 15 ) ]
 fee = 0
 quests = [ SubResource( 2 ) ]
 key = ""
+attributes = [  ]
 
-[sub_resource type="Resource" id=3]
+[sub_resource type="Resource" id=4]
 script = ExtResource( 13 )
 depiction = "deevee"
 health = 50
@@ -40,6 +52,7 @@ accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
 fee = 0
 quests = [  ]
 key = "deevee"
+attributes = [  ]
 
 [node name="root" type="Spatial"]
 
@@ -86,39 +99,31 @@ resource = "gold"
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 4 )
 creature = ExtResource( 3 )
-health_value = 100
 
 [node name="joe" type="Node" parent="player"]
 script = ExtResource( 4 )
 creature = ExtResource( 3 )
-health_value = 100
 
 [node name="employee" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, -3.05739 )
 
 [node name="char" type="Node" parent="employee"]
 script = ExtResource( 4 )
-creature = ExtResource( 3 )
+creature = SubResource( 1 )
 faction = "neutral"
-is_for_hire = true
-health_value = 50
 
 [node name="client" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.90778, 1.87952, 2.74601 )
 
 [node name="char" type="Node" parent="client"]
 script = ExtResource( 4 )
-creature = SubResource( 1 )
+creature = SubResource( 3 )
 faction = "neutral"
-include_fees = false
-health_value = 50
 
 [node name="deevee" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.90778, 1.87952, -5.86603 )
 
 [node name="char" type="Node" parent="deevee"]
 script = ExtResource( 4 )
-creature = SubResource( 3 )
+creature = SubResource( 4 )
 faction = "neutral"
-include_fees = false
-health_value = 50

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://defining/Accessory.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+effect = "resurrect"
+strength = 0.0
+Range = 0.0
+costResource = ""
+costAmount = 0
+cooldown = 0.0
+attributes = [  ]

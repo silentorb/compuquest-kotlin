@@ -1,4 +1,4 @@
-package scripts.gui
+package compuquest.clienting.gui
 
 enum class ManagementScreens {
   members,

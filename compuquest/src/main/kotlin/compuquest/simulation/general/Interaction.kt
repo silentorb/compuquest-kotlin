@@ -24,35 +24,36 @@ object InteractionBehaviors {
   val jobInterview = "jobInterview"
   val offerQuests = "offerQuests"
   val completeQuest = "completeQuests"
+  val resurrect = "resurrect"
 }
 
 data class Interactable(
   val target: Id,
   val action: String,
-  val onInteract: String,
+  val onInteracts: List<String>,
 )
 
 private const val interactableMaxDistance = 4f
 
-fun getOnInteract(deck: Deck, target: Id, targetCharacter: Character): Key? =
-  when {
-    targetCharacter.isForHire -> InteractionBehaviors.jobInterview
-    getAvailableQuests(deck, target).any() -> InteractionBehaviors.offerQuests
-    readyToCompleteQuests(deck, targetCharacter).any() -> InteractionBehaviors.completeQuest
-    else -> null
-  }
+fun getOnInteracts(deck: Deck, target: Id, targetCharacter: Character): List<Key> =
+  listOfNotNull(
+    if (targetCharacter.attributes.contains("forHire")) InteractionBehaviors.jobInterview else null,
+    if (getAvailableQuests(deck, target).any()) InteractionBehaviors.offerQuests else null,
+    if (readyToCompleteQuests(deck, targetCharacter).any()) InteractionBehaviors.completeQuest else null,
+    if (hasAccessoryWithEffect(deck.accessories, target, AccessoryEffects.resurrect)) InteractionBehaviors.completeQuest else null,
+  )
 
 fun getInteractable(world: World, actor: Id): Interactable? {
   val target = castCharacterRay(world, actor, interactableMaxDistance)
   return if (target != null) {
     val character = world.deck.characters[target]
     if (character != null) {
-      val onInteract = getOnInteract(world.deck, target, character)
-      if (onInteract != null)
+      val onInteracts = getOnInteracts(world.deck, target, character)
+      if (onInteracts.any())
         Interactable(
           target = target,
           action = InteractionActions.talk,
-          onInteract = onInteract,
+          onInteracts = onInteracts,
         )
       else
         null

@@ -11,3 +11,5 @@ export(int) var fee = 0
 export(Array, Resource) var quests
 
 export(String) var key
+
+export(Array, String, "forHire", "organic", "construct") var attributes

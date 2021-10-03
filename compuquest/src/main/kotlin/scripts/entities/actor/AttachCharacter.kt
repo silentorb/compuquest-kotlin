@@ -23,14 +23,6 @@ class AttachCharacter : Node() {
 
   @Export
   @RegisterProperty
-  var isClient: Boolean = true
-
-  @Export
-  @RegisterProperty
-  var isForHire: Boolean = false
-
-  @Export
-  @RegisterProperty
   var includeFees: Boolean = true
 
   @RegisterFunction

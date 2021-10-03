@@ -1,5 +1,6 @@
 package scripts.gui
 
+import compuquest.clienting.gui.ManagementScreens
 import godot.Node
 import godot.TabContainer
 import godot.annotation.RegisterClass

@@ -15,9 +15,8 @@ data class Character(
   val faction: Key,
   val health: IntResource,
   val body: Id? = null,
-  val isForHire: Boolean = false,
+  val attributes: Set<Key> = setOf(),
   val fee: Int = 0,
-  val isClient: Boolean = false,
   override val depiction: String,
   override val frame: Int = 0,
 ) : SpriteState {
@@ -26,6 +25,9 @@ data class Character(
 
 fun getAccessories(accessories: Table<Accessory>, actor: Id) =
   accessories.filterValues { it.owner == actor }
+
+fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
+  getAccessories(accessories, actor).any { it.value.effect == effect }
 
 fun getReadyAccessories(world: World, actor: Id) =
   getAccessories(world.deck.accessories, actor)

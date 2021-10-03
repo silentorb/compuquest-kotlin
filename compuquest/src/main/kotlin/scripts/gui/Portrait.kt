@@ -1,5 +1,6 @@
 package scripts.gui
 
+import compuquest.clienting.gui.ManagementScreens
 import compuquest.simulation.general.*
 import godot.*
 import godot.annotation.Export
