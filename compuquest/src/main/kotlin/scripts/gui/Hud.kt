@@ -35,7 +35,8 @@ class Hud : Node() {
 		val menuStack = getPlayerMenuStack(client, player.key)
 
 		if (localSlot != null) {
-		  lastMenu = syncGuiToState(localSlot, player.key, player.value, lastMenu, menuStack)
+		  syncGuiToState(localSlot, player.key, Global.world!!, lastMenu, menuStack)
+			lastMenu = menuStack.lastOrNull()
 		}
 	  }
 	}

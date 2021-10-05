@@ -1,7 +1,7 @@
 package scripts.gui
 
 import compuquest.clienting.gui.MenuContent
-import compuquest.simulation.input.Commands
+import compuquest.clienting.gui.activateMenuItem
 import godot.Button
 import godot.Label
 import godot.Node
@@ -21,36 +21,25 @@ class MenuScreen : Node() {
 	val world = Global.world
 	val localContent = content
 	if (world != null && localContent != null) {
-	  val player = Global.getPlayer()!!
-    val option = localContent.items[index]
-	  val eventSource = option.events
-	  if (eventSource != null) {
-		val events = eventSource(world, player.key)
-		for (event in events) {
-		  Global.addEvent(event)
-		}
-	  }
-    else if (option.content != null) {
-
-    }
+	  val item = localContent.items[index]
+	  activateMenuItem(world, item)
 	}
-	Global.addPlayerEvent(Commands.menuBack)
   }
 
   @RegisterFunction
   override fun _ready() {
-		val buttons = findNode("buttons")!!
-		val message = findNode("message")!! as Label
-		val localContent = content
-		if (localContent != null) {
-			message.text = localContent.message
+	val buttons = findNode("buttons")!!
+	val message = findNode("message")!! as Label
+	val localContent = content
+	if (localContent != null) {
+	  message.text = localContent.message.joinToString("\n\n")
 
-			localContent.items.forEachIndexed { index, option ->
-				val button = Button()
-				button.text = option.title
-				button.connect("pressed", this, "on_pressed", variantArrayOf(index))
-				buttons.addChild(button)
-			}
-		}
+	  localContent.items.forEachIndexed { index, option ->
+		val button = Button()
+		button.text = option.title
+		button.connect("pressed", this, "on_pressed", variantArrayOf(index))
+		buttons.addChild(button)
+	  }
 	}
+  }
 }

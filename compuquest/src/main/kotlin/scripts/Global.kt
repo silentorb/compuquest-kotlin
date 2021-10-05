@@ -2,6 +2,7 @@ package scripts
 
 import compuquest.app.newGame
 import compuquest.clienting.Client
+import compuquest.clienting.eventsFromClient
 import compuquest.clienting.updateClient
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
@@ -9,7 +10,7 @@ import compuquest.simulation.general.Player
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getPlayer
 import compuquest.simulation.input.Commands
-import compuquest.simulation.input.gatherDefaultPlayerInput
+import compuquest.clienting.input.gatherDefaultPlayerInput
 import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.Engine
@@ -133,8 +134,11 @@ class Global : Node() {
           }
         } else {
           val events = updateEvents()
-          client = updateClient(localWorlds.lastOrNull(), events, client)
-          updateWorlds(events, localWorlds, delta.toFloat())
+          val previousClient = client
+          val nextClient = updateClient(localWorlds.lastOrNull(), events, previousClient)
+          val clientEvents = eventsFromClient(getPlayer()!!.key, nextClient, previousClient)
+          client = nextClient
+          updateWorlds(events + clientEvents, localWorlds, delta.toFloat())
         }
       }
     }

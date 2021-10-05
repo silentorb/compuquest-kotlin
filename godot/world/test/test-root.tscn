@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://world/test/test-zone.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
@@ -24,7 +24,17 @@ accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
 fee = 10
 quests = [  ]
 key = "vik"
-attributes = [ "forHire" ]
+attributes = [ "forHire", "talk" ]
+
+[sub_resource type="Resource" id=5]
+script = ExtResource( 13 )
+depiction = "viking"
+health = 50
+accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
+fee = 10
+quests = [  ]
+key = "vik"
+attributes = [ "talk" ]
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 14 )
@@ -42,7 +52,7 @@ accessories = [ ExtResource( 15 ) ]
 fee = 0
 quests = [ SubResource( 2 ) ]
 key = ""
-attributes = [  ]
+attributes = [ "talk" ]
 
 [sub_resource type="Resource" id=4]
 script = ExtResource( 13 )
@@ -52,7 +62,7 @@ accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
 fee = 0
 quests = [  ]
 key = "deevee"
-attributes = [  ]
+attributes = [ "talk" ]
 
 [node name="root" type="Spatial"]
 
@@ -110,6 +120,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, -3.05739 )
 [node name="char" type="Node" parent="employee"]
 script = ExtResource( 4 )
 creature = SubResource( 1 )
+faction = "neutral"
+
+[node name="employee2" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, 6.79788 )
+
+[node name="char" type="Node" parent="employee2"]
+script = ExtResource( 4 )
+creature = SubResource( 5 )
 faction = "neutral"
 
 [node name="client" parent="." instance=ExtResource( 10 )]

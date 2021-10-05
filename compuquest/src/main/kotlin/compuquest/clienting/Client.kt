@@ -2,9 +2,12 @@ package compuquest.clienting
 
 import compuquest.clienting.gui.MenuStack
 import compuquest.clienting.gui.updateMenuStack
+import compuquest.clienting.input.gatherDefaultPlayerInput
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getPlayer
+import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
+import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 
 data class PlayerGui(
@@ -28,3 +31,14 @@ fun updateClient(world: World?, events: Events, client: Client): Client {
       client.menuStack,
   )
 }
+
+fun eventsFromClient(player: Id, client: Client, previous: Client?): Events =
+  if (previous == null)
+    listOf()
+  else
+    listOfNotNull(
+      if (client.menuStack.none() and previous.menuStack.any())
+        Event(Commands.finishInteraction, player)
+      else
+        null
+    )

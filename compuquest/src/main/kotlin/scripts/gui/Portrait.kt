@@ -1,6 +1,7 @@
 package scripts.gui
 
-import compuquest.clienting.gui.ManagementScreens
+import compuquest.clienting.gui.MenuAddress
+import compuquest.clienting.gui.managementScreens
 import compuquest.simulation.general.*
 import godot.*
 import godot.annotation.Export
@@ -109,10 +110,10 @@ class Portrait : Node() {
 	  }
 	  verticalBox?.visible = lastCharacter != null
 
-		val menu = Global.getMenuStack().lastOrNull()
+	  val menuKey = Global.getMenuStack().lastOrNull()?.key
 
 	  val currentIsManaging = player != null
-		  && ManagementScreens.values().any { it.name == menu }
+		  && managementScreens.contains(menuKey)
 		  && lastCharacter != null &&
 		  (player.party.size > 1 || !player.party.contains(actor))
 

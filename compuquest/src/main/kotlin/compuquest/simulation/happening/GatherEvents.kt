@@ -3,10 +3,7 @@ package compuquest.simulation.happening
 import compuquest.simulation.combat.eventsFromHomingMissile
 import compuquest.simulation.general.World
 import compuquest.simulation.general.eventsFromFaction
-import compuquest.simulation.input.gatherUserInput
 import compuquest.simulation.intellect.pursueGoals
-import silentorb.mythic.ent.Id
-import silentorb.mythic.ent.Table
 import silentorb.mythic.happening.Events
 
 fun <K, V> tableEvents(transform: (K, V) -> Events, table: Map<K, V>): Events =

@@ -7,4 +7,5 @@ object Commands {
   val manageMembers = "manageMembers"
   val manageQuests = "manageQuests"
   val newGame = "newGame"
+  val navigate = "navigate"
 }

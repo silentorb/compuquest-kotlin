@@ -12,4 +12,4 @@ export(Array, Resource) var quests
 
 export(String) var key
 
-export(Array, String, "forHire", "organic", "construct") var attributes
+export(Array, String, "forHire", "talk", "organic", "construct") var attributes

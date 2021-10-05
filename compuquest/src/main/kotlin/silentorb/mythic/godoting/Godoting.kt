@@ -9,7 +9,9 @@ import godot.global.GD
 
 inline fun <reified T> instantiateScene(path: String): T? {
   val scene = GD.load<PackedScene>(path)
-  return scene?.instance() as? T
+  val node = scene?.instance()
+  assert(node is T)
+  return node as? T
 }
 
 // Godot-JVM raises warnings and sometimes becomes unstable around JNI calls that are

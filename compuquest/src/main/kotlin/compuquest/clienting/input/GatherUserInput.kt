@@ -1,7 +1,8 @@
-package compuquest.simulation.input
+package compuquest.clienting.input
 
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getPlayer
+import compuquest.simulation.input.Commands
 import godot.Input
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
