@@ -15,18 +15,18 @@ class Management : Node() {
 
   @RegisterFunction
   override fun _ready() {
-    tabContainer = findNode("tab-container") as? TabContainer
-    tabContainer?.currentTab = startingIndex.toLong()
+	tabContainer = findNode("tab-container") as? TabContainer
+	tabContainer?.currentTab = startingIndex.toLong()
   }
 
   fun setActiveTab(screen: Key) {
-    val index = managementScreens.indexOf(screen)
-    val localContainer = tabContainer
-    if (localContainer != null) {
-      tabContainer?.currentTab = index.toLong()
-    } else {
-      startingIndex = index
-    }
+	val index = managementScreens.indexOf(screen)
+	val localContainer = tabContainer
+	if (localContainer != null) {
+	  tabContainer?.currentTab = index.toLong()
+	} else {
+	  startingIndex = index
+	}
   }
 
   @RegisterFunction

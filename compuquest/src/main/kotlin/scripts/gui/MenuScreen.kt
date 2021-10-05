@@ -1,5 +1,6 @@
 package scripts.gui
 
+import compuquest.clienting.gui.GameContext
 import compuquest.clienting.gui.MenuContent
 import compuquest.clienting.gui.activateMenuItem
 import godot.Button
@@ -13,7 +14,7 @@ import scripts.Global
 @RegisterClass
 class MenuScreen : Node() {
 
-  var content: MenuContent? = null
+  var content: MenuContent<GameContext>? = null
 
   // This function needs to be snake case because Godot-JVM is converting everything to snake case under the hood
   @RegisterFunction
@@ -22,7 +23,11 @@ class MenuScreen : Node() {
 	val localContent = content
 	if (world != null && localContent != null) {
 	  val item = localContent.items[index]
-	  activateMenuItem(world, item)
+		val context = GameContext(
+			world = world,
+			actor = Global.getPlayer()!!.key
+		)
+	  activateMenuItem(context, item)
 	}
   }
 

@@ -11,6 +11,7 @@ import silentorb.mythic.happening.Events
 data class Spirit(
   val actionChanceAccumulator: Int = 0,
   val focusedAction: Id? = null,
+  val target: Id? = null,
 )
 
 fun inRangeAndVisible(
@@ -64,14 +65,18 @@ fun filterAllyTargets(
     mapOf()
 }
 
-fun getNextActionAndTarget(
+fun getNextTarget(
   world: World,
   actor: Id,
-  character: Character,
-  accessory: Accessory
+  accessory: Accessory,
+  target: Id?
 ): Id? {
+  val character = world.deck.characters[actor]!!
   val options = filterEnemyTargets(world, actor, character, accessory)
-  return world.dice.takeOneOrNull(options.entries)?.key
+  return if (options.containsKey(target))
+    target
+  else
+    world.dice.takeOneOrNull(options.entries)?.key
 }
 
 fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit): Events {
@@ -80,7 +85,7 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
   return if (action != null && accessory != null) {
     when (accessory.effect) {
       AccessoryEffects.attack -> {
-        val target = getNextActionAndTarget(world, actor, character, accessory)
+        val target = spirit.target
         if (target != null) {
           attack(world, actor, character, action, accessory, target)
         } else
@@ -123,8 +128,14 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
     .minus(spirit.focusedAction ?: 0L) // Branching shortcut.  Assuming 0L is never a valid key.
 
   val focusedAction = world.dice.takeOneOrNull(readyActions.keys)
+  val accessory = world.deck.accessories[focusedAction]
+  val target = if (accessory?.effect == AccessoryEffects.attack)
+    getNextTarget(world, actor, accessory, spirit.target)
+  else
+    spirit.target
 
   spirit.copy(
     focusedAction = focusedAction,
+    target = target,
   )
 }

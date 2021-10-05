@@ -1,5 +1,7 @@
 package compuquest.clienting.gui
 
+import compuquest.simulation.definition.Factions
+import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.*
 import godot.Node
 import scripts.gui.Management
@@ -59,12 +61,13 @@ fun jobInterviewConversation() =
     content = { _, argument ->
       val other = argument as Id
       newConversationMenu(
-        MenuContent(
+        GameMenuContent(
           message = listOf("Hey, friend!  You wanna make more money?"),
           items = listOf(
-            MenuItem(
+            GameMenuItem(
               title = "Hire",
-              events = { _, player ->
+              events = { context ->
+                val player = context.actor
                 listOf(
                   Event(hiredNpc, player, other),
                   Event(joinedPlayer, other, player),
@@ -83,12 +86,13 @@ fun offerQuestsConversation() =
     content = { _, argument ->
       val quest = argument as Id
       newConversationMenu(
-        MenuContent(
+        GameMenuContent(
           message = listOf("I have a quest for you."),
           items = listOf(
-            MenuItem(
+            GameMenuItem(
               title = "Accept",
-              events = { _, player ->
+              events = { context ->
+                val player = context.actor
                 listOf(
                   Event(setQuestHeroEvent, quest, player),
                   Event(setQuestStatusEvent, quest, QuestStatus.active),
@@ -106,19 +110,19 @@ fun completeQuestConversation() =
     title = staticTitle("Complete Quest"),
     content = { _, argument ->
       newConversationMenu(
-        MenuContent(
+        GameMenuContent(
           message = listOf("Thank you!"),
           items = listOf(
-            MenuItem(
+            GameMenuItem(
               title = "Accept",
-              events = { world, player ->
+              events = { context ->
                 val quest = argument as Id
-                val deck = world.deck
-                val faction = deck.players[player]!!.faction
+                val deck = context.world.deck
+                val faction = deck.players[context.actor]!!.faction
                 val questRecord = deck.quests[quest]!!
                 listOf(
                   Event(setQuestStatusEvent, quest, QuestStatus.completed),
-                  Event(modifyFactionResourcesEvent, faction, questRecord.reward),
+                  modifyFactionResources(faction, questRecord.reward),
                 )
               }
             )
@@ -129,15 +133,19 @@ fun completeQuestConversation() =
   )
 
 fun resurrectMenuItem(actor: Id, character: Character) =
-  MenuItem(
-    title = "Resurrect ${character.name}",
+  GameMenuItem(
+    title = "Resurrect ${character.name} ($100)",
 //    key = MenuAddress("resurrect", actor),
-    events = { world, _ ->
-      val deck = world.deck
+    events = { context ->
+      val deck = context.world.deck
       val targetCharacter = deck.characters[actor]!!
+      val faction = targetCharacter.faction
       listOf(
         modifyHealth(actor, targetCharacter.health.max),
-      )
+      ) + if (faction != Factions.neutral)
+        listOf(modifyFactionResources(faction, mapOf(ResourceType.gold to -100)))
+      else
+        listOf()
     }
   )
 
@@ -163,7 +171,7 @@ fun resurrectionConversation() =
         listOf("You can bring your dead here to be restored.")
 
       newConversationMenu(
-        MenuContent(
+        GameMenuContent(
           message = message,
           items = items,
         )
@@ -188,13 +196,13 @@ fun getConversationOptions(deck: Deck, target: Id, targetCharacter: Character): 
   }
 
 val leaveMenuItem =
-  MenuItem(
+  GameMenuItem(
     title = "Leave"
   )
 
 fun emptyConversation() =
   newConversationMenu(
-    MenuContent(
+    GameMenuContent(
       message = listOf("This individual has nothing to say to you"),
       items = listOf(),
     )
@@ -219,7 +227,7 @@ fun conversationMenu() =
           .map { address ->
             val screen = gameScreens[address.key]!!
             val title = screen.title(context, address.argument)
-            MenuItem(
+            GameMenuItem(
               title = title,
               address = address,
             )
@@ -231,7 +239,7 @@ fun conversationMenu() =
             addressToGameScreen(context, address)
           } else
             newConversationMenu(
-              MenuContent(
+              GameMenuContent(
                 message = listOf("What do you want?"),
                 items = items,
               )

@@ -28,7 +28,7 @@ fun mountScreen(slot: Node, scenePath: String): Node? {
     null
 }
 
-fun newMenuScreen(content: MenuContent): MenuScreen {
+fun newMenuScreen(content: GameMenuContent): MenuScreen {
   return tempCatch {
     val screen = instantiateScene<MenuScreen>("res://gui/menus/MenuScreen.tscn")!!
     screen.content = content
@@ -36,7 +36,7 @@ fun newMenuScreen(content: MenuContent): MenuScreen {
   }
 }
 
-fun newConversationMenu(content: MenuContent): MenuScreen =
+fun newConversationMenu(content: GameMenuContent): MenuScreen =
   newMenuScreen(
     content.copy(items = content.items + leaveMenuItem)
   )

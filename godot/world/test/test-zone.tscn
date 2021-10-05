@@ -12,16 +12,16 @@
 [node name="Floor1" parent="arena" instance=ExtResource( 2 )]
 
 [node name="Wall1" parent="arena" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04772, -20 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.58296, -20 )
 
 [node name="Wall2" parent="arena" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.127789, -0.10051, 19.905 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.127789, -5.63576, 19.905 )
 
 [node name="Wall3" parent="arena" instance=ExtResource( 5 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20.0834, -0.1096, 0.0110435 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20.0834, -5.64485, 0.0110435 )
 
 [node name="Wall4" parent="arena" instance=ExtResource( 5 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, -0.04772, 0 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, -5.58296, 0 )
 
 [node name="Cube1" parent="arena" instance=ExtResource( 6 )]
 transform = Transform( 4, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.25, -17.5 )

@@ -1,6 +1,5 @@
 package scripts.gui
 
-import compuquest.clienting.gui.MenuAddress
 import compuquest.clienting.gui.managementScreens
 import compuquest.simulation.general.*
 import godot.*

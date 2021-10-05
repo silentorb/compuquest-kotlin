@@ -19,7 +19,8 @@ data class Character(
   val fee: Int = 0,
   override val depiction: String,
   override val frame: Int = 0,
-) : SpriteState {
+  val originalDepiction: String = depiction,
+  ) : SpriteState {
   val isAlive: Boolean = health.value > 0
 }
 
@@ -83,7 +84,7 @@ fun updateCharacter(world: World, events: Events): (Id, Character) -> Character 
   val depiction = if (health.value == 0)
     "sprites"
   else
-    character.depiction
+    character.originalDepiction
 
   character.copy(
     health = health,

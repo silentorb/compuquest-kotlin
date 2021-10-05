@@ -32,6 +32,9 @@ enum class RelationshipCategory {
   ally
 }
 
+fun modifyFactionResources(faction: Key, mod: ResourceMap) =
+  Event(modifyFactionResourcesEvent, faction, mod)
+
 fun getRelationshipValue(relationships: RelationshipTable, first: Key?, second: Key?): Int =
   relationships[setOf(first, second)] ?: 50
 
