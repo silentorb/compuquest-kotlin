@@ -18,24 +18,13 @@ object Screens {
   const val resurrection = "resurrection"
   const val manageQuests = "manageQuests"
   const val manageMembers = "manageMembers"
+  const val shopping = "shopping"
 }
 
 val managementScreens = listOf(
   Screens.manageMembers,
   Screens.manageQuests,
 )
-
-fun newManagementMenuOld(slot: Node, screen: Key): Management? {
-  val existing = slot.getChildren().firstOrNull() as? Management
-  val control = existing
-    ?: mountScreen(slot, "res://gui/menus/Management.tscn") as? Management
-
-  control?.setActiveTab(screen)
-  return if (existing == null)
-    control
-  else
-    null
-}
 
 fun newManagementMenu(screen: Key): Management {
   val control = instantiateScene<Management>("res://gui/menus/Management.tscn")!!
@@ -100,6 +89,42 @@ fun offerQuestsConversation() =
               }
             ),
           ),
+        )
+      )
+    }
+  )
+
+fun shoppingConversation() =
+  GameScreen(
+    title = staticTitle("Purchase Something"),
+    content = { context, argument ->
+      val other = argument as Id
+      val wares = context.world.deck.wares.filterValues { it.owner == other }
+      newConversationMenu(
+        GameMenuContent(
+          message = listOf("What would you like to buy?"),
+          items = wares
+            .filterValues { it.quantity >= it.quantityPerPurchase }
+            .map { (ware, wareRecord) ->
+              val price = wareRecord.price.entries.first()
+              val purchasePrice = price.value * wareRecord.quantityPerPurchase
+              val resourceName = wareRecord.resourceType!!.name
+              val name = " ${wareRecord.quantityPerPurchase} $resourceName for $purchasePrice ${price.key} "
+              GameMenuItem(
+                title = name,
+                enabled = { context, _ ->
+                  val player = context.actor
+                  val deck = context.world.deck
+                  val faction = deck.players[player]!!.faction
+                  val balance = deck.factions[faction]!!.resources[price.key] ?: 0
+                  balance >= purchasePrice
+                },
+                events = { context ->
+                  val player = context.actor
+                  purchase(context.world.deck, player, ware, wareRecord.quantityPerPurchase)
+                }
+              )
+            },
         )
       )
     }
@@ -189,6 +214,10 @@ fun getConversationOptions(deck: Deck, target: Id, targetCharacter: Character): 
       MenuAddress(Screens.resurrection, target)
     else
       null,
+    if (deck.wares.any { it.value.owner == target })
+      MenuAddress(Screens.shopping, target)
+    else
+      null,
   ) + getAvailableQuests(deck, target).map {
     MenuAddress(Screens.offerQuest, it.key)
   } + readyToCompleteQuests(deck, targetCharacter).map {
@@ -259,4 +288,5 @@ val gameScreens: Map<Key, GameScreen> = mapOf(
   Screens.offerQuest to offerQuestsConversation(),
   Screens.manageQuests to questManagementScreen(),
   Screens.manageMembers to memberManagementScreen(),
+  Screens.shopping to shoppingConversation(),
 )

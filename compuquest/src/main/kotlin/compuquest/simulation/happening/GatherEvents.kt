@@ -3,6 +3,7 @@ package compuquest.simulation.happening
 import compuquest.simulation.combat.eventsFromHomingMissile
 import compuquest.simulation.general.World
 import compuquest.simulation.general.eventsFromFaction
+import compuquest.simulation.general.eventsFromWares
 import compuquest.simulation.intellect.pursueGoals
 import silentorb.mythic.happening.Events
 
@@ -16,6 +17,7 @@ fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): 
 //      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
       tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
       tableEvents(eventsFromFaction(), deck.factions) +
+      eventsFromWares(deck) +
       eventsFromEvents(world, previous, events)
 
   return nextEvents

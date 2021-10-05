@@ -29,3 +29,7 @@ fun modifyResource(mod: Int, resource: IntResource): IntResource =
     value = modifyResource(resource.value, resource.max, mod)
   )
 
+fun invertResourceMap(resourceMap: ResourceMap): ResourceMap =
+  resourceMap.mapValues { (_, value) ->
+    -value
+  }

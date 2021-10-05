@@ -1,5 +1,6 @@
 package silentorb.mythic.godoting
 
+import compuquest.simulation.definition.ResourceType
 import godot.Node
 import godot.Object
 import godot.PackedScene
@@ -70,6 +71,11 @@ fun getFloatOrNull(value: Object, property: String): Float? =
 
 fun getString(value: Object, property: String): String =
   value.get(property) as? String ?: ""
+
+fun getResourceType(value: Object, property: String): ResourceType? {
+  val resource = getString(value, property)
+  return ResourceType.values().firstOrNull { it.name == resource }
+}
 
 fun getNonEmptyString(value: Object, property: String): String? {
   return (value.get(property) as? String)?.ifEmpty { null }

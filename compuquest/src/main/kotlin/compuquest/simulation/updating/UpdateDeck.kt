@@ -14,5 +14,6 @@ fun updateDeck(events: Events, world: World, delta: Float): Deck {
     players = mapTable(deck.players, updatePlayer(world, events, delta)),
     quests = mapTable(deck.quests, updateQuest(events)),
     spirits = mapTable(deck.spirits, updateSpirit(world)),
+    wares = mapTable(deck.wares, updateWare(events)),
   )
 }

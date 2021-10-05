@@ -16,7 +16,6 @@ import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.*
 
 fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
-  val costResource = getString(accessory, "costResource")
   return Hand(
     id = nextId(),
     components = listOf(
@@ -26,7 +25,7 @@ fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
         maxCooldown = getFloat(accessory, "cooldown"),
         range = getFloat(accessory, "Range"),
         cost = mapOf(
-          (ResourceType.values().firstOrNull { it.name == costResource } ?: ResourceType.mana) to
+          (getResourceType(accessory, "costResource") ?: ResourceType.mana) to
               getInt(accessory, "costAmount")
         ),
         spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
@@ -80,6 +79,8 @@ fun addCharacter(
     sprite?.set("animation", depiction)
     val refinedFaction = parseFaction(faction, node)
     val maxHealth = getIntOrNull(creature, "health") ?: 1
+    val wares = getList<Resource>(creature, "wares")
+      .map { addWare(nextId, id, it) }
 
     listOf(
       Hand(
@@ -104,6 +105,6 @@ fun addCharacter(
     ) + getVariantArray<Resource>("accessories", creature)
       .map { accessory ->
         addAccessory(nextId, id, accessory)
-      } + addQuests(nextId, id, creature)
+      } + addQuests(nextId, id, creature) + wares
   }!!
 }

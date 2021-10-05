@@ -18,6 +18,7 @@ data class Deck(
   val players: Table<Player> = mapOf(),
   val quests: Table<Quest> = mapOf(),
   val spirits: Table<Spirit> = mapOf(),
+  val wares: Table<Ware> = mapOf(),
 )
 
 val deckReflection = newDeckReflection(Deck::class, Hand::class)
@@ -35,4 +36,5 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck) =
     players = deck.players + extractComponents(idHands),
     quests = deck.quests + extractComponents(idHands),
     spirits = deck.spirits + extractComponents(idHands),
+    wares = deck.wares + extractComponents(idHands),
   )

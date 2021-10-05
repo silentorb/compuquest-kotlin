@@ -22,13 +22,13 @@ typealias MenuStack = List<MenuAddress>
 data class MenuItem<Context>(
   val title: String,
   val address: MenuAddress? = null,
-  val enabled: IsValid<Context>? = null,
+  val enabled: ContextCheck<Context>? = null,
   val events: ConversationEventSource<Context>? = null,
 )
 
 typealias TitleSource<Context> = (Context, Any?) -> String
 typealias ContentSource<Context> = (Context, Any?) -> Node
-typealias IsValid<Context> = (Context, Any?) -> List<String>?
+typealias ContextCheck<Context> = (Context, Any?) -> Boolean
 typealias GameMenuItem = MenuItem<GameContext>
 typealias GameMenuContent = MenuContent<GameContext>
 
