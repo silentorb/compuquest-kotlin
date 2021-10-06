@@ -1,5 +1,6 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.combat.applyDamage
 import compuquest.simulation.definition.Factions
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -20,12 +21,18 @@ data class Character(
   override val depiction: String,
   override val frame: Int = 0,
   val originalDepiction: String = depiction,
-  ) : SpriteState {
+) : SpriteState {
   val isAlive: Boolean = health.value > 0
 }
 
+fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
+  accessories
+    .asSequence()
+    .filter { it.value.owner == actor }
+
 fun getAccessories(accessories: Table<Accessory>, actor: Id) =
-  accessories.filterValues { it.owner == actor }
+  accessories
+    .filterValues { it.owner == actor }
 
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
   getAccessories(accessories, actor).any { it.value.effect == effect }
@@ -78,7 +85,8 @@ val updateCharacterFaction = handleEvents<Key> { event, value ->
 fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
   val characterEvents = events.filter { it.target == actor }
   val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
-    .sum()
+    .sum() +
+      applyDamage(world.deck, actor, characterEvents)
 
   val health = modifyResource(healthMod, character.health)
   val depiction = if (health.value == 0)

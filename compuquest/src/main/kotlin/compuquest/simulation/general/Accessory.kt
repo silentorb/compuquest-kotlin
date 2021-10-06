@@ -1,6 +1,5 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.definition.TypedResource
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Events
@@ -27,6 +26,7 @@ object AccessoryEffects {
   val attack = "attack"
   val heal = "heal"
   val resurrect = "resurrect"
+  val damageReduction = "armor"
 }
 
 const val useActionCommand = "useAction"
