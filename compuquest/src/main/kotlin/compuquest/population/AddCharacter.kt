@@ -45,9 +45,8 @@ fun parseFaction(faction: Key?, node: Node): Key {
     rawFaction
 }
 
-fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands {
-
-  return getList<Resource>(creature, "quests")
+fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands =
+  getList<Resource>(creature, "quests")
     .map { quest ->
       Hand(
         id = nextId(),
@@ -58,11 +57,12 @@ fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands {
             type = getString(quest, "type"),
             reward = mapOf(ResourceType.gold to getInt(quest, "rewardGold")),
             recipient = getNonEmptyString(quest, "recipient"),
+            duration = getInt(quest, "duration"),
+            penaltyValue = getInt(quest, "penaltyValue"),
           )
         )
       )
     }
-}
 
 fun addCharacter(
   nextId: NextId,

@@ -47,7 +47,7 @@ class MenuScreen : Node() {
 		val button = Button()
 		button.text = option.title
 		val enabled = option.enabled
-		button.disabled = enabled == null || !enabled(context, null)
+		button.disabled = !(enabled == null || enabled(context, null))
 		button.connect("pressed", this, "on_pressed", variantArrayOf(index))
 		buttons.addChild(button)
 	  }
