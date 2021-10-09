@@ -182,10 +182,12 @@ Everything in [Less Certain Concepts](#less-certain-concepts) is a concern
 * Didopolis (Cyber city)
 * Pipe Maze
 * Castle
-* Mystic Mountain
 * Pizza Parlor / Burger Joint
 * Abandoned House (from Adventure and Zork)
 * Haunted mansion
+* Graveyard
+* Jungle
+* Office building overtaken by demonic forces
 
 #### Less Certain
 
@@ -195,14 +197,13 @@ Everything in [Less Certain Concepts](#less-certain-concepts) is a concern
 * Computer Underworld
 * Space Station/Ship
 * Fairy Forest
-* Jungle
 * Swamp
-* Office building overtaken by demonic forces
 * Small planet
 * Desert
 * Underwater
 * Arctic
 * Subway
+* Mystic Mountain
 
 ### Base Locations
 

@@ -1,0 +1,118 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/materials/side-wall.tres" type="Material" id=3]
+[ext_resource path="res://assets/meshes/architecture/wall-1x1.glb" type="PackedScene" id=4]
+[ext_resource path="res://Levels/Main/Geometry/Wall.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Levels/Main/Geometry/Cube.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/tiles/tile_2.png" type="Texture" id=7]
+
+[sub_resource type="PlaneShape" id=1]
+
+[node name="L_Main" type="Spatial"]
+
+[node name="arena" type="Spatial" parent="."]
+
+[node name="Floor1" parent="arena" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0609493, -0.0473022, -0.0998726 )
+material/0 = ExtResource( 3 )
+
+[node name="StaticBody2" type="StaticBody" parent="arena/Floor1"]
+
+[node name="CollisionShape" type="CollisionShape" parent="arena/Floor1/StaticBody2"]
+shape = SubResource( 1 )
+
+[node name="Wall1" parent="arena" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.58296, -20 )
+
+[node name="Wall2" parent="arena" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.127789, -5.63576, 19.905 )
+
+[node name="Wall3" parent="arena" instance=ExtResource( 5 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20.0834, -5.64485, 0.0110435 )
+
+[node name="Wall4" parent="arena" instance=ExtResource( 5 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, -5.58296, 0 )
+
+[node name="Cube1" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 4, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.25, -17.5 )
+
+[node name="Slope1" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 3.5, 0, 0, 0, 1.53209, -2.41045, 0, 1.28558, 2.87267, 0, 0.31, -13.92 )
+
+[node name="Platform1" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 6.25, 0, 0, 0, 0.25, 0, 0, 0, 2, -13.25, 5.75, -17.5 )
+
+[node name="Platform2" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 6.25, 0, 0, 0, 0.25, 0, 0, 0, 2, 13.25, 5.75, -17.5 )
+
+[node name="Platform3" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( -2.73196e-07, 0, 2, 0, 0.25, 0, -6.25, 0, -8.74228e-08, -17.5, 5.75, -1.75 )
+
+[node name="Platform4" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( -2.73196e-07, 0, 2, 0, 0.25, 0, -6.25, 0, -8.74228e-08, 17.5, 5.75, -1.75 )
+
+[node name="SlopeEnd1" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, 18, 3.5, 17.5 )
+
+[node name="SlopeEnd2" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, -18, 3.5, 17.5 )
+
+[node name="Slope2" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( -3.2476, -0.125, -1.74846e-07, -1.875, 0.216506, 0, 2.83914e-07, 1.09278e-08, -2, 12.87, 1.66, 17.5 )
+
+[node name="Slope3" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 3.2476, 0.125, 0, -1.875, 0.216506, 0, 0, 0, 2, -12.87, 1.66, 17.5 )
+
+[node name="Platform5" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, 18, 3.5, 13.5 )
+
+[node name="Platform6" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, 14, 3.5, 13.5 )
+
+[node name="Platform7" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, 10, 3.5, 13.5 )
+
+[node name="Platform8" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, 6, 3.5, 13.5 )
+
+[node name="Platform9" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, 2, 3.5, 13.5 )
+
+[node name="Platform10" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, -2, 3.5, 13.5 )
+
+[node name="Platform11" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, -6, 3.5, 13.5 )
+
+[node name="Platform12" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, -10, 3.5, 13.5 )
+
+[node name="Platform13" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, -14, 3.5, 13.5 )
+
+[node name="Platform14" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 2, 0, 0, 0, 0.25, 0, 0, 0, 2, -18, 3.5, 13.5 )
+
+[node name="TooSteep1" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( -3.5, -0.216506, -3.01992e-07, -6.06218, 0.125, -1.51421e-07, 9.87455e-07, 2.32278e-08, -2, 16.5, 5.5, 8.5 )
+
+[node name="TooSteep2" parent="arena" instance=ExtResource( 6 )]
+transform = Transform( 3.5, 0.216506, 0, -6.06218, 0.125, 0, 0, 0, 2, -16.5, 5.5, 8.5 )
+
+[node name="slot" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93855, 0.753076, -8.25841 )
+
+[node name="slot2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6033, 0.753076, -8.25841 )
+
+[node name="slot3" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9574, 4.43809, 13.7601 )
+
+[node name="slot4" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.49109, 4.43809, 13.7601 )
+
+[node name="wall-1x1" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18787, 0 )
+texture = ExtResource( 7 )
