@@ -1,7 +1,7 @@
 tool
 extends EditorScenePostImport
 
-const meshScript = preload("res://assets/meshes/Mesh.gd")
+const meshScript = preload("res://assets/meshes/scripts/Mesh.gd")
 
 func post_import(scene):
 	var mesh = scene.get_child(0)

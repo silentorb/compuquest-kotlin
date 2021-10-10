@@ -17,6 +17,7 @@ func updateAnimation():
 	if (animation != ""):
 		var sprite = find_node("sprite3d")
 		sprite.animation = animation
+		sprite.frame = frame
 
 func _ready():
 	updateAnimation()

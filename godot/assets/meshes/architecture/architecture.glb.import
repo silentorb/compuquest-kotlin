@@ -2,20 +2,20 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/wall-2x2.glb-7c5a42ea976a6190ae24d89541967cf4.scn"
+path="res://.import/architecture.glb-bab2bf586f47be0bb64f4cabace22ca3.scn"
 
 [deps]
 
-source_file="res://assets/meshes/architecture/wall-2x2.glb"
-dest_files=[ "res://.import/wall-2x2.glb-7c5a42ea976a6190ae24d89541967cf4.scn" ]
+source_file="res://assets/meshes/architecture/architecture.glb"
+dest_files=[ "res://.import/architecture.glb-bab2bf586f47be0bb64f4cabace22ca3.scn" ]
 
 [params]
 
 nodes/root_type="Spatial"
 nodes/root_name="Scene Root"
 nodes/root_scale=1.0
-nodes/custom_script="res://assets/meshes/MeshImport.gd"
-nodes/storage=0
+nodes/custom_script="res://assets/meshes/scripts/MeshImportMany.gd"
+nodes/storage=1
 nodes/use_legacy_names=false
 materials/location=1
 materials/storage=1
