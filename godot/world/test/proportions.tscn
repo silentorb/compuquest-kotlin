@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=1]
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=2]
+[ext_resource path="res://world/creatures/viking.tres" type="Resource" id=3]
+[ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=4]
+[ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=5]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="player" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02759, 0 )
+
+[node name="player" type="Node" parent="player"]
+script = ExtResource( 1 )
+
+[node name="mana" type="Node" parent="player"]
+script = ExtResource( 2 )
+amount = 200
+resource = "mana"
+
+[node name="gold" type="Node" parent="player"]
+script = ExtResource( 2 )
+amount = 200
+resource = "gold"
+
+[node name="bob" type="Node" parent="player"]
+script = ExtResource( 4 )
+creature = ExtResource( 3 )
+
+[node name="joe" type="Node" parent="player"]
+script = ExtResource( 4 )
+creature = ExtResource( 3 )
+
+[node name="CSGBox" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0332451, 1.03347, -2.52212 )
+width = 1.6
+depth = 1.6
