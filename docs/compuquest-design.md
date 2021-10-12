@@ -1,8 +1,26 @@
 # CompuQuest Design
 
+## Description
+
+CompuQuest is a strategy role playing game.  It is also:
+
+* Party-based
+* 3D
+* Real-time
+* Rogue-lite
+
+### Strategy Distinction
+
+* CompuQuest is a true strategy RPG
+  * It is not a 4X strategy game with RPG elements
+  * It is an RPG with a focus on strategy.
+  * It has minimal tactics
+    * Most labeling of games as "strategy RPGs" involves confusing strategy and tactics
+
 ## High Level Requirements
 
 * Simple UI with minimal micromanagement
+* Macro strategy
 * Capture a particular retro feeling
 * Strong sense of adventure
 * Some combat but also lots of non-combat systems
@@ -11,40 +29,6 @@
 * Surreal
 * Sublime wonder
 * Humorous / Wacky
-
-## Inspirations
-
-* Might and Magic series
-* Wizardry series
-* DOOM
-* Build Engine games
-* Tales of Maj'Eyal
-* Populous
-* NES Castlevania games
-* Arctic Adventure
-* Robomaze III
-* Adventure (Colossal Cave)
-* Pokémon
-* Secret Agent
-* Monster Bash
-* Black Future 88
-* Neverwinter Nights
-* Space Quest
-* The Catacomb Abyss
-* Duke Nukem I
-* Commander Keen series
-* Hexen
-* Paganitzu
-* Shadow Caster
-* Wolfenstein 3D
-* Megazeux
-* Heartlight
-* Rift Wizard
-* Crawl
-* You Have to Win the Game
-* Haque
-* Bloom
-* Zombies Ate My Neighbors
 
 ## Initial Core Concepts
 
@@ -66,7 +50,6 @@
   * You do not directly control your party members
 * Missile attacks always hit
   * There is no spatial dodging, though there could be an RNG-based dodge ability
-
 * Any time the player is hit or effected by an attack or negative ability, the player is temporarily slowed down
   * This will reduce the viability of the player just running past threats and force the player to engage them
 * Most resources are macro
@@ -74,14 +57,10 @@
   * Instead, they will be larger resources that are more of a long-term concern
   * The issue with conserving mana is not whether you will have enough mana for that battle, but how much resources you are expending in the big picture
     * Every attack is effectively costing you money
-
 * Support for negative player resources
   * It's like an abstraction for going into debt
 * Income mostly through quests
 * Quests need to be carefully selected for synergy and effectively form a campaign, similar to Ticket to Ride
-
-### Fairly Certain Concepts
-
 * The player will be able to hire any number of heroes but can only directly use four of them at a time
   * The others can be sent on missions that abstractly progress state over time
     * Gain levels
@@ -89,38 +68,27 @@
     * Potentially affect other more particular aspects of the world
   * Heroes have wages and will leave if they aren't paid
   * Heroes can be rehired but may not always be available after they leave
-* Within a playthrough, most  state is persistent but some state is ephemeral
-* Some key aspects of the world can be randomized each playthrough
-  * This may be kept to a minimum
+* No equipment, or at least no distinction from abilities
 * Zone occupation
   * Different major zones can be owned by different factions, resulting in different types of roaming mobs
   * Similar to Risk
+* Some key aspects of the world can be randomized each playthrough
+  * This may be kept to a minimum
 * World gets more dangerous over time
   * It's a race to beat the game
+
+### Fairly Certain Concepts
+
+* Within a playthrough, most state is persistent but some state is ephemeral
 * 3D World Map
-* Available quests are only created at the start of a playthrough
-* No equipment, or at least no distinction from abilities
-* Characters gain the most experience from dying
-* Resurrection is expensive
+* Quests are like recipe ingredients: Complete any recipe to win the game
+* Characters can be resurrected but it is expensive
 
 ### Less Certain Concepts
 
-* Lots of ways that the player feels a sense of growth
-* The player will have the option to setup bases of operation
-  * Certain locations in the world will be defined as possible base locations
-  * The player can change their base with some hassle
-* Player stances that influence member behavior
-  * The player can change stances at any time
-* Most any enemy can be a party member
-
-## Design Concerns
-
-Everything in [Less Certain Concepts](#less-certain-concepts) is a concern
-
-## Design Questions
-
-* How do you win?
-  * I'm considering possibilities for minimizing win/loss being a boolean threshold and instead having variations of success and failure
+* Available quests are only created at the start of a playthrough
+* Not sure whether characters will gain experience
+* Characters gain the most experience from dying
 
 ## Major Systems
 
@@ -168,6 +136,7 @@ Everything in [Less Certain Concepts](#less-certain-concepts) is a concern
 * Programmer
 * Venus Fly Trap
 * Mad Scientist
+* Wolf Man
 
 #### NPCs
 
@@ -205,9 +174,42 @@ Everything in [Less Certain Concepts](#less-certain-concepts) is a concern
 * Subway
 * Mystic Mountain
 
-### Base Locations
+## Inspirations
 
-* Didopolis
-* Haunted mansion
-* Castle
-* Pizza/Burger Joint ?
+* Might and Magic series
+* Wizardry series
+* Ticket to Ride
+* DOOM
+* Build Engine games
+* Dark Souls
+* Populous
+* NES Castlevania games
+* Arctic Adventure
+* Robomaze III
+* Adventure (Colossal Cave)
+* Pokémon
+* Secret Agent
+* Monster Bash
+* Neverwinter Nights
+* Space Quest
+* The Catacomb Abyss
+* Duke Nukem I
+* Tales of Maj'Eyal
+* Commander Keen series
+* Hexen
+* Paganitzu
+* Black Future 88
+* Shadow Caster
+* Wolfenstein 3D
+* Megazeux
+* Heartlight
+* Rift Wizard
+* Crawl
+* You Have to Win the Game
+* Haque
+* Bloom
+* Zombies Ate My Neighbors
+* Arthurian Legends
+* Vampire : The Masquerade
+
+## 
