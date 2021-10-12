@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://defining/Creature.gd" type="Script" id=20]
 [ext_resource path="res://defining/Ware.gd" type="Script" id=21]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=22]
+[ext_resource path="res://entities/actor/LargeSprite.tscn" type="PackedScene" id=23]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_texture = ExtResource( 7 )
@@ -430,7 +431,7 @@ depth = 1.6
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 32.727, 2, 0 )
 
 [node name="walls" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.517124, 4, 7.48288 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
 use_collision = true
 width = 10.0
 height = 12.0
@@ -438,7 +439,7 @@ depth = 8.0
 material = ExtResource( 17 )
 
 [node name="walls2" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -8.51713, 2, 7.48288 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
 use_collision = true
 width = 10.0
 height = 8.0
@@ -446,23 +447,23 @@ depth = 8.0
 material = ExtResource( 17 )
 
 [node name="roof1" type="CSGBox" parent="proto-house"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 10.8735, 7.48288 )
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
 use_collision = true
 width = 12.0
 height = 0.5
-depth = 5.0
+depth = 8.0
 material = ExtResource( 17 )
 
 [node name="roof2" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 1.51712, 10.8735, 7.48288 )
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
 use_collision = true
 width = 12.0
 height = 0.5
-depth = 5.0
+depth = 8.0
 material = ExtResource( 17 )
 
 [node name="roof3" type="CSGBox" parent="proto-house"]
-transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -8.48288, 6.87349, 4.48288 )
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
 use_collision = true
 width = 10.0
 height = 0.5
@@ -470,7 +471,7 @@ depth = 6.422
 material = ExtResource( 17 )
 
 [node name="roof4" type="CSGBox" parent="proto-house"]
-transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -8.48288, 6.87349, 10.4829 )
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
 use_collision = true
 width = 10.0
 height = 0.5
@@ -480,7 +481,7 @@ material = ExtResource( 17 )
 [node name="front yard" type="CSGBox" parent="proto-house"]
 transform = Transform( 1, -1.95953e-08, -1.13133e-08, 2.18557e-08, 0.965925, 0.258819, 5.85619e-09, -0.258819, 0.965925, -3.48288, -1.12651, -3.51712 )
 use_collision = true
-width = 18.0
+width = 20.0
 height = 0.5
 depth = 8.0
 material = ExtResource( 17 )
@@ -488,7 +489,7 @@ material = ExtResource( 17 )
 [node name="back yard" type="CSGBox" parent="proto-house"]
 transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -3.48288, -0.12651, 12.4829 )
 use_collision = true
-width = 18.0
+width = 20.0
 height = 0.5
 depth = 24.0
 material = ExtResource( 17 )
@@ -496,7 +497,7 @@ material = ExtResource( 17 )
 [node name="sidewalk" type="CSGBox" parent="proto-house"]
 transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -3.48288, -2.12651, -8.51712 )
 use_collision = true
-width = 18.0
+width = 20.0
 height = 0.5
 depth = 4.0
 material = ExtResource( 17 )
@@ -504,47 +505,47 @@ material = ExtResource( 17 )
 [node name="fence1" type="CSGBox" parent="proto-house"]
 transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -3.48288, 0.87349, 24.4829 )
 use_collision = true
-width = 18.0
+width = 20.0
 depth = 0.5
 material = ExtResource( 17 )
 
 [node name="fence2" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4829, 0.87349, 12.4829 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4829, 0.87349, 12.4829 )
 use_collision = true
 width = 24.0
 depth = 0.5
 material = ExtResource( 17 )
 
 [node name="fence3" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.51712, 0.87349, 12.4829 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.51712, 0.87349, 12.4829 )
 use_collision = true
 width = 24.0
 depth = 0.5
 material = ExtResource( 17 )
 
 [node name="fence5" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.51712, -1.12651, -8.51712 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.51712, -1.12651, -8.51712 )
 use_collision = true
 width = 4.0
 depth = 0.5
 material = ExtResource( 17 )
 
 [node name="fence4" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.52008e-08, 1.13133e-08, 1, -0.258819, 0.965926, -2.26267e-08, -0.965926, -0.258819, -4.07325e-08, 5.51712, -0.12651, -3.51712 )
+transform = Transform( -4.52008e-08, 1.13133e-08, 1, -0.258819, 0.965926, -2.26267e-08, -0.965926, -0.258819, -4.07325e-08, 6.51712, -0.12651, -3.51712 )
 use_collision = true
 width = 8.0
 depth = 0.5
 material = ExtResource( 17 )
 
 [node name="fence6" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4829, -1.12651, -8.51712 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4829, -1.12651, -8.51712 )
 use_collision = true
 width = 4.0
 depth = 0.5
 material = ExtResource( 17 )
 
 [node name="fence7" type="CSGBox" parent="proto-house"]
-transform = Transform( -4.52008e-08, 1.13133e-08, 1, -0.258819, 0.965926, -2.26267e-08, -0.965926, -0.258819, -4.07325e-08, -12.4829, -0.12651, -3.51712 )
+transform = Transform( -4.52008e-08, 1.13133e-08, 1, -0.258819, 0.965926, -2.26267e-08, -0.965926, -0.258819, -4.07325e-08, -13.4829, -0.12651, -3.51712 )
 use_collision = true
 width = 8.0
 depth = 0.5
@@ -557,3 +558,7 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329
 script = ExtResource( 10 )
 creature = SubResource( 10 )
 faction = "neutral"
+
+[node name="sprite" parent="." instance=ExtResource( 23 )]
+transform = Transform( 1.79765, 0, 0, 0, 1.79765, 0, 0, 0, 1.79765, 6.84888, 3.08805, 6.15336 )
+animation = "default"
