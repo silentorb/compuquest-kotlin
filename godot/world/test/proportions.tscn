@@ -1,15 +1,39 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=2]
 [ext_resource path="res://world/creatures/viking.tres" type="Resource" id=3]
 [ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=4]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=5]
+[ext_resource path="res://world/accessories/heal.tres" type="Resource" id=6]
+[ext_resource path="res://world/accessories/fireball.tres" type="Resource" id=7]
+[ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=8]
+[ext_resource path="res://defining/Creature.gd" type="Script" id=9]
+[ext_resource path="res://defining/Ware.gd" type="Script" id=10]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 10 )
+quantity = 100
+pricePerUnit = 2
+priceType = "gold"
+resourceType = "mana"
+quantityPerPurchase = 50
+
+[sub_resource type="Resource" id=2]
+script = ExtResource( 9 )
+depiction = "deevee"
+health = 50
+accessories = [ ExtResource( 7 ), ExtResource( 6 ) ]
+fee = 0
+quests = [  ]
+key = "deevee"
+attributes = [ "talk" ]
+wares = [ SubResource( 1 ) ]
 
 [node name="Spatial" type="Spatial"]
 
 [node name="player" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02759, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.605134, 0 )
 
 [node name="player" type="Node" parent="player"]
 script = ExtResource( 1 )
@@ -33,6 +57,15 @@ script = ExtResource( 4 )
 creature = ExtResource( 3 )
 
 [node name="CSGBox" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0332451, 1.03347, -2.52212 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0332451, 0.647224, -3.017 )
 width = 1.6
+height = 1.2
 depth = 1.6
+
+[node name="deevee" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.916, 0, -1.567 )
+
+[node name="char" type="Node" parent="deevee"]
+script = ExtResource( 4 )
+creature = SubResource( 2 )
+faction = "neutral"

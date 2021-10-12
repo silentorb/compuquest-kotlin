@@ -9,7 +9,7 @@ import scripts.Global
 import silentorb.mythic.godoting.tempCatch
 
 @RegisterClass
-class Hud : Node() {
+class Hud : Control() {
   var slot: Node? = null
   var interact: Control? = null
   var debugText: Label? = null
@@ -25,12 +25,15 @@ class Hud : Node() {
   @RegisterFunction
   override fun _process(delta: Double) {
 	tempCatch {
+		val client = Global.instance?.client
+		if (client != null) {
+			visible = client.options.ui.showHud
+		}
 	  val player = Global.getPlayer()
 	  val canInteractWith = player?.value?.canInteractWith
 	  interact!!.visible = canInteractWith != null
 	  debugText?.text = Global.instance?.debugText ?: ""
 	  val localSlot = slot
-	  val client = Global.instance?.client
 	  if (client != null && player != null) {
 		val menuStack = getPlayerMenuStack(client, player.key)
 

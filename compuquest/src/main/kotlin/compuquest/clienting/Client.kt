@@ -2,7 +2,6 @@ package compuquest.clienting
 
 import compuquest.clienting.gui.MenuStack
 import compuquest.clienting.gui.updateMenuStack
-import compuquest.clienting.input.gatherDefaultPlayerInput
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getPlayer
 import compuquest.simulation.input.Commands
@@ -16,8 +15,18 @@ data class PlayerGui(
 
 data class Client(
   val menuStack: MenuStack = listOf(),
-//  val playerGuiMap: Map<Id, PlayerGui> = mapOf(),
+  val options: AppOptions,
 )
+
+fun newClient() =
+  Client(
+    options = loadOptions(),
+  )
+
+fun restartClient(client: Client) =
+  client.copy(
+    menuStack = listOf(),
+  )
 
 fun getPlayerMenuStack(client: Client, player: Id): MenuStack =
   client.menuStack

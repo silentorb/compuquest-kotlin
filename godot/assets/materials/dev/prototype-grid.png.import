@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/prototype-grid.png-2cfac572de7648696d53c2eef0a2d1c5.stex"
+path="res://.import/prototype-grid.png-f9d96f6530a652d1f83a792b36d510e7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/dev/prototype-grid.png"
-dest_files=[ "res://.import/prototype-grid.png-2cfac572de7648696d53c2eef0a2d1c5.stex" ]
+source_file="res://assets/materials/dev/prototype-grid.png"
+dest_files=[ "res://.import/prototype-grid.png-f9d96f6530a652d1f83a792b36d510e7.stex" ]
 
 [params]
 

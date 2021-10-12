@@ -1,0 +1,14 @@
+audio:
+  soundVolume: 0.75
+display:
+  fullscreenResolution:
+    x: 1920
+    "y": 1080
+  windowedResolution: null
+  fullscreen: false
+  windowMode: windowed
+  vsync: true
+input:
+  profiles: {}
+ui:
+  showHud: false

@@ -1,8 +1,12 @@
 
 /jre
 *.log
+options.ini
 
 # Godot-specific ignores
 .import/
 export.cfg
 export_presets.cfg
+
+# Plugin Development
+addons/optional

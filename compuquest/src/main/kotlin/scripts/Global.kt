@@ -1,9 +1,7 @@
 package scripts
 
 import compuquest.app.newGame
-import compuquest.clienting.Client
-import compuquest.clienting.eventsFromClient
-import compuquest.clienting.updateClient
+import compuquest.clienting.*
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Player
@@ -29,7 +27,7 @@ import silentorb.mythic.happening.Events
 class Global : Node() {
   var worlds: List<World> = listOf()
   val definitions = newDefinitions()
-  var client: Client = Client()
+  var client: Client = newClient()
 
   @RegisterProperty
   var debugText: String = ""
@@ -55,7 +53,6 @@ class Global : Node() {
 
     fun getMenuStack() =
       instance!!.client.menuStack
-
   }
 
   init {
@@ -125,7 +122,7 @@ class Global : Node() {
           val root = tree?.root
           // This needs to happen *after* the scene is reloaded
           worlds = listOf(newGame(root!!, definitions))
-          client = Client()
+          client = restartClient(client)
           restarting = 0
         } else if (localWorlds.none()) {
           val root = getTree()?.root
