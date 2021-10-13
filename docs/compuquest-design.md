@@ -83,10 +83,12 @@ CompuQuest is a strategy role playing game.  It is also:
 * 3D World Map
 * Quests are like recipe ingredients: Complete any recipe to win the game
 * Characters can be resurrected but it is expensive
+* Available quests are only created at the start of a playthrough
+* Some quests have prerequisites and are neither available nor visible until the prerequisites are met
+  * A quest can depend on another quest
 
 ### Less Certain Concepts
 
-* Available quests are only created at the start of a playthrough
 * Not sure whether characters will gain experience
 * Characters gain the most experience from dying
 

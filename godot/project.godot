@@ -39,7 +39,7 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/entities/actor/PlayerBody.kt"
 }, {
-"base": "Node",
+"base": "Control",
 "class": "scripts_gui_Hud",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/gui/Hud.kt"
