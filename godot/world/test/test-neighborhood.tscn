@@ -559,6 +559,6 @@ script = ExtResource( 10 )
 creature = SubResource( 10 )
 faction = "neutral"
 
-[node name="sprite" parent="." instance=ExtResource( 23 )]
+[node name="tree" parent="." instance=ExtResource( 23 )]
 transform = Transform( 1.79765, 0, 0, 0, 1.79765, 0, 0, 0, 1.79765, 6.84888, 3.08805, 6.15336 )
 animation = "default"
