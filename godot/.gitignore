@@ -4,9 +4,9 @@
 options.ini
 
 # Godot-specific ignores
-.import/
+.import
 export.cfg
 export_presets.cfg
 
-# Plugin Development
-addons/optional
+# Plugins
+addons

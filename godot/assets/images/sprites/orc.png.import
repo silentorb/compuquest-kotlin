@@ -2,33 +2,33 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/compuquest.png-dbfb405623ed03b9b0b299754a85d9b3.stex"
+path="res://.import/orc.png-2132dd2d73e1fbb020bf47e0ac40a36e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/compuquest.png"
-dest_files=[ "res://.import/compuquest.png-dbfb405623ed03b9b0b299754a85d9b3.stex" ]
+source_file="res://assets/images/sprites/orc.png"
+dest_files=[ "res://.import/orc.png-2132dd2d73e1fbb020bf47e0ac40a36e.stex" ]
 
 [params]
 
-compress/mode=0
+compress/mode=3
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
-compress/normal_map=0
+compress/normal_map=2
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
-flags/srgb=2
-process/fix_alpha_border=true
+flags/srgb=1
+process/fix_alpha_border=false
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

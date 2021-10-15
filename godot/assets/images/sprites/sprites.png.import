@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/viking.png-1e6fcc6630ffa808c6a835ec6bddd3b9.stex"
+path="res://.import/sprites.png-1afac0ad789fc59e963f3fc5b28ecaae.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/viking.png"
-dest_files=[ "res://.import/viking.png-1e6fcc6630ffa808c6a835ec6bddd3b9.stex" ]
+source_file="res://assets/images/sprites/sprites.png"
+dest_files=[ "res://.import/sprites.png-1afac0ad789fc59e963f3fc5b28ecaae.stex" ]
 
 [params]
 

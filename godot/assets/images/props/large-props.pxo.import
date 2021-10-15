@@ -1,0 +1,13 @@
+[remap]
+
+importer="com.technohacker.pixelorama"
+type="StreamTexture"
+path="res://.import/large-props.pxo-f3e737b57ed26eb88023a7b9b9ff04f8.stex"
+
+[deps]
+
+source_file="res://assets/images/props/large-props.pxo"
+dest_files=[ "res://.import/large-props.pxo-f3e737b57ed26eb88023a7b9b9ff04f8.stex" ]
+
+[params]
+

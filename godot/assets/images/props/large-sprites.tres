@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=12 format=2]
 
-[ext_resource path="res://assets/images/large-props.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/props/large-props.png" type="Texture" id=1]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 16

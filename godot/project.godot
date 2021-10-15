@@ -136,6 +136,10 @@ config/icon="res://icon.png"
 
 Global="*res://src/main/kotlin/scripts/Global.kt"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/repl/plugin.cfg" )
+
 [importer_defaults]
 
 texture={

@@ -1,0 +1,16 @@
+[remap]
+
+importer="com.technohacker.pixelorama.spriteframe"
+type="SpriteFrames"
+path="res://.import/test.pxo-540c4dc83213893d514bae74f4830459.tres"
+
+[deps]
+
+files=[ "res://.import/test.pxo-540c4dc83213893d514bae74f4830459.spritesheet.stex" ]
+
+source_file="res://assets/images/test.pxo"
+dest_files=[ "res://.import/test.pxo-540c4dc83213893d514bae74f4830459.tres", "res://.import/test.pxo-540c4dc83213893d514bae74f4830459.spritesheet.stex" ]
+
+[params]
+
+animation_fps=6
