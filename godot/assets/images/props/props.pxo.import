@@ -11,3 +11,4 @@ dest_files=[ "res://.import/props.pxo-13bd718d2f77fe1dfc92851b074e5c05.stex" ]
 
 [params]
 
+detect_3d=false

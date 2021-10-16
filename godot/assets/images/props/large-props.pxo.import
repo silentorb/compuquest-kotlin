@@ -11,3 +11,4 @@ dest_files=[ "res://.import/large-props.pxo-f3e737b57ed26eb88023a7b9b9ff04f8.ste
 
 [params]
 
+detect_3d=false
