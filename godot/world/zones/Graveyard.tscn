@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://entities/world/FollowCamera.gd" type="Script" id=16]
 [ext_resource path="res://entities/world/AutoEmit.gd" type="Script" id=17]
 [ext_resource path="res://assets/images/props/large-sprites.tres" type="SpriteFrames" id=18]
+[ext_resource path="res://world/props/brick-post.tscn" type="PackedScene" id=19]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 6 )
@@ -72,6 +73,7 @@ flags_unshaded = true
 flags_use_point_size = true
 params_cull_mode = 2
 params_point_size = 8.0
+albedo_color = Color( 0.666667, 0.666667, 0.666667, 1 )
 
 [sub_resource type="PointMesh" id=9]
 material = SubResource( 8 )
@@ -264,64 +266,67 @@ alpha_cut = 2
 frames = ExtResource( 18 )
 frame = 2
 
-[node name="Spatial" type="Spatial" parent="."]
+[node name="fences1" type="Spatial" parent="."]
 transform = Transform( -0.0799379, 0, -0.9968, 0, 1, 0, 0.9968, 0, -0.0799379, 19.1553, 0, 1.53615 )
 
-[node name="fence6" type="StaticBody" parent="Spatial"]
+[node name="brick-post" parent="fences1" instance=ExtResource( 19 )]
+transform = Transform( 1.48325, 0, -5.96046e-08, 0, 1.48325, 0, 5.96046e-08, 0, 1.48325, -8.59412, 1.4802, 1.67458 )
+
+[node name="fence6" type="StaticBody" parent="fences1"]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 1.3968, 1.73101 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Spatial/fence6"]
+[node name="CollisionShape" type="CollisionShape" parent="fences1/fence6"]
 shape = SubResource( 10 )
 
-[node name="sprite" type="AnimatedSprite3D" parent="Spatial/fence6"]
+[node name="sprite" type="AnimatedSprite3D" parent="fences1/fence6"]
 pixel_size = 0.06
 alpha_cut = 2
 frames = ExtResource( 18 )
 frame = 2
 
-[node name="fence7" type="StaticBody" parent="Spatial"]
+[node name="fence7" type="StaticBody" parent="fences1"]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, -5.70437, 1.3968, 1.73101 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Spatial/fence7"]
+[node name="CollisionShape" type="CollisionShape" parent="fences1/fence7"]
 shape = SubResource( 10 )
 
-[node name="sprite" type="AnimatedSprite3D" parent="Spatial/fence7"]
+[node name="sprite" type="AnimatedSprite3D" parent="fences1/fence7"]
 pixel_size = 0.06
 alpha_cut = 2
 frames = ExtResource( 18 )
 frame = 2
 
-[node name="fence8" type="StaticBody" parent="Spatial"]
+[node name="fence8" type="StaticBody" parent="fences1"]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, -11.4582, 1.3968, 1.73101 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Spatial/fence8"]
+[node name="CollisionShape" type="CollisionShape" parent="fences1/fence8"]
 shape = SubResource( 10 )
 
-[node name="sprite" type="AnimatedSprite3D" parent="Spatial/fence8"]
+[node name="sprite" type="AnimatedSprite3D" parent="fences1/fence8"]
 pixel_size = 0.06
 alpha_cut = 2
 frames = ExtResource( 18 )
 frame = 2
 
-[node name="fence9" type="StaticBody" parent="Spatial"]
+[node name="fence9" type="StaticBody" parent="fences1"]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 5.76097, 1.3968, 1.73101 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Spatial/fence9"]
+[node name="CollisionShape" type="CollisionShape" parent="fences1/fence9"]
 shape = SubResource( 10 )
 
-[node name="sprite" type="AnimatedSprite3D" parent="Spatial/fence9"]
+[node name="sprite" type="AnimatedSprite3D" parent="fences1/fence9"]
 pixel_size = 0.06
 alpha_cut = 2
 frames = ExtResource( 18 )
 frame = 2
 
-[node name="fence10" type="StaticBody" parent="Spatial"]
+[node name="fence10" type="StaticBody" parent="fences1"]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 11.5009, 1.3968, 1.73101 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Spatial/fence10"]
+[node name="CollisionShape" type="CollisionShape" parent="fences1/fence10"]
 shape = SubResource( 10 )
 
-[node name="sprite" type="AnimatedSprite3D" parent="Spatial/fence10"]
+[node name="sprite" type="AnimatedSprite3D" parent="fences1/fence10"]
 pixel_size = 0.06
 alpha_cut = 2
 frames = ExtResource( 18 )
