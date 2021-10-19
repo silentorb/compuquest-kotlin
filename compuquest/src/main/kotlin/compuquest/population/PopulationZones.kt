@@ -1,8 +1,5 @@
 package compuquest.serving
 
-import silentorb.mythic.godoting.findChildren
-import silentorb.mythic.godoting.getVariantArray
-import silentorb.mythic.godoting.tempCatch
 import godot.Node
 import godot.PackedScene
 import godot.Resource
@@ -12,25 +9,22 @@ import godot.global.GD
 import scripts.entities.actor.AttachCharacter
 import scripts.world.slotGroup
 import scripts.world.zoneGroup
-import silentorb.mythic.godoting.getResourceName
+import silentorb.mythic.godoting.*
 import silentorb.mythic.randomly.Dice
 import java.lang.Integer.min
 
-fun populateZone(bodyScene: PackedScene, dice: Dice, zone: Node) {
+fun populateZone(factions: Map<String, Resource>, bodyScene: PackedScene, dice: Dice, zone: Node) {
   tempCatch {
     val root = zone.getTree()?.root
     if (root != null) {
       val slots = findChildren(zone) { it.isInGroup(slotGroup) }
         .filterIsInstance<Spatial>()
 
-      val factionResource = zone.get("faction") as? Resource
-      val faction = if (factionResource != null)
-        getResourceName(factionResource)
-      else
-        null
+      val faction = getString(zone, "faction")
+      val factionResource = factions[faction]
 
-      val creatures = getVariantArray<Resource>("creatures", factionResource)
-      if (creatures.any() && faction != null) {
+      val creatures = getVariantArray<Resource>(factionResource, "creatures")
+      if (creatures.any()) {
         val selectionMax = min(3, slots.size)
         val selection = dice.take(slots, selectionMax)
         for (slot in selection) {
@@ -49,13 +43,18 @@ fun populateZone(bodyScene: PackedScene, dice: Dice, zone: Node) {
   }
 }
 
+fun loadFactions(): Map<String, Resource> =
+  getVariantArray<Resource>(GD.load("res://world/factions/index.tres"), "resources")
+    .associateBy { getResourceName(it)!! }
+
 fun populateZones(dice: Dice, scene: Node) {
   tempCatch {
+    val factions = loadFactions()
     val bodyScene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
     val zones = scene.getTree()?.getNodesInGroup(zoneGroup)?.filterIsInstance<Spatial>() ?: listOf()
     for (zone in zones) {
       if (zone.get("populate") != false)
-        populateZone(bodyScene, dice, zone)
+        populateZone(factions, bodyScene, dice, zone)
     }
   }
 }

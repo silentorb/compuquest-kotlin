@@ -1,0 +1,16 @@
+[remap]
+
+importer="com.technohacker.pixelorama"
+type="StreamTexture"
+path="res://.import/moon.pxo-e27a8f2551fd9270cc7dae4929206ba7.stex"
+
+[deps]
+
+source_file="res://assets/images/sprites/moon.pxo"
+dest_files=[ "res://.import/moon.pxo-e27a8f2551fd9270cc7dae4929206ba7.stex" ]
+
+[params]
+
+detect_3d=false
+flags/repeat=0
+flags/srgb=1

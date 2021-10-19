@@ -40,7 +40,7 @@ fun deleteNode(node: Node) {
   }
 }
 
-inline fun <reified T> getVariantArray(property: String, value: Object?): List<T> =
+inline fun <reified T> getVariantArray(value: Object?, property: String): List<T> =
   (value?.get(property) as? VariantArray<*>)?.filterIsInstance<T>() ?: listOf()
 
 fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
@@ -94,6 +94,7 @@ inline fun <reified T> getList(value: Object, property: String): List<T> =
   (value.get(property) as? VariantArray<*>)?.filterIsInstance<T>() ?: listOf()
 
 val baseNamePattern = Regex("([\\w \\-]+)\\.\\w+$")
+
 fun getResourceName(resource: Resource): String? =
   baseNamePattern.find(resource.resourcePath)?.groupValues?.drop(1)?.firstOrNull()
 

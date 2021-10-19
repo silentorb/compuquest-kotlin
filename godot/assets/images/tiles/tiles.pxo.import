@@ -11,3 +11,6 @@ dest_files=[ "res://.import/tiles.pxo-b2f2bae23c1615b789f7c0a257fbf16e.stex" ]
 
 [params]
 
+detect_3d=false
+flags/repeat=0
+flags/srgb=2

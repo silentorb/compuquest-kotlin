@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=1]
+
+[sub_resource type="CylinderShape" id=1]
+
+[node name="gravestone" type="StaticBody"]
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 0.879352, 0, 0, 0, 0.939137, 0, 0, 0, 0.879352, 0, 0, 0 )
+shape = SubResource( 1 )
+
+[node name="sprite" parent="." instance=ExtResource( 1 )]
+transform = Transform( -5.82601e-08, 0, -1.33284, 0, 1.33284, 0, 1.33284, 0, -5.82601e-08, 0, 0, 0 )
+animation = "props"
+frame = 4

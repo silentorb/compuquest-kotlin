@@ -18,6 +18,7 @@ data class Character(
   val body: Id? = null,
   val attributes: Set<Key> = setOf(),
   val fee: Int = 0,
+  val enemyVisibilityRange: Float = 0f,
   override val depiction: String,
   override val frame: Int = 0,
   val originalDepiction: String = depiction,

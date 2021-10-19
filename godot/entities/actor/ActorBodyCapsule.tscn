@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/PlayerVisible.kt" type="Script" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.4
@@ -16,3 +17,4 @@ shape = SubResource( 1 )
 [node name="sprite" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1.06, 0, 0, 0, 1.06, 0, 0, 0, 1.06, 0, 0.85, 0 )
 animation = "viking"
+script = ExtResource( 2 )

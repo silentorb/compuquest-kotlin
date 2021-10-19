@@ -3,7 +3,7 @@ extends Spatial
 
 export(PackedScene) var scene setget setScene
 
-export(Resource) var faction
+export(String, "microcorp", "neutral", "undead") var faction = "neutral"
 
 export(bool) var active = true setget setActive
 

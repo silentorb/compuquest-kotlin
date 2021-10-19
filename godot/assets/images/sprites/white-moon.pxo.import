@@ -1,0 +1,16 @@
+[remap]
+
+importer="com.technohacker.pixelorama"
+type="StreamTexture"
+path="res://.import/white-moon.pxo-125efa2501cac01f851d43fccdf9d6fa.stex"
+
+[deps]
+
+source_file="res://assets/images/sprites/white-moon.pxo"
+dest_files=[ "res://.import/white-moon.pxo-125efa2501cac01f851d43fccdf9d6fa.stex" ]
+
+[params]
+
+detect_3d=false
+flags/repeat=0
+flags/srgb=1

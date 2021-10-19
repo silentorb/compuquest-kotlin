@@ -2,17 +2,14 @@ package compuquest.population
 
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
-import compuquest.simulation.definition.TypedResource
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
 import godot.Node
 import godot.Resource
 import godot.Spatial
-import scripts.entities.actor.AttachCharacter
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
-import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.*
 
 fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
@@ -96,15 +93,16 @@ fun addCharacter(
             fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
             key = getNonEmptyString(creature, "key"),
             attributes = getList<String>(creature, "attributes").toSet(),
+            enemyVisibilityRange = getFloat(creature, "enemyVisibilityRange"),
           ),
           sprite,
           spatial,
           Spirit(),
         )
       )
-    ) + getVariantArray<Resource>("accessories", creature)
+    ) + getVariantArray<Resource>(creature, "accessories")
       .map { accessory ->
         addAccessory(nextId, id, accessory)
       } + addQuests(nextId, id, creature) + wares
-  }!!
+  }
 }

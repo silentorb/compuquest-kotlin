@@ -15,3 +15,5 @@ export(String) var key
 export(Array, String, "forHire", "talk") var attributes
 
 export(Array, Resource) var wares
+
+export(float) var enemyVisibilityRange = 0

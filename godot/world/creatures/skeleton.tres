@@ -13,3 +13,4 @@ quests = [  ]
 key = ""
 attributes = [  ]
 wares = [  ]
+enemyVisibilityRange = 15.0

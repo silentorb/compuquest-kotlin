@@ -11,3 +11,6 @@ dest_files=[ "res://.import/sprites.pxo-cb0b126757dc5f850d1531073dc2ec8e.stex" ]
 
 [params]
 
+detect_3d=false
+flags/repeat=0
+flags/srgb=1

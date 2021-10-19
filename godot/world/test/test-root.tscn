@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://world/test/test-zone.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
@@ -7,8 +7,6 @@
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=5]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=6]
 [ext_resource path="res://entities/world/Zone.tscn" type="PackedScene" id=7]
-[ext_resource path="res://world/factions/undead.tres" type="Resource" id=8]
-[ext_resource path="res://world/factions/microcorp.tres" type="Resource" id=9]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=10]
 [ext_resource path="res://world/accessories/fireball.tres" type="Resource" id=11]
 [ext_resource path="res://world/accessories/heal.tres" type="Resource" id=12]
@@ -17,7 +15,7 @@
 [ext_resource path="res://world/accessories/resurrect.tres" type="Resource" id=15]
 [ext_resource path="res://defining/Ware.gd" type="Script" id=16]
 
-[sub_resource type="Resource" id=10]
+[sub_resource type="Resource" id=1]
 script = ExtResource( 13 )
 depiction = "viking"
 health = 50
@@ -27,8 +25,9 @@ quests = [  ]
 key = "vik"
 attributes = [ "forHire", "talk" ]
 wares = [  ]
+enemyVisiblityRange = 0.0
 
-[sub_resource type="Resource" id=11]
+[sub_resource type="Resource" id=2]
 script = ExtResource( 13 )
 depiction = "viking"
 health = 50
@@ -38,8 +37,9 @@ quests = [  ]
 key = "vik"
 attributes = [ "talk" ]
 wares = [  ]
+enemyVisiblityRange = 0.0
 
-[sub_resource type="Resource" id=12]
+[sub_resource type="Resource" id=3]
 script = ExtResource( 14 )
 name = "Deliver Message"
 type = ""
@@ -49,18 +49,19 @@ rewardGold = 1000
 duration = 10
 penaltyValue = 500
 
-[sub_resource type="Resource" id=13]
+[sub_resource type="Resource" id=4]
 script = ExtResource( 13 )
 depiction = "orc"
 health = 50
 accessories = [ ExtResource( 15 ) ]
 fee = 0
-quests = [ SubResource( 12 ) ]
+quests = [ SubResource( 3 ) ]
 key = ""
 attributes = [ "talk" ]
 wares = [  ]
+enemyVisiblityRange = 0.0
 
-[sub_resource type="Resource" id=9]
+[sub_resource type="Resource" id=5]
 script = ExtResource( 16 )
 quantity = 100
 pricePerUnit = 2
@@ -68,7 +69,7 @@ priceType = "gold"
 resourceType = "mana"
 quantityPerPurchase = 50
 
-[sub_resource type="Resource" id=14]
+[sub_resource type="Resource" id=6]
 script = ExtResource( 13 )
 depiction = "deevee"
 health = 50
@@ -77,32 +78,30 @@ fee = 0
 quests = [  ]
 key = "deevee"
 attributes = [ "talk" ]
-wares = [ SubResource( 9 ) ]
+wares = [ SubResource( 5 ) ]
+enemyVisiblityRange = 0.0
 
 [node name="root" type="Spatial"]
 
 [node name="Forest" parent="." instance=ExtResource( 7 )]
 scene = ExtResource( 1 )
-faction = ExtResource( 8 )
 active = true
 populate = false
 
 [node name="City" parent="." instance=ExtResource( 7 )]
 transform = Transform( 0.029265, 0, -0.999572, 0, 1, 0, 0.999572, 0, 0.029265, 0, 0, -40.0177 )
 scene = ExtResource( 1 )
-faction = ExtResource( 9 )
 active = true
 
 [node name="Desert" parent="." instance=ExtResource( 7 )]
 transform = Transform( 0.029265, 0, -0.999572, 0, 1, 0, 0.999572, 0, 0.029265, 0, 0, -80.5874 )
 scene = ExtResource( 1 )
-faction = ExtResource( 8 )
 active = true
 
 [node name="Neighborhood" parent="." instance=ExtResource( 7 )]
 transform = Transform( 0.998918, 0, 0.0464963, 0, 1, 0, -0.0464963, 0, 0.998918, 41.4873, 0.430244, -14.2298 )
 scene = ExtResource( 1 )
-faction = ExtResource( 8 )
+faction = "undead"
 active = true
 
 [node name="player" parent="." instance=ExtResource( 2 )]
@@ -134,7 +133,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, -3.05739 )
 
 [node name="char" type="Node" parent="employee"]
 script = ExtResource( 4 )
-creature = SubResource( 10 )
+creature = SubResource( 1 )
 faction = "neutral"
 
 [node name="employee2" parent="." instance=ExtResource( 10 )]
@@ -142,7 +141,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236225, 1.87952, 6.79788 )
 
 [node name="char" type="Node" parent="employee2"]
 script = ExtResource( 4 )
-creature = SubResource( 11 )
+creature = SubResource( 2 )
 faction = "neutral"
 
 [node name="client" parent="." instance=ExtResource( 10 )]
@@ -150,7 +149,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.90778, 1.87952, 2.74601 )
 
 [node name="char" type="Node" parent="client"]
 script = ExtResource( 4 )
-creature = SubResource( 13 )
+creature = SubResource( 4 )
 faction = "neutral"
 
 [node name="deevee" parent="." instance=ExtResource( 10 )]
@@ -158,5 +157,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.90778, 1.87952, -5.86603 )
 
 [node name="char" type="Node" parent="deevee"]
 script = ExtResource( 4 )
-creature = SubResource( 14 )
+creature = SubResource( 6 )
 faction = "neutral"

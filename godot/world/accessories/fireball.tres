@@ -7,7 +7,7 @@
 script = ExtResource( 1 )
 effect = "attack"
 strength = 10.0
-Range = 25.0
+Range = 15.0
 costResource = ""
 costAmount = 8
 cooldown = 2.0

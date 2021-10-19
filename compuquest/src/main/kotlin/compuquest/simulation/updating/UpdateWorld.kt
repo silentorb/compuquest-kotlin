@@ -11,7 +11,7 @@ fun syncMythic(world: World): World {
   val deck = world.deck
   val bodies = world.bodies.mapValues { spatial ->
     Body(
-      translation = tempCatch { spatial.value.translation } ?: Vector3.ZERO,
+      translation = tempCatch { spatial.value.globalTransform.origin } ?: Vector3.ZERO,
       rotation = tempCatch { spatial.value.rotation } ?: Vector3.ZERO,
     )
   }
