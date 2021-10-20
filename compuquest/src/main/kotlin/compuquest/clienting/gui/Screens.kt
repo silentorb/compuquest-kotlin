@@ -167,7 +167,7 @@ fun resurrectMenuItem(actor: Id, character: Character) =
       val faction = targetCharacter.faction
       listOf(
         modifyHealth(actor, targetCharacter.health.max),
-      ) + if (faction != Factions.neutral)
+      ) + if (faction != Factions.neutral.name)
         listOf(modifyFactionResources(faction, mapOf(ResourceType.gold to -100)))
       else
         listOf()

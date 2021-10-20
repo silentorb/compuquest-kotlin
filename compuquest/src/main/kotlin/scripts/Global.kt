@@ -23,6 +23,13 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Events
 
+enum class InitMode {
+  delayInit,
+  readyInitOrInitialized,
+  delayRestart,
+  readyRestart,
+}
+
 @RegisterClass
 class Global : Node() {
   var worlds: List<World> = listOf()
@@ -59,7 +66,7 @@ class Global : Node() {
     instance = this
   }
 
-  var restarting = 0
+  var initMode: InitMode = InitMode.delayInit
 
   fun restartGame() {
     val tree = getTree()
@@ -76,7 +83,7 @@ class Global : Node() {
       }
       // Wait until the frame has finished processing and the queued nodes are freed before
       // continuing with the restarting process
-      restarting = 1
+      initMode = InitMode.delayRestart
     }
   }
 
@@ -113,29 +120,43 @@ class Global : Node() {
           getTree()!!.quit()
 
         val localWorlds = worlds
-        if (restarting == 1) {
-          val tree = getTree()
-          tree!!.reloadCurrentScene()
-          restarting = 2
-        } else if (restarting == 2) {
-          val tree = getTree()
-          val root = tree?.root
-          // This needs to happen *after* the scene is reloaded
-          worlds = listOf(newGame(root!!, definitions))
-          client = restartClient(client)
-          restarting = 0
-        } else if (localWorlds.none()) {
-          val root = getTree()?.root
-          if (root != null) {
-            worlds = listOf(newGame(root, definitions))
+        when (initMode) {
+
+          InitMode.delayRestart -> {
+            val tree = getTree()
+            tree!!.reloadCurrentScene()
+            initMode = InitMode.readyRestart
           }
-        } else {
-          val events = updateEvents()
-          val previousClient = client
-          val nextClient = updateClient(localWorlds.lastOrNull(), events, previousClient)
-          val clientEvents = eventsFromClient(getPlayer()!!.key, nextClient, previousClient)
-          client = nextClient
-          updateWorlds(events + clientEvents, localWorlds, delta.toFloat())
+
+          InitMode.readyRestart -> {
+            val tree = getTree()
+            val root = tree?.root
+            // This needs to happen *after* the scene is reloaded
+            worlds = listOf(newGame(root!!, definitions))
+            client = restartClient(client)
+            initMode = InitMode.readyInitOrInitialized
+          }
+
+          InitMode.readyInitOrInitialized -> {
+            if (localWorlds.none()) {
+              val root = getTree()?.root
+              if (root != null) {
+                worlds = listOf(newGame(root, definitions))
+              }
+            } else {
+              val events = updateEvents()
+              val previousClient = client
+              val nextClient = updateClient(localWorlds.lastOrNull(), events, previousClient)
+              val clientEvents = eventsFromClient(getPlayer()!!.key, nextClient, previousClient)
+              client = nextClient
+              updateWorlds(events + clientEvents, localWorlds, delta.toFloat())
+            }
+          }
+          InitMode.delayInit -> {
+            // Delay initialization one frame to ensure nodes deleted during _ready are completely removed.
+            // This should not be needed and is either a Godot design flaw or bug
+            initMode = InitMode.readyInitOrInitialized
+          }
         }
       }
     }

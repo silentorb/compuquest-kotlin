@@ -15,7 +15,7 @@ fun newWorld(definitions: Definitions): World {
     nextId = SharedNextId(),
     dice = Dice(),
     factionRelationships = mapOf(
-      setOf(Factions.undead, Factions.player) to 10,
+      setOf(Factions.undead.name, Factions.player.name) to 10,
     ),
     day = DayState(dayLength = getDebugInt("DAY_LENGTH") ?: 5 * dayMinutes)
   )

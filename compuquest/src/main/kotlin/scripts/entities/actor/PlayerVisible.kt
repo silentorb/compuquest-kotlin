@@ -9,13 +9,14 @@ import scripts.Global
 @RegisterClass
 class PlayerVisible : Spatial() {
 
-  @RegisterFunction
-  override fun _ready() {
-
-  }
+  var isInitialized: Boolean = false
+  var _isVisible: Boolean = true
 
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
+    if (isInitialized && _isVisible)
+      return
+
     val player = Global.getPlayer()
     val world = Global.world
     if (player != null && world != null) {
@@ -33,6 +34,8 @@ class PlayerVisible : Spatial() {
           distance <= character.enemyVisibilityRange
         }
         visible = isVisible
+        _isVisible = isVisible
+        isInitialized = true
       }
     }
   }

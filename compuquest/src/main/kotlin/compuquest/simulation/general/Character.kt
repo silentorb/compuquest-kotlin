@@ -77,8 +77,8 @@ val updateCharacterBody = handleEvents<Id?> { event, value ->
 
 val updateCharacterFaction = handleEvents<Key> { event, value ->
   when (event.type) {
-    joinedPlayer -> Factions.player
-    removeFactionMemberEvent -> Factions.neutral
+    joinedPlayer -> Factions.player.name
+    removeFactionMemberEvent -> Factions.neutral.name
     else -> value
   }
 }

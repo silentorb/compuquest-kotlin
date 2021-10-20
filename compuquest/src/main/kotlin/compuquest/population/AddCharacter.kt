@@ -37,7 +37,7 @@ fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
 fun parseFaction(faction: Key?, node: Node): Key {
   val rawFaction = faction ?: getString(node, "faction")
   return if (rawFaction == "")
-    Factions.neutral
+    Factions.neutral.name
   else
     rawFaction
 }
