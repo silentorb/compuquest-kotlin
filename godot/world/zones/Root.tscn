@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://world/zones/Neighborhood.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://world/zones/Graveyard.tscn" type="PackedScene" id=7]
 [ext_resource path="res://world/props/NightSky.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/main/kotlin/scripts/world/RootNode.kt" type="Script" id=9]
+[ext_resource path="res://world/zones/city/BuildingA.tscn" type="PackedScene" id=10]
 
 [node name="root" type="Spatial"]
 script = ExtResource( 9 )
@@ -43,3 +44,40 @@ creature = ExtResource( 3 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7724, 1.83217, -33.3872 )
 
 [node name="stars" parent="." instance=ExtResource( 8 )]
+
+[node name="city" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.50849, 0, 182.984 )
+
+[node name="building-a" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5171, 4, -18.5171 )
+
+[node name="building-a2" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 51.4829, -27, -17.5171 )
+
+[node name="building-a4" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4829, -19, 50.4829 )
+
+[node name="building-a5" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -74.5171, -27, -24.5171 )
+
+[node name="building-a6" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 113.483, -30, 6.48289 )
+height = 108.308
+
+[node name="building-a7" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -66.5171, -14, 93.4829 )
+
+[node name="building-a8" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5171, 4, 38.4829 )
+
+[node name="building-a9" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.4829, -7, 110.483 )
+
+[node name="building-a10" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.4829, 4, 41.4829 )
+
+[node name="building-a11" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5171, 4, 119.483 )
+
+[node name="building-a3" parent="city" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -86.5171, -3, 32.4829 )

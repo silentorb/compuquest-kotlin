@@ -135,11 +135,11 @@ script = ExtResource( 10 )
 creature = ExtResource( 9 )
 
 [node name="street" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3467, -0.529197, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3467, -0.529197, 44 )
 use_collision = true
 width = 12.0
 height = 1.0
-depth = 168.579
+depth = 250.0
 material = ExtResource( 17 )
 
 [node name="house" type="Spatial" parent="."]
