@@ -2,6 +2,7 @@
 /jre
 *.log
 options.ini
+/.gde
 
 # Godot-specific ignores
 .import
