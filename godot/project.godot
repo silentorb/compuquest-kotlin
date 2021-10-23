@@ -150,7 +150,7 @@ Global="*res://src/main/kotlin/scripts/Global.kt"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/repl/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/scenic/plugin.cfg" )
 
 [importer_defaults]
 
