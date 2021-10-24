@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://world/zones/Neighborhood.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
@@ -10,9 +10,26 @@
 [ext_resource path="res://world/props/NightSky.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/main/kotlin/scripts/world/RootNode.kt" type="Script" id=9]
 [ext_resource path="res://world/zones/city/BuildingA.tscn" type="PackedScene" id=10]
+[ext_resource path="res://world/zones/city/BuildingB.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/images/tiles/windows-lit.png" type="Texture" id=12]
+[ext_resource path="res://world/zones/Mansion.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=14]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_texture = ExtResource( 12 )
+uv1_scale = Vector3( 0.25, 0.25, 0.25 )
+uv1_triplanar = true
 
 [node name="root" type="Spatial"]
 script = ExtResource( 9 )
+
+[node name="joiner" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -30.4829, -0.12651, 2.4829 )
+use_collision = true
+width = 20.0
+height = 0.5
+depth = 24.0
+material = ExtResource( 14 )
 
 [node name="neighborhood" parent="." instance=ExtResource( 1 )]
 
@@ -48,8 +65,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7724, 1.83217, -33.3872 )
 [node name="city" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.50849, 0, 182.984 )
 
-[node name="building-a" parent="city" instance=ExtResource( 10 )]
+[node name="building-a" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5171, 4, -18.5171 )
+material = SubResource( 1 )
 
 [node name="building-a2" parent="city" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 51.4829, -27, -17.5171 )
@@ -64,8 +82,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -74.5171, -27, -24.5171 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 113.483, -30, 6.48289 )
 height = 108.308
 
-[node name="building-a7" parent="city" instance=ExtResource( 10 )]
+[node name="building-a7" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -66.5171, -14, 93.4829 )
+material = SubResource( 1 )
 
 [node name="building-a8" parent="city" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5171, 4, 38.4829 )
@@ -73,11 +92,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5171, 4, 38.4829 )
 [node name="building-a9" parent="city" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.4829, -7, 110.483 )
 
-[node name="building-a10" parent="city" instance=ExtResource( 10 )]
+[node name="building-a10" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.4829, 4, 41.4829 )
+material = SubResource( 1 )
 
-[node name="building-a11" parent="city" instance=ExtResource( 10 )]
+[node name="building-a11" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5171, 4, 119.483 )
+material = SubResource( 1 )
 
-[node name="building-a3" parent="city" instance=ExtResource( 10 )]
+[node name="building-a3" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -86.5171, -3, 32.4829 )
+material = SubResource( 1 )
+
+[node name="mansion" parent="." instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 10, 0 )

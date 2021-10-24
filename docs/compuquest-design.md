@@ -87,10 +87,12 @@ CompuQuest is a strategy role playing game.  It is also:
 * Some quests have prerequisites and are neither available nor visible until the prerequisites are met
   * A quest can depend on another quest
 
+* Characters gaining experience
+  * Characters gain the most experience from dying
+
 ### Less Certain Concepts
 
-* Not sure whether characters will gain experience
-* Characters gain the most experience from dying
+* 
 
 ## Major Systems
 
@@ -155,7 +157,7 @@ CompuQuest is a strategy role playing game.  It is also:
 * Castle
 * Pizza Parlor / Burger Joint
 * Abandoned House (from Adventure and Zork)
-* Haunted mansion
+* Mansion
 * Graveyard
 * Jungle
 * Office building overtaken by demonic forces

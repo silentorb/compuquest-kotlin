@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "ResourceFormatLoader",
+"class": "HTerrainDataLoader",
+"language": "GDScript",
+"path": "res://addons/zylann.hterrain/hterrain_resource_loader.gd"
+}, {
+"base": "ResourceFormatSaver",
+"class": "HTerrainDataSaver",
+"language": "GDScript",
+"path": "res://addons/zylann.hterrain/hterrain_resource_saver.gd"
+}, {
 "base": "Node",
 "class": "scripts_Global",
 "language": "Kotlin",
@@ -115,6 +125,8 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/scripts/world/ZoneNode.kt"
 } ]
 _global_script_class_icons={
+"HTerrainDataLoader": "",
+"HTerrainDataSaver": "",
 "scripts_Global": "",
 "scripts_entities_actor_AttachAccessory": "",
 "scripts_entities_actor_AttachCharacter": "",
@@ -150,7 +162,7 @@ Global="*res://src/main/kotlin/scripts/Global.kt"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/scenic/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/scenic/plugin.cfg", "res://addons/zylann.hterrain/plugin.cfg" )
 
 [importer_defaults]
 
