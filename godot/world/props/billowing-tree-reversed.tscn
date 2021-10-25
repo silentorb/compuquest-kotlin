@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=2]
+
+[sub_resource type="CylinderShape" id=1]
+radius = 1.77471
+height = 10.0513
+
+[node name="billowing-tree" type="StaticBody"]
+
+[node name="trunk" type="CollisionShape" parent="."]
+transform = Transform( 0.879352, 0, 0, 0, 0.939137, 0, 0, 0, 0.879352, -0.0606767, 4.74908, 0 )
+shape = SubResource( 1 )
+
+[node name="sprite" parent="." instance=ExtResource( 2 )]
+transform = Transform( 3.12049, 0, 0, 0, 3.12049, 0, 0, 0, 3.12049, -1.707, 4.981, -1.401 )
+flip_h = true
+animation = "large-sprites"
+frame = 3

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=1]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=2]
@@ -10,8 +10,20 @@
 [ext_resource path="res://world/accessories/heal.tres" type="Resource" id=8]
 [ext_resource path="res://world/zones/mansion/terrain/data.hterrain" type="Resource" id=9]
 [ext_resource path="res://assets/images/tiles/tile_8.png" type="Texture" id=10]
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=11]
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=12]
 [ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=13]
+[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=14]
+[ext_resource path="res://world/creatures/viking.tres" type="Resource" id=15]
+[ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=16]
+[ext_resource path="res://world/props/pine-tree.tscn" type="PackedScene" id=17]
+[ext_resource path="res://world/props/billowing-tree.tscn" type="PackedScene" id=18]
+[ext_resource path="res://world/props/billowing-tree-reversed.tscn" type="PackedScene" id=19]
+
+[sub_resource type="Resource" id=3]
+script = ExtResource( 12 )
+mode = 0
+textures = [ [ ExtResource( 10 ) ], [ null ] ]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 5 )
@@ -21,7 +33,7 @@ priceType = "gold"
 resourceType = "mana"
 quantityPerPurchase = 50
 
-[sub_resource type="Resource" id=4]
+[sub_resource type="Resource" id=2]
 script = ExtResource( 6 )
 depiction = "deevee"
 health = 50
@@ -33,237 +45,8 @@ attributes = [ "talk" ]
 wares = [ SubResource( 1 ) ]
 enemyVisibilityRange = 0.0
 
-[sub_resource type="Resource" id=3]
-script = ExtResource( 12 )
-mode = 0
-textures = [ [ ExtResource( 10 ) ], [ null ] ]
-
 [node name="mansion" type="Spatial"]
 script = ExtResource( 1 )
-
-[node name="deevee" parent="." instance=ExtResource( 2 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329, -0.00250936, 1.1886 )
-
-[node name="char" type="Node" parent="deevee"]
-script = ExtResource( 3 )
-creature = SubResource( 4 )
-faction = "neutral"
-
-[node name="section" type="Spatial" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 9.63434, 1.55697, 11.4231 )
-
-[node name="walls" type="CSGBox" parent="section"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section2" type="Spatial" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 13.0168, -0.00250936, 3.79201 )
-
-[node name="walls" type="CSGBox" parent="section2"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section2"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section2"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section4" type="Spatial" parent="."]
-transform = Transform( 0.658716, 0, -0.752392, 0, 1, 0, 0.752392, 0, 0.658716, 9.09324, -3.05896, -18.4606 )
-
-[node name="walls" type="CSGBox" parent="section4"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section4"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section4"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section3" type="Spatial" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 9.63434, -0.00250936, -4.40533 )
-
-[node name="walls" type="CSGBox" parent="section3"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section3"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section3"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section5" type="Spatial" parent="."]
-transform = Transform( -0.0123041, 0, 0.999924, 0, 1, 0, -0.999924, 0, -0.0123041, -21.5931, 6.23556, -8.36921 )
-
-[node name="walls" type="CSGBox" parent="section5"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section5"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section5"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section6" type="Spatial" parent="."]
-transform = Transform( -0.0123041, 0, 0.999924, 0, 1, 0, -0.999924, 0, -0.0123041, -24.8814, 4.67608, -0.697111 )
-
-[node name="walls" type="CSGBox" parent="section6"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section6"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section6"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section7" type="Spatial" parent="."]
-transform = Transform( -0.521983, 0.0304356, 0.852413, 0.00990425, 0.999512, -0.0296228, -0.852899, -0.00702009, -0.52203, -20.6843, 1.61963, 20.3469 )
-
-[node name="walls" type="CSGBox" parent="section7"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section7"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section7"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="section8" type="Spatial" parent="."]
-transform = Transform( -0.0123041, 0, 0.999924, 0, 1, 0, -0.999924, 0, -0.0123041, -21.3983, 4.67608, 7.45799 )
-
-[node name="walls" type="CSGBox" parent="section8"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof1" type="CSGBox" parent="section8"]
-transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
-
-[node name="roof2" type="CSGBox" parent="section8"]
-transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
-use_collision = true
-width = 12.0
-height = 0.5
-depth = 8.0
-material = ExtResource( 4 )
 
 [node name="terrain" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0, -64 )
@@ -271,7 +54,7 @@ script = ExtResource( 13 )
 map_scale = Vector3( 2, 2, 2 )
 _terrain_data = ExtResource( 9 )
 chunk_size = 16
-collision_enabled = true
+collision_enabled = false
 collision_layer = 1
 collision_mask = 1
 shader_type = "Classic4Lite"
@@ -282,3 +65,264 @@ shader_params/u_ground_uv_scale = 2.0
 shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
 shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
+
+[node name="building" type="Spatial" parent="."]
+
+[node name="section" type="Spatial" parent="building"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 9.63434, 1.55697, 11.4231 )
+
+[node name="walls" type="CSGBox" parent="building/section"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section2" type="Spatial" parent="building"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 13.0168, -0.00250936, 3.79201 )
+
+[node name="walls" type="CSGBox" parent="building/section2"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section2"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section2"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section4" type="Spatial" parent="building"]
+transform = Transform( 0.658716, 0, -0.752392, 0, 1, 0, 0.752392, 0, 0.658716, 9.09324, -3.05896, -18.4606 )
+
+[node name="walls" type="CSGBox" parent="building/section4"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section4"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section4"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section3" type="Spatial" parent="building"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 9.63434, -0.00250936, -4.40533 )
+
+[node name="walls" type="CSGBox" parent="building/section3"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section3"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section3"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section5" type="Spatial" parent="building"]
+transform = Transform( -0.0123041, 0, 0.999924, 0, 1, 0, -0.999924, 0, -0.0123041, -21.5931, 6.23556, -8.36921 )
+
+[node name="walls" type="CSGBox" parent="building/section5"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section5"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section5"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section6" type="Spatial" parent="building"]
+transform = Transform( -0.0123041, 0, 0.999924, 0, 1, 0, -0.999924, 0, -0.0123041, -24.8814, 4.67608, -0.697111 )
+
+[node name="walls" type="CSGBox" parent="building/section6"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section6"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section6"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section7" type="Spatial" parent="building"]
+transform = Transform( -0.521983, 0.0304356, 0.852413, 0.00990425, 0.999512, -0.0296228, -0.852899, -0.00702009, -0.52203, -20.6843, 1.61963, 20.3469 )
+
+[node name="walls" type="CSGBox" parent="building/section7"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section7"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section7"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="section8" type="Spatial" parent="building"]
+transform = Transform( -0.0123041, 0, 0.999924, 0, 1, 0, -0.999924, 0, -0.0123041, -21.3983, 4.67608, 7.45799 )
+
+[node name="walls" type="CSGBox" parent="building/section8"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 10.8519 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof1" type="CSGBox" parent="building/section8"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="roof2" type="CSGBox" parent="building/section8"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 10.8519 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 4 )
+
+[node name="deevee" parent="." instance=ExtResource( 2 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329, -0.00250936, 1.1886 )
+
+[node name="char" type="Node" parent="deevee"]
+script = ExtResource( 3 )
+creature = SubResource( 2 )
+faction = "neutral"
+
+[node name="vegetation" type="Spatial" parent="."]
+
+[node name="pine-tree" parent="vegetation" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.9787, -11.324, 16.3718 )
+
+[node name="billowing-tree" parent="vegetation" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 36.6915, -10.8756, -5.52388 )
+
+[node name="billowing-tree2" parent="vegetation" instance=ExtResource( 19 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 29.6102, -4.81331, 17.0346 )
+
+[node name="player" parent="." instance=ExtResource( 16 )]
+transform = Transform( -0.169281, 0, 0.985568, 0, 1, 0, -0.985568, 0, -0.169281, 50.5994, -13.7146, 0.550591 )
+
+[node name="player" type="Node" parent="player"]
+script = ExtResource( 14 )
+
+[node name="mana" type="Node" parent="player"]
+script = ExtResource( 11 )
+amount = 200
+resource = "mana"
+
+[node name="gold" type="Node" parent="player"]
+script = ExtResource( 11 )
+amount = 200
+resource = "gold"
+
+[node name="bob" type="Node" parent="player"]
+script = ExtResource( 3 )
+creature = ExtResource( 15 )
+
+[node name="joe" type="Node" parent="player"]
+script = ExtResource( 3 )
+creature = ExtResource( 15 )

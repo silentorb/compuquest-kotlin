@@ -1,0 +1,16 @@
+[remap]
+
+importer="com.technohacker.pixelorama"
+type="StreamTexture"
+path="res://.import/tall-props.pxo-0d15a6e609170efbed2d8bc6cbcd02c0.stex"
+
+[deps]
+
+source_file="res://assets/images/props/tall-props.pxo"
+dest_files=[ "res://.import/tall-props.pxo-0d15a6e609170efbed2d8bc6cbcd02c0.stex" ]
+
+[params]
+
+detect_3d=false
+flags/repeat=0
+flags/srgb=1

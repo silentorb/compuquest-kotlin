@@ -161,10 +161,11 @@ CompuQuest is a strategy role playing game.  It is also:
 * Graveyard
 * Jungle
 * Office building overtaken by demonic forces
+* BBQ Party
+* Desert
 
 #### Less Certain
 
-* BBQ Party
 * Dungeon
 * Caves
 * Computer Underworld
@@ -172,7 +173,6 @@ CompuQuest is a strategy role playing game.  It is also:
 * Fairy Forest
 * Swamp
 * Small planet
-* Desert
 * Underwater
 * Arctic
 * Subway

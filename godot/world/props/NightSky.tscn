@@ -55,6 +55,7 @@ script = ExtResource( 2 )
 
 [node name="particles" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0 )
+emitting = false
 amount = 400
 lifetime = 360000.0
 one_shot = true

@@ -105,4 +105,4 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -86.5171, -3, 32.4829 )
 material = SubResource( 1 )
 
 [node name="mansion" parent="." instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 10, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 14, 0 )

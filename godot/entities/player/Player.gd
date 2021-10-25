@@ -103,9 +103,7 @@ func walk(delta: float) -> void:
 
 
 func camera_rotation() -> void:
-	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
-		return
-	if mouse_axis.length() > 0:
+	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED and mouse_axis.length() > 0:
 		var horizontal: float = -mouse_axis.x * (mouse_sensitivity / 100)
 		var vertical: float = -mouse_axis.y * (mouse_sensitivity / 100)
 		

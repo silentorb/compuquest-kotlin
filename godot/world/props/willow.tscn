@@ -14,7 +14,7 @@ height = 1.67563
 radius = 5.01354
 height = 4.45372
 
-[node name="gravestone" type="StaticBody"]
+[node name="willow" type="StaticBody"]
 
 [node name="trunk" type="CollisionShape" parent="."]
 transform = Transform( 0.879352, 0, 0, 0, 0.939137, 0, 0, 0, 0.879352, -0.208469, 5.15961, 0 )
