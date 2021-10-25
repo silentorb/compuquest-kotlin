@@ -20,12 +20,12 @@
 [ext_resource path="res://world/props/billowing-tree.tscn" type="PackedScene" id=18]
 [ext_resource path="res://world/props/billowing-tree-reversed.tscn" type="PackedScene" id=19]
 
-[sub_resource type="Resource" id=3]
+[sub_resource type="Resource" id=4]
 script = ExtResource( 12 )
 mode = 0
 textures = [ [ ExtResource( 10 ) ], [ null ] ]
 
-[sub_resource type="Resource" id=1]
+[sub_resource type="Resource" id=2]
 script = ExtResource( 5 )
 quantity = 100
 pricePerUnit = 2
@@ -33,7 +33,7 @@ priceType = "gold"
 resourceType = "mana"
 quantityPerPurchase = 50
 
-[sub_resource type="Resource" id=2]
+[sub_resource type="Resource" id=3]
 script = ExtResource( 6 )
 depiction = "deevee"
 health = 50
@@ -42,7 +42,7 @@ fee = 0
 quests = [  ]
 key = "deevee"
 attributes = [ "talk" ]
-wares = [ SubResource( 1 ) ]
+wares = [ SubResource( 2 ) ]
 enemyVisibilityRange = 0.0
 
 [node name="mansion" type="Spatial"]
@@ -54,13 +54,13 @@ script = ExtResource( 13 )
 map_scale = Vector3( 2, 2, 2 )
 _terrain_data = ExtResource( 9 )
 chunk_size = 16
-collision_enabled = false
+collision_enabled = true
 collision_layer = 1
 collision_mask = 1
 shader_type = "Classic4Lite"
 custom_shader = null
 custom_globalmap_shader = null
-texture_set = SubResource( 3 )
+texture_set = SubResource( 4 )
 shader_params/u_ground_uv_scale = 2.0
 shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
@@ -289,7 +289,7 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329
 
 [node name="char" type="Node" parent="deevee"]
 script = ExtResource( 3 )
-creature = SubResource( 2 )
+creature = SubResource( 3 )
 faction = "neutral"
 
 [node name="vegetation" type="Spatial" parent="."]

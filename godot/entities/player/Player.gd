@@ -75,7 +75,8 @@ func _input(event: InputEvent) -> void:
 func walk(delta: float) -> void:
 	direction_input()
 	
-	if is_on_floor():
+	var isGrounded = is_on_floor()
+	if isGrounded:
 		snap = -get_floor_normal() - get_floor_velocity() * delta
 		
 		# Workaround for sliding down after jump on slope
@@ -96,8 +97,21 @@ func walk(delta: float) -> void:
 	updateSpeed()
 	
 	accelerate(delta)
+	var velocity_max = 10
 	
-	velocity = move_and_slide_with_snap(velocity, snap, Vector3.UP, true, 4, FLOOR_MAX_ANGLE)
+	var velocity_length = velocity.length()
+	if (velocity_length > velocity_max):
+		velocity = velocity.normalized() * velocity_max
+	
+	var previous_translation = translation
+	var new_velocity = move_and_slide_with_snap(velocity, snap, Vector3.UP, true, 4, FLOOR_MAX_ANGLE)
+	var height_diff = translation.y - previous_translation.y
+	if !isGrounded and velocity.y < -1 and abs(height_diff) < 0.001:
+		jump()
+		translate(new_velocity * delta)
+	else:
+		velocity = new_velocity
+	
 	_is_jumping_input = false
 	_is_sprinting_input = false
 
