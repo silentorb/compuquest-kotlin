@@ -3,6 +3,7 @@
 *.log
 options.ini
 /.gde
+options.yaml
 
 # Godot-specific ignores
 .import

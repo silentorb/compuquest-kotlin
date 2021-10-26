@@ -11,15 +11,14 @@ import compuquest.simulation.input.Commands
 import compuquest.clienting.input.gatherDefaultPlayerInput
 import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
-import godot.Engine
-import godot.Input
-import godot.Node
+import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
+import silentorb.mythic.godoting.findChildren
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Events
 
@@ -108,6 +107,25 @@ class Global : Node() {
     }
   }
 
+  fun newGameWorld(): World? {
+    return tempCatch {
+      val root = getTree()?.root
+      if (root != null) {
+        val scene = root.getChildren().filterIsInstance<Node>().last()
+        val viewport = findChildren(root) { it.name == "viewport3d" }.firstOrNull() as? Viewport
+        val rootViewport = root as? Viewport
+        if (viewport != null && rootViewport != null) {
+          root.removeChild(scene)
+          viewport.addChild(scene)
+          viewport.world = rootViewport.world
+          newGame(scene, definitions)
+        } else
+          null
+      } else
+        null
+    }
+  }
+
   @RegisterFunction
   override fun _physicsProcess(delta: Double) {
     if (!Engine.editorHint) {
@@ -129,19 +147,18 @@ class Global : Node() {
           }
 
           InitMode.readyRestart -> {
-            val tree = getTree()
-            val root = tree?.root
+            val world = newGameWorld()
             // This needs to happen *after* the scene is reloaded
-            worlds = listOf(newGame(root!!, definitions))
+            worlds = listOf(world!!)
             client = restartClient(client)
             initMode = InitMode.readyInitOrInitialized
           }
 
           InitMode.readyInitOrInitialized -> {
             if (localWorlds.none()) {
-              val root = getTree()?.root
-              if (root != null) {
-                worlds = listOf(newGame(root, definitions))
+              val world = newGameWorld()
+              if (world != null) {
+                worlds = listOf(world)
               }
             } else {
               val events = updateEvents()

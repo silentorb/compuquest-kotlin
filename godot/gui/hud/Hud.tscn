@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/main/kotlin/scripts/gui/Hud.kt" type="Script" id=1]
 [ext_resource path="res://gui/hud/Portrait.tscn" type="PackedScene" id=2]
 [ext_resource path="res://gui/hud/Panel.tres" type="StyleBox" id=3]
 [ext_resource path="res://gui/hud/PlayerInfo.tscn" type="PackedScene" id=4]
 [ext_resource path="res://gui/style/Theme.tres" type="Theme" id=5]
+[ext_resource path="res://gui/hud/resize-viewport.gd" type="Script" id=6]
 
 [node name="Hud" type="MarginContainer"]
 anchor_right = 1.0
@@ -46,6 +47,16 @@ margin_bottom = 35.0
 text = "Talk"
 align = 1
 valign = 1
+
+[node name="viewport-container" type="ViewportContainer" parent="vbox/overlay"]
+margin_right = 1024.0
+margin_bottom = 396.0
+stretch = true
+script = ExtResource( 6 )
+
+[node name="viewport3d" type="Viewport" parent="vbox/overlay/viewport-container"]
+handle_input_locally = false
+render_target_update_mode = 3
 
 [node name="lower-third" type="MarginContainer" parent="vbox"]
 margin_top = 400.0
