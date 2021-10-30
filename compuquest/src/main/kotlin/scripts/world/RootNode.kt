@@ -2,6 +2,7 @@ package scripts.world
 
 import godot.KinematicBody
 import godot.Node
+import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.Tool
@@ -10,7 +11,7 @@ import silentorb.mythic.godoting.tempCatch
 
 @Tool
 @RegisterClass
-class RootNode : Node() {
+class RootNode : Spatial() {
 
   @RegisterFunction
   override fun _ready() {

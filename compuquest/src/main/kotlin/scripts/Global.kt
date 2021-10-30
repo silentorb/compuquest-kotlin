@@ -34,6 +34,7 @@ class Global : Node() {
   var worlds: List<World> = listOf()
   val definitions = newDefinitions()
   var client: Client = newClient()
+  var sceneNode: Spatial? = null
 
   @RegisterProperty
   var debugText: String = ""
@@ -80,6 +81,12 @@ class Global : Node() {
           sprites.queueFree()
         }
       }
+
+      // For no discernible reason, the current scene needs to be a direct child of the tree root
+      val scene = sceneNode!!
+      scene.getParent()!!.removeChild(scene)
+      tree.root!!.addChild(scene)
+
       // Wait until the frame has finished processing and the queued nodes are freed before
       // continuing with the restarting process
       initMode = InitMode.delayRestart
@@ -89,7 +96,8 @@ class Global : Node() {
   @RegisterFunction
   override fun _ready() {
     val hud = instantiateScene<Node>("res://gui/hud/Hud.tscn")!!
-    addChild(hud)
+    hud.owner = getTree()!!.editedSceneRoot
+    getParent()!!.callDeferred("add_child", hud)
   }
 
   fun updateEvents(): Events {
@@ -109,15 +117,18 @@ class Global : Node() {
 
   fun newGameWorld(): World? {
     return tempCatch {
-      val root = getTree()?.root
+      val tree = getTree()
+      val root = tree?.root
       if (root != null) {
-        val scene = root.getChildren().filterIsInstance<Node>().last()
+//        newGame(root, definitions)
+        val scene = root.getChildren().filterIsInstance<Spatial>().lastOrNull()
         val viewport = findChildren(root) { it.name == "viewport3d" }.firstOrNull() as? Viewport
         val rootViewport = root as? Viewport
-        if (viewport != null && rootViewport != null) {
+        if (scene != null && viewport != null && rootViewport != null) {
           root.removeChild(scene)
           viewport.addChild(scene)
           viewport.world = rootViewport.world
+          sceneNode = scene
           newGame(scene, definitions)
         } else
           null
@@ -141,17 +152,20 @@ class Global : Node() {
         when (initMode) {
 
           InitMode.delayRestart -> {
-            val tree = getTree()
-            tree!!.reloadCurrentScene()
+            val tree = getTree()!!
+            tree.currentScene = sceneNode
+            tree.reloadCurrentScene()
             initMode = InitMode.readyRestart
           }
 
           InitMode.readyRestart -> {
             val world = newGameWorld()
             // This needs to happen *after* the scene is reloaded
-            worlds = listOf(world!!)
-            client = restartClient(client)
-            initMode = InitMode.readyInitOrInitialized
+            if (world != null) {
+              worlds = listOf(world)
+              client = restartClient(client)
+              initMode = InitMode.readyInitOrInitialized
+            }
           }
 
           InitMode.readyInitOrInitialized -> {
@@ -164,7 +178,12 @@ class Global : Node() {
               val events = updateEvents()
               val previousClient = client
               val nextClient = updateClient(localWorlds.lastOrNull(), events, previousClient)
-              val clientEvents = eventsFromClient(getPlayer()!!.key, nextClient, previousClient)
+              val player = getPlayer()?.key
+              val clientEvents = if (player != null)
+                eventsFromClient(player, nextClient, previousClient)
+              else
+                listOf()
+
               client = nextClient
               updateWorlds(events + clientEvents, localWorlds, delta.toFloat())
             }

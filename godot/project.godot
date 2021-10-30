@@ -114,7 +114,7 @@ _global_script_classes=[ {
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/world/CharacterDefinition.kt"
 }, {
-"base": "Node",
+"base": "Spatial",
 "class": "scripts_world_RootNode",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/world/RootNode.kt"
