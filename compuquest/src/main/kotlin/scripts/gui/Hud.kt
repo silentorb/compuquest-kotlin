@@ -14,12 +14,14 @@ class Hud : Control() {
   var interact: Control? = null
   var debugText: Label? = null
   var lastMenu: Any? = null
+	var lowerThird: Control? = null
 
   @RegisterFunction
   override fun _ready() {
 	slot = findNode("slot")
 	interact = findNode("interact") as? Control
 	debugText = findNode("debug") as? Label
+		lowerThird = findNode("lower-third") as? Control
   }
 
   @RegisterFunction
@@ -27,7 +29,7 @@ class Hud : Control() {
 	tempCatch {
 		val client = Global.instance?.client
 		if (client != null) {
-			visible = client.options.ui.showHud
+			lowerThird?.visible = client.options.ui.showHud
 		}
 	  val player = Global.getPlayer()
 	  val canInteractWith = player?.value?.canInteractWith

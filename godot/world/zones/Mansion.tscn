@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=1]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=2]
@@ -9,7 +9,7 @@
 [ext_resource path="res://world/accessories/fireball.tres" type="Resource" id=7]
 [ext_resource path="res://world/accessories/heal.tres" type="Resource" id=8]
 [ext_resource path="res://world/zones/mansion/terrain/data.hterrain" type="Resource" id=9]
-[ext_resource path="res://assets/images/tiles/tile_8.png" type="Texture" id=10]
+[ext_resource path="res://assets/images/tiles/grass-02.png" type="Texture" id=10]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=11]
 [ext_resource path="res://addons/zylann.hterrain/hterrain_texture_set.gd" type="Script" id=12]
 [ext_resource path="res://addons/zylann.hterrain/hterrain.gd" type="Script" id=13]
@@ -19,6 +19,7 @@
 [ext_resource path="res://world/props/pine-tree.tscn" type="PackedScene" id=17]
 [ext_resource path="res://world/props/billowing-tree.tscn" type="PackedScene" id=18]
 [ext_resource path="res://world/props/billowing-tree-reversed.tscn" type="PackedScene" id=19]
+[ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=20]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -61,7 +62,7 @@ shader_type = "Classic4Lite"
 custom_shader = null
 custom_globalmap_shader = null
 texture_set = SubResource( 1 )
-shader_params/u_ground_uv_scale = 2.0
+shader_params/u_ground_uv_scale = 4.0
 shader_params/u_depth_blending = true
 shader_params/u_triplanar = false
 shader_params/u_tile_reduction = Plane( 0, 0, 0, 0 )
@@ -353,3 +354,29 @@ creature = ExtResource( 15 )
 [node name="joe" type="Node" parent="player"]
 script = ExtResource( 3 )
 creature = ExtResource( 15 )
+
+[node name="spawning" type="Spatial" parent="."]
+
+[node name="slot1" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 33.0365, -7.9398, 26.3429 )
+
+[node name="slot2" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.6293, -13.1839, -17.09 )
+
+[node name="slot3" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8827, -1.9238, 21.4559 )
+
+[node name="slot4" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38.5871, -11.0414, -5.74172 )
+
+[node name="slot5" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6911, -0.108149, 7.16327 )
+
+[node name="slot6" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 54.1286, -13.7785, -12.5411 )
+
+[node name="slot7" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 45.109, -10.9206, 13.8239 )
+
+[node name="slot8" parent="spawning" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.1898, -5.06791, 5.37724 )

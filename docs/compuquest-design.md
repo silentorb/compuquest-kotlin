@@ -59,40 +59,38 @@ CompuQuest is a strategy role playing game.  It is also:
     * Every attack is effectively costing you money
 * Support for negative player resources
   * It's like an abstraction for going into debt
-* Income mostly through quests
-* Quests need to be carefully selected for synergy and effectively form a campaign, similar to Ticket to Ride
 * The player will be able to hire any number of heroes but can only directly use four of them at a time
   * The others can be sent on missions that abstractly progress state over time
-    * Gain levels
+    * Gain experience
     * Generate expenses and revenue
     * Potentially affect other more particular aspects of the world
   * Heroes have wages and will leave if they aren't paid
   * Heroes can be rehired but may not always be available after they leave
 * No equipment, or at least no distinction from abilities
-* Zone occupation
-  * Different major zones can be owned by different factions, resulting in different types of roaming mobs
-  * Similar to Risk
 * Some key aspects of the world can be randomized each playthrough
   * This may be kept to a minimum
-* World gets more dangerous over time
-  * It's a race to beat the game
 
 ### Fairly Certain Concepts
 
-* Within a playthrough, most state is persistent but some state is ephemeral
-* 3D World Map
-* Quests are like recipe ingredients: Complete any recipe to win the game
 * Characters can be resurrected but it is expensive
-* Available quests are only created at the start of a playthrough
-* Some quests have prerequisites and are neither available nor visible until the prerequisites are met
-  * A quest can depend on another quest
-
 * Characters gaining experience
   * Characters gain the most experience from dying
 
 ### Less Certain Concepts
 
-* 
+* Within a playthrough, most state is persistent but some state is ephemeral
+* Quests are like recipe ingredients: Complete any recipe to win the game
+* Income mostly through quests
+* Quests need to be carefully selected for synergy and effectively form a campaign, similar to Ticket to Ride
+* Some quests have prerequisites and are neither available nor visible until the prerequisites are met
+  * A quest can depend on another quest
+* Available quests are only created at the start of a playthrough
+* 3D World Map
+* Zone occupation
+  * Different major zones can be owned by different factions, resulting in different types of roaming mobs
+  * Similar to Risk
+* World gets more dangerous over time
+  * It's a race to beat the game
 
 ## Major Systems
 

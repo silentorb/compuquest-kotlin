@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_9.png-fce8a9dc2f7450aedb09f74b2482391b.stex"
+path="res://.import/grass-02.png-aa64c72efd7892fc712c40c1ab1d893d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/tiles/tile_9.png"
-dest_files=[ "res://.import/tile_9.png-fce8a9dc2f7450aedb09f74b2482391b.stex" ]
+source_file="res://assets/images/tiles/grass-02.png"
+dest_files=[ "res://.import/grass-02.png-aa64c72efd7892fc712c40c1ab1d893d.stex" ]
 
 [params]
 
@@ -22,7 +22,7 @@ compress/normal_map=2
 flags/repeat=1
 flags/filter=false
 flags/mipmaps=false
-flags/anisotropic=true
+flags/anisotropic=false
 flags/srgb=1
 process/fix_alpha_border=false
 process/premult_alpha=false

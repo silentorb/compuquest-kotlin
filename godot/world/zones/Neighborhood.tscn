@@ -98,18 +98,6 @@ material/0 = SubResource( 1 )
 [node name="CollisionShape" type="CollisionShape" parent="arena/Floor1/StaticBody2"]
 shape = SubResource( 2 )
 
-[node name="slot" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93855, 0.753076, -8.25841 )
-
-[node name="slot2" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6033, 0.753076, -8.25841 )
-
-[node name="slot3" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.54299, -0.0193362, 12.4118 )
-
-[node name="slot4" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1439, 0.303079, 17.48 )
-
 [node name="player" parent="." instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17243, 0 )
 
@@ -560,3 +548,38 @@ faction = "neutral"
 [node name="tree" parent="." instance=ExtResource( 23 )]
 transform = Transform( 1.79765, 0, 0, 0, 1.79765, 0, 0, 0, 1.79765, 6.84888, 3.08805, 6.15336 )
 animation = "default"
+
+[node name="spawning" type="Spatial" parent="."]
+
+[node name="slot" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93855, 0.470803, -8.25841 )
+
+[node name="slot10" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.93855, 0.470803, 3.74159 )
+
+[node name="slot11" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06145, 0.600058, -4.25841 )
+
+[node name="slot2" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.3967, 1.14647, 8.74159 )
+
+[node name="slot6" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 29.3967, 2.48622, -2.25841 )
+
+[node name="slot3" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.54299, 0.156365, 12.4118 )
+
+[node name="slot4" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1439, 0.470803, 17.48 )
+
+[node name="slot5" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8827, 0.470803, -23.5441 )
+
+[node name="slot7" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.8827, 0.470803, -0.544106 )
+
+[node name="slot8" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.8827, 2.62349, 1.45589 )
+
+[node name="slot9" parent="spawning" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.8827, 2.62349, 8.45589 )

@@ -392,22 +392,22 @@ frames = ExtResource( 18 )
 frame = 2
 
 [node name="slot" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.79616, 0.753076, 4.15677 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.79616, 0.77885, 4.15677 )
 
 [node name="slot2" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0572, 3.18175, 4.15677 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0572, 2.489, 4.15677 )
 
 [node name="slot3" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4856, 1.11092, -8.44403 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4856, 0.945409, -8.44403 )
 
 [node name="slot5" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.151252, 0.570562, -5.43386 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.151252, -0.372256, -5.43386 )
 
 [node name="slot6" parent="." instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.13698, 0.33231, -7.06296 )
 
 [node name="slot7" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.86794, -0.452284, 13.2591 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.86794, -0.488784, 13.2591 )
 
 [node name="slot4" parent="." instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.17838, 1.11092, 13.4459 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.17838, 0.708269, 13.4459 )
