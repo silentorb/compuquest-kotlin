@@ -6,6 +6,7 @@ import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import godot.core.Vector3
 import scripts.Global
+import silentorb.mythic.godoting.tempCatchStatement
 
 fun syncMythic(world: World): World {
   val deck = world.deck
@@ -36,14 +37,19 @@ fun syncGodot(world: World, events: Events) {
   }
 }
 
-fun updateDepictions(previous: World, next: World) {
+fun updateDepictions(previous: World?, next: World) {
+  val characters = previous?.deck?.characters
   for (after in next.deck.characters) {
-    val before = previous.deck.characters[after.key]
+    val before = if (characters != null) characters[after.key] else null
     val animation = after.value.depiction
-    if (before?.depiction != animation) {
+    val frame = after.value.frame
+    if (before == null || before.depiction != animation || before.frame != frame) {
       val node = next.sprites[after.key]
       if (node != null) {
-        tempCatch { node.set("animation", animation) }
+        tempCatchStatement {
+          node.set("animation", animation)
+          node.set("frame", frame)
+        }
       }
     }
   }

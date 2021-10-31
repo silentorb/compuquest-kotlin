@@ -2,6 +2,7 @@ package scripts
 
 import compuquest.app.newGame
 import compuquest.clienting.*
+import compuquest.clienting.display.applyDisplayOptions
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.Player
@@ -173,6 +174,7 @@ class Global : Node() {
               val world = newGameWorld()
               if (world != null) {
                 worlds = listOf(world)
+                applyDisplayOptions(client.options.display)
               }
             } else {
               val events = updateEvents()

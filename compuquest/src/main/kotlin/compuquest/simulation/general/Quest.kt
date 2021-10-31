@@ -22,7 +22,8 @@ data class Quest(
   val reward: ResourceMap,
   val duration: Int = 0, // Seconds
   val elapsedFrames: Int = 0,
-  val recipient: Key? = null, // For delivery quests
+  val recipientName: Key? = null, // For delivery quests
+  val recipient: Id? = null, // For delivery quests
   val penaltyValue: Int = 0,
 )
 
@@ -35,10 +36,10 @@ fun getAvailableQuests(deck: Deck, actor: Id): Sequence<Map.Entry<Id, Quest>> =
     .asSequence()
     .filter { it.value.client == actor && it.value.hero == null }
 
-fun readyToCompleteQuests(deck: Deck, target: Character): Sequence<Map.Entry<Id, Quest>> =
+fun readyToCompleteQuests(deck: Deck, target: Id): Sequence<Map.Entry<Id, Quest>> =
   deck.quests
     .asSequence()
-    .filter { target.key != null && it.value.recipient == target.key && it.value.status == QuestStatus.active }
+    .filter { it.value.recipient == target && it.value.status == QuestStatus.active }
 
 const val setQuestHeroEvent = "setQuestHero"
 const val setQuestStatusEvent = "setQuestStatus"

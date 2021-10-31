@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=2]
@@ -24,6 +24,7 @@
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=22]
 [ext_resource path="res://entities/actor/LargeSprite.tscn" type="PackedScene" id=23]
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=24]
+[ext_resource path="res://world/npcs/npc.tres" type="Resource" id=25]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_texture = ExtResource( 7 )
@@ -55,6 +56,7 @@ albedo_texture = ExtResource( 7 )
 [sub_resource type="Resource" id=8]
 script = ExtResource( 20 )
 depiction = "viking"
+frame = 0
 health = 50
 accessories = [ ExtResource( 19 ), ExtResource( 18 ) ]
 fee = 10
@@ -75,6 +77,7 @@ quantityPerPurchase = 50
 [sub_resource type="Resource" id=10]
 script = ExtResource( 20 )
 depiction = "deevee"
+frame = 0
 health = 50
 accessories = [ ExtResource( 19 ), ExtResource( 18 ) ]
 fee = 0
@@ -583,3 +586,19 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.8827, 2.62349, 1.45589 )
 
 [node name="slot9" parent="spawning" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.8827, 2.62349, 8.45589 )
+
+[node name="frank" parent="." instance=ExtResource( 22 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 24 )
+
+[node name="char" type="Node" parent="frank"]
+script = ExtResource( 10 )
+creature = ExtResource( 25 )
+faction = "neutral"
+
+[node name="backyard-guy" parent="." instance=ExtResource( 22 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 2.12349, 5 )
+
+[node name="char" type="Node" parent="backyard-guy"]
+script = ExtResource( 10 )
+creature = ExtResource( 25 )
+faction = "neutral"

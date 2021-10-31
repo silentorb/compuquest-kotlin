@@ -53,7 +53,7 @@ fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands =
             name = getString(quest, "name"),
             type = getString(quest, "type"),
             reward = mapOf(ResourceType.gold to getInt(quest, "rewardGold")),
-            recipient = getNonEmptyString(quest, "recipient"),
+            recipientName = getNonEmptyString(quest, "recipient"),
             duration = getInt(quest, "duration"),
             penaltyValue = getInt(quest, "penaltyValue"),
           )
@@ -90,6 +90,7 @@ fun addCharacter(
             health = IntResource(maxHealth),
             body = body ?: id,
             depiction = depiction,
+            frame = getInt(creature, "frame"),
             fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
             key = getNonEmptyString(creature, "key"),
             attributes = getList<String>(creature, "attributes").toSet(),

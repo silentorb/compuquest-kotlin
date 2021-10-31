@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=1]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://world/props/billowing-tree.tscn" type="PackedScene" id=18]
 [ext_resource path="res://world/props/billowing-tree-reversed.tscn" type="PackedScene" id=19]
 [ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=20]
+[ext_resource path="res://world/npcs/npc.tres" type="Resource" id=21]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -37,6 +38,7 @@ quantityPerPurchase = 50
 [sub_resource type="Resource" id=3]
 script = ExtResource( 6 )
 depiction = "deevee"
+frame = 0
 health = 50
 accessories = [ ExtResource( 7 ), ExtResource( 8 ) ]
 fee = 0
@@ -367,7 +369,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.6293, -13.1839, -17.09 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8827, -1.9238, 21.4559 )
 
 [node name="slot4" parent="spawning" instance=ExtResource( 20 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38.5871, -11.0414, -5.74172 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.2755, -11.8293, -8.09578 )
 
 [node name="slot5" parent="spawning" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6911, -0.108149, 7.16327 )
@@ -380,3 +382,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 45.109, -10.9206, 13.8239 )
 
 [node name="slot8" parent="spawning" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.1898, -5.06791, 5.37724 )
+
+[node name="butler" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.54675, -0.241385, 4.56323 )
+
+[node name="char" type="Node" parent="butler"]
+script = ExtResource( 3 )
+creature = ExtResource( 21 )
+faction = "neutral"

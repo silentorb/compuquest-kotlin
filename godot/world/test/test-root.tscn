@@ -18,6 +18,7 @@
 [sub_resource type="Resource" id=1]
 script = ExtResource( 13 )
 depiction = "viking"
+frame = 0
 health = 50
 accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
 fee = 10
@@ -25,11 +26,12 @@ quests = [  ]
 key = "vik"
 attributes = [ "forHire", "talk" ]
 wares = [  ]
-enemyVisiblityRange = 0.0
+enemyVisibilityRange = 0.0
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 13 )
 depiction = "viking"
+frame = 0
 health = 50
 accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
 fee = 10
@@ -37,7 +39,7 @@ quests = [  ]
 key = "vik"
 attributes = [ "talk" ]
 wares = [  ]
-enemyVisiblityRange = 0.0
+enemyVisibilityRange = 0.0
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 14 )
@@ -52,6 +54,7 @@ penaltyValue = 500
 [sub_resource type="Resource" id=4]
 script = ExtResource( 13 )
 depiction = "orc"
+frame = 0
 health = 50
 accessories = [ ExtResource( 15 ) ]
 fee = 0
@@ -59,7 +62,7 @@ quests = [ SubResource( 3 ) ]
 key = ""
 attributes = [ "talk" ]
 wares = [  ]
-enemyVisiblityRange = 0.0
+enemyVisibilityRange = 0.0
 
 [sub_resource type="Resource" id=5]
 script = ExtResource( 16 )
@@ -72,6 +75,7 @@ quantityPerPurchase = 50
 [sub_resource type="Resource" id=6]
 script = ExtResource( 13 )
 depiction = "deevee"
+frame = 0
 health = 50
 accessories = [ ExtResource( 11 ), ExtResource( 12 ) ]
 fee = 0
@@ -79,7 +83,7 @@ quests = [  ]
 key = "deevee"
 attributes = [ "talk" ]
 wares = [ SubResource( 5 ) ]
-enemyVisiblityRange = 0.0
+enemyVisibilityRange = 0.0
 
 [node name="root" type="Spatial"]
 

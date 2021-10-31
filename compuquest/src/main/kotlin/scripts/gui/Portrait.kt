@@ -77,6 +77,8 @@ class Portrait : Node() {
 	  if (character.depiction != "")
 		avatar?.animation = character.depiction
 
+//		avatar?.frame = character.frame.toLong()
+
 	  nameLabel?.text = character.name
 	  val localHealth = health
 	  if (localHealth != null) {

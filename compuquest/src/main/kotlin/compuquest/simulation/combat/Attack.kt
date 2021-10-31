@@ -12,7 +12,7 @@ fun attack(world: World, actor: Id, character: Character, action: Id, accessory:
   val spawns = accessory.spawns ?: return listOf()
   val projectileBody = instantiateScene<Spatial>(spawns)
   val actorBody = world.deck.bodies[character.body]!!
-  projectileBody?.translation = actorBody.translation + Vector3(0f, -1f, 0f)
+  projectileBody?.translation = actorBody.translation // + Vector3(0f, -1f, 0f)
   val projectile = Hand(
     components = listOfNotNull(
       HomingMissile(

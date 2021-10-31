@@ -2,6 +2,7 @@ package compuquest.simulation.general
 
 import compuquest.population.addCharacter
 import compuquest.population.addPlayer
+import compuquest.population.populateQuests
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
 import godot.Resource
@@ -52,5 +53,6 @@ fun processSceneEntities(root: Node, world: World): World {
       }
     }
 
-  return newEntitiesFromHands(hands, world)
+  val nextWorld = newEntitiesFromHands(hands, world)
+  return populateQuests(nextWorld)
 }

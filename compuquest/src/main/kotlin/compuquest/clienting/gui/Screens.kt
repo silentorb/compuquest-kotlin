@@ -220,7 +220,7 @@ fun getConversationOptions(deck: Deck, target: Id, targetCharacter: Character): 
       null,
   ) + getAvailableQuests(deck, target).map {
     MenuAddress(Screens.offerQuest, it.key)
-  } + readyToCompleteQuests(deck, targetCharacter).map {
+  } + readyToCompleteQuests(deck, target).map {
     MenuAddress(Screens.completeQuest, it.key)
   }
 

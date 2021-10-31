@@ -29,7 +29,7 @@ fun populateZone(factions: Map<String, Resource>, bodyScene: PackedScene, dice: 
         val selection = dice.take(slots, selectionMax)
         for (slot in selection) {
           val body = bodyScene.instance() as Spatial
-          body.translation = slot.globalTransform.origin + Vector3(0f, 1f, 0f)
+          body.translation = slot.globalTransform.origin + Vector3(0f, -0.5f, 0f)
           val creature = dice.takeOne(creatures)
           val attachCharacter = AttachCharacter()
           attachCharacter.creature = creature
