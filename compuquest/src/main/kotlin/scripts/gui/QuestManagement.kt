@@ -1,5 +1,6 @@
 package scripts.gui
 
+import compuquest.simulation.general.formatQuestDescription
 import godot.Label
 import godot.Node
 import godot.annotation.RegisterClass
@@ -9,13 +10,13 @@ import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.tempCatch
 
-var selectedQuest: Id? = null
+//var selectedQuest: Id? = null
 
 @RegisterClass
 class QuestManagement : Node() {
 
   fun on_pressed(index: Long) {
-	selectedQuest = index
+//	selectedQuest = index
   }
 
   @RegisterFunction
@@ -26,20 +27,17 @@ class QuestManagement : Node() {
 	  tempCatch {
 		val questList = findNode("quests")!!
 		val quests = world.deck.quests.filter { it.value.hero == player.key }
-		val lastSelected = selectedQuest
-		val selected = if (quests.containsKey(lastSelected))
-		  lastSelected
-		else
-		  quests.keys.firstOrNull()
+//		val lastSelected = selectedQuest
+//		val selected = if (quests.containsKey(lastSelected))
+//		  lastSelected
+//		else
+//		  quests.keys.firstOrNull()
 
 		for (quest in quests) {
-		  val nameLabel = Label()
-		  nameLabel.text = quest.value.name
-		  val statusLabel = Label()
-		  statusLabel.text = quest.value.status.toString().capitalize()
-		  questList.addChild(nameLabel)
-		  questList.addChild(statusLabel)
-		  nameLabel.connect("pressed", this, "on_pressed", variantArrayOf(quest.key))
+			val description = formatQuestDescription(world.deck, quest.value).capitalize()
+		  questList.addChild(newLabel(quest.value.name))
+		  questList.addChild(newLabel(quest.value.status.toString().capitalize()))
+		  questList.addChild(newLabel(description))
 		}
 	  }
 	}

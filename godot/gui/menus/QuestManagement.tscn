@@ -24,11 +24,11 @@ margin_bottom = 600.0
 custom_constants/separation = 20
 
 [node name="quests" type="GridContainer" parent="hbox"]
-margin_right = 159.0
+margin_right = 1024.0
 margin_bottom = 600.0
 custom_constants/vseparation = 20
 custom_constants/hseparation = 20
-columns = 2
+columns = 3
 
 [node name="Label" type="Label" parent="hbox/quests"]
 margin_right = 55.0
@@ -41,16 +41,11 @@ margin_right = 159.0
 margin_bottom = 25.0
 text = "Failed"
 
-[node name="quest-margin" type="MarginContainer" parent="hbox"]
+[node name="Desc" type="Label" parent="hbox/quests"]
 margin_left = 179.0
-margin_right = 1024.0
-margin_bottom = 600.0
-
-[node name="vbox" type="VBoxContainer" parent="hbox/quest-margin"]
-margin_right = 845.0
-margin_bottom = 600.0
-
-[node name="quest-title" type="Label" parent="hbox/quest-margin/vbox"]
-margin_right = 845.0
+margin_right = 556.0
 margin_bottom = 25.0
-text = "Hello"
+text = "This is a quest description"
+__meta__ = {
+"_edit_use_anchors_": false
+}

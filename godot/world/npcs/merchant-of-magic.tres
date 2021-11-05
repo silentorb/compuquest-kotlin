@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://defining/Creature.gd" type="Script" id=1]
+[ext_resource path="res://world/npcs/wares/mana.tres" type="Resource" id=2]
+
+[resource]
+script = ExtResource( 1 )
+depiction = "sprites"
+frame = 2
+health = 50
+accessories = [  ]
+fee = 0
+quests = [  ]
+key = ""
+attributes = [ "talk", "quests" ]
+wares = [ ExtResource( 2 ) ]
+enemyVisibilityRange = 0.0

@@ -12,7 +12,7 @@ fun populateQuests(world: World): World {
   val clients = deck.characters.filter { it.value.attributes.contains("quests") }
   val quests = clients
     .flatMap { (client, _) ->
-      val recipients = dice.take(clients.minus(client).entries, dice.getInt(1, 3))
+      val recipients = dice.take(clients.minus(client).entries, dice.getInt(0, 2))
       recipients.map { recipient ->
         Quest(
           name = "Quest ${recipient.value.name}",

@@ -72,11 +72,12 @@ fun jobInterviewConversation() =
 fun offerQuestsConversation() =
   GameScreen(
     title = staticTitle("Quest"),
-    content = { _, argument ->
+    content = { context, argument ->
       val quest = argument as Id
+      val deck = context.world.deck
       newConversationMenu(
         GameMenuContent(
-          message = listOf("I have a quest for you."),
+          message = listOf("Will you ${formatQuestDescription(deck, deck.quests[quest]!!)}"),
           items = listOf(
             GameMenuItem(
               title = "Accept",

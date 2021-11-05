@@ -22,6 +22,7 @@ data class Quest(
   val reward: ResourceMap,
   val duration: Int = 0, // Seconds
   val elapsedFrames: Int = 0,
+  // Deprecated
   val recipientName: Key? = null, // For delivery quests
   val recipient: Id? = null, // For delivery quests
   val penaltyValue: Int = 0,
@@ -86,4 +87,9 @@ fun updateQuest(events: Events): (Id, Quest) -> Quest = { id, quest ->
     status = status,
     elapsedFrames = elapsedFrames,
   )
+}
+
+fun formatQuestDescription(deck: Deck, quest: Quest): String {
+  val recipientRecord = deck.characters[quest.recipient]!!
+  return "deliver a message to ${recipientRecord.name}"
 }

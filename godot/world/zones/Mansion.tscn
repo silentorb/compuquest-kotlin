@@ -386,7 +386,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.1898, -5.06791, 5.37724 )
 [node name="butler" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.54675, -0.241385, 4.56323 )
 
-[node name="char" type="Node" parent="butler"]
+[node name="butler" type="Node" parent="butler"]
 script = ExtResource( 3 )
 creature = ExtResource( 21 )
 faction = "neutral"
