@@ -77,7 +77,7 @@ fun offerQuestsConversation() =
       val deck = context.world.deck
       newConversationMenu(
         GameMenuContent(
-          message = listOf("Will you ${formatQuestDescription(deck, deck.quests[quest]!!)}"),
+          message = listOf("Will you ${formatQuestDescription(deck, deck.quests[quest]!!)}?"),
           items = listOf(
             GameMenuItem(
               title = "Accept",

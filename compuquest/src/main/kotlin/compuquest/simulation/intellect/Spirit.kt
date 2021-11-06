@@ -4,6 +4,7 @@ import compuquest.simulation.combat.attack
 import compuquest.simulation.combat.heal
 import compuquest.simulation.general.*
 import godot.PhysicsDirectSpaceState
+import godot.core.Vector3
 import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
@@ -23,9 +24,10 @@ fun inRangeAndVisible(
   range: Float
 ): Boolean {
   val otherBody = world.bodies[other.body]
+  val location = body.translation + Vector3(0f, 1f, 0f)
 
   return otherBody != null
-      && body.translation.distanceTo(otherBody.translation) <= range
+      && location.distanceTo(otherBody.translation + Vector3(0f, 1f, 0f)) <= range
       && space.intersectRay(body.translation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody))
     .none()
 }

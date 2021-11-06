@@ -18,7 +18,7 @@ fun populateQuests(world: World): World {
           name = "Quest ${recipient.value.name}",
           client = client,
           type = QuestTypes.delivery,
-          reward = mapOf(ResourceType.gold to 1000),
+          reward = mapOf(ResourceType.mana to 200),
           recipient = recipient.key,
         )
       }

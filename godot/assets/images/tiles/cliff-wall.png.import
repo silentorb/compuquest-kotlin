@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/grass-02.png-aa64c72efd7892fc712c40c1ab1d893d.stex"
+path="res://.import/cliff-wall.png-d9a4b645862a5264fd9e87c553e6e335.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/tiles/grass-02.png"
-dest_files=[ "res://.import/grass-02.png-aa64c72efd7892fc712c40c1ab1d893d.stex" ]
+source_file="res://assets/images/tiles/cliff-wall.png"
+dest_files=[ "res://.import/cliff-wall.png-d9a4b645862a5264fd9e87c553e6e335.stex" ]
 
 [params]
 
@@ -19,10 +19,10 @@ compress/lossy_quality=0.7
 compress/hdr_mode=1
 compress/bptc_ldr=0
 compress/normal_map=2
-flags/repeat=1
+flags/repeat=0
 flags/filter=false
 flags/mipmaps=false
-flags/anisotropic=true
+flags/anisotropic=false
 flags/srgb=1
 process/fix_alpha_border=false
 process/premult_alpha=false
