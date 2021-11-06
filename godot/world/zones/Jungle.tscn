@@ -1,18 +1,16 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=1]
+[ext_resource path="res://assets/materials/grass.tres" type="Material" id=2]
+[ext_resource path="res://assets/materials/water.tres" type="Material" id=3]
 [ext_resource path="res://world/props/jungle-tree1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=5]
 [ext_resource path="res://world/creatures/viking.tres" type="Resource" id=6]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=8]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=9]
-[ext_resource path="res://assets/images/tiles/grass-02.png" type="Texture" id=10]
-
-[sub_resource type="SpatialMaterial" id=4]
-albedo_texture = ExtResource( 10 )
-uv1_scale = Vector3( 0.25, 0.25, 0.25 )
-uv1_triplanar = true
+[ext_resource path="res://assets/materials/cliff-edge.tres" type="Material" id=10]
+[ext_resource path="res://assets/materials/cliff-edge-grass.tres" type="Material" id=11]
 
 [node name="jungle" type="Spatial"]
 script = ExtResource( 1 )
@@ -21,7 +19,7 @@ script = ExtResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.23204, 0, -5.47663 )
 
 [node name="player" parent="." instance=ExtResource( 7 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 20.4409, 0.852714, 14.2302 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.181005, 0.852715, 5.87984 )
 
 [node name="player" type="Node" parent="player"]
 script = ExtResource( 9 )
@@ -44,10 +42,211 @@ creature = ExtResource( 6 )
 script = ExtResource( 5 )
 creature = ExtResource( 6 )
 
-[node name="back yard" type="CSGBox" parent="."]
+[node name="large-ground" type="CSGBox" parent="."]
 transform = Transform( 3.38418, 0, 3.60689e-14, 0, 3.38418, 0, -3.60689e-14, 0, 3.38418, -3.48288, -0.84333, 7.72185 )
+visible = false
 use_collision = true
 width = 20.0
 height = 0.5
 depth = 24.0
-material = SubResource( 4 )
+material = ExtResource( 2 )
+
+[node name="ground-long" type="CSGBox" parent="."]
+transform = Transform( 3.27501, 0, -0.852648, 0, 3.38418, 0, 0.852648, 0, 3.27501, -29.5874, -0.789371, -59.6693 )
+use_collision = true
+width = 30.0
+height = 0.5
+depth = 60.0
+material = ExtResource( 2 )
+
+[node name="water" type="CSGBox" parent="."]
+transform = Transform( 3.35611, 0, -0.434988, 0, 3.38418, 0, 0.434988, 0, 3.35611, 61.1079, -11.2863, -44.3428 )
+use_collision = true
+width = 30.0
+height = 0.5
+depth = 60.0
+material = ExtResource( 3 )
+
+[node name="ground-square" type="CSGBox" parent="."]
+transform = Transform( 3.38418, 0, 3.60689e-14, 0, 3.38418, 0, -3.60689e-14, 0, 3.38418, -3.48288, -0.624717, 0.72185 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square14" type="CSGBox" parent="."]
+transform = Transform( 3.37198, 0, -0.287124, 0, 3.38418, 0, 0.287124, 0, 3.37198, -3.68373, -0.624717, 33.6486 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square15" type="CSGBox" parent="."]
+transform = Transform( 3.37198, 0, -0.287124, 0, 3.38418, 0, 0.287124, 0, 3.37198, -3.68373, -0.45869, 33.6486 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="cliff-edge" type="CSGBox" parent="."]
+transform = Transform( 0.0617783, 0, 3.38362, 0, 3.38418, 0, -3.38362, 0, 0.0617783, 89.3591, -9.93858, 6.32135 )
+use_collision = true
+width = 20.0
+height = 5.0
+depth = 1.0
+material = ExtResource( 10 )
+
+[node name="cliff-edge-grass" type="CSGBox" parent="."]
+transform = Transform( -0.168031, 0, 3.38001, 0, 3.38418, 0, -3.38001, 0, -0.168031, 81.6248, -1.56055, 22.8007 )
+use_collision = true
+width = 10.0
+height = 1.0
+depth = 0.1
+material = ExtResource( 11 )
+
+[node name="cliff-edge-grass2" type="CSGBox" parent="."]
+transform = Transform( 0.200291, 0, 3.37825, 0, 3.38418, 0, -3.37825, 0, 0.200291, 79.8545, -1.56055, -12.449 )
+use_collision = true
+width = 10.0
+height = 1.0
+depth = 0.1
+material = ExtResource( 11 )
+
+[node name="cliff-edge-grass3" type="CSGBox" parent="."]
+transform = Transform( 0.970104, 0, 3.24216, 0, 3.38418, 0, -3.24216, 0, 0.970104, 89.4873, -1.56055, -51.2004 )
+use_collision = true
+width = 10.0
+height = 1.0
+depth = 0.1
+material = ExtResource( 11 )
+
+[node name="cliff-edge-grass4" type="CSGBox" parent="."]
+transform = Transform( 1.48401, 0, 3.04145, 0, 3.38418, 0, -3.04145, 0, 1.48401, 102.845, -1.56055, -84.8436 )
+use_collision = true
+width = 10.0
+height = 1.0
+depth = 0.1
+material = ExtResource( 11 )
+
+[node name="cliff-edge-grass5" type="CSGBox" parent="."]
+transform = Transform( 0.397592, 0, 3.36075, 0, 3.38418, 0, -3.36075, 0, 0.397592, 110.603, -1.56055, -115.367 )
+use_collision = true
+width = 10.0
+height = 1.0
+depth = 0.1
+material = ExtResource( 11 )
+
+[node name="cliff-edge2" type="CSGBox" parent="."]
+transform = Transform( 0.871439, 0, 3.27006, 0, 3.38418, 0, -3.27006, 0, 0.871439, 100.652, -9.93858, -60.3979 )
+use_collision = true
+width = 20.0
+height = 5.0
+depth = 1.0
+material = ExtResource( 10 )
+
+[node name="cliff-edge3" type="CSGBox" parent="."]
+transform = Transform( 0.871439, 0, 3.27006, 0, 3.38418, 0, -3.27006, 0, 0.871439, 118.714, -9.93858, -128.177 )
+use_collision = true
+width = 20.0
+height = 5.0
+depth = 1.0
+material = ExtResource( 10 )
+
+[node name="ground-square2" type="CSGBox" parent="."]
+transform = Transform( 3.21628, 0, -1.05273, 0, 3.38418, 0, 1.05273, 0, 3.21628, 2.79636, -0.45869, -36.9535 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square6" type="CSGBox" parent="."]
+transform = Transform( 3.36555, 0, -0.354624, 0, 3.38418, 0, 0.354624, 0, 3.36555, 98.5756, -0.624717, -11.6841 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square11" type="CSGBox" parent="."]
+transform = Transform( 3.37192, 0, 0.287772, 0, 3.38418, 0, -0.287772, 0, 3.37192, 99.7983, -0.624717, 22.5519 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square12" type="CSGBox" parent="."]
+transform = Transform( 3.37192, 0, 0.287772, 0, 3.38418, 0, -0.287772, 0, 3.37192, 38.2551, -0.45869, -157.595 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square13" type="CSGBox" parent="."]
+transform = Transform( 3.35819, 0, -0.418641, 0, 3.38418, 0, 0.418641, 0, 3.35819, 125.475, -0.624717, -177.566 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square7" type="CSGBox" parent="."]
+transform = Transform( 3.23665, 0, -0.988309, 0, 3.38418, 0, 0.988309, 0, 3.23665, 106.319, -0.624717, -44.6974 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square8" type="CSGBox" parent="."]
+transform = Transform( 3.10328, 0, -1.34993, 0, 3.38418, 0, 1.34993, 0, 3.10328, 118.228, -0.624717, -75.4662 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square9" type="CSGBox" parent="."]
+transform = Transform( 3.37477, 0, -0.25221, 0, 3.38418, 0, 0.25221, 0, 3.37477, 128.418, -0.624717, -112.148 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square10" type="CSGBox" parent="."]
+transform = Transform( 3.32252, 0, 0.643065, 0, 3.38418, 0, -0.643065, 0, 3.32252, 125.565, -0.624717, -149.644 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square3" type="CSGBox" parent="."]
+transform = Transform( 2.64617, 0, -2.10961, 0, 3.38418, 0, 2.10961, 0, 2.64617, 22.295, -0.624717, -71.4893 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square4" type="CSGBox" parent="."]
+transform = Transform( 3.28763, 0, -0.802593, 0, 3.38418, 0, 0.802593, 0, 3.28763, 35.594, -0.45869, -95.389 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="ground-square5" type="CSGBox" parent="."]
+transform = Transform( 3.38386, 0, -0.0466007, 0, 3.38418, 0, 0.0466007, 0, 3.38386, 39.5274, -0.624717, -125.544 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 2 )

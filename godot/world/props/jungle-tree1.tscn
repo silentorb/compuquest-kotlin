@@ -15,28 +15,28 @@ shape = SubResource( 1 )
 [node name="sprite" parent="." instance=ExtResource( 2 )]
 transform = Transform( 3.12049, 0, 0, 0, 3.12049, 0, 0, 0, 3.12049, 0, 4.981, 1.401 )
 animation = "large-sprites"
-frame = 5
+frame = 7
 
 [node name="limb" parent="." instance=ExtResource( 2 )]
-transform = Transform( -3.12049, 0, -2.72802e-07, 0, 3.12049, 0, 2.72802e-07, 0, -3.12049, -5.34208, 6.5564, 1.401 )
+transform = Transform( -3.12049, 0, -2.72802e-07, 0, 3.12049, 0, 2.72802e-07, 0, -3.12049, -5.34208, 5.43713, 1.401 )
 billboard = 0
 animation = "large-sprites"
-frame = 4
+frame = 6
 
 [node name="limb2" parent="." instance=ExtResource( 2 )]
-transform = Transform( 3.12049, 0, 0, 0, 3.12049, 0, 0, 0, 3.12049, 5.13744, 6.5564, 1.401 )
+transform = Transform( 3.12049, 0, 0, 0, 3.12049, 0, 0, 0, 3.12049, 5.13744, 5.43713, 1.401 )
 billboard = 0
 animation = "large-sprites"
-frame = 4
+frame = 6
 
 [node name="limb3" parent="." instance=ExtResource( 2 )]
-transform = Transform( 0.641593, 0, 3.05382, 0, 3.12049, 0, -3.05382, 0, 0.641593, 0.975008, 6.5564, -3.72681 )
+transform = Transform( 0.641593, 0, 3.05382, 0, 3.12049, 0, -3.05382, 0, 0.641593, 0.975008, 5.43713, -3.72681 )
 billboard = 0
 animation = "large-sprites"
-frame = 4
+frame = 6
 
 [node name="limb4" parent="." instance=ExtResource( 2 )]
-transform = Transform( -0.641593, 0, -3.05382, 0, 3.12049, 0, 3.05382, 0, -0.641593, -1.17965, 6.5564, 6.52881 )
+transform = Transform( -0.641593, 0, -3.05382, 0, 3.12049, 0, 3.05382, 0, -0.641593, -1.17965, 5.43713, 6.52881 )
 billboard = 0
 animation = "large-sprites"
-frame = 4
+frame = 6

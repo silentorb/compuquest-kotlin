@@ -1,0 +1,16 @@
+[remap]
+
+importer="com.technohacker.pixelorama"
+type="StreamTexture"
+path="res://.import/cliff-edge-grass.pxo-9dda8b6d0f001b2b147a1d2ebb258266.stex"
+
+[deps]
+
+source_file="res://assets/images/tiles/cliff-edge-grass.pxo"
+dest_files=[ "res://.import/cliff-edge-grass.pxo-9dda8b6d0f001b2b147a1d2ebb258266.stex" ]
+
+[params]
+
+detect_3d=false
+flags/repeat=1
+flags/srgb=1
