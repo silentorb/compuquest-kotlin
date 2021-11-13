@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/materials/grass.tres" type="Material" id=1]
+[ext_resource path="res://assets/materials/cliff-edge.tres" type="Material" id=2]
+[ext_resource path="res://assets/images/tiles/cliff-edge-grass.png" type="Texture" id=3]
+
+[node name="cliff" type="Spatial"]
+
+[node name="cliff-edge" type="CSGBox" parent="."]
+transform = Transform( 3.38418, 0, 0, 0, 3.38418, 0, 0, 0, 3.38418, 0, -10.165, -14.3742 )
+use_collision = true
+width = 10.0
+height = 5.0
+depth = 1.0
+material = ExtResource( 2 )
+
+[node name="ground-square11" type="CSGBox" parent="."]
+transform = Transform( 3.38418, 0, 0, 0, 3.38418, 0, 0, 0, 3.38418, 0, -0.850989, 0 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 10.0
+material = ExtResource( 1 )
+
+[node name="grass" type="Sprite3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.54282, -17.1165 )
+pixel_size = 0.5
+texture = ExtResource( 3 )

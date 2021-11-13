@@ -36,6 +36,7 @@
       * If the player can gain experience and upgrades, the last realm explored will be easier
         * This is minimized and sometimes reversed by enemy auto scaling
       * A variation of the previous example is when different items can be found in each realm which support the player's efforts in the other realms
+  * One common commutative operation is gaining experience and levels, be it through grinding or quests
 
 * Some roguelites like Slay the Spire have a very tight structure with tiered progression and branching paths
 

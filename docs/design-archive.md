@@ -18,3 +18,10 @@
     * Adds restrictions to neighboring mechanics and systems
     * Can easily break the game and make it no fun
 
+### Strategy Distinction
+
+* CompuQuest is a true strategy RPG
+  * It is not a 4X strategy game with RPG elements
+  * It is an RPG with a focus on strategy.
+  * It has minimal tactics
+    * Most labeling of games as "strategy RPGs" involves confusing strategy and tactics

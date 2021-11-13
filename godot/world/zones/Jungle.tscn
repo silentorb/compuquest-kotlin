@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=1]
 [ext_resource path="res://assets/materials/grass.tres" type="Material" id=2]
@@ -9,8 +9,6 @@
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=8]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=9]
-[ext_resource path="res://assets/materials/cliff-edge.tres" type="Material" id=10]
-[ext_resource path="res://assets/materials/cliff-edge-grass.tres" type="Material" id=11]
 
 [node name="jungle" type="Spatial"]
 script = ExtResource( 1 )
@@ -90,70 +88,6 @@ width = 10.0
 height = 0.5
 depth = 10.0
 material = ExtResource( 2 )
-
-[node name="cliff-edge" type="CSGBox" parent="."]
-transform = Transform( 0.0617783, 0, 3.38362, 0, 3.38418, 0, -3.38362, 0, 0.0617783, 89.3591, -9.93858, 6.32135 )
-use_collision = true
-width = 20.0
-height = 5.0
-depth = 1.0
-material = ExtResource( 10 )
-
-[node name="cliff-edge-grass" type="CSGBox" parent="."]
-transform = Transform( -0.168031, 0, 3.38001, 0, 3.38418, 0, -3.38001, 0, -0.168031, 81.6248, -1.56055, 22.8007 )
-use_collision = true
-width = 10.0
-height = 1.0
-depth = 0.1
-material = ExtResource( 11 )
-
-[node name="cliff-edge-grass2" type="CSGBox" parent="."]
-transform = Transform( 0.200291, 0, 3.37825, 0, 3.38418, 0, -3.37825, 0, 0.200291, 79.8545, -1.56055, -12.449 )
-use_collision = true
-width = 10.0
-height = 1.0
-depth = 0.1
-material = ExtResource( 11 )
-
-[node name="cliff-edge-grass3" type="CSGBox" parent="."]
-transform = Transform( 0.970104, 0, 3.24216, 0, 3.38418, 0, -3.24216, 0, 0.970104, 89.4873, -1.56055, -51.2004 )
-use_collision = true
-width = 10.0
-height = 1.0
-depth = 0.1
-material = ExtResource( 11 )
-
-[node name="cliff-edge-grass4" type="CSGBox" parent="."]
-transform = Transform( 1.48401, 0, 3.04145, 0, 3.38418, 0, -3.04145, 0, 1.48401, 102.845, -1.56055, -84.8436 )
-use_collision = true
-width = 10.0
-height = 1.0
-depth = 0.1
-material = ExtResource( 11 )
-
-[node name="cliff-edge-grass5" type="CSGBox" parent="."]
-transform = Transform( 0.397592, 0, 3.36075, 0, 3.38418, 0, -3.36075, 0, 0.397592, 110.603, -1.56055, -115.367 )
-use_collision = true
-width = 10.0
-height = 1.0
-depth = 0.1
-material = ExtResource( 11 )
-
-[node name="cliff-edge2" type="CSGBox" parent="."]
-transform = Transform( 0.871439, 0, 3.27006, 0, 3.38418, 0, -3.27006, 0, 0.871439, 100.652, -9.93858, -60.3979 )
-use_collision = true
-width = 20.0
-height = 5.0
-depth = 1.0
-material = ExtResource( 10 )
-
-[node name="cliff-edge3" type="CSGBox" parent="."]
-transform = Transform( 0.871439, 0, 3.27006, 0, 3.38418, 0, -3.27006, 0, 0.871439, 118.714, -9.93858, -128.177 )
-use_collision = true
-width = 20.0
-height = 5.0
-depth = 1.0
-material = ExtResource( 10 )
 
 [node name="ground-square2" type="CSGBox" parent="."]
 transform = Transform( 3.21628, 0, -1.05273, 0, 3.38418, 0, 1.05273, 0, 3.21628, 2.79636, -0.45869, -36.9535 )

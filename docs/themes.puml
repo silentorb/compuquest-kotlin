@@ -1,0 +1,8 @@
+@startuml
+skinparam componentStyle rectangle
+
+(Corruption) as corruption
+
+(Redemption) as redemption
+
+@enduml

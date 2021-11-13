@@ -1,0 +1,25 @@
+@startuml
+skinparam componentStyle rectangle
+
+package Characters {
+  [Lawyer] as lawyer
+  [Salesman] as salesman
+  [Janitor] as janitor
+  [Ninja] as ninja
+  [Viking] as viking
+  [Kid] as kid
+  [Wolf Man] as wolf
+}
+
+package Locations {
+  [Diner]
+}
+
+package Faction {
+  [Corporation] as corporation
+  [Withered] as withered
+  [Chaos] as chaos
+  [Residents] as residents
+}
+
+@enduml
