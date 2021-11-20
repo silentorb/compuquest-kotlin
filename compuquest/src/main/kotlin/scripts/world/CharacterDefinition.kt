@@ -19,8 +19,8 @@ class CharacterDefinition : Node() {
   @RegisterProperty
   var health: Int = 0
 
-  @Export
-  @RegisterProperty
-  var accessories: MutableList<Resource> = mutableListOf()
+//  @Export
+//  @RegisterProperty
+//  var accessories: MutableList<Resource> = mutableListOf()
 
 }

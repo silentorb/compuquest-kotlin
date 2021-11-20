@@ -13,3 +13,5 @@ export_presets.cfg
 # Plugins
 # addons
 addons/zylann.hterrain
+
+godot_kotlin_configuration.json
