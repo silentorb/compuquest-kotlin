@@ -1,16 +1,3 @@
 [remap]
 
-importer="com.technohacker.pixelorama"
-type="StreamTexture"
-path="res://.import/large-tiles.pxo-00104c34a08101a23f720ca8bc903d4d.stex"
-
-[deps]
-
-source_file="res://assets/images/tiles/large-tiles.pxo"
-dest_files=[ "res://.import/large-tiles.pxo-00104c34a08101a23f720ca8bc903d4d.stex" ]
-
-[params]
-
-detect_3d=false
-flags/repeat=0
-flags/srgb=2
+importer="keep"

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/windows-lit.png-f0b241f060ef5efd6b79e9bf7f50dbc2.stex"
+path="res://.import/windows-dark.png-8880b3e73377301816cd04ae0b817228.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/tiles/windows-lit.png"
-dest_files=[ "res://.import/windows-lit.png-f0b241f060ef5efd6b79e9bf7f50dbc2.stex" ]
+source_file="res://assets/images/old-tiles/windows-dark.png"
+dest_files=[ "res://.import/windows-dark.png-8880b3e73377301816cd04ae0b817228.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=false
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=false

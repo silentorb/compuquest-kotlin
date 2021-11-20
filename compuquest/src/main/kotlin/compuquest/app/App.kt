@@ -13,7 +13,7 @@ fun newGame(scene: Node, definitions: Definitions): World {
   val world = newWorld(definitions)
     .copy(scene = scene)
 
-  populateZones(Dice(), scene)
+//  populateZones(Dice(), scene)
 
   val world2 = processSceneEntities(scene, world)
   updateDepictions(null, world2)

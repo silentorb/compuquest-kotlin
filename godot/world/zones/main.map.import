@@ -1,0 +1,13 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+path="res://.import/main.map-af30ff120a7f17313cb3958fc771935f.tres"
+
+[deps]
+
+source_file="res://world/zones/main.map"
+dest_files=[ "res://.import/main.map-af30ff120a7f17313cb3958fc771935f.tres" ]
+
+[params]
+

@@ -11,7 +11,7 @@
 [ext_resource path="res://src/main/kotlin/scripts/world/RootNode.kt" type="Script" id=9]
 [ext_resource path="res://world/zones/city/BuildingA.tscn" type="PackedScene" id=10]
 [ext_resource path="res://world/zones/city/BuildingB.tscn" type="PackedScene" id=11]
-[ext_resource path="res://assets/images/tiles/windows-lit.png" type="Texture" id=12]
+[ext_resource path="res://assets/images/old-tiles/windows-lit.png" type="Texture" id=12]
 [ext_resource path="res://world/zones/Mansion.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=14]
 

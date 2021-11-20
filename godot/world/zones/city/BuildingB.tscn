@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/images/tiles/windows-lit.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/old-tiles/windows-lit.png" type="Texture" id=1]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_texture = ExtResource( 1 )
