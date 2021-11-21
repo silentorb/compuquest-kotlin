@@ -11,3 +11,6 @@ dest_files=[ "res://.import/prototype-grid.pxo-cca797d6dec619d8f9615fed26ee564d.
 
 [params]
 
+detect_3d=false
+flags/repeat=0
+flags/srgb=2
