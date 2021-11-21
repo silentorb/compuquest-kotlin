@@ -28,9 +28,9 @@ class Hud : Control() {
   override fun _process(delta: Double) {
 	tempCatch {
 		val client = Global.instance?.client
-		if (client != null) {
-			lowerThird?.visible = client.options.ui.showHud
-		}
+//		if (client != null) {
+//			lowerThird?.visible = client.options.ui.showHud
+//		}
 	  val player = Global.getPlayer()
 	  val canInteractWith = player?.value?.canInteractWith
 	  interact!!.visible = canInteractWith != null

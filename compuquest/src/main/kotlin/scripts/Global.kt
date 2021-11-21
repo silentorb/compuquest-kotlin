@@ -36,6 +36,7 @@ class Global : Node() {
   val definitions = newDefinitions()
   var client: Client = newClient()
   var sceneNode: Spatial? = null
+  val partyUi: Boolean = false
 
   @RegisterProperty
   var debugText: String = ""
@@ -83,10 +84,12 @@ class Global : Node() {
         }
       }
 
-      // For no discernible reason, the current scene needs to be a direct child of the tree root
-      val scene = sceneNode!!
-      scene.getParent()!!.removeChild(scene)
-      tree.root!!.addChild(scene)
+      if (partyUi) {
+        // For no discernible reason, the current scene needs to be a direct child of the tree root
+        val scene = sceneNode!!
+        scene.getParent()!!.removeChild(scene)
+        tree.root!!.addChild(scene)
+      }
 
       // Wait until the frame has finished processing and the queued nodes are freed before
       // continuing with the restarting process
@@ -123,16 +126,20 @@ class Global : Node() {
       if (root != null) {
 //        newGame(root, definitions)
         val scene = root.getChildren().filterIsInstance<Spatial>().lastOrNull()
-        val viewport = findChildren(root) { it.name == "viewport3d" }.firstOrNull() as? Viewport
-        val rootViewport = root as? Viewport
-        if (scene != null && viewport != null && rootViewport != null) {
-          root.removeChild(scene)
-          viewport.addChild(scene)
-          viewport.world = rootViewport.world
-          sceneNode = scene
-          newGame(scene, definitions)
-        } else
-          null
+        if (partyUi) {
+          val viewport = findChildren(root) { it.name == "viewport3d" }.firstOrNull() as? Viewport
+          val rootViewport = root as? Viewport
+          if (scene != null && viewport != null && rootViewport != null) {
+            root.removeChild(scene)
+            viewport.addChild(scene)
+            viewport.world = rootViewport.world
+            sceneNode = scene
+            newGame(scene, definitions)
+          } else
+            null
+        }
+        else
+          newGame(scene!!, definitions)
       } else
         null
     }

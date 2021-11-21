@@ -25,28 +25,29 @@ __meta__ = {
 
 [node name="overlay" type="MarginContainer" parent="vbox"]
 margin_right = 1024.0
-margin_bottom = 396.0
+margin_bottom = 600.0
 size_flags_vertical = 3
 
 [node name="viewport-container" type="ViewportContainer" parent="vbox/overlay"]
+visible = false
 margin_right = 1024.0
-margin_bottom = 396.0
+margin_bottom = 600.0
 stretch = true
 script = ExtResource( 6 )
 
 [node name="viewport3d" type="Viewport" parent="vbox/overlay/viewport-container"]
-size = Vector2( 1024, 396 )
+size = Vector2( 1024, 600 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 
 [node name="slot" type="MarginContainer" parent="vbox/overlay"]
 margin_right = 1024.0
-margin_bottom = 396.0
+margin_bottom = 600.0
 
 [node name="margin" type="MarginContainer" parent="vbox/overlay"]
-margin_top = 351.0
+margin_top = 555.0
 margin_right = 1024.0
-margin_bottom = 396.0
+margin_bottom = 600.0
 size_flags_vertical = 8
 custom_constants/margin_top = 10
 custom_constants/margin_bottom = 10
@@ -60,6 +61,7 @@ align = 1
 valign = 1
 
 [node name="lower-third" type="MarginContainer" parent="vbox"]
+visible = false
 margin_top = 400.0
 margin_right = 1024.0
 margin_bottom = 600.0
