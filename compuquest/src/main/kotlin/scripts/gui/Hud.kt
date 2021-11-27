@@ -14,20 +14,20 @@ class Hud : Control() {
   var interact: Control? = null
   var debugText: Label? = null
   var lastMenu: Any? = null
-	var lowerThird: Control? = null
+  var lowerThird: Control? = null
 
   @RegisterFunction
   override fun _ready() {
 	slot = findNode("slot")
 	interact = findNode("interact") as? Control
 	debugText = findNode("debug") as? Label
-		lowerThird = findNode("lower-third") as? Control
+	lowerThird = findNode("lower-third") as? Control
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
 	tempCatch {
-		val client = Global.instance?.client
+	  val client = Global.instance?.client
 //		if (client != null) {
 //			lowerThird?.visible = client.options.ui.showHud
 //		}
@@ -41,7 +41,7 @@ class Hud : Control() {
 
 		if (localSlot != null) {
 		  syncGuiToState(localSlot, player.key, Global.world!!, lastMenu, menuStack)
-			lastMenu = menuStack.lastOrNull()
+		  lastMenu = menuStack.lastOrNull()
 		}
 	  }
 	}

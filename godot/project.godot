@@ -180,11 +180,6 @@ _global_script_classes=[ {
 "path": "res://addons/qodot/game_definitions/worldspawn_layers/liquid/water.gd"
 }, {
 "base": "Node",
-"class": "scripts_Global",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/Global.kt"
-}, {
-"base": "Node",
 "class": "scripts_entities_actor_AttachAccessory",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/entities/actor/AttachAccessory.kt"
@@ -213,11 +208,6 @@ _global_script_classes=[ {
 "class": "scripts_entities_actor_PlayerVisible",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/entities/actor/PlayerVisible.kt"
-}, {
-"base": "Control",
-"class": "scripts_gui_Hud",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/Hud.kt"
 }, {
 "base": "Label",
 "class": "scripts_gui_IntLabel",
@@ -314,14 +304,12 @@ _global_script_class_icons={
 "TrenchBroomGameConfigFolder": "",
 "TrenchBroomTag": "",
 "WaterLayer": "",
-"scripts_Global": "",
 "scripts_entities_actor_AttachAccessory": "",
 "scripts_entities_actor_AttachCharacter": "",
 "scripts_entities_actor_AttachPlayer": "",
 "scripts_entities_actor_AttachResource": "",
 "scripts_entities_actor_PlayerBody": "",
 "scripts_entities_actor_PlayerVisible": "",
-"scripts_gui_Hud": "",
 "scripts_gui_IntLabel": "",
 "scripts_gui_Management": "",
 "scripts_gui_MemberManagement": "",
@@ -339,7 +327,7 @@ _global_script_class_icons={
 [application]
 
 config/name="test"
-run/main_scene="res://world/zones/Root.tscn"
+run/main_scene="res://world/zones/Root2.tscn"
 config/icon="res://icon.png"
 
 [autoload]
