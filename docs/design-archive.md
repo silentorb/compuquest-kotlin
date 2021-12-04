@@ -25,3 +25,36 @@
   * It is an RPG with a focus on strategy.
   * It has minimal tactics
     * Most labeling of games as "strategy RPGs" involves confusing strategy and tactics
+
+## NPC Types
+
+### Grunt
+
+* General character
+* Temporary until enough richer NPC types exist
+* Attacks enemies
+
+### Firebrand
+
+* Incites nearby characters to view its enemies as their enemies
+* Has an increased tendency to view everyone as an enemy
+* Does not attack
+
+### Bouncer
+
+* Maintains a force field that prevents enemies from drawing near it
+* Does not attack
+
+### Peacemaker
+
+* Causes nearby characters to be more friendly to other characters
+* This aura provides a stronger friendship bonus toward the peacemaker's friends
+* Attacks enemies
+  * I think this is a healthy balance in showing that making peace is more than just being nice
+  * "Negotions have gone out the window"
+
+### Scout
+
+* Reveals location of nearby characters to allies
+* Attacks enemies
+

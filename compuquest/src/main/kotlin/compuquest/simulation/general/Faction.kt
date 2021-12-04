@@ -2,6 +2,7 @@ package compuquest.simulation.general
 
 import compuquest.simulation.definition.TypedResource
 import compuquest.simulation.definition.ResourceType
+import compuquest.simulation.happening.useActionEvent
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.KeyTable
@@ -125,23 +126,23 @@ fun updateFactionResources(
   }
 }
 
-fun getUseEvents(deck: Deck, events: Events) =
-  events
-    .filter { it.type == useActionCommand }
-    .flatMap { event ->
-      val accessory = deck.accessories[event.target]
-      val character = deck.characters[accessory?.owner]
-      if (accessory != null && character != null) {
-        accessory.cost.map { cost ->
-          Pair(character.faction, cost.key to -cost.value)
-        }
-      } else
-        listOf()
-    }
+//fun getUseEvents(deck: Deck, events: Events) =
+//  events
+//    .filter { it.type == useActionEvent }
+//    .flatMap { event ->
+//      val accessory = deck.accessories[event.target]
+//      val character = deck.characters[accessory?.owner]
+//      if (accessory != null && character != null) {
+//        accessory.cost.map { cost ->
+//          Pair(character.faction, cost.key to -cost.value)
+//        }
+//      } else
+//        listOf()
+//    }
 
 fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
   val dice = world.dice
-  val uses = getUseEvents(world.deck, events)
+//  val uses = getUseEvents(world.deck, events)
   val isPayday = events.any { it.type == newDayEvent }
 
   return { key, faction ->
@@ -159,17 +160,17 @@ fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
     }
       .flatMap { event -> (event.value as ResourceMap).map { it.key to it.value } }
 
-    val adjustments = uses
-      .filter { f -> f.first == key }
-      .map { it.second } +
-        basicAdjustments +
-        if (paidInvoices.any())
-          listOf(TypedResource(ResourceType.gold, -paidInvoices.sumBy { it.amountDue }))
-        else
-          listOf()
+//    val adjustments = uses
+//      .filter { f -> f.first == key }
+//      .map { it.second } +
+//        basicAdjustments +
+//        if (paidInvoices.any())
+//          listOf(TypedResource(ResourceType.gold, -paidInvoices.sumBy { it.amountDue }))
+//        else
+//          listOf()
 
     faction.copy(
-      resources = updateFactionResources(adjustments, faction.resources),
+//      resources = updateFactionResources(adjustments, faction.resources),
       nextInvoiceNumber = faction.nextInvoiceNumber + invoices.size,
       newUnpaidInvoices = unpaidInvoices,
       oldUnpaidInvoices = faction.oldUnpaidInvoices + faction.newUnpaidInvoices

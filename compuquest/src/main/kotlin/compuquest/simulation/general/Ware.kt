@@ -4,6 +4,7 @@ import compuquest.simulation.definition.ResourceType
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.newEvent
 
 data class Ware(
   val owner: Id,
@@ -37,7 +38,7 @@ fun purchase(deck: Deck, actor: Id, ware: Id, quantity: Int): Events {
 fun eventsFromWares(deck: Deck): Events =
   deck.wares
     .filterValues { it.quantity == 0 }
-    .map { Event(deleteEntityCommand, it.key) }
+    .map { newEvent(deleteEntityCommand, it.key) }
 
 fun updateWare(events: Events): (Id, Ware) -> Ware = { id, ware ->
   val quantityMod = events

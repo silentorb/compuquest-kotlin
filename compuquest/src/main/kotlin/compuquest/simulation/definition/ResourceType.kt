@@ -5,3 +5,8 @@ enum class ResourceType {
   mana,
   none,
 }
+
+object ResourceTypes {
+  val health = "health"
+  val energy = "energy"
+}

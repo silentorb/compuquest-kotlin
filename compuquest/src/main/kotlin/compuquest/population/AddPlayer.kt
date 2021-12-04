@@ -1,5 +1,6 @@
 package compuquest.population
 
+import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.*
 import godot.Node
@@ -7,12 +8,12 @@ import godot.Spatial
 import scripts.entities.actor.AttachResource
 import silentorb.mythic.ent.NextId
 
-fun addPlayer(nextId: NextId, spatial: Spatial, components: List<Node>): List<Hand> {
+fun addPlayer(definitions: Definitions, nextId: NextId, spatial: Spatial, components: List<Node>): List<Hand> {
   val faction = playerFaction
   val id = nextId()
   val memberHands = components
     .flatMap { child ->
-      processComponentNode(nextId, null, id, faction, child)
+      processComponentNode(definitions, nextId, null, id, faction, child)
     }
 
   return listOf(

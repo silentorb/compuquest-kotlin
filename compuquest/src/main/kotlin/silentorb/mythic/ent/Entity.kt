@@ -2,6 +2,8 @@ package silentorb.mythic.ent
 
 typealias Id = Long
 
+const val emptyId = 0L
+
 typealias NextId = () -> Id
 
 data class SharedNextId(

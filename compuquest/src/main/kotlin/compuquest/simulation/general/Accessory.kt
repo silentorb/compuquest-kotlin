@@ -1,16 +1,14 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.happening.useActionEvent
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventTargets
 import kotlin.math.max
 
-data class Accessory(
-  val owner: Id,
-  val level: Int? = null,
+data class AccessoryDefinition(
   val cooldown: Float = 0f,
-  val maxCooldown: Float = 0f,
   val name: String,
   val range: Float = 0f,
   val cost: ResourceMap = mapOf(),
@@ -19,8 +17,16 @@ data class Accessory(
   val effect: Key,
   val strength: Float = 0f,
 ) {
+  fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
   val strengthInt: Int get() = strength.toInt()
 }
+
+data class Accessory(
+  val owner: Id,
+  val level: Int? = null,
+  val cooldown: Float = 0f,
+  val definition: AccessoryDefinition,
+)
 
 object AccessoryEffects {
   val attack = "attack"
@@ -29,15 +35,18 @@ object AccessoryEffects {
   val damageReduction = "armor"
 }
 
-const val useActionCommand = "useAction"
+object AccessoryAttributes {
+  const val weapon = "weapon"
+}
+
 const val detrimentalEffectCommand = "detrementalEffect"
 
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
-  val uses = filterEventTargets<Id>(useActionCommand, events)
+  val uses = filterEventTargets<Id>(useActionEvent, events)
   return { id, accessory ->
     val used = uses.contains(id)
     val cooldown = if (used)
-      accessory.maxCooldown
+      accessory.cooldown
     else
       max(0f, accessory.cooldown - delta)
 

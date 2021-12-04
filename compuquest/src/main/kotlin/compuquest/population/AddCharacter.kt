@@ -1,5 +1,6 @@
 package compuquest.population
 
+import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.*
@@ -12,23 +13,29 @@ import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
 import silentorb.mythic.godoting.*
 
-fun addAccessory(nextId: NextId, owner: Id, accessory: Resource): Hand {
+fun addAccessory(definitions: Definitions, nextId: NextId, owner: Id, accessory: Resource): Hand {
+  val type = getString(accessory, "type")
+  val definition = definitions.accessories[type]
+  if (definition == null)
+    throw Error("Invalid accessory type $type")
+
   return Hand(
     id = nextId(),
     components = listOf(
       Accessory(
         owner = owner,
-        name = getString(accessory, "name"),
-        maxCooldown = getFloat(accessory, "cooldown"),
-        range = getFloat(accessory, "Range"),
-        cost = mapOf(
-          (getResourceType(accessory, "costResource") ?: ResourceType.mana) to
-              getInt(accessory, "costAmount")
-        ),
-        spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
-        effect = getString(accessory, "effect"),
-        strength = getFloat(accessory, "strength"),
-        attributes = getList<Key>(accessory, "attributes").toSet()
+        definition = definition,
+//        name = getString(accessory, "name"),
+//        maxCooldown = getFloat(accessory, "cooldown"),
+//        range = getFloat(accessory, "Range"),
+//        cost = mapOf(
+//          (getResourceType(accessory, "costResource") ?: ResourceType.mana) to
+//              getInt(accessory, "costAmount")
+//        ),
+//        spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
+//        effect = getString(accessory, "effect"),
+//        strength = getFloat(accessory, "strength"),
+//        attributes = getList<Key>(accessory, "attributes").toSet()
       )
     )
   )
@@ -62,6 +69,7 @@ fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands =
     }
 
 fun addCharacter(
+  definitions: Definitions,
   nextId: NextId,
   spatial: Spatial?,
   body: Id?,
@@ -103,7 +111,7 @@ fun addCharacter(
       )
     ) + getVariantArray<Resource>(creature, "accessories")
       .map { accessory ->
-        addAccessory(nextId, id, accessory)
+        addAccessory(definitions, nextId, id, accessory)
       } + addQuests(nextId, id, creature) + wares
   }
 }

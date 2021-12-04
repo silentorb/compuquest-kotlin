@@ -1,0 +1,13 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+path="res://.import/prototype.map-68598efb56ca3e04b3ac6d4e0239fb2e.tres"
+
+[deps]
+
+source_file="res://world/zones/prototype.map"
+dest_files=[ "res://.import/prototype.map-68598efb56ca3e04b3ac6d4e0239fb2e.tres" ]
+
+[params]
+

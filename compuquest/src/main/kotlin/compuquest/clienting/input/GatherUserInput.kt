@@ -7,6 +7,7 @@ import godot.Input
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.newEvent
 
 val keyStrokes = setOf(
   Commands.interact,
@@ -18,7 +19,7 @@ val keyStrokes = setOf(
 
 fun gatherUserInput(player: Id): Events =
   keyStrokes.filter { Input.isActionJustReleased(it) }
-    .map { Event(it, player) }
+    .map { newEvent(it, player) }
 
 fun gatherDefaultPlayerInput(world: World): Events {
   val player = getPlayer(world)?.key

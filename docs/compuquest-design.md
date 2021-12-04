@@ -28,6 +28,7 @@
 ### Less Certain Concepts
 
 * [Interaction Using Commands](#interaction-using-commands)
+* [Dialog in 3D Space](dialog-in-3d-space)
 
 ## Factions
 
@@ -64,41 +65,9 @@
 * Mostly replace traditional shooting with diplomacy
 * Unlike shooters, increased interaction and side-effects between nearby NPCs
 * A cleaner model for enemies being pacified instead of terminated
-  * I've always wrestled both with both the moral implications and game mechanics of how the traditional shooter method of neutralizing a threat is by killing them, and all of my solutions toward mitigating this have always been weak—until this solution
+  * I've always wrestled with both the moral implications and game mechanics of how the traditional shooter method of neutralizing a threat is by killing them, and all of my solutions toward mitigating this have always been weak—until this solution
     * The issue with killing game mechanic-wise is it is so boolean and normally permanent
       * It means most matches between a single enemy have little continuity—you kill an enemy and never fight them again
-
-## NPC Types
-
-### Grunt
-
-* General character
-* Temporary until enough richer NPC types exist
-* Attacks enemies
-
-### Firebrand
-
-* Incites nearby characters to view its enemies as their enemies
-* Has an increased tendency to view everyone as an enemy
-* Does not attack
-
-### Bouncer
-
-* Maintains a force field that prevents enemies from drawing near it
-* Does not attack
-
-### Peacemaker
-
-* Causes nearby characters to be more friendly to other characters
-* This aura provides a stronger friendship bonus toward the peacemaker's friends
-* Attacks enemies
-  * I think this is a healthy balance in showing that making peace is more than just being nice
-  * "Negotions have gone out the window"
-
-### Scout
-
-* Reveals location of nearby characters to allies
-* Attacks enemies
 
 
 

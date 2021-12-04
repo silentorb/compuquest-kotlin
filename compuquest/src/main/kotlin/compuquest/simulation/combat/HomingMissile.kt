@@ -4,6 +4,7 @@ import compuquest.simulation.general.*
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.ent.Id
+import silentorb.mythic.happening.newEvent
 
 data class HomingMissile(
   val damage: Int,
@@ -23,8 +24,8 @@ fun eventsFromHomingMissile(world: World, delta: Float): (Id, HomingMissile) -> 
     if (distance < 1f)
       listOf(
         Event(damageCommand, missile.target, missile.damage),
-        Event(deleteEntityCommand, actor),
-        Event(detrimentalEffectCommand, missile.target)
+        newEvent(deleteEntityCommand, actor),
+        newEvent(detrimentalEffectCommand, missile.target)
       )
     else {
       val offset = vector.normalized() * missile.speed * delta;

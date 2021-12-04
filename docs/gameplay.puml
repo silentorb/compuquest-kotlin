@@ -1,0 +1,15 @@
+@startuml
+skinparam componentStyle rectangle
+
+(Obstacles) as obstacles
+
+(Negating Obstacles\nWithout Destruction) as nowd
+
+(Cleanup Fun) as cleanup
+
+(Killing) as killing
+
+obstacles -- nowd
+
+killing -- cleanup
+@enduml

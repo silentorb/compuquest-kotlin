@@ -8,6 +8,8 @@ import godot.core.Vector3
 import scripts.Global
 import silentorb.mythic.godoting.tempCatchStatement
 
+const val simulationFps: Int = 60
+
 fun syncMythic(world: World): World {
   val deck = world.deck
   val bodies = world.bodies.mapValues { spatial ->

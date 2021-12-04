@@ -1,7 +1,6 @@
 package compuquest.simulation.intellect
 
 import compuquest.simulation.combat.attack
-import compuquest.simulation.combat.heal
 import compuquest.simulation.general.*
 import godot.PhysicsDirectSpaceState
 import godot.core.Vector3
@@ -42,7 +41,8 @@ fun filterEnemyTargets(
   val bodies = deck.bodies
   val body = bodies[character.body] ?: return mapOf()
   val space = getSpace(world) ?: return mapOf()
-  val range = action.range
+  val definition = action.definition
+  val range = definition.range
   return deck.characters
     .filter { (id, other) ->
       id != actor
@@ -85,7 +85,7 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
   val action = spirit.focusedAction
   val accessory = world.deck.accessories[action]
   return if (action != null && accessory != null) {
-    when (accessory.effect) {
+    when (accessory.definition.effect) {
       AccessoryEffects.attack -> {
         val target = spirit.target
         if (target != null) {
@@ -93,20 +93,20 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
         } else
           listOf()
       }
-      AccessoryEffects.heal -> {
-        val strength = accessory.strengthInt
-        val targets = filterAllyTargets(world, actor, character)
-          .filterValues {
-            it.isAlive &&
-                (it.health.value <= it.health.max - strength || it.health.value < it.health.max / 2)
-          }
-
-        val target = world.dice.takeOneOrNull(targets.keys)
-        if (target != null) {
-          heal(action, accessory, target)
-        } else
-          listOf()
-      }
+//      AccessoryEffects.heal -> {
+//        val strength = definition.strengthInt
+//        val targets = filterAllyTargets(world, actor, character)
+//          .filterValues {
+//            it.isAlive &&
+//                (it.health.value <= it.health.max - strength || it.health.value < it.health.max / 2)
+//          }
+//
+//        val target = world.dice.takeOneOrNull(targets.keys)
+//        if (target != null) {
+//          heal(action, accessory, target)
+//        } else
+//          listOf()
+//      }
       else -> listOf()
     }
   } else
@@ -131,7 +131,7 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 
   val focusedAction = world.dice.takeOneOrNull(readyActions.keys)
   val accessory = world.deck.accessories[focusedAction]
-  val target = if (accessory?.effect == AccessoryEffects.attack)
+  val target = if (accessory != null && accessory.definition.effect == AccessoryEffects.attack)
     getNextTarget(world, actor, accessory, spirit.target)
   else
     spirit.target

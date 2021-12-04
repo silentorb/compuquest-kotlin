@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=53 format=2]
 
 [ext_resource path="res://assets/images/tiles/prototype-grid-gray.png" type="Texture" id=1]
 [ext_resource path="res://addons/qodot/game_definitions/fgd/qodot_fgd.tres" type="Resource" id=2]
@@ -15,6 +15,31 @@
 [ext_resource path="res://defining/Creature.gd" type="Script" id=13]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=14]
 [ext_resource path="res://world/zones/QodotMapAutoLoad.gd" type="Script" id=15]
+
+[sub_resource type="Resource" id=9]
+script = ExtResource( 12 )
+quantity = 100
+pricePerUnit = 2
+priceType = "gold"
+resourceType = "mana"
+quantityPerPurchase = 50
+
+[sub_resource type="Resource" id=19]
+script = ExtResource( 13 )
+depiction = "deevee"
+frame = 0
+health = 50
+accessories = [ ExtResource( 10 ), ExtResource( 9 ) ]
+fee = 0
+quests = [  ]
+key = "deevee"
+attributes = [ "talk" ]
+wares = [ SubResource( 9 ) ]
+enemyVisibilityRange = 0.0
+
+[sub_resource type="NavigationMesh" id=53]
+vertices = PoolVector3Array( 7.5, -0.6, -13.5, 8.4, -0.6, -15.3, 8.1, -0.6, -15.9, 1.5, -0.6, -17.4, 2.1, -0.6, -13.2, -7.2, -0.6, -8.7, -3.6, -0.6, -8.7, -3.6, -0.6, -11.1, -5.7, -0.6, -13.8, 7.5, 1.4, -7.8, 7.5, -0.6, -13.5, 2.1, -0.6, -13.2, 2.7, 1.4, -6.9, 2.55, 1.2, -8.475, -5.7, -0.6, -13.8, -3.6, -0.6, -11.1, -3, -0.6, -11.7, 2.7, 1.4, -6.9, 8.1, 1.4, -7.5, 7.5, 1.4, -7.8, 1.5, -0.6, -17.4, -5.7, -0.6, -13.8, -3, -0.6, -11.7, 2.1, -0.6, -13.2, -9.6, 1.4, 3.6, -8.4, 1.4, 3.3, -8.4, 1.4, 2.7, -9.6, 1.4, 2.4, -12.3, 1.4, 3.6, -9.6, 1.4, -1.5, -6.6, 1.4, -2.7, -6.6, 1.4, -6.3, -12.3, 1.4, -6.3, -14.7, 1.4, -2.4, -12.3, 1.4, -6.3, -12.6, 1.4, -7.5, -14.4, 1.4, -7.5, -14.7, 1.4, -2.4, -14.7, 1.4, 2.4, -14.4, 1.4, 3.3, -12.3, 1.4, 3.6, -9.6, 1.4, 2.4, -9.6, 1.4, -1.5, -14.7, 1.4, -2.4, -12.3, 1.4, 5.4, -9.6, 1.4, 5.4, -9.6, 1.4, 3.6, -12.3, 1.4, 3.6, -14.7, 1.4, -2.4, -20.4, 1.2, -2.4, -20.4, 2.4, 2.4, -14.7, 1.4, 2.4, -17.55, 1.8, -2.4, -18.975, 3, 2.4, -17.55, 2.8, 2.4, -17.388, 1.8, -0.0168152, -11.4, 9.4, -7.5, -11.4, 9.4, -2.4, -1.5, 9.4, -2.4, -1.5, 9.4, -7.5, 6.6, 1.4, -1.8, 6.9, 1.4, 0, 9.3, 1.4, 0, 9.3, 1.4, -7.5, 8.1, 1.4, -7.5, -6.6, 1.4, -6.3, -6.6, 1.4, -2.7, -5.4, 1.4, -2.7, 2.4, 1.4, -6.3, 8.1, 1.4, -7.5, 2.7, 1.4, -6.9, 2.4, 1.4, -6.3, 2.4, 1.4, -6.3, -5.4, 1.4, -2.7, -5.1, 1.4, -1.8, 6.6, 1.4, -1.8, 8.1, 1.4, -7.5, -2.4, 8.2, 6.3, 3.6, 8.2, 6.3, 3.3, 8.4, -0.599998, -1.26, 8.4, 4.92, 3.525, 8.4, 4.575, -8.4, 8.4, -0.599998, -8.4, 7.4, 6.6, -2.4, 8.2, 6.3, 3.3, 8.4, -0.599998, -8.4, 8.4, 4.8, -1.26, 8.4, 4.92, 5.7, 1.4, 9.6, 4.2, 1.4, 9.9, 4.2, 1.4, 10.5, 9.3, 1.4, 10.5, 9.3, 1.4, 0, 6.9, 1.4, 0, 6.6, 1.4, 1.8, 5.7, 1.4, 5.7, 5.7, 1.4, 9.6, 9.3, 1.4, 10.5, 9.3, 1.4, 0, 6.6, 1.4, 1.8, 4.8, 1.4, 1.8, 4.8, 1.4, 5.4, 5.7, 1.4, 5.7, 6.6, 1.4, 1.8, -8.4, 1.4, 2.7, -8.4, 1.4, 3.3, -7.2, 1.4, 3.6, -5.4, 1.4, 2.7, 2.4, 1.4, 0.900002, -5.1, 1.4, 0.900002, -5.4, 1.4, 2.7, -5.4, 1.4, 2.7, -7.2, 1.4, 3.6, -7.2, 1.4, 5.4, 2.4, 1.4, 5.4, 2.4, 1.4, 0.900002, 4.2, 1.4, 10.5, 4.2, 1.4, 9.9, 2.4, 1.4, 9.6, -0.599998, 1.4, 9.9, -5.1, 1.4, 10.5, 2.4, 1.4, 9.6, 2.4, 1.4, 7.8, -0.299999, 1.4, 7.8, -0.599998, 1.4, 9.9, -5.1, 1.4, 10.5, -0.599998, 1.4, 9.9, -3.3, 1.4, 9.9, -9.6, 1.4, 5.4, -12.3, 1.4, 5.4, -12.3, 1.4, 7.5, -9.3, 1.4, 7.8, -5.1, 1.4, 10.5, -3.3, 1.4, 9.9, -3.6, 1.4, 7.8, -9.3, 1.4, 7.8, -12.3, 1.4, 7.5, -14.4, 1.4, 7.8, -14.4, 1.4, 10.5, -5.1, 1.4, 10.5, -9.3, 1.4, 7.8 )
+polygons = [ PoolIntArray( 1, 0, 2 ), PoolIntArray( 2, 0, 4 ), PoolIntArray( 2, 4, 3 ), PoolIntArray( 6, 5, 7 ), PoolIntArray( 7, 5, 8 ), PoolIntArray( 12, 13, 9 ), PoolIntArray( 9, 13, 11 ), PoolIntArray( 9, 11, 10 ), PoolIntArray( 16, 15, 14 ), PoolIntArray( 17, 19, 18 ), PoolIntArray( 22, 21, 23 ), PoolIntArray( 23, 21, 20 ), PoolIntArray( 25, 24, 26 ), PoolIntArray( 26, 24, 27 ), PoolIntArray( 27, 24, 28 ), PoolIntArray( 30, 29, 31 ), PoolIntArray( 31, 29, 32 ), PoolIntArray( 32, 29, 33 ), PoolIntArray( 35, 34, 36 ), PoolIntArray( 36, 34, 37 ), PoolIntArray( 39, 38, 40 ), PoolIntArray( 40, 38, 41 ), PoolIntArray( 41, 38, 42 ), PoolIntArray( 42, 38, 43 ), PoolIntArray( 47, 46, 44 ), PoolIntArray( 44, 46, 45 ), PoolIntArray( 54, 55, 51 ), PoolIntArray( 51, 55, 48 ), PoolIntArray( 48, 55, 52 ), PoolIntArray( 52, 55, 49 ), PoolIntArray( 49, 55, 50 ), PoolIntArray( 50, 55, 53 ), PoolIntArray( 53, 55, 54 ), PoolIntArray( 59, 58, 56 ), PoolIntArray( 56, 58, 57 ), PoolIntArray( 61, 60, 62 ), PoolIntArray( 62, 60, 64 ), PoolIntArray( 62, 64, 63 ), PoolIntArray( 66, 65, 67 ), PoolIntArray( 67, 65, 68 ), PoolIntArray( 71, 70, 69 ), PoolIntArray( 76, 75, 72 ), PoolIntArray( 72, 75, 74 ), PoolIntArray( 72, 74, 73 ), PoolIntArray( 77, 80, 78 ), PoolIntArray( 78, 80, 81 ), PoolIntArray( 81, 80, 79 ), PoolIntArray( 83, 86, 84 ), PoolIntArray( 84, 86, 87 ), PoolIntArray( 87, 86, 82 ), PoolIntArray( 87, 82, 85 ), PoolIntArray( 89, 88, 90 ), PoolIntArray( 90, 88, 91 ), PoolIntArray( 94, 93, 92 ), PoolIntArray( 96, 95, 97 ), PoolIntArray( 97, 95, 99 ), PoolIntArray( 97, 99, 98 ), PoolIntArray( 101, 100, 102 ), PoolIntArray( 102, 100, 103 ), PoolIntArray( 105, 104, 106 ), PoolIntArray( 106, 104, 107 ), PoolIntArray( 110, 109, 108 ), PoolIntArray( 112, 111, 113 ), PoolIntArray( 113, 111, 114 ), PoolIntArray( 114, 111, 115 ), PoolIntArray( 117, 116, 118 ), PoolIntArray( 118, 116, 119 ), PoolIntArray( 119, 116, 120 ), PoolIntArray( 122, 121, 123 ), PoolIntArray( 123, 121, 124 ), PoolIntArray( 127, 126, 125 ), PoolIntArray( 129, 128, 130 ), PoolIntArray( 130, 128, 131 ), PoolIntArray( 133, 132, 134 ), PoolIntArray( 134, 132, 135 ), PoolIntArray( 137, 136, 138 ), PoolIntArray( 138, 136, 140 ), PoolIntArray( 138, 140, 139 ) ]
 
 [sub_resource type="SpatialMaterial" id=1]
 
@@ -128,27 +153,6 @@ points = PoolVector3Array( -19, 1, -1, -21, 1, -1, -21, 0, -1, -19, 0, -1, -19, 
 [sub_resource type="ConvexPolygonShape" id=52]
 points = PoolVector3Array( -19, 1.75, 1, -21, 1.25, 1, -21, 0, 1, -19, 0, 1, -19, 2.9375, 3, -21, 1.5, 3, -21, 0, 3, -19, 0, 3 )
 
-[sub_resource type="Resource" id=9]
-script = ExtResource( 12 )
-quantity = 100
-pricePerUnit = 2
-priceType = "gold"
-resourceType = "mana"
-quantityPerPurchase = 50
-
-[sub_resource type="Resource" id=19]
-script = ExtResource( 13 )
-depiction = "deevee"
-frame = 0
-health = 50
-accessories = [ ExtResource( 10 ), ExtResource( 9 ) ]
-fee = 0
-quests = [  ]
-key = "deevee"
-attributes = [ "talk" ]
-wares = [ SubResource( 9 ) ]
-enemyVisibilityRange = 0.0
-
 [node name="Spatial" type="Spatial"]
 
 [node name="player" parent="." instance=ExtResource( 7 )]
@@ -175,7 +179,29 @@ creature = ExtResource( 5 )
 script = ExtResource( 6 )
 creature = ExtResource( 5 )
 
-[node name="QodotMap" type="Spatial" parent="."]
+[node name="deevee" parent="." instance=ExtResource( 14 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -8.99093, 1.04773, 3.7787 )
+
+[node name="char" type="Node" parent="deevee"]
+script = ExtResource( 6 )
+creature = SubResource( 19 )
+faction = "neutral"
+
+[node name="autoloader" type="Node" parent="."]
+script = ExtResource( 15 )
+map = NodePath("../Navigation/NavigationMeshInstance/QodotMap")
+last_modified = 1637467358
+
+[node name="text" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.58734, 2.50218, 0 )
+occlusion = true
+
+[node name="Navigation" type="Navigation" parent="."]
+
+[node name="NavigationMeshInstance" type="NavigationMeshInstance" parent="Navigation"]
+navmesh = SubResource( 53 )
+
+[node name="QodotMap" type="Spatial" parent="Navigation/NavigationMeshInstance"]
 script = ExtResource( 8 )
 map_file = "E:/dev/games/compuquest-kotlin/godot/world/zones/main.map"
 inverse_scale_factor = 16.0
@@ -194,119 +220,102 @@ use_trenchbroom_group_hierarchy = false
 tree_attach_batch_size = 16
 set_owner_batch_size = 16
 
-[node name="entity_0_worldspawn" type="StaticBody" parent="QodotMap"]
+[node name="entity_0_worldspawn" type="StaticBody" parent="Navigation/NavigationMeshInstance/QodotMap"]
 
-[node name="entity_0_mesh_instance" type="MeshInstance" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_mesh_instance" type="MeshInstance" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 use_in_baked_light = true
 mesh = SubResource( 21 )
 material/0 = null
 
-[node name="entity_0_brush_0_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_0_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 22 )
 
-[node name="entity_0_brush_1_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_1_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 23 )
 
-[node name="entity_0_brush_2_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_2_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 24 )
 
-[node name="entity_0_brush_3_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_3_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 25 )
 
-[node name="entity_0_brush_4_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_4_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 26 )
 
-[node name="entity_0_brush_5_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_5_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 27 )
 
-[node name="entity_0_brush_6_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_6_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 28 )
 
-[node name="entity_0_brush_7_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_7_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 29 )
 
-[node name="entity_0_brush_8_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_8_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 30 )
 
-[node name="entity_0_brush_9_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_9_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 31 )
 
-[node name="entity_0_brush_10_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_10_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 32 )
 
-[node name="entity_0_brush_11_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_11_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 33 )
 
-[node name="entity_0_brush_12_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_12_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 34 )
 
-[node name="entity_0_brush_13_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_13_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 35 )
 
-[node name="entity_0_brush_14_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_14_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 36 )
 
-[node name="entity_0_brush_15_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_15_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 37 )
 
-[node name="entity_0_brush_16_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_16_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 38 )
 
-[node name="entity_0_brush_17_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_17_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 39 )
 
-[node name="entity_0_brush_18_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_18_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 40 )
 
-[node name="entity_0_brush_19_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_19_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 41 )
 
-[node name="entity_0_brush_20_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_20_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 42 )
 
-[node name="entity_0_brush_21_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_21_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 43 )
 
-[node name="entity_0_brush_22_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_22_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 44 )
 
-[node name="entity_0_brush_23_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_23_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 45 )
 
-[node name="entity_0_brush_24_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_24_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 46 )
 
-[node name="entity_0_brush_25_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_25_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 47 )
 
-[node name="entity_0_brush_26_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_26_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 48 )
 
-[node name="entity_0_brush_27_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_27_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 49 )
 
-[node name="entity_0_brush_28_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_28_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 50 )
 
-[node name="entity_0_brush_29_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_29_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 51 )
 
-[node name="entity_0_brush_30_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
+[node name="entity_0_brush_30_collision_shape" type="CollisionShape" parent="Navigation/NavigationMeshInstance/QodotMap/entity_0_worldspawn"]
 shape = SubResource( 52 )
-
-[node name="deevee" parent="." instance=ExtResource( 14 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -8.99093, 1.04773, 3.7787 )
-
-[node name="char" type="Node" parent="deevee"]
-script = ExtResource( 6 )
-creature = SubResource( 19 )
-faction = "neutral"
-
-[node name="autoloader" type="Node" parent="."]
-script = ExtResource( 15 )
-map = NodePath("../QodotMap")
-last_modified = 1637467358
-
-[node name="text" parent="." instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.58734, 2.50218, 0 )
-occlusion = true

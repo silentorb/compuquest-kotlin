@@ -1,8 +1,8 @@
-package compuquest.simulation.general
+package compuquest.population
 
-import compuquest.population.addCharacter
-import compuquest.population.addPlayer
-import compuquest.population.populateQuests
+import compuquest.simulation.definition.Definitions
+import compuquest.simulation.general.Hand
+import compuquest.simulation.general.World
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
 import godot.Resource
@@ -15,26 +15,26 @@ import silentorb.mythic.godoting.*
 
 const val componentGroup = "component"
 
-fun processComponentNode(nextId: NextId, spatial: Spatial?, body: Id?, faction: Key?, node: Node): List<Hand> =
+fun processComponentNode(definitions: Definitions, nextId: NextId, spatial: Spatial?, body: Id?, faction: Key?, node: Node): List<Hand> =
   when {
     getScriptName(node) == "AttachCharacter" -> {
       val creature = node.get("creature") as? Resource
       if (creature == null)
         listOf()
       else
-        addCharacter(nextId, spatial, body, creature, faction, node)
+        addCharacter(definitions, nextId, spatial, body, creature, faction, node)
     }
     else -> listOf()
   }
 
-
 fun newCharacterBody(
-  nextId: NextId, spatial: Spatial, components: List<Node>
+  definitions: Definitions, nextId: NextId, spatial: Spatial, components: List<Node>
 ): List<Hand> {
-  return components.flatMap { processComponentNode(nextId, spatial, null, null, it) }
+  return components.flatMap { processComponentNode(definitions, nextId, spatial, null, null, it) }
 }
 
 fun processSceneEntities(root: Node, world: World): World {
+  val definitions = world.definitions
   val componentNodes = root.getTree()?.getNodesInGroup(componentGroup)?.filterIsInstance<Node>() ?: listOf()
   val parents = componentNodes
     .mapNotNull { it.getParent() }
@@ -47,9 +47,9 @@ fun processSceneEntities(root: Node, world: World): World {
     .flatMap { spatial ->
       val components = componentNodes.filter { it.getParent() == spatial }
       if (components.any { it is AttachPlayer })
-        addPlayer(nextId, spatial, components)
+        addPlayer(definitions, nextId, spatial, components)
       else {
-        newCharacterBody(nextId, spatial, components)
+        newCharacterBody(definitions, nextId, spatial, components)
       }
     }
 

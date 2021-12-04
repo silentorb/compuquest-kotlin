@@ -8,6 +8,7 @@ import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.newEvent
 
 data class PlayerGui(
   val menuStack: MenuStack = listOf(),
@@ -47,7 +48,7 @@ fun eventsFromClient(player: Id, client: Client, previous: Client?): Events =
   else
     listOfNotNull(
       if (client.menuStack.none() and previous.menuStack.any())
-        Event(Commands.finishInteraction, player)
+        newEvent(Commands.finishInteraction, player)
       else
         null
     )

@@ -11,6 +11,7 @@ import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.happening.Event
+import silentorb.mythic.happening.newEvent
 
 @RegisterClass
 class Portrait : Node() {
@@ -67,7 +68,7 @@ class Portrait : Node() {
   fun on_fire_pressed() {
 	val actor = lastActor
 	if (actor != null) {
-	  Global.addEvent(Event(removeFactionMemberEvent, actor))
+	  Global.addEvent(newEvent(removeFactionMemberEvent, actor))
 	}
   }
 

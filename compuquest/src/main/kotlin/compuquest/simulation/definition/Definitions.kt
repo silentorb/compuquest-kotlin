@@ -1,7 +1,8 @@
 package compuquest.simulation.definition
 
-import silentorb.mythic.ent.Key
+import compuquest.simulation.general.AccessoryDefinition
+import silentorb.mythic.ent.KeyTable
 
 data class Definitions(
-  val zones: Map<Key, ZoneDefinition>,
+  val accessories: KeyTable<AccessoryDefinition>,
 )

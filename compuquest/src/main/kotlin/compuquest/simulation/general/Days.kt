@@ -28,8 +28,8 @@ fun updateDay(day: DayState): DayState {
 
 const val newDayEvent = "newDay"
 
-fun dayEvents(next: DayState, previous: DayState?): Events =
-  if (previous != null && next.value > previous.value)
-    listOf(Event(newDayEvent))
-  else
-    listOf()
+//fun dayEvents(next: DayState, previous: DayState?): Events =
+//  if (previous != null && next.value > previous.value)
+//    listOf(Event(newDayEvent))
+//  else
+//    listOf()

@@ -1,6 +1,6 @@
 package scripts.entities.actor
 
-import compuquest.simulation.general.componentGroup
+import compuquest.population.componentGroup
 import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction

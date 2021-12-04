@@ -36,7 +36,7 @@ fun getAccessories(accessories: Table<Accessory>, actor: Id) =
     .filterValues { it.owner == actor }
 
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
-  getAccessories(accessories, actor).any { it.value.effect == effect }
+  getAccessories(accessories, actor).any { it.value.definition.effect == effect }
 
 fun getReadyAccessories(world: World, actor: Id) =
   getAccessories(world.deck.accessories, actor)
@@ -46,7 +46,7 @@ fun canUse(world: World, accessory: Accessory): Boolean {
   val deck = world.deck
   val actor = deck.characters[accessory.owner]
   val faction = deck.factions[actor?.faction]
-  val cost = accessory.cost
+  val cost = accessory.definition.cost
   return accessory.cooldown == 0f && (faction == null ||
       cost.all { faction.resources[it.key] ?: 0 >= it.value })
 
