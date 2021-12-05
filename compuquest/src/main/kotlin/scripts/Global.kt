@@ -41,6 +41,14 @@ class Global : Node() {
   @RegisterProperty
   var debugText: String = ""
 
+  @RegisterFunction
+  fun getCharacterDepiction(type: String): String =
+    definitions.characters[type]!!.depiction
+
+  @RegisterFunction
+  fun getCharacterFrame(type: String): Int =
+    definitions.characters[type]!!.frame
+
   companion object {
     var instance: Global? = null
     private var eventQueue: MutableList<Event> = mutableListOf()

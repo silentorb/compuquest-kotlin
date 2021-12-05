@@ -23,9 +23,9 @@ fun addPlayer(definitions: Definitions, nextId: NextId, spatial: Spatial, compon
         spatial,
         Player(
           faction = faction,
-          party = memberHands
-            .filter { hand -> hand.components.any { it is Character } }
-            .mapNotNull { it.id }
+//          party = memberHands
+//            .filter { hand -> hand.components.any { it is Character } }
+//            .mapNotNull { it.id }
         ),
         NewFaction(faction,
           Faction(

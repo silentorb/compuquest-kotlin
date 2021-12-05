@@ -32,9 +32,9 @@ fun syncGodot(world: World, events: Events) {
     val body = world.bodies[player.key]
     if (body != null) {
       body.set("isActive", playerRigIsActive)
-      if (shouldRefreshPlayerSlowdown(player.value, events)) {
-        body.set("isSlowed", true)
-      }
+//      if (shouldRefreshPlayerSlowdown(player.value, events)) {
+//        body.set("isSlowed", true)
+//      }
     }
   }
 }

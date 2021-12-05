@@ -1,13 +1,7 @@
 tool
 extends Node
 
-export(Resource) var creature
-
-export(String) var faction
-
-export(int) var healthValue
-
-export(bool) var includeFees = true
+export(String) var type
 
 var lastDepiction
 
@@ -21,12 +15,14 @@ func updateSprite():
 
 func _ready():
 	add_to_group("component")
-	lastDepiction = creature.depiction
-	lastFrame = creature.frame
+	lastDepiction = Global.getCharacterDepiction(type)
+	lastFrame = Global.getCharacterFrame(type)
 	if Engine.editor_hint:
 		updateSprite()
 
 func _process(delta):
-	if Engine.editor_hint and lastDepiction != creature.depiction:
-		lastDepiction = creature.depiction
-		lastFrame = creature.frame
+	if Engine.editor_hint:
+		var depiction = Global.getCharacterDepiction(type)
+		if lastDepiction != depiction:
+			lastDepiction = depiction
+			lastFrame = Global.getCharacterFrame(type)

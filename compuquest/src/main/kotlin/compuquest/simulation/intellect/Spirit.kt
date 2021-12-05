@@ -52,20 +52,20 @@ fun filterEnemyTargets(
     }
 }
 
-fun filterAllyTargets(
-  world: World,
-  actor: Id,
-  character: Character
-): Map<Id, Character> {
-  val deck = world.deck
-  val player = world.deck.players.entries.firstOrNull()
-  return if (player != null && character.body == player.key)
-    player.value.party
-      .minus(actor)
-      .associateWith { deck.characters[it]!! }
-  else
-    mapOf()
-}
+//fun filterAllyTargets(
+//  world: World,
+//  actor: Id,
+//  character: Character
+//): Map<Id, Character> {
+//  val deck = world.deck
+//  val player = world.deck.players.entries.firstOrNull()
+//  return if (player != null && character.body == player.key)
+//    player.value.party
+//      .minus(actor)
+//      .associateWith { deck.characters[it]!! }
+//  else
+//    mapOf()
+//}
 
 fun getNextTarget(
   world: World,

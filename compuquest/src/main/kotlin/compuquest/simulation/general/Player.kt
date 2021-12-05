@@ -17,7 +17,7 @@ val removeMemberFromParty = "removeMemberFromParty"
 
 data class Player(
   val faction: Key,
-  val party: List<Id> = listOf(),
+//  val party: List<Id> = listOf(),
   val canInteractWith: Interactable? = null,
   val interactingWith: Id? = null,
   val isPlaying: Boolean = true,
@@ -52,8 +52,8 @@ fun updateParty() = handleEvents<List<Id>> { event, value ->
   }
 }
 
-fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
-  events.any { it.type == detrimentalEffectCommand && player.party.contains(it.target) }
+//fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
+//  events.any { it.type == detrimentalEffectCommand && player.party.contains(it.target) }
 
 fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
   val deck = world.deck
@@ -72,9 +72,9 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 
   val playerEvents = events.filter { it.target == actor }
   val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
-  val party = updateParty()(playerEvents, player.party) - removedCharacters
+//  val party = updateParty()(playerEvents, player.party) - removedCharacters
 
-  val isPlaying = party.any { deck.characters[it]?.isAlive ?: false }
+//  val isPlaying = party.any { deck.characters[it]?.isAlive ?: false }
 
 //  val menu = if (!isPlaying && player.isPlaying)
 //    gameOverScreen
@@ -84,12 +84,12 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
   player.copy(
     canInteractWith = canInteractWith,
     interactingWith = interactingWith,
-    party = party,
-    isPlaying = isPlaying,
+//    party = party,
+//    isPlaying = isPlaying,
   )
 }
 
-fun getNonPartyMembers(deck: Deck, player: Player): Set<Id> =
-  deck.characters
-    .filterValues { it.faction == player.faction }
-    .keys - player.party
+//fun getNonPartyMembers(deck: Deck, player: Player): Set<Id> =
+//  deck.characters
+//    .filterValues { it.faction == player.faction }
+//    .keys - player.party

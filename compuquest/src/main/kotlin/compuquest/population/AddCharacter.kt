@@ -87,20 +87,25 @@ fun addCharacter(
     val wares = getList<Resource>(creature, "wares")
       .map { addWare(nextId, id, it) }
 
+    val type = getString(creature, "type")
+    val definition = definitions.characters[type] ?: throw Error("Unknown character type: $type")
+
     listOf(
       Hand(
         id = id,
         components =
         listOfNotNull(
           Character(
-            name = node.name,
+            definition = definition,
+//            name = node.name,
+            name = definition.name,
             faction = refinedFaction,
-            health = IntResource(maxHealth),
+            health = maxHealth,
             body = body ?: id,
             depiction = depiction,
             frame = getInt(creature, "frame"),
             fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
-            key = getNonEmptyString(creature, "key"),
+//            key = getNonEmptyString(creature, "key"),
             attributes = getList<String>(creature, "attributes").toSet(),
             enemyVisibilityRange = getFloat(creature, "enemyVisibilityRange"),
           ),

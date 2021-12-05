@@ -167,7 +167,7 @@ fun resurrectMenuItem(actor: Id, character: Character) =
       val targetCharacter = deck.characters[actor]!!
       val faction = targetCharacter.faction
       listOf(
-        modifyHealth(actor, targetCharacter.health.max),
+        modifyHealth(actor, targetCharacter.definition.health),
       ) + if (faction != Factions.neutral.name)
         listOf(modifyFactionResources(faction, mapOf(ResourceType.gold to -100)))
       else
@@ -175,35 +175,35 @@ fun resurrectMenuItem(actor: Id, character: Character) =
     }
   )
 
-fun resurrectionConversation() =
-  GameScreen(
-    title = staticTitle("Resurrection"),
-    content = { context, _ ->
-      val deck = context.world.deck
-      val party = deck.players[context.actor]!!.party
-      val items = party
-        .mapNotNull { id ->
-          val character = deck.characters[id]!!
-          if (character.isAlive)
-            null
-          else {
-            resurrectMenuItem(id, character)
-          }
-        }
-
-      val message = if (items.any())
-        listOf("Are there dead in need of rising?")
-      else
-        listOf("You can bring your dead here to be restored.")
-
-      newConversationMenu(
-        GameMenuContent(
-          message = message,
-          items = items,
-        )
-      )
-    }
-  )
+//fun resurrectionConversation() =
+//  GameScreen(
+//    title = staticTitle("Resurrection"),
+//    content = { context, _ ->
+//      val deck = context.world.deck
+//      val party = deck.players[context.actor]!!.party
+//      val items = party
+//        .mapNotNull { id ->
+//          val character = deck.characters[id]!!
+//          if (character.isAlive)
+//            null
+//          else {
+//            resurrectMenuItem(id, character)
+//          }
+//        }
+//
+//      val message = if (items.any())
+//        listOf("Are there dead in need of rising?")
+//      else
+//        listOf("You can bring your dead here to be restored.")
+//
+//      newConversationMenu(
+//        GameMenuContent(
+//          message = message,
+//          items = items,
+//        )
+//      )
+//    }
+//  )
 
 fun getConversationOptions(deck: Deck, target: Id, targetCharacter: Character): List<MenuAddress> =
   listOfNotNull(
@@ -284,7 +284,7 @@ fun conversationMenu() =
 val gameScreens: Map<Key, GameScreen> = mapOf(
   Screens.completeQuest to completeQuestConversation(),
   Screens.jobInterview to jobInterviewConversation(),
-  Screens.resurrection to resurrectionConversation(),
+//  Screens.resurrection to resurrectionConversation(),
   Screens.conversation to conversationMenu(),
   Screens.offerQuest to offerQuestsConversation(),
   Screens.manageQuests to questManagementScreen(),

@@ -10,11 +10,20 @@ import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.happening.handleEvents
 
-data class Character(
+data class CharacterDefinition(
   val name: String,
-  val key: String? = null,
+  val attributes: Set<Key> = setOf(),
+  val depiction: String,
+  val frame: Int = 0,
   val faction: Key,
-  val health: IntResource,
+  val health: Int,
+)
+
+data class Character(
+  val definition: CharacterDefinition,
+  val name: String,
+  val faction: Key,
+  val health: Int,
   val body: Id? = null,
   val attributes: Set<Key> = setOf(),
   val fee: Int = 0,
@@ -23,7 +32,7 @@ data class Character(
   override val frame: Int = 0,
   val originalDepiction: String = depiction,
 ) : SpriteState {
-  val isAlive: Boolean = health.value > 0
+  val isAlive: Boolean = health > 0
 }
 
 fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
@@ -89,8 +98,8 @@ fun updateCharacter(world: World, events: Events): (Id, Character) -> Character 
     .sum() +
       applyDamage(world.deck, actor, characterEvents)
 
-  val health = modifyResource(healthMod, character.health)
-  val depiction = if (health.value == 0)
+  val health = modifyResource(healthMod, character.definition.health, character.health)
+  val depiction = if (health == 0)
     "sprites"
   else
     character.originalDepiction

@@ -50,19 +50,19 @@ class Portrait : Node() {
 	}
   }
 
-  @RegisterFunction
-  fun on_move_pressed() {
-	val actor = lastActor
-	if (actor != null) {
-	  val player = Global.getPlayer()!!
-	  val eventType = if (player.value.party.contains(actor))
-		removeMemberFromParty
-	  else
-		addMemberToParty
-
-	  Global.addPlayerEvent(eventType, actor)
-	}
-  }
+//  @RegisterFunction
+//  fun on_move_pressed() {
+//	val actor = lastActor
+//	if (actor != null) {
+//	  val player = Global.getPlayer()!!
+//	  val eventType = if (player.value.party.contains(actor))
+//		removeMemberFromParty
+//	  else
+//		addMemberToParty
+//
+//	  Global.addPlayerEvent(eventType, actor)
+//	}
+//  }
 
   @RegisterFunction
   fun on_fire_pressed() {
@@ -83,48 +83,48 @@ class Portrait : Node() {
 	  nameLabel?.text = character.name
 	  val localHealth = health
 	  if (localHealth != null) {
-		localHealth.value = character.health.value
-		localHealth.max = character.health.max
+		localHealth.value = character.health
+		localHealth.max = character.definition.health
 	  }
 	}
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-	tempCatch {
-	  val world = Global.world
-	  val deck = world?.deck
-	  val player = getPlayer(world)?.value
-	  val actor = member ?: player?.party?.getOrNull(index)
-	  if (actor == null) {
-		lastActor = null
-		lastCharacter = null
-	  } else {
-		val localCharacter = lastCharacter
-		val character = deck!!.characters[actor]
-		if (localCharacter != character) {
-		  if (character != null)
-			characterChanged(character, localCharacter)
-
-		  lastActor = actor
-		  lastCharacter = character
-		}
-	  }
-	  verticalBox?.visible = lastCharacter != null
-
-	  val menuKey = Global.getMenuStack().lastOrNull()?.key
-
-	  val currentIsManaging = player != null
-		  && managementScreens.contains(menuKey)
-		  && lastCharacter != null &&
-		  (player.party.size > 1 || !player.party.contains(actor))
-
-	  if (isManaging != currentIsManaging) {
-		isManaging = currentIsManaging
-		moveButton?.visible =
-		  currentIsManaging && player != null && (player.party.size < maxPartySize || player.party.contains(actor))
-		fireButton?.visible = currentIsManaging
-	  }
-	}
+//	tempCatch {
+//	  val world = Global.world
+//	  val deck = world?.deck
+//	  val player = getPlayer(world)?.value
+//	  val actor = member ?: player?.party?.getOrNull(index)
+//	  if (actor == null) {
+//		lastActor = null
+//		lastCharacter = null
+//	  } else {
+//		val localCharacter = lastCharacter
+//		val character = deck!!.characters[actor]
+//		if (localCharacter != character) {
+//		  if (character != null)
+//			characterChanged(character, localCharacter)
+//
+//		  lastActor = actor
+//		  lastCharacter = character
+//		}
+//	  }
+//	  verticalBox?.visible = lastCharacter != null
+//
+//	  val menuKey = Global.getMenuStack().lastOrNull()?.key
+//
+//	  val currentIsManaging = player != null
+//		  && managementScreens.contains(menuKey)
+//		  && lastCharacter != null &&
+//		  (player.party.size > 1 || !player.party.contains(actor))
+//
+//	  if (isManaging != currentIsManaging) {
+//		isManaging = currentIsManaging
+//		moveButton?.visible =
+//		  currentIsManaging && player != null && (player.party.size < maxPartySize || player.party.contains(actor))
+//		fireButton?.visible = currentIsManaging
+//	  }
+//	}
   }
 }
