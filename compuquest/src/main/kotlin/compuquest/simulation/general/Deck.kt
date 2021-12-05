@@ -8,6 +8,7 @@ import silentorb.mythic.ent.KeyTable
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.genericRemoveEntities
 import silentorb.mythic.ent.newDeckReflection
+import compuquest.simulation.characters.Character
 
 data class Deck(
   val accessories: Table<Accessory> = mapOf(),

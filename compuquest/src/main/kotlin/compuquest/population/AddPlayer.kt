@@ -13,7 +13,7 @@ fun addPlayer(definitions: Definitions, nextId: NextId, spatial: Spatial, compon
   val id = nextId()
   val memberHands = components
     .flatMap { child ->
-      processComponentNode(definitions, nextId, null, id, faction, child)
+      processComponentNode(definitions, id, nextId, spatial, faction, child)
     }
 
   return listOf(

@@ -1,8 +1,16 @@
 package compuquest.definition
 
+import compuquest.simulation.general.AccessoryAttributes
 import compuquest.simulation.general.AccessoryDefinition
 import silentorb.mythic.ent.KeyTable
 
-fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
+object Accessories {
+  val rocketLauncher = "rocketLauncher"
+}
 
+fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
+  Accessories.rocketLauncher to AccessoryDefinition(
+    name = Accessories.rocketLauncher,
+    attributes = setOf(AccessoryAttributes.weapon),
+  )
 )

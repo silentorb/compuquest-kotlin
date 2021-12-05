@@ -1,5 +1,7 @@
 package compuquest.population
 
+import compuquest.simulation.characters.newCharacterAccessories
+import compuquest.simulation.characters.newCharacter
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
@@ -12,34 +14,6 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
 import silentorb.mythic.godoting.*
-
-fun addAccessory(definitions: Definitions, nextId: NextId, owner: Id, accessory: Resource): Hand {
-  val type = getString(accessory, "type")
-  val definition = definitions.accessories[type]
-  if (definition == null)
-    throw Error("Invalid accessory type $type")
-
-  return Hand(
-    id = nextId(),
-    components = listOf(
-      Accessory(
-        owner = owner,
-        definition = definition,
-//        name = getString(accessory, "name"),
-//        maxCooldown = getFloat(accessory, "cooldown"),
-//        range = getFloat(accessory, "Range"),
-//        cost = mapOf(
-//          (getResourceType(accessory, "costResource") ?: ResourceType.mana) to
-//              getInt(accessory, "costAmount")
-//        ),
-//        spawns = (accessory.get("spawns") as? Resource)?.resourcePath,
-//        effect = getString(accessory, "effect"),
-//        strength = getFloat(accessory, "strength"),
-//        attributes = getList<Key>(accessory, "attributes").toSet()
-      )
-    )
-  )
-}
 
 fun parseFaction(faction: Key?, node: Node): Key {
   val rawFaction = faction ?: getString(node, "faction")
@@ -70,53 +44,39 @@ fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands =
 
 fun addCharacter(
   definitions: Definitions,
+  id: Id,
   nextId: NextId,
   spatial: Spatial?,
-  body: Id?,
-  creature: Resource,
   faction: Key?,
   node: Node
 ): Hands {
   return tempCatch {
-    val id = nextId()
-    val sprite = node.getParent()?.findNode("sprite")
-    val depiction = getString(creature, "depiction")
-    sprite?.set("animation", depiction)
-    val refinedFaction = parseFaction(faction, node)
-    val maxHealth = getIntOrNull(creature, "health") ?: 1
-    val wares = getList<Resource>(creature, "wares")
-      .map { addWare(nextId, id, it) }
+//    val sprite = node.getParent()?.findNode("sprite")
+//    val depiction = getString(creature, "depiction")
+//    sprite?.set("animation", depiction)
+//    val refinedFaction = parseFaction(faction, node)
+//    val maxHealth = getIntOrNull(creature, "health") ?: 1
+//    val wares = getList<Resource>(creature, "wares")
+//      .map { addWare(nextId, id, it) }
 
-    val type = getString(creature, "type")
-    val definition = definitions.characters[type] ?: throw Error("Unknown character type: $type")
+    val type = getString(node, "type")
+    val definition = definitions.characters[type]
+    if (definition == null)
+      throw Error("Unknown character type: $type")
+
+    val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 
     listOf(
       Hand(
         id = id,
         components =
         listOfNotNull(
-          Character(
-            definition = definition,
-//            name = node.name,
-            name = definition.name,
-            faction = refinedFaction,
-            health = maxHealth,
-            body = body ?: id,
-            depiction = depiction,
-            frame = getInt(creature, "frame"),
-            fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
-//            key = getNonEmptyString(creature, "key"),
-            attributes = getList<String>(creature, "attributes").toSet(),
-            enemyVisibilityRange = getFloat(creature, "enemyVisibilityRange"),
-          ),
-          sprite,
+          newCharacter(definition, accessories),
+//          sprite,
           spatial,
           Spirit(),
         )
       )
-    ) + getVariantArray<Resource>(creature, "accessories")
-      .map { accessory ->
-        addAccessory(definitions, nextId, id, accessory)
-      } + addQuests(nextId, id, creature) + wares
+    ) + accessories
   }
 }

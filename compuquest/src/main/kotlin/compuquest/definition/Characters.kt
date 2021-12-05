@@ -1,7 +1,7 @@
 package compuquest.definition
 
+import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.definition.FactionNames
-import compuquest.simulation.general.CharacterDefinition
 import silentorb.mythic.ent.KeyTable
 
 object Characters {
@@ -14,5 +14,8 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
     depiction = "skeleton",
     faction = FactionNames.undead,
     health = 50,
+    accessories = listOf(
+      Accessories.rocketLauncher,
+    ),
   )
 )

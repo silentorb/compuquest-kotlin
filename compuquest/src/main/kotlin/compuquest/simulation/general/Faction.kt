@@ -108,7 +108,7 @@ tailrec fun payInvoices(dice: Dice, gold: Int, invoices: Invoices, accumulator: 
   }
 
 fun payInvoices(dice: Dice, gold: Int, invoices: Invoices): Invoices =
-  if (invoices.sumBy { it.amountDue } < gold)
+  if (invoices.sumOf { it.amountDue } < gold)
     invoices
   else
     payInvoices(dice, gold, invoices, listOf())
@@ -120,7 +120,7 @@ fun updateFactionResources(
   return resources.mapValues { (resourceType, amount) ->
     val adjustment = adjustments
       .filter { cost -> cost.first == resourceType }
-      .sumBy { cost -> cost.second }
+      .sumOf { cost -> cost.second }
 
     amount + adjustment
   }
@@ -165,7 +165,7 @@ fun updateFaction(world: World, events: Events): (Key, Faction) -> Faction {
 //      .map { it.second } +
 //        basicAdjustments +
 //        if (paidInvoices.any())
-//          listOf(TypedResource(ResourceType.gold, -paidInvoices.sumBy { it.amountDue }))
+//          listOf(TypedResource(ResourceType.gold, -paidInvoices.sumOf { it.amountDue }))
 //        else
 //          listOf()
 

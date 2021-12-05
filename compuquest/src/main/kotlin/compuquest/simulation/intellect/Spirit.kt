@@ -1,12 +1,14 @@
 package compuquest.simulation.intellect
 
-import compuquest.simulation.combat.attack
+import compuquest.simulation.combat.attackOld
 import compuquest.simulation.general.*
 import godot.PhysicsDirectSpaceState
 import godot.core.Vector3
 import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
+import compuquest.simulation.characters.Character
+import compuquest.simulation.characters.getReadyAccessories
 
 data class Spirit(
   val actionChanceAccumulator: Int = 0,
@@ -19,10 +21,10 @@ fun inRangeAndVisible(
   world: World,
   bodyId: Id,
   body: Body,
-  other: Character,
+  other: Id,
   range: Float
 ): Boolean {
-  val otherBody = world.bodies[other.body]
+  val otherBody = world.bodies[other]
   val location = body.translation + Vector3(0f, 1f, 0f)
 
   return otherBody != null
@@ -39,7 +41,7 @@ fun filterEnemyTargets(
 ): Map<Id, Character> {
   val deck = world.deck
   val bodies = deck.bodies
-  val body = bodies[character.body] ?: return mapOf()
+  val body = bodies[actor] ?: return mapOf()
   val space = getSpace(world) ?: return mapOf()
   val definition = action.definition
   val range = definition.range
@@ -48,7 +50,7 @@ fun filterEnemyTargets(
       id != actor
           && other.isAlive
           && isEnemy(world.factionRelationships, other.faction, character.faction)
-          && inRangeAndVisible(space, world, character.body!!, body, other, range)
+          && inRangeAndVisible(space, world, actor, body, id, range)
     }
 }
 
@@ -84,12 +86,13 @@ fun getNextTarget(
 fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit): Events {
   val action = spirit.focusedAction
   val accessory = world.deck.accessories[action]
-  return if (action != null && accessory != null) {
-    when (accessory.definition.effect) {
+  val effect = accessory?.definition?.effects?.firstOrNull()
+  return if (effect != null && action != null) {
+    when (effect.type) {
       AccessoryEffects.attack -> {
         val target = spirit.target
         if (target != null) {
-          attack(world, actor, character, action, accessory, target)
+          attackOld(world, actor, character, action, accessory, target)
         } else
           listOf()
       }
@@ -131,7 +134,7 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 
   val focusedAction = world.dice.takeOneOrNull(readyActions.keys)
   val accessory = world.deck.accessories[focusedAction]
-  val target = if (accessory != null && accessory.definition.effect == AccessoryEffects.attack)
+  val target = if (accessory != null && accessory.definition.effects.firstOrNull()?.type == AccessoryEffects.attack)
     getNextTarget(world, actor, accessory, spirit.target)
   else
     spirit.target

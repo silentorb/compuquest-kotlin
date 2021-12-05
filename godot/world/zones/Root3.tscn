@@ -124,6 +124,10 @@ script = ExtResource( 4 )
 amount = 200
 resource = "gold"
 
+[node name="char" type="Node" parent="player"]
+script = ExtResource( 5 )
+type = "skeleton"
+
 [node name="deevee" parent="." instance=ExtResource( 14 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5.30361, 1.04053, 2.83892 )
 

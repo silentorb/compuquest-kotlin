@@ -9,6 +9,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Event
+import compuquest.simulation.characters.Character
 
 object Screens {
   const val conversation = "conversation"
@@ -158,22 +159,22 @@ fun completeQuestConversation() =
     }
   )
 
-fun resurrectMenuItem(actor: Id, character: Character) =
-  GameMenuItem(
-    title = "Resurrect ${character.name} ($100)",
-//    key = MenuAddress("resurrect", actor),
-    events = { context ->
-      val deck = context.world.deck
-      val targetCharacter = deck.characters[actor]!!
-      val faction = targetCharacter.faction
-      listOf(
-        modifyHealth(actor, targetCharacter.definition.health),
-      ) + if (faction != Factions.neutral.name)
-        listOf(modifyFactionResources(faction, mapOf(ResourceType.gold to -100)))
-      else
-        listOf()
-    }
-  )
+//fun resurrectMenuItem(actor: Id, character: Character) =
+//  GameMenuItem(
+//    title = "Resurrect ${character.name} ($100)",
+////    key = MenuAddress("resurrect", actor),
+//    events = { context ->
+//      val deck = context.world.deck
+//      val targetCharacter = deck.characters[actor]!!
+//      val faction = targetCharacter.faction
+//      listOf(
+//        modifyHealth(actor, targetCharacter.definition.health),
+//      ) + if (faction != Factions.neutral.name)
+//        listOf(modifyFactionResources(faction, mapOf(ResourceType.gold to -100)))
+//      else
+//        listOf()
+//    }
+//  )
 
 //fun resurrectionConversation() =
 //  GameScreen(
@@ -207,14 +208,14 @@ fun resurrectMenuItem(actor: Id, character: Character) =
 
 fun getConversationOptions(deck: Deck, target: Id, targetCharacter: Character): List<MenuAddress> =
   listOfNotNull(
-    if (targetCharacter.attributes.contains("forHire"))
-      MenuAddress(Screens.jobInterview, target)
-    else
-      null,
-    if (hasAccessoryWithEffect(deck.accessories, target, AccessoryEffects.resurrect))
-      MenuAddress(Screens.resurrection, target)
-    else
-      null,
+//    if (targetCharacter.attributes.contains("forHire"))
+//      MenuAddress(Screens.jobInterview, target)
+//    else
+//      null,
+//    if (hasAccessoryWithEffect(deck.accessories, target, AccessoryEffects.resurrect))
+//      MenuAddress(Screens.resurrection, target)
+//    else
+//      null,
     if (deck.wares.any { it.value.owner == target })
       MenuAddress(Screens.shopping, target)
     else

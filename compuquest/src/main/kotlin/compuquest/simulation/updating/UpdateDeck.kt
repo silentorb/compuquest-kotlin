@@ -1,5 +1,6 @@
 package compuquest.simulation.updating
 
+import compuquest.simulation.characters.updateCharacter
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.updateSpirit
 import silentorb.mythic.ent.mapTable

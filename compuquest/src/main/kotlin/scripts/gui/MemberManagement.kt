@@ -19,32 +19,32 @@ class MemberManagement : Node() {
 
   @RegisterFunction
   override fun _ready() {
-    _grid = findNode("grid") as? GridContainer
+	_grid = findNode("grid") as? GridContainer
   }
 
   fun updateGrid(members: Set<Id>) {
-    val grid = _grid!!
-    clearChildren(grid)
-    for (member in members) {
-      val portrait = instantiateScene<Portrait>("res://gui/hud/Portrait.tscn")!!
-      portrait.member = member
-      grid.addChild(portrait)
-    }
+	val grid = _grid!!
+	clearChildren(grid)
+	for (member in members) {
+	  val portrait = instantiateScene<Portrait>("res://gui/hud/Portrait.tscn")!!
+	  portrait.member = member
+	  grid.addChild(portrait)
+	}
   }
 
   @RegisterFunction
   override fun _process(delta: Double) {
-    tempCatch {
-      val world = Global.world
-      val deck = world?.deck
-      val player = getPlayer(world)?.value
-      if (deck != null && player != null) {
+	tempCatch {
+	  val world = Global.world
+	  val deck = world?.deck
+	  val player = getPlayer(world)?.value
+	  if (deck != null && player != null) {
 //		val members = getNonPartyMembers(deck, player)
 //		if (lastMembers != members) {
 //		  lastMembers = members
 //		  updateGrid(members)
 //		}
-      }
-    }
+	  }
+	}
   }
 }

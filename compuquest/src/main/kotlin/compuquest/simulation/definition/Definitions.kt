@@ -1,7 +1,7 @@
 package compuquest.simulation.definition
 
+import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.general.AccessoryDefinition
-import compuquest.simulation.general.CharacterDefinition
 import silentorb.mythic.ent.KeyTable
 
 data class Definitions(

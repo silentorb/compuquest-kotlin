@@ -43,7 +43,7 @@ fun eventsFromWares(deck: Deck): Events =
 fun updateWare(events: Events): (Id, Ware) -> Ware = { id, ware ->
   val quantityMod = events
     .filter { it.target == id && it.type == modifyWareQuantityEvent }
-    .sumBy { it.value as? Int ?: 0 }
+    .sumOf { it.value as? Int ?: 0 }
 
   ware.copy(
     quantity = ware.quantity + quantityMod

@@ -1,7 +1,7 @@
 package scripts.gui
 
-import compuquest.clienting.gui.managementScreens
-import compuquest.simulation.general.*
+import compuquest.simulation.characters.Character
+import compuquest.simulation.general.removeFactionMemberEvent
 import godot.*
 import godot.annotation.Export
 import godot.annotation.RegisterClass
@@ -10,7 +10,6 @@ import godot.annotation.RegisterProperty
 import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.tempCatch
-import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.newEvent
 
 @RegisterClass

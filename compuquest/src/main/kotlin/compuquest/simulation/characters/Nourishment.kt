@@ -7,5 +7,5 @@ package compuquest.simulation.characters
 //      val components = definitions.accessories[deck.accessories[event.action]?.type]?.components ?: listOf()
 //      components
 //        .filterIsInstance<Nutrient>()
-//        .sumBy { it.value }
+//        .sumOf { it.value }
 //    }

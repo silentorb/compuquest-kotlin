@@ -8,4 +8,6 @@ object Commands {
   val manageQuests = "manageQuests"
   val newGame = "newGame"
   val navigate = "navigate"
+  val primaryAction = "primaryAction"
+  val secondaryAction = "secondaryAction"
 }

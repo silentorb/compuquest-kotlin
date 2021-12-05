@@ -5,7 +5,6 @@ import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
-import godot.Resource
 import godot.Spatial
 import scripts.entities.actor.AttachPlayer
 import silentorb.mythic.ent.Id
@@ -15,14 +14,17 @@ import silentorb.mythic.godoting.*
 
 const val componentGroup = "component"
 
-fun processComponentNode(definitions: Definitions, nextId: NextId, spatial: Spatial?, body: Id?, faction: Key?, node: Node): List<Hand> =
+fun processComponentNode(
+  definitions: Definitions,
+  id: Id,
+  nextId: NextId,
+  spatial: Spatial?,
+  faction: Key?,
+  node: Node
+): List<Hand> =
   when {
     getScriptName(node) == "AttachCharacter" -> {
-      val creature = node.get("creature") as? Resource
-      if (creature == null)
-        listOf()
-      else
-        addCharacter(definitions, nextId, spatial, body, creature, faction, node)
+      addCharacter(definitions, id, nextId, spatial, faction, node)
     }
     else -> listOf()
   }
@@ -30,7 +32,7 @@ fun processComponentNode(definitions: Definitions, nextId: NextId, spatial: Spat
 fun newCharacterBody(
   definitions: Definitions, nextId: NextId, spatial: Spatial, components: List<Node>
 ): List<Hand> {
-  return components.flatMap { processComponentNode(definitions, nextId, spatial, null, null, it) }
+  return components.flatMap { processComponentNode(definitions, nextId(), nextId, spatial, null, it) }
 }
 
 fun processSceneEntities(root: Node, world: World): World {

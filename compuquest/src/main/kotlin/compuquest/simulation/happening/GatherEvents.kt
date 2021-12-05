@@ -16,7 +16,7 @@ fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): 
 
   val nextEvents = deck.spirits.flatMap { pursueGoals(world, it.key) } +
 //      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
-      tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
+//      tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
       tableEvents(eventsFromFaction(), deck.factions) +
       eventsFromWares(deck) +
       eventsFromQuests(deck) +

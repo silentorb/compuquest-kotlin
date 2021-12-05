@@ -1,8 +1,8 @@
 package compuquest.simulation.combat
 
+import compuquest.simulation.characters.getAccessoriesSequence
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.Deck
-import compuquest.simulation.general.getAccessoriesSequence
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
@@ -23,8 +23,11 @@ fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
   val damages = filterEventValues<Int>(damageCommand, characterEvents)
   return if (damages.any()) {
     val damageReduction = getAccessoriesSequence(deck.accessories, actor)
-      .filter { it.value.definition.effect == AccessoryEffects.damageReduction }
-      .sumBy { it.value.definition.strengthInt }
+      .sumOf { (_, value) ->
+        value.definition.effects
+          .filter { it.type == AccessoryEffects.damageReduction }
+          .sumOf { it.strengthInt }
+      }
 
     damages.sumOf { -max(0, it - damageReduction) }
   } else
@@ -40,9 +43,7 @@ fun applyDamageMods(multipliers: DamageMultipliers): (Damage) -> Int = { damage 
 }
 
 fun aggregateDamage(multipliers: DamageMultipliers, damages: List<Damage>) =
-  damages
-    .map(applyDamageMods(multipliers))
-    .sum()
+  damages.sumOf(applyDamageMods(multipliers))
 
 fun aggregateHealthModifiers(destructible: Destructible, damages: List<Damage>): Int {
   val damage = aggregateDamage(destructible.damageMultipliers, damages)
@@ -51,7 +52,12 @@ fun aggregateHealthModifiers(destructible: Destructible, damages: List<Damage>):
 
 typealias DamageModifierQuery = (Id) -> (DamageType) -> List<Int>
 
-fun calculateDamageMultipliers(damageTypes: Set<DamageType>, modifierQuery: DamageModifierQuery, id: Id, base: DamageMultipliers): DamageMultipliers {
+fun calculateDamageMultipliers(
+  damageTypes: Set<DamageType>,
+  modifierQuery: DamageModifierQuery,
+  id: Id,
+  base: DamageMultipliers
+): DamageMultipliers {
   val query = modifierQuery(id)
   return damageTypes.map { damageType ->
     val baseMultiplier = base[damageType] ?: defaultDamageMultiplier

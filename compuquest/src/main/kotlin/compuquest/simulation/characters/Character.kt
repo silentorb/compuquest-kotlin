@@ -1,10 +1,11 @@
-package compuquest.simulation.general
+package compuquest.simulation.characters
 
 import compuquest.simulation.combat.applyDamage
+import compuquest.simulation.definition.Definitions
+import compuquest.simulation.definition.FactionNames
 import compuquest.simulation.definition.Factions
-import silentorb.mythic.ent.Id
-import silentorb.mythic.ent.Key
-import silentorb.mythic.ent.Table
+import compuquest.simulation.general.*
+import silentorb.mythic.ent.*
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
@@ -15,8 +16,9 @@ data class CharacterDefinition(
   val attributes: Set<Key> = setOf(),
   val depiction: String,
   val frame: Int = 0,
-  val faction: Key,
+  val faction: Key = FactionNames.neutral,
   val health: Int,
+  val accessories: List<Key> = listOf(),
 )
 
 data class Character(
@@ -24,13 +26,13 @@ data class Character(
   val name: String,
   val faction: Key,
   val health: Int,
-  val body: Id? = null,
   val attributes: Set<Key> = setOf(),
   val fee: Int = 0,
   val enemyVisibilityRange: Float = 0f,
   override val depiction: String,
   override val frame: Int = 0,
   val originalDepiction: String = depiction,
+  val activeAccessory: Id? = null,
 ) : SpriteState {
   val isAlive: Boolean = health > 0
 }
@@ -45,7 +47,7 @@ fun getAccessories(accessories: Table<Accessory>, actor: Id) =
     .filterValues { it.owner == actor }
 
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
-  getAccessories(accessories, actor).any { it.value.definition.effect == effect }
+  getAccessories(accessories, actor).any { it.value.definition.effects.any { a -> a.type == effect } }
 
 fun getReadyAccessories(world: World, actor: Id) =
   getAccessories(world.deck.accessories, actor)
@@ -92,6 +94,28 @@ val updateCharacterFaction = handleEvents<Key> { event, value ->
   }
 }
 
+fun newCharacterAccessories(definitions: Definitions, definition: CharacterDefinition, id: Id, nextId: NextId): List<Hand> =
+  definition.accessories
+    .map { accessory ->
+      newAccessory(definitions, nextId, id, accessory)
+    }
+
+fun newCharacter(definition: CharacterDefinition, accessories: Hands) =
+  Character(
+    definition = definition,
+//            name = node.name,
+    name = definition.name,
+    faction = definition.faction,
+    health = definition.health,
+    depiction = definition.depiction,
+    frame = definition.frame,
+//            fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
+//            key = getNonEmptyString(creature, "key"),
+//    attributes = definition.attributes,
+    activeAccessory = accessories.mapNotNull { it.id }.firstOrNull(),
+//            enemyVisibilityRange = getFloat(creature, "enemyVisibilityRange"),
+  )
+
 fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
   val characterEvents = events.filter { it.target == actor }
   val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
@@ -107,7 +131,7 @@ fun updateCharacter(world: World, events: Events): (Id, Character) -> Character 
   character.copy(
     health = health,
     depiction = depiction,
-    body = updateCharacterBody(characterEvents, character.body),
+//    body = updateCharacterBody(characterEvents, character.body),
     faction = updateCharacterFaction(characterEvents, character.faction),
   )
 }
