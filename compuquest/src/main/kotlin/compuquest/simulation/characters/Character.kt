@@ -60,7 +60,6 @@ fun canUse(world: World, accessory: Accessory): Boolean {
   val cost = accessory.definition.cost
   return accessory.cooldown == 0f && (faction == null ||
       cost.all { faction.resources[it.key] ?: 0 >= it.value })
-
 }
 
 const val modifyHealthCommand = "modifyHealth"

@@ -14,8 +14,8 @@ fun syncMythic(world: World): World {
   val deck = world.deck
   val bodies = world.bodies.mapValues { spatial ->
     Body(
-      translation = tempCatch { spatial.value.globalTransform.origin } ?: Vector3.ZERO,
-      rotation = tempCatch { spatial.value.rotation } ?: Vector3.ZERO,
+      translation = spatial.value.globalTransform.origin,
+      rotation = spatial.value.rotation,
     )
   }
   return world.copy(
@@ -28,7 +28,8 @@ fun syncMythic(world: World): World {
 fun syncGodot(world: World, events: Events) {
   val player = getPlayer(world)
   if (player != null) {
-    val playerRigIsActive = player.value.interactingWith == null && Global.getMenuStack().none() && player.value.isPlaying
+    val playerRigIsActive =
+      player.value.interactingWith == null && Global.getMenuStack().none() && player.value.isPlaying
     val body = world.bodies[player.key]
     if (body != null) {
       body.set("isActive", playerRigIsActive)

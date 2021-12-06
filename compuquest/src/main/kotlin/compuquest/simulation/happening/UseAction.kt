@@ -1,5 +1,6 @@
 package compuquest.simulation.happening
 
+import compuquest.simulation.characters.canUse
 import compuquest.simulation.combat.startAttack
 import compuquest.simulation.general.AccessoryAttributes
 import compuquest.simulation.general.World
@@ -23,20 +24,22 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
   val action = event.action
   val targetEntity = event.targetEntity
   val accessory = deck.accessories[action]!!
-  val definition = accessory.definition
-  val isWeapon = definition.hasAttribute(AccessoryAttributes.weapon)
-  val specificEvents =
-    when {
-      isWeapon -> listOf(
-        startAttack(action, accessory, actor, event.targetLocation, event.targetEntity)
-      )
+  if (canUse(world, accessory)) {
+    println("Action")
+    val definition = accessory.definition
+    val isWeapon = definition.hasAttribute(AccessoryAttributes.weapon)
+    val specificEvents =
+      when {
+        isWeapon -> listOf(
+          startAttack(action, accessory, actor, event.targetLocation, event.targetEntity)
+        )
 //      else -> when (definition.effect) {
 //        Actions.dash -> dashEvents(definitions, accessory, actor)
 //        Actions.entangle -> withResolvedTarget(world, actor, targetEntity, entangleEvents(deck, definition?.level ?: 1))
-      else -> listOf()
+        else -> listOf()
 //      }
-    }
-  val cost = definition.cost
+      }
+    val cost = definition.cost
 //  val paymentEvents = if (cost.isNotEmpty())
 //    listOf(
 //      ModifyResource(
@@ -48,14 +51,16 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 //  else
 //    listOf()
 
-  specificEvents + Event(
-    type = useActionEvent,
-    target = actor,
-    value = UseAction(
-      action = action,
-      deferredEvents = mapOf()
-    )
-  ) //+ paymentEvents
+    specificEvents + Event(
+      type = useActionEvent,
+      target = actor,
+      value = UseAction(
+        action = action,
+        deferredEvents = mapOf()
+      )
+    ) //+ paymentEvents
+  } else
+    listOf()
 }
 
 //fun eventsFromTryAction(world: World, freedomTable: FreedomTable): (TryActionEvent) -> Events = { event ->

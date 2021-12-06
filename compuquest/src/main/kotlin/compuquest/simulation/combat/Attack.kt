@@ -89,7 +89,7 @@ fun getAttackerOriginAndFacing(
   val target = deck.bodies[targetEntity]?.translation
     ?: targetLocation
     ?: null // deck.bodies[deck.targets[attacker]]?.translation
-  val baseOrigin = body.translation + Vector3(0f, 0f, defaultCharacterHeight * 0.5f)
+  val baseOrigin = body.translation + Vector3(0f, -0.5f, 0f)
   val vector = if (target == null)
     getCharacterFacing(world, attacker)
   else

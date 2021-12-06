@@ -1,6 +1,7 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.definition.Definitions
+import compuquest.simulation.happening.UseAction
 import compuquest.simulation.happening.useActionEvent
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -13,6 +14,7 @@ data class ActionEffect(
   val type: String,
   val strength: Float = 0f,
   val spawns: Key? = null,
+  val speed: Float = 1f
 ) {
   val strengthInt: Int get() = strength.toInt()
 }
@@ -77,11 +79,13 @@ fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key)
 }
 
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
-  val uses = filterEventTargets<Id>(useActionEvent, events)
+  val uses = events
+    .filter { it.type == useActionEvent }
+    .mapNotNull { (it.value as? UseAction)?.action }
   return { id, accessory ->
     val used = uses.contains(id)
     val cooldown = if (used)
-      accessory.cooldown
+      accessory.definition.cooldown
     else
       max(0f, accessory.cooldown - delta)
 

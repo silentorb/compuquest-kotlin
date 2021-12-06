@@ -28,7 +28,7 @@ val actionPresses = setOf(
 fun gatherUserInput(deck: Deck, player: Id): Events =
   keyStrokes.filter { Input.isActionJustReleased(it) }
     .map { newEvent(it, player) } +
-      actionPresses.filter { Input.isActionJustPressed(it) }
+      actionPresses.filter { Input.isActionPressed(it) }
         .mapNotNull {
           val character = deck.characters[player]
           if (character?.activeAccessory != null)
