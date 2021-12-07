@@ -22,7 +22,7 @@ fun eventsFromHomingMissile(world: World, delta: Float): (Id, HomingMissile) -> 
     val distance = vector.length()
     if (distance < 1f)
       listOf(
-        Event(damageCommand, missile.target, missile.damage),
+        Event(damageEvent, missile.target, missile.damage),
         newEvent(deleteEntityCommand, actor),
         newEvent(detrimentalEffectCommand, missile.target)
       )

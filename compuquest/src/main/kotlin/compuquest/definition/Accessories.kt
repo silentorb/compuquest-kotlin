@@ -36,7 +36,7 @@ fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
         type = AccessoryEffects.attack,
         strength = 10f,
         spawns = "res://entities/effect/Fireball.tscn",
-        speed = 1f,
+        speed = 30f,
       ),
     )
   ),

@@ -33,6 +33,7 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
         isWeapon -> listOf(
           startAttack(action, accessory, actor, event.targetLocation, event.targetEntity)
         )
+
 //      else -> when (definition.effect) {
 //        Actions.dash -> dashEvents(definitions, accessory, actor)
 //        Actions.entangle -> withResolvedTarget(world, actor, targetEntity, entangleEvents(deck, definition?.level ?: 1))

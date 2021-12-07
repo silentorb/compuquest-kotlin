@@ -7,6 +7,7 @@ enum class Factions {
 }
 
 object FactionNames {
-  val undead = "undead"
   val neutral = "neutral"
+  val player = "player"
+  val undead = "undead"
 }

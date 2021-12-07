@@ -3,6 +3,7 @@ package scripts.entities
 import godot.Area
 import godot.KinematicBody
 import godot.RigidBody
+import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
@@ -12,19 +13,7 @@ import silentorb.mythic.godoting.deleteNode
 @RegisterClass
 class Projectile : Area() {
 
-	@RegisterProperty
-	var velocity: Vector3 = Vector3.ZERO
-
-	@RegisterProperty
-	var range: Float = 0f
-
-	var origin: Vector3 = Vector3.ZERO
-	var ignore: Any? = null
-
-	@RegisterFunction
-	override fun _ready() {
-		origin = transform.origin
-	}
+//	var ignore: Spatial? = null
 
 //	@RegisterFunction
 //	override fun _physicsProcess(delta: Double) {

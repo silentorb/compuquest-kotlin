@@ -17,10 +17,10 @@ data class Damage(
   val source: Id
 )
 
-const val damageCommand = "damage"
+const val damageEvent = "damage"
 
 fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
-  val damages = filterEventValues<Int>(damageCommand, characterEvents)
+  val damages = filterEventValues<Int>(damageEvent, characterEvents)
   return if (damages.any()) {
     val damageReduction = getAccessoriesSequence(deck.accessories, actor)
       .sumOf { (_, value) ->

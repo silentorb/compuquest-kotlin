@@ -1,11 +1,7 @@
 package compuquest.simulation.happening
 
-import compuquest.simulation.combat.eventsFromHomingMissile
 import compuquest.simulation.combat.eventsFromMissile
 import compuquest.simulation.general.World
-import compuquest.simulation.general.eventsFromFaction
-import compuquest.simulation.general.eventsFromQuests
-import compuquest.simulation.general.eventsFromWares
 import compuquest.simulation.intellect.pursueGoals
 import silentorb.mythic.happening.Events
 
@@ -15,14 +11,13 @@ fun <K, V> tableEvents(transform: (K, V) -> Events, table: Map<K, V>): Events =
 fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): Events {
 	val deck = world.deck
 
-	val nextEvents = deck.spirits.flatMap { pursueGoals(world, it.key) } +
-			tableEvents(eventsFromMissile(world, delta), deck.missiles) +
+	val events2 = deck.spirits.flatMap { pursueGoals(world, it.key) } +
+			tableEvents(eventsFromMissile(world, delta), deck.missiles)
 //      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
 //      tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
 //      tableEvents(eventsFromFaction(), deck.factions) +
 //      eventsFromWares(deck) +
 //      eventsFromQuests(deck) +
-			eventsFromEvents(world, previous, events)
 
-	return nextEvents
+	return eventsFromEvents(world, previous, events + events2)
 }

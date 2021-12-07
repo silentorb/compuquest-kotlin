@@ -48,10 +48,11 @@ fun addCharacter(
   nextId: NextId,
   spatial: Spatial?,
   faction: Key?,
-  node: Node
+  node: Node,
+  additional: List<Any> = listOf()
 ): Hands {
   return tempCatch {
-//    val sprite = node.getParent()?.findNode("sprite")
+    val sprite = node.getParent()?.findNode("sprite")
 //    val depiction = getString(creature, "depiction")
 //    sprite?.set("animation", depiction)
 //    val refinedFaction = parseFaction(faction, node)
@@ -72,10 +73,9 @@ fun addCharacter(
         components =
         listOfNotNull(
           newCharacter(definition, accessories),
-//          sprite,
+          sprite,
           spatial,
-          Spirit(),
-        )
+        ) + additional
       )
     ) + accessories
   }
