@@ -7,13 +7,28 @@ import compuquest.simulation.general.ActionEffect
 import silentorb.mythic.ent.KeyTable
 
 object Accessories {
+  val rifle = "rifle"
   val rocketLauncher = "rocketLauncher"
 }
 
 fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
+  Accessories.rifle to AccessoryDefinition(
+    name = Accessories.rifle,
+    cooldown = 0.2f,
+    attributes = setOf(AccessoryAttributes.weapon),
+    range = 30f,
+    effects = listOf(
+      ActionEffect(
+        type = AccessoryEffects.attack,
+        strength = 10f,
+        spawns = "res://entities/effect/Fireball.tscn",
+        speed = 75f,
+      ),
+    )
+  ),
   Accessories.rocketLauncher to AccessoryDefinition(
     name = Accessories.rocketLauncher,
-    cooldown = 0.2f,
+    cooldown = 1f,
     attributes = setOf(AccessoryAttributes.weapon),
     range = 20f,
     effects = listOf(
@@ -21,8 +36,8 @@ fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
         type = AccessoryEffects.attack,
         strength = 10f,
         spawns = "res://entities/effect/Fireball.tscn",
-        speed = 10f,
+        speed = 1f,
       ),
     )
-  )
+  ),
 )

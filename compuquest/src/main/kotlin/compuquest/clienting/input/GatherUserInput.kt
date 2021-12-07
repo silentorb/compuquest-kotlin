@@ -14,8 +14,8 @@ import silentorb.mythic.happening.newEvent
 
 val keyStrokes = setOf(
   Commands.interact,
-  Commands.manageMembers,
-  Commands.manageQuests,
+//  Commands.manageMembers,
+//  Commands.manageQuests,
   Commands.menuBack,
   Commands.newGame,
 )

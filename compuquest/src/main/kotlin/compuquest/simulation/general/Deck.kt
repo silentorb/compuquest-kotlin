@@ -11,17 +11,17 @@ import silentorb.mythic.ent.newDeckReflection
 import compuquest.simulation.characters.Character
 
 data class Deck(
-  val accessories: Table<Accessory> = mapOf(),
-  val bodies: Table<Body> = mapOf(),
-  val characters: Table<Character> = mapOf(),
-  val interactables: Table<Interactable> = mapOf(),
-  val factions: KeyTable<Faction> = mapOf(),
-  val homingMissiles: Table<HomingMissile> = mapOf(),
-  val missiles: Table<Missile> = mapOf(),
-  val players: Table<Player> = mapOf(),
-  val quests: Table<Quest> = mapOf(),
-  val spirits: Table<Spirit> = mapOf(),
-  val wares: Table<Ware> = mapOf(),
+	val accessories: Table<Accessory> = mapOf(),
+	val bodies: Table<Body> = mapOf(),
+	val characters: Table<Character> = mapOf(),
+	val interactables: Table<Interactable> = mapOf(),
+	val factions: KeyTable<Faction> = mapOf(),
+	val homingMissiles: Table<HomingMissile> = mapOf(),
+	val missiles: Table<Missile> = mapOf(),
+	val players: Table<Player> = mapOf(),
+	val quests: Table<Quest> = mapOf(),
+	val spirits: Table<Spirit> = mapOf(),
+	val wares: Table<Ware> = mapOf(),
 )
 
 val deckReflection = newDeckReflection(Deck::class, Hand::class)
