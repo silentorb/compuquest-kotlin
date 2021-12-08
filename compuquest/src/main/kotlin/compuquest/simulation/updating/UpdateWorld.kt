@@ -4,7 +4,7 @@ import compuquest.simulation.general.*
 import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import scripts.Global
-import scripts.entities.Player
+import scripts.entities.CharacterBody
 import silentorb.mythic.godoting.tempCatchStatement
 
 const val simulationFps: Int = 60
@@ -27,7 +27,7 @@ fun syncMythic(world: World): World {
 fun syncGodot(world: World, events: Events) {
 	val player = getPlayer(world)
 	if (player != null) {
-		val body = world.bodies[player.key] as? Player
+		val body = world.bodies[player.key] as? CharacterBody
 		val character = world.deck.characters[player.key]
 		if (body != null && character != null) {
 			body.isActive = character.isAlive

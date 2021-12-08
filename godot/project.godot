@@ -205,11 +205,6 @@ _global_script_classes=[ {
 "path": "res://src/main/kotlin/scripts/gui/MenuScreen.kt"
 }, {
 "base": "Node",
-"class": "scripts_gui_PlayerInfo",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/PlayerInfo.kt"
-}, {
-"base": "Node",
 "class": "scripts_gui_Prompt",
 "language": "Kotlin",
 "path": "res://src/main/kotlin/scripts/gui/Prompt.kt"
@@ -279,7 +274,6 @@ _global_script_class_icons={
 "scripts_gui_IntLabel": "",
 "scripts_gui_Management": "",
 "scripts_gui_MenuScreen": "",
-"scripts_gui_PlayerInfo": "",
 "scripts_gui_Prompt": "",
 "scripts_gui_QuestManagement": "",
 "scripts_gui_ValueMax": "",

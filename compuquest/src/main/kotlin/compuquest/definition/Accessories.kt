@@ -30,7 +30,7 @@ fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
     name = Accessories.rocketLauncher,
     cooldown = 1f,
     attributes = setOf(AccessoryAttributes.weapon),
-    range = 20f,
+    range = 5f,
     effects = listOf(
       ActionEffect(
         type = AccessoryEffects.attack,

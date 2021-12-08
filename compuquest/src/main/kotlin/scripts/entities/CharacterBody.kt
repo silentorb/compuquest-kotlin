@@ -1,40 +1,24 @@
 package scripts.entities
 
-import compuquest.simulation.general.isPlayerDead
-import godot.*
+import godot.KinematicBody
+import godot.Spatial
 import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.NodePath
-import godot.core.Vector2
 import godot.core.Vector3
 import godot.global.GD
-import scripts.Global
 import kotlin.math.abs
 
 @RegisterClass
-class Player : KinematicBody() {
-
-	@Export
-	@RegisterProperty
-	var mouseSensitivity: Float = 8f
+class CharacterBody : KinematicBody() {
 
 	@Export
 	@RegisterProperty
 	var headPath: NodePath? = null
 
-	@Export
-	@RegisterProperty
-	var cameraPath: NodePath? = null
-
-	@Export
-	@RegisterProperty
-	var fov: Float = 80f
-
-	var mouseAxis = Vector2.ZERO
 	var head: Spatial? = null
-	var camera: Camera? = null
 	var snap: Vector3 = Vector3.ZERO
 	var velocity = Vector3.ZERO
 	var moveAxis = Vector3.ZERO
@@ -74,8 +58,6 @@ class Player : KinematicBody() {
 	@RegisterFunction
 	override fun _ready() {
 		head = getNode(headPath!!) as? Spatial
-		camera = getNode(cameraPath!!) as? Camera
-		camera!!.fov = fov.toDouble()
 		speed = walkSpeed
 	}
 
@@ -160,64 +142,9 @@ class Player : KinematicBody() {
 		isJumpingInput = false
 	}
 
-	fun cameraRotation() {
-		val horizontal = -mouseAxis.x * mouseSensitivity / 100
-		val vertical = -mouseAxis.y * mouseSensitivity / 100
-
-		mouseAxis = Vector2.ZERO
-
-		rotateY(GD.deg2rad(horizontal))
-		head!!.rotateX(GD.deg2rad(vertical))
-
-		val tempRotation = head!!.rotationDegrees
-		tempRotation.x = GD.clamp(tempRotation.x, -90, 90)
-		head!!.rotationDegrees = tempRotation
-	}
-
-	fun deathCollapse() {
-		head!!.translation {
-			y = GD.lerp(head!!.translation.y.toFloat(), -0.35f, 0.05f).toDouble()
-		}
-
-		head!!.rotation {
-			z = GD.lerp(head!!.rotation.z.toFloat(), 0.5f, 0.05f).toDouble()
-		}
-	}
-
-	@RegisterFunction
-	override fun _process(delta: Double) {
-		if (isActive) {
-			Input.setMouseMode(Input.MOUSE_MODE_CAPTURED)
-			moveAxis.x = Input.getActionStrength("move_forward") - Input.getActionStrength("move_backward")
-			moveAxis.y = Input.getActionStrength("move_right") - Input.getActionStrength("move_left")
-
-			if (Input.isActionJustPressed("move_jump")) {
-				isJumpingInput = true
-			}
-		} else {
-			moveAxis = Vector3.ZERO
-			isJumpingInput = false
-			Input.setMouseMode(Input.MOUSE_MODE_VISIBLE)
-		}
-	}
-
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
-//		if (isActive) {
 		walk(delta.toFloat())
-//		}
-		if (isPlayerDead(Global.world?.deck)) {
-			deathCollapse()
-		}
 	}
 
-	@RegisterFunction
-	override fun _input(event: InputEvent) {
-		if (isActive) {
-			if (event is InputEventMouseMotion) {
-				mouseAxis = event.relative
-				cameraRotation()
-			}
-		}
-	}
 }
