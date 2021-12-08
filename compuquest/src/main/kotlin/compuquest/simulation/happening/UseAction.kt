@@ -7,7 +7,6 @@ import compuquest.simulation.general.World
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.GenericEvent
 
 data class UseAction(
   val action: Id,

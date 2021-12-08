@@ -1,5 +1,6 @@
 package scripts.entities
 
+import compuquest.simulation.general.isPlayerDead
 import godot.*
 import godot.annotation.Export
 import godot.annotation.RegisterClass
@@ -9,6 +10,7 @@ import godot.core.NodePath
 import godot.core.Vector2
 import godot.core.Vector3
 import godot.global.GD
+import scripts.Global
 import kotlin.math.abs
 
 @RegisterClass
@@ -172,6 +174,16 @@ class Player : KinematicBody() {
 		head!!.rotationDegrees = tempRotation
 	}
 
+	fun deathCollapse() {
+		head!!.translation {
+			y = GD.lerp(head!!.translation.y.toFloat(), -0.35f, 0.05f).toDouble()
+		}
+
+		head!!.rotation {
+			z = GD.lerp(head!!.rotation.z.toFloat(), 0.5f, 0.05f).toDouble()
+		}
+	}
+
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		if (isActive) {
@@ -183,14 +195,19 @@ class Player : KinematicBody() {
 				isJumpingInput = true
 			}
 		} else {
+			moveAxis = Vector3.ZERO
+			isJumpingInput = false
 			Input.setMouseMode(Input.MOUSE_MODE_VISIBLE)
 		}
 	}
 
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
-		if (isActive) {
-			walk(delta.toFloat())
+//		if (isActive) {
+		walk(delta.toFloat())
+//		}
+		if (isPlayerDead(Global.world?.deck)) {
+			deathCollapse()
 		}
 	}
 

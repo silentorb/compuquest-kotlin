@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/main/kotlin/scripts/gui/Hud.kt" type="Script" id=1]
+[ext_resource path="res://gui/hud/Portrait.tscn" type="PackedScene" id=2]
+[ext_resource path="res://gui/hud/Panel.tres" type="StyleBox" id=3]
 [ext_resource path="res://gui/hud/PlayerInfo.tscn" type="PackedScene" id=4]
 [ext_resource path="res://gui/style/Theme.tres" type="Theme" id=5]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 0, 0, 0.231373 )
+[ext_resource path="res://gui/hud/resize-viewport.gd" type="Script" id=6]
 
 [node name="Hud" type="MarginContainer"]
 anchor_right = 1.0
@@ -16,11 +16,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="pain-overlay" type="Panel" parent="."]
-margin_right = 1024.0
-margin_bottom = 600.0
-custom_styles/panel = SubResource( 1 )
-
 [node name="vbox" type="VBoxContainer" parent="."]
 margin_right = 1024.0
 margin_bottom = 600.0
@@ -30,13 +25,29 @@ __meta__ = {
 
 [node name="overlay" type="MarginContainer" parent="vbox"]
 margin_right = 1024.0
-margin_bottom = 507.0
+margin_bottom = 600.0
 size_flags_vertical = 3
 
-[node name="margin" type="MarginContainer" parent="vbox/overlay"]
-margin_top = 462.0
+[node name="viewport-container" type="ViewportContainer" parent="vbox/overlay"]
+visible = false
 margin_right = 1024.0
-margin_bottom = 507.0
+margin_bottom = 600.0
+stretch = true
+script = ExtResource( 6 )
+
+[node name="viewport3d" type="Viewport" parent="vbox/overlay/viewport-container"]
+size = Vector2( 1024, 600 )
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="slot" type="MarginContainer" parent="vbox/overlay"]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="margin" type="MarginContainer" parent="vbox/overlay"]
+margin_top = 555.0
+margin_right = 1024.0
+margin_bottom = 600.0
 size_flags_vertical = 8
 custom_constants/margin_top = 10
 custom_constants/margin_bottom = 10
@@ -50,7 +61,8 @@ align = 1
 valign = 1
 
 [node name="lower-third" type="MarginContainer" parent="vbox"]
-margin_top = 511.0
+visible = false
+margin_top = 400.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
@@ -60,9 +72,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="panel" type="Panel" parent="vbox/lower-third"]
+margin_right = 1024.0
+margin_bottom = 200.0
+custom_styles/panel = ExtResource( 3 )
+
 [node name="hbox" type="HBoxContainer" parent="vbox/lower-third"]
 margin_right = 1024.0
-margin_bottom = 89.0
+margin_bottom = 200.0
 size_flags_horizontal = 3
 size_flags_vertical = 8
 __meta__ = {
@@ -71,9 +88,28 @@ __meta__ = {
 
 [node name="player-info" parent="vbox/lower-third/hbox" instance=ExtResource( 4 )]
 anchor_bottom = 0.0
-margin_right = 103.0
-margin_bottom = 89.0
+margin_right = 76.0
+margin_bottom = 200.0
 size_flags_vertical = 1
+
+[node name="portrait1" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
+margin_left = 80.0
+margin_right = 313.0
+
+[node name="portrait2" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
+margin_left = 317.0
+margin_right = 550.0
+index = 1
+
+[node name="portrait3" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
+margin_left = 554.0
+margin_right = 787.0
+index = 2
+
+[node name="portrait4" parent="vbox/lower-third/hbox" instance=ExtResource( 2 )]
+margin_left = 791.0
+margin_right = 1024.0
+index = 3
 
 [node name="debug" type="Label" parent="."]
 margin_bottom = 25.0

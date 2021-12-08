@@ -10,12 +10,10 @@ data class DamageEvent(
   val position: Vector3? = null
 )
 
-const val damageEventKey = "damageEvent"
-
 fun newDamageEvents(target: Id, source: Id, damages: List<DamageDefinition>, position: Vector3? = null): Events =
   damages.map { damage ->
     Event(
-      type = damageEventKey,
+      type = damageEvent,
       target = target,
       value = DamageEvent(
         position = position,

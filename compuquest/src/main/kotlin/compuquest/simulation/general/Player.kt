@@ -1,6 +1,7 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.input.Commands
+import scripts.Global
 import scripts.gui.gameOverScreen
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -16,62 +17,62 @@ val addMemberToParty = "addMemberToParty"
 val removeMemberFromParty = "removeMemberFromParty"
 
 data class Player(
-  val faction: Key,
+	val faction: Key,
 //  val party: List<Id> = listOf(),
-  val canInteractWith: Interactable? = null,
-  val interactingWith: Id? = null,
-  val isPlaying: Boolean = true,
+	val canInteractWith: Interactable? = null,
+	val interactingWith: Id? = null,
+	val isPlaying: Boolean = true,
 )
 
 fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
-  when (event.type) {
-    Commands.interact -> player.canInteractWith?.target
-    Commands.finishInteraction -> null
-    else -> value
-  }
+	when (event.type) {
+		Commands.interact -> player.canInteractWith?.target
+		Commands.finishInteraction -> null
+		else -> value
+	}
 }
 
 fun updateParty() = handleEvents<List<Id>> { event, value ->
-  when (event.type) {
-    hiredNpc -> value + event.value as Id
-    addMemberToParty -> {
-      val member = event.value as? Id
-      if (member != null && value.size < maxPartySize)
-        value + member
-      else
-        value
-    }
-    removeMemberFromParty -> {
-      val member = event.value as? Id
-      if (member != null && value.size > 1)
-        value - member
-      else
-        value
-    }
-    else -> value
-  }
+	when (event.type) {
+		hiredNpc -> value + event.value as Id
+		addMemberToParty -> {
+			val member = event.value as? Id
+			if (member != null && value.size < maxPartySize)
+				value + member
+			else
+				value
+		}
+		removeMemberFromParty -> {
+			val member = event.value as? Id
+			if (member != null && value.size > 1)
+				value - member
+			else
+				value
+		}
+		else -> value
+	}
 }
 
 //fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
 //  events.any { it.type == detrimentalEffectCommand && player.party.contains(it.target) }
 
 fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
-  val deck = world.deck
-  val canInteractWith = if (player.interactingWith == null && player.isPlaying)
-    getInteractable(world, actor)
-  else
-    null
+	val deck = world.deck
+	val canInteractWith = if (player.interactingWith == null && player.isPlaying)
+		getInteractable(world, actor)
+	else
+		null
 
-  val removedCharacters = events.filter { it.type == removeFactionMemberEvent }
-    .mapNotNull {
-      if (deck.characters[it.target]?.faction == player.faction)
-        it.target as? Id
-      else
-        null
-    }
+	val removedCharacters = events.filter { it.type == removeFactionMemberEvent }
+		.mapNotNull {
+			if (deck.characters[it.target]?.faction == player.faction)
+				it.target as? Id
+			else
+				null
+		}
 
-  val playerEvents = events.filter { it.target == actor }
-  val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
+	val playerEvents = events.filter { it.target == actor }
+	val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
 //  val party = updateParty()(playerEvents, player.party) - removedCharacters
 
 //  val isPlaying = party.any { deck.characters[it]?.isAlive ?: false }
@@ -81,15 +82,24 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 //  else
 //    updateManagementMenu(events, player.menu)
 
-  player.copy(
-    canInteractWith = canInteractWith,
-    interactingWith = interactingWith,
+	player.copy(
+		canInteractWith = canInteractWith,
+		interactingWith = interactingWith,
 //    party = party,
 //    isPlaying = isPlaying,
-  )
+	)
 }
 
 //fun getNonPartyMembers(deck: Deck, player: Player): Set<Id> =
 //  deck.characters
 //    .filterValues { it.faction == player.faction }
 //    .keys - player.party
+
+fun isPlayerDead(deck: Deck?): Boolean {
+	val player = getPlayer(deck)
+	return if (deck != null && player != null) {
+		val character = deck.characters[player.key]
+		return character != null && !character.isAlive
+	} else
+		false
+}

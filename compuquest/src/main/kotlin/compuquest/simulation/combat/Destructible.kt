@@ -62,7 +62,7 @@ fun modifyDestructible(events: Events, actor: Id, destructible: Destructible, mo
     modifyResourceWithEvents(events, actor, ResourceTypes.health, destructible.health, destructible.maxHealth, mod)
 
 fun updateDestructibleHealth(definitions: Definitions, deck: Deck, events: Events): (Id, Destructible) -> Destructible {
-  val damageEvents = filterEventsByType<DamageEvent>(damageEventKey, events)
+  val damageEvents = filterEventsByType<DamageEvent>(damageEvent, events)
   val restoreEvents = events.filterIsInstance<RestoreHealth>()
 
   return { actor, destructible ->
