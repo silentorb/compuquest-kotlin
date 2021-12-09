@@ -8,6 +8,8 @@ import godot.core.Vector3
 import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 
+const val spiritRangeBuffer = 0.1f
+
 fun inRangeAndVisible(
 	space: PhysicsDirectSpaceState,
 	world: World,
@@ -69,7 +71,6 @@ fun filterEnemyTargets(
 fun getNextTarget(
 	world: World,
 	actor: Id,
-	accessory: Accessory,
 	target: Id?
 ): Id? {
 	val character = world.deck.characters[actor]!!
@@ -90,21 +91,60 @@ fun getNextTarget(
 	}
 }
 
-fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
-	// Ensure the same action is never immediately tried twice in a row.
-	// With the current setup, that situation could lead to race conditions.
-	val readyActions = getReadyAccessories(world, actor)
-		.minus(spirit.focusedAction ?: 0L) // Branching shortcut.  Assuming 0L is never a valid key.
+fun updateDestination(world: World, actor: Id, targetLocation: Vector3?): Vector3? {
+	val navigation = world.navigation
+	val sourceLocation = world.deck.bodies[actor]?.translation
+	return if (navigation != null && sourceLocation != null && targetLocation != null) {
+//		val start = navigation.getClosestPoint(sourceLocation)
+		val path = navigation.getSimplePath(sourceLocation, targetLocation)
+		path.drop(1).firstOrNull { it.distanceTo(sourceLocation) > 0.1f }
+	} else
+		null
+}
 
-	val focusedAction = world.dice.takeOneOrNull(readyActions.keys)
-	val accessory = world.deck.accessories[focusedAction]
-	val target = if (accessory != null && accessory.definition.effects.firstOrNull()?.type == AccessoryEffects.attack)
-		getNextTarget(world, actor, accessory, spirit.target)
+fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
+	val readyActions = getReadyAccessories(world, actor)
+	return readyActions.maxByOrNull { it.value.definition.range }
+//world.dice.takeOneOrNull(readyActions.entries)
+}
+
+fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
+	val target = getNextTarget(world, actor, spirit.target)
+	val body = world.deck.bodies[actor]
+	val targetRange = if (body != null && target != null)
+		getTargetRange(world, body, target)
 	else
-		spirit.target
+		null
+
+	val accessory = if (targetRange != null)
+		updateFocusedAction(world, actor)
+	else
+		null
+
+	val targetBody = if (target != null)
+		world.deck.bodies[target]
+	else
+		null
+
+	val lastKnownTargetLocation = when {
+		targetBody != null -> targetBody.translation
+		spirit.lastKnownTargetLocation != null && body != null &&
+				spirit.lastKnownTargetLocation.distanceTo(body.translation) < 0.5f -> null
+		else -> spirit.lastKnownTargetLocation
+	}
+
+	val destination = when {
+		target != null && targetRange != null && accessory != null &&
+				targetRange > accessory.value.definition.range ->
+			updateDestination(world, actor, world.deck.bodies[target]?.translation)
+		target == null && lastKnownTargetLocation != null -> updateDestination(world, actor, lastKnownTargetLocation)
+		else -> null
+	}
 
 	spirit.copy(
-		focusedAction = focusedAction,
+		focusedAction = accessory?.key,
 		target = target,
+		nextDestination = destination,
+		lastKnownTargetLocation = lastKnownTargetLocation
 	)
 }

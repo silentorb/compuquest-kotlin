@@ -5,6 +5,7 @@ import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.updating.newEntitiesFromHands
+import godot.Navigation
 import godot.Node
 import godot.Spatial
 import scripts.entities.actor.AttachPlayer
@@ -58,5 +59,9 @@ fun processSceneEntities(root: Node, world: World): World {
 		}
 
 	val nextWorld = newEntitiesFromHands(hands, world)
+		.copy(
+			navigation = root.findNode("Navigation") as? Navigation,
+		)
+
 	return populateQuests(nextWorld)
 }

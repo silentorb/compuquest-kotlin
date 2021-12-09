@@ -21,7 +21,6 @@ class CharacterBody : KinematicBody() {
 	var head: Spatial? = null
 	var snap: Vector3 = Vector3.ZERO
 	var velocity = Vector3.ZERO
-	var moveAxis = Vector3.ZERO
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)
@@ -57,11 +56,16 @@ class CharacterBody : KinematicBody() {
 
 	@RegisterFunction
 	override fun _ready() {
-		head = getNode(headPath!!) as? Spatial
+		val _headPath = headPath
+		head = if (_headPath != null)
+			getNode(_headPath) as? Spatial
+		else
+			null
+
 		speed = walkSpeed
 	}
 
-	fun directionInput(): Vector3 {
+	fun directionInput(moveAxis: Vector3): Vector3 {
 		val aim = globalTransform.basis
 		val directionA = when {
 			moveAxis.x >= 0.5f -> -aim.z
@@ -79,8 +83,8 @@ class CharacterBody : KinematicBody() {
 		return Vector3(result.x, 0f, result.z).normalized()
 	}
 
-	fun accelerate(delta: Float) {
-		val direction = directionInput()
+	fun accelerate(moveAxis: Vector3, delta: Float) {
+		val direction = directionInput(moveAxis)
 		var tempVelocity = velocity
 		val target = direction * speed
 
@@ -117,7 +121,7 @@ class CharacterBody : KinematicBody() {
 		}
 	}
 
-	fun walk(delta: Float) {
+	fun walk(moveAxis: Vector3, delta: Float) {
 		if (isOnFloor()) {
 			snap = -getFloorNormal() - getFloorVelocity() * delta
 
@@ -136,15 +140,9 @@ class CharacterBody : KinematicBody() {
 
 		updateSpeed()
 
-		accelerate(delta)
+		accelerate(moveAxis, delta)
 
 		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
 		isJumpingInput = false
 	}
-
-	@RegisterFunction
-	override fun _physicsProcess(delta: Double) {
-		walk(delta.toFloat())
-	}
-
 }

@@ -2,6 +2,7 @@ package compuquest.simulation.general
 
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Zone
+import godot.Navigation
 import godot.Node
 import godot.PhysicsDirectSpaceState
 import godot.Spatial
@@ -24,6 +25,7 @@ data class World(
 	val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
 	val day: DayState,
 	val previousEvents: Events = listOf(),
+	val navigation: Navigation? = null
 )
 
 fun getSpace(world: World): PhysicsDirectSpaceState? =

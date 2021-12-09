@@ -3,11 +3,14 @@ package compuquest.simulation.updating
 import compuquest.simulation.general.*
 import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
+import compuquest.simulation.intellect.updateSpirit
 import scripts.Global
 import scripts.entities.CharacterBody
+import silentorb.mythic.ent.mapTable
 import silentorb.mythic.godoting.tempCatchStatement
 
 const val simulationFps: Int = 60
+const val simulationDelta: Float = 1f / simulationFps.toFloat()
 
 fun syncMythic(world: World): World {
 	val deck = world.deck
@@ -70,14 +73,26 @@ fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
 	val world = updateWorldDay(previousWorld)
 
 	val world2 = syncMythic(world)
-	val events2 = gatherEvents(world2, previousWorld, delta, events)
-	val deck = updateDeck(events2, world2, delta)
+
+	// Update the AI state before events are generated because AI state is not directly dependent on
+	// events but AI state does generate events and it is better for the AI state and AI event generation
+	// to use the same world state or bugs could arise such as the AI state referring to an entity that
+	// was just deleted and the AI event generation trying to access that deleted entity.
+	// That in turn removes the need for a lot of defensive code.
 	val world3 = world2.copy(
+		deck = world2.deck.copy(
+			spirits = mapTable(world2.deck.spirits, updateSpirit(world)),
+		)
+	)
+
+	val events2 = gatherEvents(world3, previousWorld, delta, events)
+	val deck = updateDeck(events2, world3, delta)
+	val world4 = world3.copy(
 		deck = deck,
 	)
-	updateDepictions(world, world3)
-	val world4 = deleteEntities(events2, world3)
-	val world5 = newEntities(events2, world4)
-	syncGodot(world5, events2)
-	return world5.copy(previousEvents = events2)
+	updateDepictions(world, world4)
+	val world5 = deleteEntities(events2, world4)
+	val world6 = newEntities(events2, world5)
+	syncGodot(world6, events2)
+	return world6.copy(previousEvents = events2)
 }

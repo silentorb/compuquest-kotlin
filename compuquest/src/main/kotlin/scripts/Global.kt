@@ -28,6 +28,7 @@ enum class InitMode {
 	readyInitOrInitialized,
 	delayRestart,
 	readyRestart,
+	debugNone,
 }
 
 @RegisterClass
@@ -213,6 +214,11 @@ class Global : Node() {
 				}
 			}
 		}
+	}
+
+	override fun _onDestroy() {
+		// Need to release any references to Godot objects or there will be a memory leak
+		worlds = listOf()
 	}
 }
 

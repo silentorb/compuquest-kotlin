@@ -30,6 +30,7 @@ class PlayerController : Node() {
 	var fov: Float = 80f
 
 	var mouseAxis = Vector2.ZERO
+	var moveAxis = Vector3.ZERO
 
 	@RegisterFunction
 	override fun _ready() {
@@ -43,16 +44,14 @@ class PlayerController : Node() {
 		if (body != null) {
 			if (body.isActive) {
 				Input.setMouseMode(Input.MOUSE_MODE_CAPTURED)
-				val moveAxis = body.moveAxis
 				moveAxis.x = Input.getActionStrength("move_forward") - Input.getActionStrength("move_backward")
 				moveAxis.y = Input.getActionStrength("move_right") - Input.getActionStrength("move_left")
-				body.moveAxis = moveAxis
 
 				if (Input.isActionJustPressed("move_jump")) {
 					body.isJumpingInput = true
 				}
 			} else {
-				body.moveAxis = Vector3.ZERO
+				moveAxis = Vector3.ZERO
 				body.isJumpingInput = false
 				Input.setMouseMode(Input.MOUSE_MODE_VISIBLE)
 			}
@@ -97,9 +96,11 @@ class PlayerController : Node() {
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
 		val body = getParent() as? CharacterBody
-		if (body != null && isPlayerDead(Global.world?.deck)) {
-			deathCollapse(body.head!!)
+		if (body != null) {
+			if (isPlayerDead(Global.world?.deck)) {
+				deathCollapse(body.head!!)
+			}
+			body.walk(moveAxis, delta.toFloat())
 		}
 	}
-
 }
