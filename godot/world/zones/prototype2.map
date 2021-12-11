@@ -51,12 +51,12 @@
 }
 // brush 5
 {
-( 0 96 56 ) ( 0 -16 56 ) ( 0 -16 16 ) prototype-grid-gray 0 0 0 1 1
-( 0 -16 56 ) ( 8 -16 56 ) ( 8 -16 16 ) prototype-grid-gray 0 0 0 1 1
-( 8 -16 16 ) ( 8 96 16 ) ( 0 96 16 ) prototype-grid-gray 0 0 0 1 1
-( 0 96 56 ) ( 8 96 56 ) ( 8 -16 56 ) prototype-grid-gray 0 0 0 1 1
-( 8 96 16 ) ( 8 96 56 ) ( 0 96 56 ) prototype-grid-gray 0 0 0 1 1
-( 8 -16 56 ) ( 8 96 56 ) ( 8 96 16 ) prototype-grid-gray 0 0 0 1 1
+( -48 88 56 ) ( -48 -24 56 ) ( -48 -24 16 ) prototype-grid-gray 8 0 0 1 1
+( -48 -24 56 ) ( -40 -24 56 ) ( -40 -24 16 ) prototype-grid-gray 48 0 0 1 1
+( -40 -24 16 ) ( -40 88 16 ) ( -48 88 16 ) prototype-grid-gray 48 -8 0 1 1
+( -48 88 56 ) ( -40 88 56 ) ( -40 -24 56 ) prototype-grid-gray 48 -8 0 1 1
+( -40 88 16 ) ( -40 88 56 ) ( -48 88 56 ) prototype-grid-gray 48 0 0 1 1
+( -40 -24 56 ) ( -40 88 56 ) ( -40 88 16 ) prototype-grid-gray 8 0 0 1 1
 }
 // brush 6
 {
@@ -150,66 +150,66 @@
 }
 // brush 16
 {
-( -64 128 16 ) ( -64 129 16 ) ( -64 128 17 ) prototype-grid-gray 0 0 0 1 1
-( -64 128 16 ) ( -64 128 17 ) ( -63 128 16 ) prototype-grid-gray 0 0 0 1 1
-( -64 128 16 ) ( -63 128 16 ) ( -64 129 16 ) prototype-grid-gray 0 0 0 1 1
-( 0 136 48 ) ( 0 137 48 ) ( 1 136 48 ) prototype-grid-gray 0 0 0 1 1
-( 0 136 48 ) ( 1 136 48 ) ( 0 136 49 ) prototype-grid-gray 0 0 0 1 1
-( 0 136 48 ) ( 0 136 49 ) ( 0 137 48 ) prototype-grid-gray 0 0 0 1 1
+( -128 136 48 ) ( -128 128 48 ) ( -128 128 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 128 48 ) ( 0 128 48 ) ( 0 128 16 ) prototype-grid-gray 0 0 0 1 1
+( 0 128 16 ) ( 0 136 16 ) ( -128 136 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 136 48 ) ( 0 136 48 ) ( 0 128 48 ) prototype-grid-gray 0 0 0 1 1
+( 0 136 16 ) ( 0 136 48 ) ( -128 136 48 ) prototype-grid-gray 0 0 0 1 1
+( 0 128 48 ) ( 0 136 48 ) ( 0 136 16 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 17
 {
-( -64 88 16 ) ( -64 89 16 ) ( -64 88 17 ) prototype-grid-gray 0 0 0 1 1
-( -64 88 16 ) ( -64 88 17 ) ( -63 88 16 ) prototype-grid-gray 0 0 0 1 1
-( -64 88 16 ) ( -63 88 16 ) ( -64 89 16 ) prototype-grid-gray 0 0 0 1 1
-( 0 96 56 ) ( 0 97 56 ) ( 1 96 56 ) prototype-grid-gray 0 0 0 1 1
-( 0 96 56 ) ( 1 96 56 ) ( 0 96 57 ) prototype-grid-gray 0 0 0 1 1
-( 0 96 56 ) ( 0 96 57 ) ( 0 97 56 ) prototype-grid-gray 0 0 0 1 1
+( -128 96 56 ) ( -128 88 56 ) ( -128 88 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 88 56 ) ( 0 88 56 ) ( 0 88 16 ) prototype-grid-gray 0 0 0 1 1
+( 0 88 16 ) ( 0 96 16 ) ( -128 96 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 96 56 ) ( 0 96 56 ) ( 0 88 56 ) prototype-grid-gray 0 0 0 1 1
+( 0 96 16 ) ( 0 96 56 ) ( -128 96 56 ) prototype-grid-gray 0 0 0 1 1
+( 0 88 56 ) ( 0 96 56 ) ( 0 96 16 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 18
 {
-( -64 32 16 ) ( -64 33 16 ) ( -64 32 17 ) prototype-grid-gray 0 0 0 1 1
-( -64 32 16 ) ( -64 32 17 ) ( -63 32 16 ) prototype-grid-gray 0 0 0 1 1
-( -64 32 16 ) ( -63 32 16 ) ( -64 33 16 ) prototype-grid-gray 0 0 0 1 1
-( -56 88 56 ) ( -56 89 56 ) ( -55 88 56 ) prototype-grid-gray 0 0 0 1 1
-( -56 88 56 ) ( -55 88 56 ) ( -56 88 57 ) prototype-grid-gray 0 0 0 1 1
-( -56 88 56 ) ( -56 88 57 ) ( -56 89 56 ) prototype-grid-gray 0 0 0 1 1
+( -128 32 16 ) ( -128 33 16 ) ( -128 32 17 ) prototype-grid-gray 0 0 0 1 1
+( -128 32 16 ) ( -128 32 17 ) ( -127 32 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 32 16 ) ( -127 32 16 ) ( -128 33 16 ) prototype-grid-gray 0 0 0 1 1
+( -120 88 56 ) ( -120 89 56 ) ( -119 88 56 ) prototype-grid-gray 0 0 0 1 1
+( -120 88 56 ) ( -119 88 56 ) ( -120 88 57 ) prototype-grid-gray 0 0 0 1 1
+( -120 88 56 ) ( -120 88 57 ) ( -120 89 56 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 19
 {
-( -184 40 64 ) ( -184 32 64 ) ( -184 32 16 ) prototype-grid-gray 0 0 0 1 1
-( -184 32 64 ) ( -64 32 64 ) ( -64 32 16 ) prototype-grid-gray 0 0 0 1 1
-( -64 32 16 ) ( -64 40 16 ) ( -184 40 16 ) prototype-grid-gray 0 0 0 1 1
-( -184 40 64 ) ( -64 40 64 ) ( -64 32 64 ) prototype-grid-gray 0 0 0 1 1
-( -64 40 16 ) ( -64 40 64 ) ( -184 40 64 ) prototype-grid-gray 0 0 0 1 1
-( -64 32 64 ) ( -64 40 64 ) ( -64 40 16 ) prototype-grid-gray 0 0 0 1 1
+( -248 40 64 ) ( -248 32 64 ) ( -248 32 16 ) prototype-grid-gray 0 0 0 1 1
+( -248 32 64 ) ( -128 32 64 ) ( -128 32 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 32 16 ) ( -128 40 16 ) ( -248 40 16 ) prototype-grid-gray 0 0 0 1 1
+( -248 40 64 ) ( -128 40 64 ) ( -128 32 64 ) prototype-grid-gray 0 0 0 1 1
+( -128 40 16 ) ( -128 40 64 ) ( -248 40 64 ) prototype-grid-gray 0 0 0 1 1
+( -128 32 64 ) ( -128 40 64 ) ( -128 40 16 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 20
 {
-( -184 192 64 ) ( -184 40 64 ) ( -184 40 16 ) prototype-grid-gray 0 0 0 1 1
-( -184 40 64 ) ( -176 40 64 ) ( -176 40 16 ) prototype-grid-gray 0 0 0 1 1
-( -176 40 16 ) ( -176 192 16 ) ( -184 192 16 ) prototype-grid-gray 0 0 0 1 1
-( -184 192 64 ) ( -176 192 64 ) ( -176 40 64 ) prototype-grid-gray 0 0 0 1 1
-( -176 192 16 ) ( -176 192 64 ) ( -184 192 64 ) prototype-grid-gray 0 0 0 1 1
-( -176 40 64 ) ( -176 192 64 ) ( -176 192 16 ) prototype-grid-gray 0 0 0 1 1
+( -248 192 64 ) ( -248 40 64 ) ( -248 40 16 ) prototype-grid-gray 0 0 0 1 1
+( -248 40 64 ) ( -240 40 64 ) ( -240 40 16 ) prototype-grid-gray 0 0 0 1 1
+( -240 40 16 ) ( -240 192 16 ) ( -248 192 16 ) prototype-grid-gray 0 0 0 1 1
+( -248 192 64 ) ( -240 192 64 ) ( -240 40 64 ) prototype-grid-gray 0 0 0 1 1
+( -240 192 16 ) ( -240 192 64 ) ( -248 192 64 ) prototype-grid-gray 0 0 0 1 1
+( -240 40 64 ) ( -240 192 64 ) ( -240 192 16 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 21
 {
-( -64 136 16 ) ( -64 137 16 ) ( -64 136 17 ) prototype-grid-gray 0 0 0 1 1
-( -64 136 16 ) ( -64 136 17 ) ( -63 136 16 ) prototype-grid-gray 0 0 0 1 1
-( -64 136 16 ) ( -63 136 16 ) ( -64 137 16 ) prototype-grid-gray 0 0 0 1 1
-( -56 184 48 ) ( -56 185 48 ) ( -55 184 48 ) prototype-grid-gray 0 0 0 1 1
-( -56 184 48 ) ( -55 184 48 ) ( -56 184 49 ) prototype-grid-gray 0 0 0 1 1
-( -56 184 48 ) ( -56 184 49 ) ( -56 185 48 ) prototype-grid-gray 0 0 0 1 1
+( -128 136 16 ) ( -128 137 16 ) ( -128 136 17 ) prototype-grid-gray 0 0 0 1 1
+( -128 136 16 ) ( -128 136 17 ) ( -127 136 16 ) prototype-grid-gray 0 0 0 1 1
+( -128 136 16 ) ( -127 136 16 ) ( -128 137 16 ) prototype-grid-gray 0 0 0 1 1
+( -120 184 48 ) ( -120 185 48 ) ( -119 184 48 ) prototype-grid-gray 0 0 0 1 1
+( -120 184 48 ) ( -119 184 48 ) ( -120 184 49 ) prototype-grid-gray 0 0 0 1 1
+( -120 184 48 ) ( -120 184 49 ) ( -120 185 48 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 22
 {
-( -176 192 48 ) ( -176 184 48 ) ( -176 184 16 ) prototype-grid-gray 0 0 0 1 1
-( -176 184 48 ) ( -48 184 48 ) ( -48 184 16 ) prototype-grid-gray 0 0 0 1 1
-( -48 184 16 ) ( -48 192 16 ) ( -176 192 16 ) prototype-grid-gray 0 0 0 1 1
-( -176 192 48 ) ( -48 192 48 ) ( -48 184 48 ) prototype-grid-gray 0 0 0 1 1
-( -48 192 16 ) ( -48 192 48 ) ( -176 192 48 ) prototype-grid-gray 0 0 0 1 1
-( -48 184 48 ) ( -48 192 48 ) ( -48 192 16 ) prototype-grid-gray 0 0 0 1 1
+( -240 192 48 ) ( -240 184 48 ) ( -240 184 16 ) prototype-grid-gray 0 0 0 1 1
+( -240 184 48 ) ( -112 184 48 ) ( -112 184 16 ) prototype-grid-gray 0 0 0 1 1
+( -112 184 16 ) ( -112 192 16 ) ( -240 192 16 ) prototype-grid-gray 0 0 0 1 1
+( -240 192 48 ) ( -112 192 48 ) ( -112 184 48 ) prototype-grid-gray 0 0 0 1 1
+( -112 192 16 ) ( -112 192 48 ) ( -240 192 48 ) prototype-grid-gray 0 0 0 1 1
+( -112 184 48 ) ( -112 192 48 ) ( -112 192 16 ) prototype-grid-gray 0 0 0 1 1
 }
 // brush 23
 {
@@ -246,5 +246,14 @@
 ( 80 -256 32 ) ( 112 -256 32 ) ( 80 -264 32 ) prototype-grid-gray 0 0 0 1 1
 ( 112 -256 16 ) ( 112 -256 32 ) ( 80 -256 16 ) prototype-grid-gray 0 0 0 1 1
 ( 112 -264 16 ) ( 112 -264 32 ) ( 112 -256 16 ) prototype-grid-gray 0 0 0 1 1
+}
+// brush 27
+{
+( -64 -24 16 ) ( -64 -23 16 ) ( -64 -24 17 ) prototype-grid-gray 48 0 0 1 1
+( -64 -24 16 ) ( -64 -24 17 ) ( -63 -24 16 ) prototype-grid-gray 0 0 0 1 1
+( -64 -24 16 ) ( -63 -24 16 ) ( -64 -23 16 ) prototype-grid-gray 0 -48 0 1 1
+( 0 -16 56 ) ( 0 -15 56 ) ( 1 -16 56 ) prototype-grid-gray 0 -48 0 1 1
+( 0 -16 56 ) ( 1 -16 56 ) ( 0 -16 57 ) prototype-grid-gray 0 0 0 1 1
+( 0 -16 56 ) ( 0 -16 57 ) ( 0 -15 56 ) prototype-grid-gray 48 0 0 1 1
 }
 }

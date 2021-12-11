@@ -22,7 +22,7 @@ fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
         type = AccessoryEffects.attack,
         strength = 10f,
         spawns = "res://entities/effect/Fireball.tscn",
-        speed = 75f,
+        speed = 60f,
       ),
     )
   ),
@@ -30,13 +30,13 @@ fun accessoryDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
     name = Accessories.rocketLauncher,
     cooldown = 1f,
     attributes = setOf(AccessoryAttributes.weapon),
-    range = 5f,
+    range = 10f,
     effects = listOf(
       ActionEffect(
         type = AccessoryEffects.attack,
-        strength = 10f,
+        strength = 20f,
         spawns = "res://entities/effect/Fireball.tscn",
-        speed = 30f,
+        speed = 20f,
       ),
     )
   ),

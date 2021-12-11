@@ -12,7 +12,6 @@ collision_layer = 2
 collision_mask = 3
 collision/safe_margin = 0.01
 script = ExtResource( 1 )
-head_path = NodePath("Head")
 
 [node name="Collision" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
@@ -28,3 +27,4 @@ far = 1000.0
 [node name="controller" type="Node" parent="."]
 script = ExtResource( 2 )
 camera_path = NodePath("../Head/Camera")
+head_path = NodePath("../Head")

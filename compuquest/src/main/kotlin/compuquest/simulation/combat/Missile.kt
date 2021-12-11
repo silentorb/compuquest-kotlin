@@ -68,7 +68,7 @@ fun eventsFromMissile(world: World, delta: Float): (Id, Missile) -> Events = { a
 	val body = world.bodies[actor] as? Area
 	if (body != null) {
 		body.translate(missile.velocity * delta)
-		val collisions = (body.getOverlappingBodies() as VariantArray<PhysicsBody>)
+		val collisions = (body.getOverlappingBodies() as VariantArray<Spatial>)
 			.filter { (it as? Spatial)?.getInstanceId() != missile.ignore }
 		val hit = collisions.any()
 		val deletions = if (hit || missile.origin.distanceTo(body.transform.origin) > missile.range) {

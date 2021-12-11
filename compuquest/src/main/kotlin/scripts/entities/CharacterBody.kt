@@ -14,10 +14,6 @@ import kotlin.math.abs
 @RegisterClass
 class CharacterBody : KinematicBody() {
 
-	@Export
-	@RegisterProperty
-	var headPath: NodePath? = null
-
 	var head: Spatial? = null
 	var snap: Vector3 = Vector3.ZERO
 	var velocity = Vector3.ZERO
@@ -56,12 +52,6 @@ class CharacterBody : KinematicBody() {
 
 	@RegisterFunction
 	override fun _ready() {
-		val _headPath = headPath
-		head = if (_headPath != null)
-			getNode(_headPath) as? Spatial
-		else
-			null
-
 		speed = walkSpeed
 	}
 
@@ -83,12 +73,10 @@ class CharacterBody : KinematicBody() {
 		return Vector3(result.x, 0f, result.z).normalized()
 	}
 
-	fun accelerate(moveAxis: Vector3, delta: Float) {
-		val direction = directionInput(moveAxis)
-		var tempVelocity = velocity
+	fun accelerate(direction: Vector3, delta: Float) {
+		var tempVelocity = Vector3(velocity.x, 0.0, velocity.z)
 		val target = direction * speed
 
-		tempVelocity.y = 0.0
 		val tempAcceleration = when {
 			direction.dot(tempVelocity) > 0f -> acceleration
 			else -> deacceleration
@@ -121,7 +109,7 @@ class CharacterBody : KinematicBody() {
 		}
 	}
 
-	fun walk(moveAxis: Vector3, delta: Float) {
+	fun walk(direction: Vector3, delta: Float) {
 		if (isOnFloor()) {
 			snap = -getFloorNormal() - getFloorVelocity() * delta
 
@@ -135,12 +123,12 @@ class CharacterBody : KinematicBody() {
 			}
 
 			snap = Vector3.ZERO
-			velocity.y = (gravity * delta).toDouble()
+			velocity.y -= (gravity * delta).toDouble()
 		}
 
 		updateSpeed()
 
-		accelerate(moveAxis, delta)
+		accelerate(direction, delta)
 
 		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
 		isJumpingInput = false

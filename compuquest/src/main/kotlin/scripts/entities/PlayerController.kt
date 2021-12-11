@@ -17,6 +17,10 @@ class PlayerController : Node() {
 
 	@Export
 	@RegisterProperty
+	var headPath: NodePath? = null
+
+	@Export
+	@RegisterProperty
 	var mouseSensitivity: Float = 8f
 
 	@Export
@@ -34,6 +38,8 @@ class PlayerController : Node() {
 
 	@RegisterFunction
 	override fun _ready() {
+		val body = getParent() as CharacterBody
+		body.head = getNode(headPath!!) as? Spatial
 		camera = getNode(cameraPath!!) as? Camera
 		camera!!.fov = fov.toDouble()
 	}
@@ -100,7 +106,8 @@ class PlayerController : Node() {
 			if (isPlayerDead(Global.world?.deck)) {
 				deathCollapse(body.head!!)
 			}
-			body.walk(moveAxis, delta.toFloat())
+			val direction = body.directionInput(moveAxis)
+			body.walk(direction, delta.toFloat())
 		}
 	}
 }

@@ -41,12 +41,12 @@ fun isVisible(
 	space: PhysicsDirectSpaceState,
 	world: World,
 	bodyId: Id,
-	body: Body,
+	headLocation: Vector3,
 	other: Id
 ): Boolean {
 	val otherBody = world.bodies[other]
 	return otherBody != null &&
-			space.intersectRay(body.translation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody))
+			space.intersectRay(headLocation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody))
 				.none()
 }
 
@@ -58,13 +58,14 @@ fun filterEnemyTargets(
 	val deck = world.deck
 	val bodies = deck.bodies
 	val body = bodies[actor] ?: return mapOf()
+	val headLocation = body.translation + Vector3(0f, 0.5f, 0f)
 	val space = getSpace(world) ?: return mapOf()
 	return deck.characters
 		.filter { (id, other) ->
 			id != actor
 					&& other.isAlive
 					&& isEnemy(world.factionRelationships, other.faction, character.faction)
-					&& isVisible(space, world, actor, body, id)
+					&& isVisible(space, world, actor, headLocation, id)
 		}
 }
 
