@@ -1,8 +1,6 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=21 format=2]
 
-[ext_resource path="res://world/zones/Neighborhood.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
-[ext_resource path="res://world/creatures/viking.tres" type="Resource" id=3]
 [ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=4]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=5]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=6]
@@ -14,8 +12,18 @@
 [ext_resource path="res://assets/images/old-tiles/windows-lit.png" type="Texture" id=12]
 [ext_resource path="res://world/zones/Mansion.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=14]
+[ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=17]
+[ext_resource path="res://assets/images/old-tiles/tile_2.png" type="Texture" id=21]
+[ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=25]
 
 [sub_resource type="SpatialMaterial" id=1]
+albedo_texture = ExtResource( 21 )
+
+[sub_resource type="PlaneShape" id=2]
+
+[sub_resource type="SpatialMaterial" id=8]
 albedo_texture = ExtResource( 12 )
 uv1_scale = Vector3( 0.25, 0.25, 0.25 )
 uv1_triplanar = true
@@ -31,8 +39,1149 @@ height = 0.5
 depth = 24.0
 material = ExtResource( 14 )
 
-[node name="neighborhood" parent="." instance=ExtResource( 1 )]
+[node name="neighborhood" type="Spatial" parent="."]
+script = ExtResource( 25 )
 faction = "undead"
+
+[node name="street2" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 21.3467, -1.48596, 48 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street4" type="CSGBox" parent="neighborhood"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 9.3467, -0.849343, 16 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street5" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 6.22538, -0.529197, -3.32577 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street6" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.947585, 0.319505, 0, -0.319505, 0.947585, 0, 0, 0, 1, 22.2704, -2.99938, 25.0445 )
+use_collision = true
+width = 17.7397
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street3" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 11.8996, -0.926977, 35.7956 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard2" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7.91212, -1.10476, -23.0341 )
+use_collision = true
+width = 32.2333
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard8" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 8.09519, -2.028, 54.6532 )
+use_collision = true
+width = 18.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard6" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.975839, 0.21816, -0.0120079, -0.218144, 0.975913, 0.00268431, 0.0123043, 0, 0.999924, 15.8231, -2.90693, -23.0341 )
+use_collision = true
+width = 18.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard3" type="CSGBox" parent="neighborhood"]
+transform = Transform( 1, 0, -2.98023e-08, -8.26562e-09, 0.960769, -0.277348, 2.86332e-08, 0.277348, 0.960769, 5.21762, 0.559752, -44.594 )
+use_collision = true
+width = 26.0
+height = 6.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard4" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.994605, -0.10373, -2.96416e-08, 0.10373, 0.994605, -3.09139e-09, 2.98023e-08, 0, 1, -2.78239, -1.01712, 3.40597 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 28.0
+material = ExtResource( 14 )
+
+[node name="yard5" type="CSGBox" parent="neighborhood"]
+transform = Transform( 0.965926, -0.258819, -2.87868e-08, 0.258819, 0.965926, -7.71341e-09, 2.98023e-08, 0, 1, -6.2545, -2.5292, 29.406 )
+use_collision = true
+width = 21.2071
+height = 1.0
+depth = 28.0
+material = ExtResource( 14 )
+
+[node name="arena" type="Spatial" parent="neighborhood"]
+visible = false
+
+[node name="Floor1" parent="neighborhood/arena" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0609493, -0.595061, -0.0998726 )
+material/0 = SubResource( 1 )
+
+[node name="StaticBody2" type="StaticBody" parent="neighborhood/arena/Floor1"]
+
+[node name="CollisionShape" type="CollisionShape" parent="neighborhood/arena/Floor1/StaticBody2"]
+shape = SubResource( 2 )
+
+[node name="player" parent="neighborhood" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17243, 0 )
+
+[node name="player" type="Node" parent="neighborhood/player"]
+script = ExtResource( 5 )
+
+[node name="mana" type="Node" parent="neighborhood/player"]
+script = ExtResource( 6 )
+amount = 200
+resource = "mana"
+
+[node name="gold" type="Node" parent="neighborhood/player"]
+script = ExtResource( 6 )
+amount = 200
+resource = "gold"
+
+[node name="bob" type="Node" parent="neighborhood/player"]
+script = ExtResource( 4 )
+
+[node name="joe" type="Node" parent="neighborhood/player"]
+script = ExtResource( 4 )
+
+[node name="employee" parent="neighborhood" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0013, -0.0353752, 2.81605 )
+visible = false
+
+[node name="char" type="Node" parent="neighborhood/employee"]
+script = ExtResource( 4 )
+
+[node name="house2" type="Spatial" parent="neighborhood"]
+transform = Transform( -0.258819, 0, -0.965925, 0, 1, 0, 0.965925, 0, -0.258819, 37.4762, -2, 33.5963 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house2"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house2/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house2/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house2"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house2"]
+transform = Transform( -4.47035e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 4.47035e-08, -4.47035e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house2"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house2"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="house3" type="Spatial" parent="neighborhood"]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 29.9292, 0, -15.7381 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house3"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house3/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house3/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house3"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house3"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house3"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house3"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="house4" type="Spatial" parent="neighborhood"]
+transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -12.1828, 4, -19.1882 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house4"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house4/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -5.96046e-08, 0, -1, 0, 1, 0, 1, 0, -5.96046e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house4"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house4"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house4"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house4"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="house5" type="Spatial" parent="neighborhood"]
+transform = Transform( 0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -7.65655, -1, 36.8477 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house5"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house5/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house5/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house5"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house5"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house5"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house5"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="house6" type="Spatial" parent="neighborhood"]
+transform = Transform( 0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -6.65655, 1, 4.84767 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house6"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house6/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house6/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house6"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house6"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house6"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house6"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="house7" type="Spatial" parent="neighborhood"]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 13.3434, 1, 54.8477 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house7"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house7/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house7"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house7"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house7"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house7"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="house8" type="Spatial" parent="neighborhood"]
+transform = Transform( -1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, -1, 7.3434, 7, -44.1523 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house8"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/house8/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/house8/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/house8"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/house8"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/house8"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/house8"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="proto-house-lot" type="Spatial" parent="neighborhood"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 29.727, 2, 0 )
+
+[node name="house" type="Spatial" parent="neighborhood/proto-house-lot"]
+
+[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/proto-house-lot/house"]
+use_collision = true
+
+[node name="walls" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+use_collision = true
+width = 10.0
+height = 12.0
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="walls2" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner/walls"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 10.0
+material = ExtResource( 14 )
+
+[node name="interior1" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 10.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="front-doorway" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 4.0
+material = ExtResource( 14 )
+
+[node name="hall-door" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+height = 4.0
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="interior2" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
+operation = 2
+use_collision = true
+width = 8.0
+height = 6.0
+depth = 6.0
+material = ExtResource( 14 )
+
+[node name="window1" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
+operation = 2
+use_collision = true
+width = 4.0
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window2" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
+operation = 2
+use_collision = true
+depth = 3.0
+material = ExtResource( 14 )
+
+[node name="window3" type="CSGBox" parent="neighborhood/proto-house-lot/house/CSGCombiner"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
+operation = 2
+use_collision = true
+material = ExtResource( 14 )
+
+[node name="roof1" type="CSGBox" parent="neighborhood/proto-house-lot/house"]
+transform = Transform( -1.07285e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 7.58614e-08, -7.58614e-08, -2.48288, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof2" type="CSGBox" parent="neighborhood/proto-house-lot/house"]
+transform = Transform( -4.37114e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 3.09086e-08, -3.09086e-08, 3.51712, 11.8735, 7.48288 )
+use_collision = true
+width = 12.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="roof3" type="CSGBox" parent="neighborhood/proto-house-lot/house"]
+transform = Transform( 1, -9.0529e-09, -6.94656e-09, 1.13133e-08, 0.866025, 0.5, 1.48939e-09, -0.5, 0.866025, -7.48288, 6.87349, 4.48288 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="roof4" type="CSGBox" parent="neighborhood/proto-house-lot/house"]
+transform = Transform( -1, -4.37114e-08, 7.57104e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -7.48288, 6.87349, 10.4829 )
+use_collision = true
+width = 10.0
+height = 0.5
+depth = 6.422
+material = ExtResource( 14 )
+
+[node name="front yard" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( 1, -1.95953e-08, -1.13133e-08, 2.18557e-08, 0.965925, 0.258819, 5.85619e-09, -0.258819, 0.965925, -3.48288, -1.12651, -3.51712 )
+use_collision = true
+width = 20.0
+height = 0.5
+depth = 8.0
+material = ExtResource( 14 )
+
+[node name="back yard" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -3.48288, -0.12651, 12.4829 )
+use_collision = true
+width = 20.0
+height = 0.5
+depth = 24.0
+material = ExtResource( 14 )
+
+[node name="sidewalk" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -3.48288, -2.12651, -8.51712 )
+use_collision = true
+width = 20.0
+height = 0.5
+depth = 4.0
+material = ExtResource( 14 )
+
+[node name="fence1" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( 1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -3.48288, 0.87349, 24.4829 )
+use_collision = true
+width = 20.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="fence2" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4829, 0.87349, 12.4829 )
+use_collision = true
+width = 24.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="fence3" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.51712, 0.87349, 12.4829 )
+use_collision = true
+width = 24.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="fence5" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.51712, -1.12651, -8.51712 )
+use_collision = true
+width = 4.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="fence4" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( -4.52008e-08, 1.13133e-08, 1, -0.258819, 0.965926, -2.26267e-08, -0.965926, -0.258819, -4.07325e-08, 6.51712, -0.12651, -3.51712 )
+use_collision = true
+width = 8.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="fence6" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4829, -1.12651, -8.51712 )
+use_collision = true
+width = 4.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="fence7" type="CSGBox" parent="neighborhood/proto-house-lot"]
+transform = Transform( -4.52008e-08, 1.13133e-08, 1, -0.258819, 0.965926, -2.26267e-08, -0.965926, -0.258819, -4.07325e-08, -13.4829, -0.12651, -3.51712 )
+use_collision = true
+width = 8.0
+depth = 0.5
+material = ExtResource( 14 )
+
+[node name="deevee" parent="neighborhood/proto-house-lot" instance=ExtResource( 16 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329, -0.00250936, 1.1886 )
+
+[node name="char" type="Node" parent="neighborhood/proto-house-lot/deevee"]
+script = ExtResource( 4 )
+
+[node name="spawning" type="Spatial" parent="neighborhood"]
+
+[node name="slot" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93855, 0.470803, -8.25841 )
+
+[node name="slot10" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.93855, 0.470803, 3.74159 )
+
+[node name="slot11" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06145, 0.600058, -4.25841 )
+
+[node name="slot2" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.3967, 1.14647, 8.74159 )
+
+[node name="slot6" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 29.3967, 2.48622, -2.25841 )
+
+[node name="slot3" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, -3.54299, 0.156365, 12.4118 )
+
+[node name="slot4" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1439, 0.470803, 17.48 )
+
+[node name="slot5" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8827, 0.470803, -23.5441 )
+
+[node name="slot7" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.8827, 0.470803, -0.544106 )
+
+[node name="slot8" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.8827, 2.62349, 1.45589 )
+
+[node name="slot9" parent="neighborhood/spawning" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.8827, 2.62349, 8.45589 )
+
+[node name="frank" parent="neighborhood" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 24 )
+
+[node name="frank" type="Node" parent="neighborhood/frank"]
+script = ExtResource( 4 )
+
+[node name="merchant" parent="neighborhood" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -11 )
+
+[node name="merchant-of-magic" type="Node" parent="neighborhood/merchant"]
+script = ExtResource( 4 )
+
+[node name="backyard-guy" parent="neighborhood" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 2.12349, 5 )
+
+[node name="backyard-guy" type="Node" parent="neighborhood/backyard-guy"]
+script = ExtResource( 4 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27909, 0 )
@@ -52,14 +1201,12 @@ resource = "gold"
 
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 4 )
-creature = ExtResource( 3 )
 
 [node name="joe" type="Node" parent="player"]
 script = ExtResource( 4 )
-creature = ExtResource( 3 )
 
 [node name="graveyard" parent="." instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7724, 1.83217, -33.3872 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7724, 1.83217, -91.3872 )
 
 [node name="stars" parent="." instance=ExtResource( 8 )]
 
@@ -68,7 +1215,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.50849, 0, 182.984 )
 
 [node name="building-a" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5171, 4, -18.5171 )
-material = SubResource( 1 )
+material = SubResource( 8 )
 
 [node name="building-a2" parent="city" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 51.4829, -27, -17.5171 )
@@ -85,7 +1232,7 @@ height = 108.308
 
 [node name="building-a7" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -66.5171, -14, 93.4829 )
-material = SubResource( 1 )
+material = SubResource( 8 )
 
 [node name="building-a8" parent="city" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5171, 4, 38.4829 )
@@ -95,15 +1242,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.4829, -7, 110.483 )
 
 [node name="building-a10" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.4829, 4, 41.4829 )
-material = SubResource( 1 )
+material = SubResource( 8 )
 
 [node name="building-a11" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5171, 4, 119.483 )
-material = SubResource( 1 )
+material = SubResource( 8 )
 
 [node name="building-a3" parent="city" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -86.5171, -3, 32.4829 )
-material = SubResource( 1 )
+material = SubResource( 8 )
 
 [node name="mansion" parent="." instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 14, 0 )

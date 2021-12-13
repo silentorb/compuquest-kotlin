@@ -1,0 +1,315 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://assets/images/old-tiles/tile_1.png" type="Texture" id=1]
+[ext_resource path="res://assets/images/old-tiles/tile_2.png" type="Texture" id=2]
+[ext_resource path="res://assets/meshes/architecture/wall-2x1-flat.scn" type="PackedScene" id=3]
+[ext_resource path="res://assets/meshes/architecture/wall-4x4.scn" type="PackedScene" id=4]
+[ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/images/old-tiles/tile_5.png" type="Texture" id=6]
+[ext_resource path="res://assets/images/old-tiles/tile_4.png" type="Texture" id=7]
+[ext_resource path="res://entities/actor/LargeSprite.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/meshes/architecture/wall-1x1.scn" type="PackedScene" id=9]
+[ext_resource path="res://assets/meshes/architecture/wall-2x2.scn" type="PackedScene" id=10]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_transparent = true
+flags_unshaded = true
+params_specular_mode = 4
+params_cull_mode = 2
+params_depth_draw_mode = 3
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 8, 0.1, 8 )
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_unshaded = true
+albedo_texture = ExtResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_unshaded = true
+albedo_texture = ExtResource( 6 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="yard" type="Spatial" parent="."]
+
+[node name="fence" type="Spatial" parent="yard"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.58966, 1.22763, -7.34861 )
+
+[node name="wall-2x1-flat" parent="yard/fence" instance=ExtResource( 3 )]
+transform = Transform( -1.99694, 0, -0.110597, 0, 2, 0, 0.110597, 0, -1.99694, 0, 0, 0 )
+material/0 = SubResource( 1 )
+texture = ExtResource( 1 )
+
+[node name="fence2" type="Spatial" parent="yard"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.528302, 1.22763, -7.08537 )
+
+[node name="wall-2x1-flat" parent="yard/fence2" instance=ExtResource( 3 )]
+transform = Transform( -1.99694, 0, -0.110597, 0, 2, 0, 0.110597, 0, -1.99694, 0, 0, 0 )
+material/0 = SubResource( 1 )
+texture = ExtResource( 1 )
+
+[node name="fence3" type="Spatial" parent="yard"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45655, 1.22763, -6.87396 )
+
+[node name="wall-2x1-flat" parent="yard/fence3" instance=ExtResource( 3 )]
+transform = Transform( -1.99694, 0, -0.110597, 0, 2, 0, 0.110597, 0, -1.99694, 0, 0, 0 )
+material/0 = SubResource( 1 )
+texture = ExtResource( 1 )
+
+[node name="grass" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.478082, 0, 0, 0, 0.478082, 0, 0, 0, 0.478082, 2.4648, 0.885778, 0 )
+animation = "props"
+frame = 3
+
+[node name="grass2" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.478082, 0, 0, 0, 0.478082, 0, 0, 0, 0.478082, -2.70863, 0.885778, 2.18581 )
+animation = "props"
+frame = 3
+
+[node name="grass3" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.478082, 0, 0, 0, 0.478082, 0, 0, 0, 0.478082, -2.70863, 0.885778, -4.26669 )
+animation = "props"
+frame = 3
+
+[node name="grass4" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.478082, 0, 0, 0, 0.478082, 0, 0, 0, 0.478082, 2.10554, 0.885778, -1.89971 )
+animation = "props"
+frame = 3
+
+[node name="bush" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.908398, 0, 0, 0, 0.908398, 0, 0, 0, 0.908398, -4.68716, 1.64089, -0.616904 )
+animation = "props"
+frame = 2
+
+[node name="bush2" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.908398, 0, 0, 0, 0.908398, 0, 0, 0, 0.908398, 5.08057, 1.64089, -4.54209 )
+animation = "props"
+frame = 2
+
+[node name="bush3" parent="yard" instance=ExtResource( 5 )]
+transform = Transform( 0.908398, 0, 0, 0, 0.908398, 0, 0, 0, 0.908398, 5.08057, 1.64089, 5.32702 )
+animation = "props"
+frame = 2
+
+[node name="lawn" type="Spatial" parent="yard"]
+
+[node name="StaticBody" type="StaticBody" parent="yard/lawn"]
+
+[node name="CollisionShape" type="CollisionShape" parent="yard/lawn/StaticBody"]
+shape = SubResource( 2 )
+
+[node name="wall-4x4" parent="yard/lawn" instance=ExtResource( 4 )]
+transform = Transform( 4, 0, 0, 0, -1.74846e-07, 4, 0, -4, -1.74846e-07, 0, 0, 0 )
+material/0 = SubResource( 3 )
+texture = ExtResource( 2 )
+
+[node name="tree" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1.79765, 0, 0, 0, 1.79765, 0, 0, 0, 1.79765, 6.84888, 3.08805, 6.15336 )
+animation = "default"
+
+[node name="house" type="Spatial" parent="."]
+
+[node name="house-wall" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, 7 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall2" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, 5 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall3" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, 3 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall4" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, 1 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall5" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, -1 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall6" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, -3 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall7" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, -5 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall8" parent="house" instance=ExtResource( 9 )]
+transform = Transform( -8.74228e-08, 0, 2, 0, 4, 0, -2, 0, -8.74228e-08, -7.677, 2.124, -7 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall11" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -18.677, 2.124, 8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall12" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -16.677, 2.124, 8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall13" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -14.677, 2.124, 8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall14" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -12.677, 2.124, 8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall15" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -10.677, 2.124, 8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall16" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -8.677, 2.124, 8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall19" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -18.677, 2.124, -8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall20" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -16.677, 2.124, -8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall21" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -14.677, 2.124, -8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall22" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -12.677, 2.124, -8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall23" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -10.677, 2.124, -8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="house-wall24" parent="house" instance=ExtResource( 9 )]
+transform = Transform( 2, 0, -5.96046e-08, 0, 4, 0, 5.96046e-08, 0, 2, -8.677, 2.124, -8 )
+material/0 = SubResource( 4 )
+texture = ExtResource( 7 )
+
+[node name="roof1" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -8.20519, 4.53785, 6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof2" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -11.6978, 6.57241, 6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof3" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -8.20519, 4.53785, 6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof4" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -11.6978, 6.57241, 6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof5" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -8.20519, 4.53785, 2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof6" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -11.6978, 6.57241, 2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof7" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -8.20519, 4.53785, -2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof8" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -11.6978, 6.57241, -2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof9" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -8.20519, 4.53785, -6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof10" parent="house" instance=ExtResource( 10 )]
+transform = Transform( -4.37114e-08, -1.73205, -1, -7.57103e-08, 1, -1.73205, 2, 0, -8.74228e-08, -11.6978, 6.57241, -6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof11" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -18.6978, 4.53785, -6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof12" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -15.2052, 6.57241, -6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof13" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -18.6978, 4.53785, -6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof14" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -15.2052, 6.57241, -6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof15" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -18.6978, 4.53785, -2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof16" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -15.2052, 6.57241, -2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof17" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -18.6978, 4.53785, 2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof18" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -15.2052, 6.57241, 2 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof19" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -18.6978, 4.53785, 6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )
+
+[node name="roof20" parent="house" instance=ExtResource( 10 )]
+transform = Transform( 0, 1.73205, 1, -7.57103e-08, 1, -1.73205, -2, -2.98023e-08, 5.96046e-08, -15.2052, 6.57241, 6 )
+material/0 = SubResource( 5 )
+texture = ExtResource( 6 )

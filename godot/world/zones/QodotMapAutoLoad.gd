@@ -16,7 +16,7 @@ export (int) var last_modified = 0 # Not meant to be set by the user
 
 onready var _map: QodotMap = get_node(map)
 var step = 0
-
+var delay = 0
 func _ready():
 	if not Engine.is_editor_hint():
 		queue_free()
@@ -24,7 +24,14 @@ func _ready():
 func _physics_process(delta):
 	if Engine.is_editor_hint() && _map != null:
 		step += 1
-		if step > 60 * 2:
+		if delay > 0:
+			delay += 1
+			if delay > 60 * 4:
+				delay = 0
+				_map.should_add_children = true
+				_map.should_set_owners = true
+				_map.verify_and_build()				
+		elsif step > 60 * 2:
 			step = 0
 			var resource_path = _map.map_file
 			# Ideally this would be checking the .import file hashes but
@@ -34,7 +41,5 @@ func _physics_process(delta):
 			
 			if last_modified != modified:
 				print('Rebuilding modified map...')
-				_map.should_add_children = true
-				_map.should_set_owners = true
-				_map.verify_and_build()
 				last_modified = modified
+				delay = 1
