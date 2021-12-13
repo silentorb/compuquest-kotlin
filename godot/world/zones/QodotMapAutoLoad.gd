@@ -31,7 +31,7 @@ func _physics_process(delta):
 				_map.should_add_children = true
 				_map.should_set_owners = true
 				_map.verify_and_build()				
-		elsif step > 60 * 2:
+		elif step > 60 * 2:
 			step = 0
 			var resource_path = _map.map_file
 			# Ideally this would be checking the .import file hashes but
