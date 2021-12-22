@@ -1206,7 +1206,7 @@ script = ExtResource( 4 )
 script = ExtResource( 4 )
 
 [node name="graveyard" parent="." instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7724, 1.83217, -91.3872 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25.6505, 1.61555, -58.1381 )
 
 [node name="stars" parent="." instance=ExtResource( 8 )]
 
