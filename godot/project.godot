@@ -178,61 +178,6 @@ _global_script_classes=[ {
 "class": "WaterLayer",
 "language": "GDScript",
 "path": "res://addons/qodot/game_definitions/worldspawn_layers/liquid/water.gd"
-}, {
-"base": "Spatial",
-"class": "scripts_entities_actor_PlayerBody",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/entities/actor/PlayerBody.kt"
-}, {
-"base": "Spatial",
-"class": "scripts_entities_actor_PlayerVisible",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/entities/actor/PlayerVisible.kt"
-}, {
-"base": "Label",
-"class": "scripts_gui_IntLabel",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/IntLabel.kt"
-}, {
-"base": "Node",
-"class": "scripts_gui_Management",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/Management.kt"
-}, {
-"base": "Node",
-"class": "scripts_gui_MenuScreen",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/MenuScreen.kt"
-}, {
-"base": "Node",
-"class": "scripts_gui_Prompt",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/Prompt.kt"
-}, {
-"base": "Node",
-"class": "scripts_gui_QuestManagement",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/QuestManagement.kt"
-}, {
-"base": "Node",
-"class": "scripts_gui_ValueMax",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/gui/ValueMax.kt"
-}, {
-"base": "Node",
-"class": "scripts_world_AccessoryDefinition",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/world/AccessoryDefinition.kt"
-}, {
-"base": "Spatial",
-"class": "scripts_world_RootNode",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/world/RootNode.kt"
-}, {
-"base": "Node",
-"class": "scripts_world_ZoneNode",
-"language": "Kotlin",
-"path": "res://src/main/kotlin/scripts/world/ZoneNode.kt"
 } ]
 _global_script_class_icons={
 "HTerrainDataLoader": "",
@@ -268,18 +213,7 @@ _global_script_class_icons={
 "TrenchBroomGameConfigFile": "",
 "TrenchBroomGameConfigFolder": "",
 "TrenchBroomTag": "",
-"WaterLayer": "",
-"scripts_entities_actor_PlayerBody": "",
-"scripts_entities_actor_PlayerVisible": "",
-"scripts_gui_IntLabel": "",
-"scripts_gui_Management": "",
-"scripts_gui_MenuScreen": "",
-"scripts_gui_Prompt": "",
-"scripts_gui_QuestManagement": "",
-"scripts_gui_ValueMax": "",
-"scripts_world_AccessoryDefinition": "",
-"scripts_world_RootNode": "",
-"scripts_world_ZoneNode": ""
+"WaterLayer": ""
 }
 
 [application]
@@ -294,7 +228,7 @@ Global="*res://src/main/kotlin/scripts/Global.kt"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/qodot/plugin.cfg", "res://addons/scenic/plugin.cfg", "res://addons/zylann.hterrain/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/scenic/plugin.cfg", "res://addons/zylann.hterrain/plugin.cfg" )
 
 [importer_defaults]
 
