@@ -1143,7 +1143,7 @@ script = ExtResource( 5 )
 [node name="autoloader" type="Node" parent="."]
 script = ExtResource( 15 )
 map = NodePath("../Navigation/NavigationMeshInstance/QodotMap")
-last_modified = 1639376871
+last_modified = 1639458865
 
 [node name="text" parent="." instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.58734, 2.50218, 0 )

@@ -285,7 +285,7 @@ _global_script_class_icons={
 [application]
 
 config/name="test"
-run/main_scene="res://world/zones/Root2.tscn"
+run/main_scene="res://world/zones/Root.tscn"
 config/icon="res://icon.png"
 
 [autoload]

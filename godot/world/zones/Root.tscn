@@ -1,5 +1,6 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
+[ext_resource path="res://assets/meshes/compuquest-unity-neighborhood.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
 [ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=4]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=5]
@@ -42,91 +43,6 @@ material = ExtResource( 14 )
 [node name="neighborhood" type="Spatial" parent="."]
 script = ExtResource( 25 )
 faction = "undead"
-
-[node name="street2" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 21.3467, -1.48596, 48 )
-use_collision = true
-width = 12.0
-height = 1.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="street4" type="CSGBox" parent="neighborhood"]
-transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 9.3467, -0.849343, 16 )
-use_collision = true
-width = 12.0
-height = 1.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="street5" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 6.22538, -0.529197, -3.32577 )
-use_collision = true
-width = 12.0
-height = 1.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="street6" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.947585, 0.319505, 0, -0.319505, 0.947585, 0, 0, 0, 1, 22.2704, -2.99938, 25.0445 )
-use_collision = true
-width = 17.7397
-height = 1.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="street3" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 11.8996, -0.926977, 35.7956 )
-use_collision = true
-width = 12.0
-height = 1.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="yard2" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7.91212, -1.10476, -23.0341 )
-use_collision = true
-width = 32.2333
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="yard8" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 8.09519, -2.028, 54.6532 )
-use_collision = true
-width = 18.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="yard6" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.975839, 0.21816, -0.0120079, -0.218144, 0.975913, 0.00268431, 0.0123043, 0, 0.999924, 15.8231, -2.90693, -23.0341 )
-use_collision = true
-width = 18.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="yard3" type="CSGBox" parent="neighborhood"]
-transform = Transform( 1, 0, -2.98023e-08, -8.26562e-09, 0.960769, -0.277348, 2.86332e-08, 0.277348, 0.960769, 5.21762, 0.559752, -44.594 )
-use_collision = true
-width = 26.0
-height = 6.0
-depth = 22.0
-material = ExtResource( 14 )
-
-[node name="yard4" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.994605, -0.10373, -2.96416e-08, 0.10373, 0.994605, -3.09139e-09, 2.98023e-08, 0, 1, -2.78239, -1.01712, 3.40597 )
-use_collision = true
-width = 12.0
-height = 1.0
-depth = 28.0
-material = ExtResource( 14 )
-
-[node name="yard5" type="CSGBox" parent="neighborhood"]
-transform = Transform( 0.965926, -0.258819, -2.87868e-08, 0.258819, 0.965926, -7.71341e-09, 2.98023e-08, 0, 1, -6.2545, -2.5292, 29.406 )
-use_collision = true
-width = 21.2071
-height = 1.0
-depth = 28.0
-material = ExtResource( 14 )
 
 [node name="arena" type="Spatial" parent="neighborhood"]
 visible = false
@@ -396,7 +312,7 @@ transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -12.1828,
 use_collision = true
 
 [node name="walls" type="CSGBox" parent="neighborhood/house4/CSGCombiner"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
+transform = Transform( -5.96046e-08, 0, -1, 0, 1, 0, 1, 0, -5.96046e-08, 0.482874, 4, 7.48288 )
 use_collision = true
 width = 10.0
 height = 12.0
@@ -1183,6 +1099,93 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 2.12349, 5 )
 [node name="backyard-guy" type="Node" parent="neighborhood/backyard-guy"]
 script = ExtResource( 4 )
 
+[node name="streets" type="Spatial" parent="neighborhood"]
+
+[node name="street2" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 21.3467, -1.48596, 48 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street4" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 9.3467, -0.849343, 16 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street5" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 6.22538, -0.529197, -3.32577 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street6" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.947585, 0.319505, 0, -0.319505, 0.947585, 0, 0, 0, 1, 22.2704, -2.99938, 25.0445 )
+use_collision = true
+width = 17.7397
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="street3" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 11.8996, -0.926977, 35.7956 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard2" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7.91212, -1.10476, -23.0341 )
+use_collision = true
+width = 32.2333
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard8" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 8.09519, -2.028, 54.6532 )
+use_collision = true
+width = 18.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard6" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.975839, 0.21816, -0.0120079, -0.218144, 0.975913, 0.00268431, 0.0123043, 0, 0.999924, 15.8231, -2.90693, -23.0341 )
+use_collision = true
+width = 18.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard3" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 1, 0, -2.98023e-08, -8.26562e-09, 0.960769, -0.277348, 2.86332e-08, 0.277348, 0.960769, 5.21762, 0.559752, -44.594 )
+use_collision = true
+width = 26.0
+height = 6.0
+depth = 22.0
+material = ExtResource( 14 )
+
+[node name="yard4" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.994605, -0.10373, -2.96416e-08, 0.10373, 0.994605, -3.09139e-09, 2.98023e-08, 0, 1, -2.78239, -1.01712, 3.40597 )
+use_collision = true
+width = 12.0
+height = 1.0
+depth = 28.0
+material = ExtResource( 14 )
+
+[node name="yard5" type="CSGBox" parent="neighborhood/streets"]
+transform = Transform( 0.965926, -0.258819, -2.87868e-08, 0.258819, 0.965926, -7.71341e-09, 2.98023e-08, 0, 1, -6.2545, -2.5292, 29.406 )
+use_collision = true
+width = 21.2071
+height = 1.0
+depth = 28.0
+material = ExtResource( 14 )
+
 [node name="player" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27909, 0 )
 
@@ -1255,3 +1258,28 @@ material = SubResource( 8 )
 [node name="mansion" parent="." instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 14, 0 )
 faction = "undead"
+
+[node name="compuquest-unity-neighborhood" type="MeshInstance" parent="."]
+transform = Transform( 0.0975134, 0, 0.995234, 0, 1, 0, -0.995234, 0, 0.0975134, -0.295082, 6.49824, 0.871181 )
+mesh = ExtResource( 1 )
+skeleton = NodePath("")
+material/0 = null
+material/1 = null
+material/2 = null
+material/3 = null
+material/4 = null
+material/5 = null
+material/6 = null
+material/7 = null
+material/8 = null
+material/9 = null
+material/10 = null
+material/11 = null
+material/12 = null
+material/13 = null
+material/14 = null
+material/15 = null
+material/16 = null
+material/17 = null
+material/18 = null
+material/19 = null
