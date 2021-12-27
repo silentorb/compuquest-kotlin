@@ -51,12 +51,12 @@
 }
 // brush 5
 {
-( -48 88 56 ) ( -48 -24 56 ) ( -48 -24 16 ) prototype-grid-gray 8 0 0 1 1
-( -48 -24 56 ) ( -40 -24 56 ) ( -40 -24 16 ) prototype-grid-gray 48 0 0 1 1
-( -40 -24 16 ) ( -40 88 16 ) ( -48 88 16 ) prototype-grid-gray 48 -8 0 1 1
-( -48 88 56 ) ( -40 88 56 ) ( -40 -24 56 ) prototype-grid-gray 48 -8 0 1 1
+( -48 88 56 ) ( -48 -16 56 ) ( -48 -16 16 ) prototype-grid-gray 8 0 0 1 1
+( -48 -16 56 ) ( -40 -16 56 ) ( -40 -16 16 ) prototype-grid-gray 48 0 0 1 1
+( -40 -16 16 ) ( -40 88 16 ) ( -48 88 16 ) prototype-grid-gray 48 -8 0 1 1
+( -48 88 56 ) ( -40 88 56 ) ( -40 -16 56 ) prototype-grid-gray 48 -8 0 1 1
 ( -40 88 16 ) ( -40 88 56 ) ( -48 88 56 ) prototype-grid-gray 48 0 0 1 1
-( -40 -24 56 ) ( -40 88 56 ) ( -40 88 16 ) prototype-grid-gray 8 0 0 1 1
+( -40 -16 56 ) ( -40 88 56 ) ( -40 88 16 ) prototype-grid-gray 8 0 0 1 1
 }
 // brush 6
 {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://assets/meshes/compuquest-unity-neighborhood.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=2]
@@ -13,16 +13,9 @@
 [ext_resource path="res://assets/images/old-tiles/windows-lit.png" type="Texture" id=12]
 [ext_resource path="res://world/zones/Mansion.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=14]
-[ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=17]
-[ext_resource path="res://assets/images/old-tiles/tile_2.png" type="Texture" id=21]
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=25]
-
-[sub_resource type="SpatialMaterial" id=1]
-albedo_texture = ExtResource( 21 )
-
-[sub_resource type="PlaneShape" id=2]
 
 [sub_resource type="SpatialMaterial" id=8]
 albedo_texture = ExtResource( 12 )
@@ -44,18 +37,6 @@ material = ExtResource( 14 )
 script = ExtResource( 25 )
 faction = "undead"
 
-[node name="arena" type="Spatial" parent="neighborhood"]
-visible = false
-
-[node name="Floor1" parent="neighborhood/arena" instance=ExtResource( 15 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0609493, -0.595061, -0.0998726 )
-material/0 = SubResource( 1 )
-
-[node name="StaticBody2" type="StaticBody" parent="neighborhood/arena/Floor1"]
-
-[node name="CollisionShape" type="CollisionShape" parent="neighborhood/arena/Floor1/StaticBody2"]
-shape = SubResource( 2 )
-
 [node name="player" parent="neighborhood" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17243, 0 )
 
@@ -64,25 +45,14 @@ script = ExtResource( 5 )
 
 [node name="mana" type="Node" parent="neighborhood/player"]
 script = ExtResource( 6 )
-amount = 200
-resource = "mana"
 
 [node name="gold" type="Node" parent="neighborhood/player"]
 script = ExtResource( 6 )
-amount = 200
-resource = "gold"
 
 [node name="bob" type="Node" parent="neighborhood/player"]
 script = ExtResource( 4 )
 
 [node name="joe" type="Node" parent="neighborhood/player"]
-script = ExtResource( 4 )
-
-[node name="employee" parent="neighborhood" instance=ExtResource( 16 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0013, -0.0353752, 2.81605 )
-visible = false
-
-[node name="char" type="Node" parent="neighborhood/employee"]
 script = ExtResource( 4 )
 
 [node name="house2" type="Spatial" parent="neighborhood"]
@@ -638,10 +608,10 @@ material = ExtResource( 14 )
 [node name="house7" type="Spatial" parent="neighborhood"]
 transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 13.3434, 1, 54.8477 )
 
-[node name="CSGCombiner" type="CSGCombiner" parent="neighborhood/house7"]
+[node name="foo" type="CSGCombiner" parent="neighborhood/house7"]
 use_collision = true
 
-[node name="walls" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="walls" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
 use_collision = true
 width = 10.0
@@ -649,7 +619,7 @@ height = 12.0
 depth = 8.0
 material = ExtResource( 14 )
 
-[node name="walls2" type="CSGBox" parent="neighborhood/house7/CSGCombiner/walls"]
+[node name="walls2" type="CSGBox" parent="neighborhood/house7/foo/walls"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 7.00001 )
 use_collision = true
 width = 10.0
@@ -657,7 +627,7 @@ height = 8.0
 depth = 10.0
 material = ExtResource( 14 )
 
-[node name="interior1" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="interior1" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.482876, 4, 7.48288 )
 operation = 2
 use_collision = true
@@ -666,7 +636,7 @@ height = 10.0
 depth = 6.0
 material = ExtResource( 14 )
 
-[node name="front-doorway" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="front-doorway" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48288, 2, 4.48288 )
 operation = 2
 use_collision = true
@@ -674,7 +644,7 @@ width = 8.0
 height = 4.0
 material = ExtResource( 14 )
 
-[node name="hall-door" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="hall-door" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.51713, 2, 8.48288 )
 operation = 2
 use_collision = true
@@ -683,7 +653,7 @@ height = 4.0
 depth = 4.0
 material = ExtResource( 14 )
 
-[node name="interior2" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="interior2" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.51713, 2, 7.48288 )
 operation = 2
 use_collision = true
@@ -692,7 +662,7 @@ height = 6.0
 depth = 6.0
 material = ExtResource( 14 )
 
-[node name="window1" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="window1" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.51713, 2, 3.48288 )
 operation = 2
 use_collision = true
@@ -700,14 +670,14 @@ width = 4.0
 depth = 3.0
 material = ExtResource( 14 )
 
-[node name="window2" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="window2" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.5171, 2, 7.48288 )
 operation = 2
 use_collision = true
 depth = 3.0
 material = ExtResource( 14 )
 
-[node name="window3" type="CSGBox" parent="neighborhood/house7/CSGCombiner"]
+[node name="window3" type="CSGBox" parent="neighborhood/house7/foo"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.48287, 2, 11.4829 )
 operation = 2
 use_collision = true
@@ -1194,13 +1164,9 @@ script = ExtResource( 5 )
 
 [node name="mana" type="Node" parent="player"]
 script = ExtResource( 6 )
-amount = 200
-resource = "mana"
 
 [node name="gold" type="Node" parent="player"]
 script = ExtResource( 6 )
-amount = 200
-resource = "gold"
 
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 4 )
@@ -1261,6 +1227,7 @@ faction = "undead"
 
 [node name="compuquest-unity-neighborhood" type="MeshInstance" parent="."]
 transform = Transform( 0.0975134, 0, 0.995234, 0, 1, 0, -0.995234, 0, 0.0975134, -0.295082, 6.49824, 0.871181 )
+visible = false
 mesh = ExtResource( 1 )
 skeleton = NodePath("")
 material/0 = null

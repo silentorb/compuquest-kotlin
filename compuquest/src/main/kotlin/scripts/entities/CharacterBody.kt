@@ -131,6 +131,7 @@ class CharacterBody : KinematicBody() {
 		accelerate(direction, delta)
 
 		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
+		var k = isOnFloor()
 		isJumpingInput = false
 	}
 }

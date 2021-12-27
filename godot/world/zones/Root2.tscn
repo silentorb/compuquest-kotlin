@@ -1120,13 +1120,9 @@ script = ExtResource( 3 )
 
 [node name="mana" type="Node" parent="player"]
 script = ExtResource( 4 )
-amount = 200
-resource = "mana"
 
 [node name="gold" type="Node" parent="player"]
 script = ExtResource( 4 )
-amount = 200
-resource = "gold"
 
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 6 )

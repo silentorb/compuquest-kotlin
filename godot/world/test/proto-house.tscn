@@ -1,3 +1,11 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
+[ext_resource path="res://entities/world/CsgBaker.gd" type="Script" id=2]
 
 [node name="proto-house" type="Spatial"]
+
+[node name="CSGBox" type="CSGBox" parent="."]
+width = 7.59534
+material = ExtResource( 1 )
+script = ExtResource( 2 )

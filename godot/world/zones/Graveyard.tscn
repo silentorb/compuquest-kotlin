@@ -1,46 +1,19 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=3]
 [ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=4]
-[ext_resource path="res://defining/Creature.gd" type="Script" id=5]
-[ext_resource path="res://defining/Ware.gd" type="Script" id=6]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=7]
 [ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=8]
-[ext_resource path="res://world/accessories/fireball.tres" type="Resource" id=9]
-[ext_resource path="res://world/creatures/viking.tres" type="Resource" id=10]
-[ext_resource path="res://world/accessories/heal.tres" type="Resource" id=11]
 [ext_resource path="res://assets/meshes/architecture/graveyard.scn" type="PackedScene" id=12]
 [ext_resource path="res://assets/images/old-tiles/tile_8.png" type="Texture" id=13]
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=14]
 [ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=15]
 [ext_resource path="res://world/props/gravestone.tscn" type="PackedScene" id=16]
-[ext_resource path="res://world/npcs/npc.tres" type="Resource" id=17]
 [ext_resource path="res://assets/images/props/large-sprites.tres" type="SpriteFrames" id=18]
 [ext_resource path="res://world/props/brick-post.tscn" type="PackedScene" id=19]
 [ext_resource path="res://world/props/willow.tscn" type="PackedScene" id=20]
-
-[sub_resource type="Resource" id=1]
-script = ExtResource( 6 )
-quantity = 100
-pricePerUnit = 2
-priceType = "gold"
-resourceType = "mana"
-quantityPerPurchase = 50
-
-[sub_resource type="Resource" id=2]
-script = ExtResource( 5 )
-depiction = "deevee"
-frame = 0
-health = 50
-accessories = [ ExtResource( 9 ), ExtResource( 11 ) ]
-fee = 0
-quests = [  ]
-key = "deevee"
-attributes = [ "talk" ]
-wares = [ SubResource( 1 ) ]
-enemyVisibilityRange = 0.0
 
 [sub_resource type="SpatialMaterial" id=3]
 flags_unshaded = true
@@ -61,8 +34,6 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329
 
 [node name="char" type="Node" parent="deevee"]
 script = ExtResource( 4 )
-creature = SubResource( 2 )
-faction = "neutral"
 
 [node name="grass" parent="." instance=ExtResource( 1 )]
 transform = Transform( -4.41376e-08, 0, -1.00975, 0, 1.00975, 0, 1.00975, 0, -4.41376e-08, 3.13903, 0.892017, -6.18127 )
@@ -105,21 +76,15 @@ script = ExtResource( 7 )
 
 [node name="mana" type="Node" parent="player"]
 script = ExtResource( 8 )
-amount = 200
-resource = "mana"
 
 [node name="gold" type="Node" parent="player"]
 script = ExtResource( 8 )
-amount = 200
-resource = "gold"
 
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 4 )
-creature = ExtResource( 10 )
 
 [node name="joe" type="Node" parent="player"]
 script = ExtResource( 4 )
-creature = ExtResource( 10 )
 
 [node name="ground" type="StaticBody" parent="."]
 
@@ -419,5 +384,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.54675, 0.710501, 3.56323 )
 
 [node name="grounds-keeper" type="Node" parent="grounds-keeper"]
 script = ExtResource( 4 )
-creature = ExtResource( 17 )
-faction = "neutral"

@@ -228,7 +228,7 @@ Global="*res://src/main/kotlin/scripts/Global.kt"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/scenic/plugin.cfg", "res://addons/zylann.hterrain/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_pixelorama_importer/plugin.cfg", "res://addons/qodot/plugin.cfg", "res://addons/scenic/plugin.cfg", "res://addons/zylann.hterrain/plugin.cfg" )
 
 [importer_defaults]
 
@@ -346,7 +346,7 @@ editor/gradle_wrapper_dir="E:/dev/games/compuquest-kotlin/compuquest"
 [physics]
 
 common/enable_pause_aware_picking=true
-3d/physics_engine="Bullet"
+3d/physics_engine="GodotPhysics"
 3d/active_soft_world=false
 
 [rendering]
