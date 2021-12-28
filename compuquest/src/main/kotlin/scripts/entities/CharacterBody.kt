@@ -6,7 +6,6 @@ import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
-import godot.core.NodePath
 import godot.core.Vector3
 import godot.global.GD
 import kotlin.math.abs
@@ -17,6 +16,7 @@ class CharacterBody : KinematicBody() {
 	var head: Spatial? = null
 	var snap: Vector3 = Vector3.ZERO
 	var velocity = Vector3.ZERO
+	var toolOffset: Vector3 = Vector3.ZERO
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)
@@ -53,6 +53,7 @@ class CharacterBody : KinematicBody() {
 	@RegisterFunction
 	override fun _ready() {
 		speed = walkSpeed
+		toolOffset = (findNode("toolOrigin") as? Spatial)?.translation ?: Vector3.ZERO
 	}
 
 	fun directionInput(moveAxis: Vector3): Vector3 {

@@ -10,6 +10,8 @@ import compuquest.simulation.intellect.Spirit
 import godot.Node
 import godot.Resource
 import godot.Spatial
+import godot.core.Vector3
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
@@ -52,7 +54,8 @@ fun addCharacter(
   additional: List<Any> = listOf()
 ): Hands {
   return tempCatch {
-    val sprite = node.getParent()?.findNode("sprite")
+    val parent = node.getParent()
+    val sprite = parent?.findNode("sprite")
 //    val depiction = getString(creature, "depiction")
 //    sprite?.set("animation", depiction)
 //    val refinedFaction = parseFaction(faction, node)
@@ -66,13 +69,15 @@ fun addCharacter(
       throw Error("Unknown character type: $type")
 
     val accessories = newCharacterAccessories(definitions, definition, id, nextId)
+    val characterBody = parent as? CharacterBody
+    val toolOffset = characterBody?.toolOffset ?: Vector3.ZERO
 
     listOf(
       Hand(
         id = id,
         components =
         listOfNotNull(
-          newCharacter(definition, accessories),
+          newCharacter(definition, accessories, toolOffset),
           sprite,
           spatial,
         ) + additional

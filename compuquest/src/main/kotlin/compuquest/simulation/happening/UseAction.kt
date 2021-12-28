@@ -24,7 +24,6 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
   val targetEntity = event.targetEntity
   val accessory = deck.accessories[action]!!
   if (canUse(world, accessory)) {
-    println("Action")
     val definition = accessory.definition
     val isWeapon = definition.hasAttribute(AccessoryAttributes.weapon)
     val specificEvents =

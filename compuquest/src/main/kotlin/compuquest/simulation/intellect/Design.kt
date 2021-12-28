@@ -58,7 +58,14 @@ fun filterEnemyTargets(
 	val deck = world.deck
 	val bodies = deck.bodies
 	val body = bodies[actor] ?: return mapOf()
-	val headLocation = body.translation + Vector3(0f, 0.5f, 0f)
+	// Add a random offset as a heuristic to deal with complex terrain and a lack of sphere casting.
+	// Occasionally, a spirit will try to attack a character through a space that is wide enough
+	// for a ray but not for the spirit's projectile size.
+	// This heuristic will minimize how often a spirit continuously attempts such a futile feat.
+	// It also mixes up visibility checks when the target would be barely visible
+	val r = 0.4f
+	val randomPadding = Vector3(world.dice.getFloat(-r, r), world.dice.getFloat(-r, r), world.dice.getFloat(-r, r))
+	val headLocation = body.translation + character.toolOffset + randomPadding
 	val space = getSpace(world) ?: return mapOf()
 	return deck.characters
 		.filter { (id, other) ->

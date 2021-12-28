@@ -5,6 +5,7 @@ import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.FactionNames
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
+import godot.core.Vector3
 import silentorb.mythic.ent.*
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -33,6 +34,7 @@ data class Character(
 	override val frame: Int = 0,
 	val originalDepiction: String = depiction,
 	val activeAccessory: Id? = null,
+	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState {
 	val isAlive: Boolean = health > 0
 }
@@ -107,7 +109,7 @@ fun newCharacterAccessories(
 			newAccessory(definitions, nextId, id, accessory)
 		}
 
-fun newCharacter(definition: CharacterDefinition, accessories: Hands) =
+fun newCharacter(definition: CharacterDefinition, accessories: Hands, toolOffset: Vector3) =
 	Character(
 		definition = definition,
 //            name = node.name,
@@ -120,6 +122,7 @@ fun newCharacter(definition: CharacterDefinition, accessories: Hands) =
 //            key = getNonEmptyString(creature, "key"),
 //    attributes = definition.attributes,
 		activeAccessory = accessories.mapNotNull { it.id }.firstOrNull(),
+		toolOffset = toolOffset,
 //            enemyVisibilityRange = getFloat(creature, "enemyVisibilityRange"),
 	)
 

@@ -9,6 +9,7 @@ import godot.Navigation
 import godot.Node
 import godot.Spatial
 import scripts.entities.actor.AttachPlayer
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
@@ -48,13 +49,16 @@ fun processSceneEntities(root: Node, world: World): World {
 	val spatialNodes = parents.filterIsInstance<Spatial>()
 	val nextId = world.nextId.source()
 
+	val excludeNonPlayers = getDebugBoolean("NO_MONSTERS")
 	val hands = spatialNodes
 		.flatMap { spatial ->
 			val components = componentNodes.filter { it.getParent() == spatial }
-			if (components.any { it is AttachPlayer })
-				addPlayer(definitions, nextId, spatial, components)
-			else {
-				newCharacterBody(definitions, nextId, spatial, components)
+			when {
+				components.any { it is AttachPlayer } -> addPlayer(definitions, nextId, spatial, components)
+				!excludeNonPlayers -> {
+					newCharacterBody(definitions, nextId, spatial, components)
+				}
+				else -> listOf()
 			}
 		}
 
