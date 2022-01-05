@@ -5,9 +5,28 @@
 [node name="text" type="Spatial"]
 script = ExtResource( 1 )
 
-[node name="control" type="Label" parent="."]
+[node name="control" type="CenterContainer" parent="."]
 margin_right = 40.0
+margin_bottom = 40.0
+use_top_left = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="background" type="PanelContainer" parent="control"]
+margin_left = -45.0
+margin_top = -14.0
+margin_right = 45.0
 margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="control/background"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 83.0
+margin_bottom = 21.0
 text = "Hello World"
 __meta__ = {
 "_edit_use_anchors_": false

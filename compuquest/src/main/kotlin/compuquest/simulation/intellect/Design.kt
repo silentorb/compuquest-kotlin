@@ -81,6 +81,7 @@ fun getNextTarget(
 	actor: Id,
 	target: Id?
 ): Id? {
+	return null
 	val character = world.deck.characters[actor]!!
 	val options = filterEnemyTargets(world, actor, character)
 	return if (options.containsKey(target))
