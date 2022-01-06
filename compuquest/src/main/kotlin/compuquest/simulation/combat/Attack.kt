@@ -2,17 +2,12 @@ package compuquest.simulation.combat
 
 import compuquest.simulation.general.*
 import compuquest.simulation.happening.UseAction
-import compuquest.simulation.happening.useActionEvent
-import godot.Spatial
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
-import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import compuquest.simulation.characters.Character
-import compuquest.simulation.characters.defaultCharacterHeight
 import compuquest.simulation.characters.getCharacterFacing
-import compuquest.simulation.happening.TryActionEvent
 
 const val attackEvent = "attackEvent"
 
@@ -52,7 +47,7 @@ fun startAttack(
 
 fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 	val accessory = world.deck.accessories[attack.accessory]!!
-	accessory.definition.effects.flatMap { effect ->
+	accessory.definition.actionEffects.flatMap { effect ->
 		when (effect.type) {
 			AccessoryEffects.attack -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
 			AccessoryEffects.summonAtTarget -> summonAtTarget(world, actor, accessory, attack.targetLocation!!)

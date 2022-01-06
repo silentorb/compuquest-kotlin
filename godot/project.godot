@@ -343,6 +343,13 @@ secondaryAction={
 
 editor/gradle_wrapper_dir="E:/dev/games/compuquest-kotlin/compuquest"
 
+[layer_names]
+
+3d_physics/layer_1="Dynamic"
+3d_physics/layer_2="Static"
+3d_physics/layer_3="Damage"
+3d_physics/layer_4="Damageable"
+
 [physics]
 
 common/enable_pause_aware_picking=true

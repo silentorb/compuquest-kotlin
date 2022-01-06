@@ -29,7 +29,7 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
     val specificEvents =
       when {
         isAttack -> listOf(
-          startAttack(action, accessory, actor, event.targetLocation, event.targetEntity)
+          startAttack(action, accessory, actor, event.targetLocation, targetEntity)
         )
 
 //      else -> when (definition.effect) {

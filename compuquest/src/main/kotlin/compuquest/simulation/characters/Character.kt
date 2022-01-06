@@ -49,7 +49,7 @@ fun getAccessories(accessories: Table<Accessory>, actor: Id): Table<Accessory> =
 		.filterValues { it.owner == actor }
 
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
-	getAccessories(accessories, actor).any { it.value.definition.effects.any { a -> a.type == effect } }
+	getAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
 fun getReadyAccessories(world: World, actor: Id): Table<Accessory> =
 	getAccessories(world.deck.accessories, actor)

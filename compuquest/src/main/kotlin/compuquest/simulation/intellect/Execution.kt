@@ -15,14 +15,28 @@ import silentorb.mythic.happening.newEvent
 fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit): Events {
 	val action = spirit.focusedAction
 	val accessory = world.deck.accessories[action]
-	val effect = accessory?.definition?.effects?.firstOrNull()
+	val effect = accessory?.definition?.actionEffects?.firstOrNull()
 	return if (effect != null && action != null) {
 		when (effect.type) {
-			AccessoryEffects.attack, AccessoryEffects.summonAtTarget -> {
+			AccessoryEffects.attack -> {
 				val target = spirit.target
 				if (target != null) {
 
 					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetEntity = target)))
+				} else
+					listOf()
+			}
+			AccessoryEffects.summonAtTarget -> {
+				val target = spirit.target
+				if (target != null) {
+					val body = world.bodies[target]!!
+//					val offset = if (accessory.definition.targetRegion == EffectRegion.feet)
+//						Vector3(0f, -1f, 0f)
+//					else
+//						Vector3.ZERO
+
+					val targetLocation  = body.translation //+ offset
+					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetLocation = targetLocation)))
 				} else
 					listOf()
 			}

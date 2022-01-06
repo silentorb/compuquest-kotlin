@@ -24,7 +24,7 @@ fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
   return if (damages.any()) {
     val damageReduction = getAccessoriesSequence(deck.accessories, actor)
       .sumOf { (_, value) ->
-        value.definition.effects
+        value.definition.actionEffects
           .filter { it.type == AccessoryEffects.damageReduction }
           .sumOf { it.strengthInt }
       }

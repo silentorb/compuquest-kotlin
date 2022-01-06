@@ -31,7 +31,7 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 	else {
 		val (origin, velocity) = originAndFacing
 		val definition = weapon.definition
-		val effect = definition.effects.first()
+		val effect = definition.actionEffects.first()
 		val projectile = instantiateScene<Spatial>(effect.spawns!!)!!
 		projectile.translation = origin
 		val shape = projectile.findNode("collisionShape") as? CollisionShape
