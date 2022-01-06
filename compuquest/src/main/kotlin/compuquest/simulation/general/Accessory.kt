@@ -40,13 +40,14 @@ data class Accessory(
 
 object AccessoryEffects {
   val attack = "attack"
+  val summonAtTarget = "summonAtTarget"
   val heal = "heal"
   val resurrect = "resurrect"
   val damageReduction = "armor"
 }
 
 object AccessoryAttributes {
-  const val weapon = "weapon"
+  const val attack = "attack"
 }
 
 const val detrimentalEffectCommand = "detrementalEffect"

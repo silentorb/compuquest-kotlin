@@ -18,7 +18,7 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
 	val effect = accessory?.definition?.effects?.firstOrNull()
 	return if (effect != null && action != null) {
 		when (effect.type) {
-			AccessoryEffects.attack -> {
+			AccessoryEffects.attack, AccessoryEffects.summonAtTarget -> {
 				val target = spirit.target
 				if (target != null) {
 

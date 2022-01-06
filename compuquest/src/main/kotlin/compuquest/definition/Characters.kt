@@ -25,7 +25,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
     faction = FactionNames.undead,
     health = 50,
     accessories = listOf(
-      Accessories.rocketLauncher,
+      Accessories.fireRing,
     ),
   ),
 )

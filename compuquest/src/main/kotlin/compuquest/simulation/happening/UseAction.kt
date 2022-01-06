@@ -25,10 +25,10 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
   val accessory = deck.accessories[action]!!
   if (canUse(world, accessory)) {
     val definition = accessory.definition
-    val isWeapon = definition.hasAttribute(AccessoryAttributes.weapon)
+    val isAttack = definition.hasAttribute(AccessoryAttributes.attack)
     val specificEvents =
       when {
-        isWeapon -> listOf(
+        isAttack -> listOf(
           startAttack(action, accessory, actor, event.targetLocation, event.targetEntity)
         )
 
