@@ -44,24 +44,19 @@ fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
 		.asSequence()
 		.filter { it.value.owner == actor }
 
-fun getAccessories(accessories: Table<Accessory>, actor: Id): Table<Accessory> =
-	accessories
-		.filterValues { it.owner == actor }
-
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
-	getAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
+	getOwnerAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
 fun getReadyAccessories(world: World, actor: Id): Table<Accessory> =
-	getAccessories(world.deck.accessories, actor)
+	getOwnerAccessories(world.deck.accessories, actor)
 		.filter { canUse(world, it.value) }
 
 fun canUse(world: World, accessory: Accessory): Boolean {
-	val deck = world.deck
-	val actor = deck.characters[accessory.owner]
-	val faction = deck.factions[actor?.faction]
-	val cost = accessory.definition.cost
-	return accessory.cooldown == 0f && (faction == null ||
-			cost.all { faction.resources[it.key] ?: 0 >= it.value })
+//	val deck = world.deck
+//	val actor = deck.characters[accessory.owner]
+//	val faction = deck.factions[actor?.faction]
+//	val cost = accessory.definition.cost
+	return accessory.cooldown == 0f
 }
 
 fun canUse(world: World, accessory: Id): Boolean =

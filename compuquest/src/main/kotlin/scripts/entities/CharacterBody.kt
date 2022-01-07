@@ -1,5 +1,7 @@
 package scripts.entities
 
+import godot.CapsuleShape
+import godot.CollisionShape
 import godot.KinematicBody
 import godot.Spatial
 import godot.annotation.Export
@@ -8,6 +10,7 @@ import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector3
 import godot.global.GD
+import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
 
 @RegisterClass
@@ -17,6 +20,7 @@ class CharacterBody : KinematicBody() {
 	var snap: Vector3 = Vector3.ZERO
 	var velocity = Vector3.ZERO
 	var toolOffset: Vector3 = Vector3.ZERO
+	var radius: Float = 0f
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)
@@ -54,6 +58,8 @@ class CharacterBody : KinematicBody() {
 	override fun _ready() {
 		speed = walkSpeed
 		toolOffset = (findNode("toolOrigin") as? Spatial)?.translation ?: Vector3.ZERO
+		val collisionShape = findNode("shape") as CollisionShape
+		radius = getCollisionShapeRadius(collisionShape)
 	}
 
 	fun directionInput(moveAxis: Vector3): Vector3 {

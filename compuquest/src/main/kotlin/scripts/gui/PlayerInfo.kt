@@ -1,16 +1,16 @@
 package scripts.gui
 
 import compuquest.simulation.characters.Character
-import compuquest.simulation.definition.ResourceType
-import compuquest.simulation.general.Faction
-import compuquest.simulation.general.Player
+import compuquest.simulation.general.Deck
+import compuquest.simulation.general.getOwnerAccessories
 import godot.Control
 import godot.GridContainer
 import godot.Label
-import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import scripts.Global
+import silentorb.mythic.ent.Id
+import silentorb.mythic.godoting.clearChildren
 
 @RegisterClass
 class PlayerInfo : Control() {
@@ -18,6 +18,7 @@ class PlayerInfo : Control() {
 	private var lastCharacter: Character? = null
 	private var resourcesGrid: GridContainer? = null
 	private val resourceIntLabels: MutableMap<Any, IntLabel> = mutableMapOf()
+	private var buffsGrid: GridContainer? = null
 
 	fun updateResource(resources: GridContainer, key: String, value: Int) {
 		val existing = resourceIntLabels[key]
@@ -43,9 +44,24 @@ class PlayerInfo : Control() {
 		}
 	}
 
+	fun updateBuffs(deck: Deck, actor: Id) {
+		val grid = buffsGrid!!
+		clearChildren(grid)
+		val buffs = getOwnerAccessories(deck.accessories, actor)
+			.filter { it.value.definition.duration > 0f }
+
+		for (buff in buffs) {
+			val label = Label()
+			label.text = buff.value.definition.name
+			label.name = label.text
+			grid.addChild(label)
+		}
+	}
+
 	@RegisterFunction
 	override fun _ready() {
 		resourcesGrid = findNode("resources") as? GridContainer
+		buffsGrid = findNode("buffs") as? GridContainer
 	}
 
 	@RegisterFunction
@@ -62,6 +78,7 @@ class PlayerInfo : Control() {
 			} else {
 				visible = true
 				updateResources(character, lastCharacter)
+				updateBuffs(deck, player.key)
 				lastCharacter = character
 			}
 		}

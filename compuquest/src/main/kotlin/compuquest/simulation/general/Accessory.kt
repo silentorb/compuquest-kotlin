@@ -17,6 +17,8 @@ data class AccessoryEffect(
 	val strength: Float = 0f,
 	val spawns: Key? = null,
 	val speed: Float = 0f,
+	val interval: Int = 0,
+	val duration: Float = 0f,
 ) {
 	val strengthInt: Int get() = strength.toInt()
 }
@@ -54,6 +56,11 @@ object AccessoryEffects {
 
 object AccessoryAttributes {
 	const val attack = "attack"
+}
+
+object AccessoryIntervals {
+	const val oneSecond = 60
+	const val default = 60
 }
 
 const val detrimentalEffectCommand = "detrementalEffect"
@@ -126,3 +133,9 @@ fun refreshTimers(timers: Table<IntTimer>, refreshed: Collection<Id>) =
 			remaining = timer.duration
 		)
 	}
+
+fun getOwnerAccessories(accessories: Table<Accessory>, owner: Id): Table<Accessory> =
+	accessories.filter { it.value.owner == owner }
+
+fun getOwnerAccessories(world: World, owner: Id): Table<Accessory> =
+	getOwnerAccessories(world.deck.accessories, owner)

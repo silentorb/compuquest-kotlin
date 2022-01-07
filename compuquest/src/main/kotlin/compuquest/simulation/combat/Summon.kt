@@ -22,7 +22,7 @@ fun summonAtTarget(world: World, actor: Id, weapon: Accessory, targetLocation: V
 			Hand(
 				components = listOf(
 					summoned,
-					newTimer(weapon.definition.duration),
+					newTimer(effect.duration),
 				)
 			)
 		)

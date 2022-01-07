@@ -4,7 +4,7 @@ import compuquest.simulation.general.*
 import silentorb.mythic.ent.KeyTable
 
 object Accessories {
-	val onFire = "onFire"
+	val burning = "burning"
 	val fireRing = "fireRing"
 	val rifle = "rifle"
 	val rocketLauncher = "rocketLauncher"
@@ -16,11 +16,11 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		cooldown = 3f,
 		attributes = setOf(AccessoryAttributes.attack),
 		range = 15f,
-		duration = 4f,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
 				strength = 20f,
+				duration = 4f,
 				spawns = "res://entities/effect/FireRing.tscn",
 			),
 		)
@@ -56,13 +56,14 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 )
 
 fun buffDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
-	Accessories.onFire to AccessoryDefinition(
-		name = Accessories.onFire,
+	Accessories.burning to AccessoryDefinition(
+		name = Accessories.burning,
 		duration = 4f,
 		passiveEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damageSelf,
 				strength = 10f,
+				interval = AccessoryIntervals.default,
 			),
 		)
 	),

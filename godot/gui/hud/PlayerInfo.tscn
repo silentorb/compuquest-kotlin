@@ -75,3 +75,17 @@ margin_top = 10.0
 margin_right = 83.0
 margin_bottom = 10.0
 columns = 2
+
+[node name="buffs-margin" type="MarginContainer" parent="margin/vbox"]
+margin_top = 73.0
+margin_right = 83.0
+margin_bottom = 93.0
+size_flags_vertical = 0
+custom_constants/margin_top = 10
+custom_constants/margin_bottom = 10
+
+[node name="buffs" type="GridContainer" parent="margin/vbox/buffs-margin"]
+margin_top = 10.0
+margin_right = 83.0
+margin_bottom = 10.0
+columns = 2
