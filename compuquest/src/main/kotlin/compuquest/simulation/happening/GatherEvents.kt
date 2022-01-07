@@ -1,5 +1,6 @@
 package compuquest.simulation.happening
 
+import compuquest.simulation.combat.eventsFromBuffs
 import compuquest.simulation.combat.eventsFromMissile
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.pursueGoals
@@ -12,7 +13,8 @@ fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): 
 	val deck = world.deck
 
 	val events2 = deck.spirits.flatMap { pursueGoals(world, it.key) } +
-			tableEvents(eventsFromMissile(world, delta), deck.missiles)
+			tableEvents(eventsFromMissile(world, delta), deck.missiles) +
+			eventsFromBuffs(world)
 //      tableEvents(eventsFromCharacter(world, previous), deck.characters) +
 //      tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
 //      tableEvents(eventsFromFaction(), deck.factions) +

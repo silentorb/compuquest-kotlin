@@ -37,9 +37,9 @@ fun syncGodot(world: World, events: Events) {
 			player.value.interactingWith == null &&
 					Global.getMenuStack().none()
 					&& player.value.isPlaying
-//      if (shouldRefreshPlayerSlowdown(player.value, events)) {
-//        body.set("isSlowed", true)
-//      }
+      if (shouldRefreshPlayerSlowdown(player.key, events)) {
+        body.isSlowed = true
+      }
 		}
 	}
 }

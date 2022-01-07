@@ -46,12 +46,12 @@ data class Accessory(
 )
 
 object AccessoryEffects {
+	val armor = "armor"
 	val attack = "attack"
 	val damageSelf = "damageSelf"
-	val summonAtTarget = "summonAtTarget"
 	val heal = "heal"
 	val resurrect = "resurrect"
-	val damageReduction = "armor"
+	val summonAtTarget = "summonAtTarget"
 }
 
 object AccessoryAttributes {

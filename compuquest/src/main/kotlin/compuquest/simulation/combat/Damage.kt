@@ -4,6 +4,7 @@ import compuquest.simulation.characters.getAccessoriesSequence
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.Deck
 import silentorb.mythic.ent.Id
+import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 import kotlin.math.max
@@ -19,13 +20,16 @@ data class Damage(
 
 const val damageEvent = "damage"
 
+fun newDamage(actor: Id, amount: Int) =
+  Event(damageEvent, actor, amount)
+
 fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
   val damages = filterEventValues<Int>(damageEvent, characterEvents)
   return if (damages.any()) {
     val damageReduction = getAccessoriesSequence(deck.accessories, actor)
       .sumOf { (_, value) ->
         value.definition.actionEffects
-          .filter { it.type == AccessoryEffects.damageReduction }
+          .filter { it.type == AccessoryEffects.armor }
           .sumOf { it.strengthInt }
       }
 

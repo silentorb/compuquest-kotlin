@@ -4,14 +4,14 @@
 [ext_resource path="res://src/main/kotlin/scripts/entities/FireRing.kt" type="Script" id=2]
 
 [sub_resource type="CylinderShape" id=1]
-radius = 2.0
+radius = 3.0
 height = 1.0
 
 [node name="fire-ring" type="Spatial"]
 script = ExtResource( 2 )
 
 [node name="mesh" parent="." instance=ExtResource( 1 )]
-transform = Transform( 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0 )
+transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0 )
 
 [node name="bounds" type="Area" parent="."]
 collision_layer = 8

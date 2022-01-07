@@ -13,13 +13,12 @@ object Accessories {
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 	Accessories.fireRing to AccessoryDefinition(
 		name = Accessories.fireRing,
-		cooldown = 3f,
+		cooldown = 8f,
 		attributes = setOf(AccessoryAttributes.attack),
 		range = 15f,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
-				strength = 20f,
 				duration = 4f,
 				spawns = "res://entities/effect/FireRing.tscn",
 			),
@@ -62,7 +61,7 @@ fun buffDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		passiveEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damageSelf,
-				strength = 10f,
+				strength = 4f,
 				interval = AccessoryIntervals.default,
 			),
 		)

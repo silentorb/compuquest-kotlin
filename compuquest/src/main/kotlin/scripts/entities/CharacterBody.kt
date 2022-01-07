@@ -21,6 +21,7 @@ class CharacterBody : KinematicBody() {
 	var velocity = Vector3.ZERO
 	var toolOffset: Vector3 = Vector3.ZERO
 	var radius: Float = 0f
+	var isSlowed: Boolean = false
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)
@@ -111,7 +112,13 @@ class CharacterBody : KinematicBody() {
 	}
 
 	fun updateSpeed() {
-		if (speed < walkSpeed) {
+		if (isSlowed) {
+			val targetSpeed = walkSpeed / 2.5f
+			speed = GD.lerp(speed, targetSpeed, 0.1f)
+			if (speed < targetSpeed + 0.01f) {
+				isSlowed = false
+			}
+		} else if (speed < walkSpeed) {
 			speed = GD.lerp(speed, walkSpeed, 0.05f)
 		}
 	}

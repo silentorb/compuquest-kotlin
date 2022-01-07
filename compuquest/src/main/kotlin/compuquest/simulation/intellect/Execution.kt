@@ -30,13 +30,13 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
 				val target = spirit.target
 				if (target != null) {
 					val body = world.bodies[target]!!
-//					val offset = if (accessory.definition.targetRegion == EffectRegion.feet)
-//						Vector3(0f, -1f, 0f)
-//					else
-//						Vector3.ZERO
-
-					val targetLocation  = body.translation //+ offset
-					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetLocation = targetLocation)))
+					val targetLocation = body.translation //+ offset
+					val value = TryActionEvent(
+						action = action,
+						targetLocation = targetLocation,
+						targetEntity = target, // Not needed for the summoning but used to trigger user targeting effects
+					)
+					listOf(newEvent(tryActionEvent, actor, value))
 				} else
 					listOf()
 			}

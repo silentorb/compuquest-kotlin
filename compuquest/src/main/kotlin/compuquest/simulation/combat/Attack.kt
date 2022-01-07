@@ -47,13 +47,14 @@ fun startAttack(
 
 fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 	val accessory = world.deck.accessories[attack.accessory]!!
-	accessory.definition.actionEffects.flatMap { effect ->
-		when (effect.type) {
-			AccessoryEffects.attack -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
-			AccessoryEffects.summonAtTarget -> summonAtTarget(world, actor, accessory, attack.targetLocation!!)
-			else -> listOf()
+	accessory.definition.actionEffects
+		.flatMap { effect ->
+			when (effect.type) {
+				AccessoryEffects.attack -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
+				AccessoryEffects.summonAtTarget -> summonAtTarget(world, actor, accessory, attack.targetLocation!!)
+				else -> listOf()
+			}
 		}
-	}
 }
 
 fun attackOld(world: World, actor: Id, character: Character, action: Id, accessory: Accessory, target: Id): Events {

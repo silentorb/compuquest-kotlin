@@ -1,5 +1,7 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.combat.Attack
+import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.input.Commands
 import scripts.Global
 import scripts.gui.gameOverScreen
@@ -53,8 +55,8 @@ fun updateParty() = handleEvents<List<Id>> { event, value ->
 	}
 }
 
-//fun shouldRefreshPlayerSlowdown(player: Player, events: Events): Boolean =
-//  events.any { it.type == detrimentalEffectCommand && player.party.contains(it.target) }
+fun shouldRefreshPlayerSlowdown(actor: Id, events: Events): Boolean =
+	events.any { it.type == attackEvent && it.value is Attack && it.value.targetEntity == actor }
 
 fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
 	val deck = world.deck

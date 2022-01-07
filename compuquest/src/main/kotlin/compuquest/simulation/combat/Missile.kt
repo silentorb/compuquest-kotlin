@@ -84,7 +84,7 @@ fun updateMissile(world: World, actor: Id, missile: Missile, body: Area, offset:
 	val damages = collisions.mapNotNull { collision ->
 		val collisionId = world.bodies.entries.firstOrNull { it.value == collision }?.key
 		if (world.deck.characters.containsKey(collisionId))
-			Event(damageEvent, collisionId, missile.damage)
+			newDamage(collisionId!!, missile.damage)
 		else
 			null
 	}.take(1)
