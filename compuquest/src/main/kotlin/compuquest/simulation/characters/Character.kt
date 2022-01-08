@@ -56,7 +56,7 @@ fun canUse(world: World, accessory: Accessory): Boolean {
 //	val actor = deck.characters[accessory.owner]
 //	val faction = deck.factions[actor?.faction]
 //	val cost = accessory.definition.cost
-	return accessory.cooldown == 0f
+	return accessory.definition.actionEffects.any() && accessory.cooldown == 0f
 }
 
 fun canUse(world: World, accessory: Id): Boolean =

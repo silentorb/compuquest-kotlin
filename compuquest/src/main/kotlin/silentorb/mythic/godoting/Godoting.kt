@@ -107,6 +107,7 @@ fun getShapeRadius(shape: Shape): Float =
 	when (shape) {
 		is CapsuleShape -> shape.radius.toFloat()
 		is CylinderShape -> shape.radius.toFloat()
+		is SphereShape -> shape.radius.toFloat()
 		else -> 0f
 	}
 

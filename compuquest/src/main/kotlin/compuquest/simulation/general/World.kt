@@ -36,3 +36,6 @@ fun getPlayer(deck: Deck?) =
 
 fun getPlayer(world: World?) =
 	getPlayer(world?.deck)
+
+fun getBodyEntityId(world: World, body: Spatial): Id? =
+	world.bodies.entries.firstOrNull { it.value == body }?.key

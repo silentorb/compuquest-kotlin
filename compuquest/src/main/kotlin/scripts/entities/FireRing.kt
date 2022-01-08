@@ -1,6 +1,7 @@
 package scripts.entities
 
 import compuquest.definition.Accessories
+import compuquest.simulation.general.getBodyEntityId
 import compuquest.simulation.general.newAccessory
 import compuquest.simulation.general.newHandEvent
 import godot.Area
@@ -35,7 +36,7 @@ class FireRing : Spatial() {
 				val bodyRadius = collision.radius
 				val distance = collision.globalTransform.origin.distanceTo(location)
 				if (distance > radius - bodyRadius) {
-					val actor = world.bodies.entries.firstOrNull { it.value == collision }?.key
+					val actor = getBodyEntityId(world, collision)
 					if (actor != null) {
 						Global.addEvent(
 							newHandEvent(

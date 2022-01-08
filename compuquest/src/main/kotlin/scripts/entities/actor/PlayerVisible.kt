@@ -1,5 +1,6 @@
 package scripts.entities.actor
 
+import compuquest.simulation.general.getBodyEntityId
 import compuquest.simulation.general.isFriendly
 import godot.Spatial
 import godot.annotation.RegisterClass
@@ -21,7 +22,7 @@ class PlayerVisible : Spatial() {
     val world = Global.world
     if (player != null && world != null) {
       val parent = getParent() as Spatial
-      val actor = world.bodies.entries.firstOrNull { it.value == parent }?.key
+      val actor = getBodyEntityId(world, parent)
       val character = world.deck.characters[actor]
       if (character != null) {
         val isVisible = if (character.enemyVisibilityRange == 0f ||

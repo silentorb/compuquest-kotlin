@@ -7,7 +7,7 @@ radius = 0.3
 
 [node name="fireball" type="Area"]
 
-[node name="collisionShape" type="CollisionShape" parent="."]
+[node name="shape" type="CollisionShape" parent="."]
 shape = SubResource( 1 )
 
 [node name="sprite" parent="." instance=ExtResource( 1 )]

@@ -6,6 +6,7 @@ import godot.*
 import godot.core.VariantArray
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
+import silentorb.mythic.godoting.getCollisionShapeRadius
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -34,37 +35,31 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 		val effect = definition.actionEffects.first()
 		val projectile = instantiateScene<Spatial>(effect.spawns!!)!!
 		projectile.translation = origin
-		val shape = projectile.findNode("collisionShape") as? CollisionShape
-		val radius = (shape?.shape as? SphereShape)?.radius?.toFloat() ?: 0.1f
-		val characterBody = world.bodies[actor]!!.getInstanceId()
-//		projectile.ignore = world.bodies[actor]
-//    projectile.addCollisionExceptionWith(world.bodies[actor]!!)
-//    projectile.applyCentralImpulse(velocity * effect.speed)
-//    world.scene!!.addChild(projectile)
+		val shape = projectile.findNode("shape") as? CollisionShape
+		if (shape == null)
+			listOf()
+		else {
+			val radius = getCollisionShapeRadius(shape)
+			val characterBody = world.bodies[actor]!!.getInstanceId()
 
-		listOf(
-			newHandEvent(
-				Hand(
-					components = listOf(
-						projectile,
-//////            Body(
-//////              position = origin,
-//////              velocity = vector * weapon.velocity,
-//////              scale = Vector3(0.5f)
-//////            ),
-						Missile(
-							velocity = velocity * effect.speed,
-							damage = effect.strengthInt,
-							origin = origin,
-							range = definition.range,
-							diameter = radius * 2f,
-							ignore = characterBody,
-//              damages = weapon.damages
-						),
+			listOf(
+				newHandEvent(
+					Hand(
+						components = listOf(
+							projectile,
+							Missile(
+								velocity = velocity * effect.speed,
+								damage = effect.strengthInt,
+								origin = origin,
+								range = definition.range,
+								diameter = radius * 2f,
+								ignore = characterBody,
+							),
+						)
 					)
 				)
 			)
-		)
+		}
 	}
 }
 
@@ -82,7 +77,7 @@ fun updateMissile(world: World, actor: Id, missile: Missile, body: Area, offset:
 		listOf()
 
 	val damages = collisions.mapNotNull { collision ->
-		val collisionId = world.bodies.entries.firstOrNull { it.value == collision }?.key
+		val collisionId = getBodyEntityId(world, collision)
 		if (world.deck.characters.containsKey(collisionId))
 			newDamage(collisionId!!, missile.damage)
 		else

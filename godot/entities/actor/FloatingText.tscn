@@ -14,10 +14,12 @@ __meta__ = {
 }
 
 [node name="background" type="PanelContainer" parent="control"]
-margin_left = -45.0
-margin_top = -14.0
-margin_right = 45.0
-margin_bottom = 14.0
+margin_left = -26.0
+margin_top = -23.0
+margin_right = 26.0
+margin_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -25,9 +27,12 @@ __meta__ = {
 [node name="label" type="Label" parent="control/background"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 83.0
-margin_bottom = 21.0
-text = "Hello World"
+margin_right = 45.0
+margin_bottom = 38.0
+size_flags_horizontal = 4
+text = "Hello
+World"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
