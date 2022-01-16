@@ -5,8 +5,13 @@ import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.FactionNames
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
+import godot.Node
+import godot.Spatial
 import godot.core.Vector3
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.*
+import silentorb.mythic.godoting.getString
+import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
@@ -104,12 +109,12 @@ fun newCharacterAccessories(
 			newAccessory(definitions, nextId, id, accessory)
 		}
 
-fun newCharacter(definition: CharacterDefinition, accessories: Hands, toolOffset: Vector3) =
+fun newCharacter(definition: CharacterDefinition, accessories: Hands, toolOffset: Vector3, faction: Key? = null) =
 	Character(
 		definition = definition,
 //            name = node.name,
 		name = definition.name,
-		faction = definition.faction,
+		faction = faction ?: definition.faction,
 		health = definition.health,
 		depiction = definition.depiction,
 		frame = definition.frame,
@@ -139,4 +144,31 @@ fun updateCharacter(world: World, events: Events): (Id, Character) -> Character 
 //    body = updateCharacterBody(characterEvents, character.body),
 		faction = updateCharacterFaction(characterEvents, character.faction),
 	)
+}
+
+fun addCharacter(
+	definitions: Definitions,
+	definition: CharacterDefinition,
+	id: Id,
+	nextId: NextId,
+	characterBody: CharacterBody,
+	faction: Key? = null,
+	additional: List<Any> = listOf()
+): Hands {
+	return tempCatch {
+		val sprite = characterBody.findNode("sprite")
+		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
+		val toolOffset = characterBody.toolOffset
+
+		listOf(
+			Hand(
+				id = id,
+				components = listOfNotNull(
+					newCharacter(definition, accessories, toolOffset, faction),
+					sprite,
+					characterBody,
+				) + additional
+			)
+		) + accessories
+	}
 }

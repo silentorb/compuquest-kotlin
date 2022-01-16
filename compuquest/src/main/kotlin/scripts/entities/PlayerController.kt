@@ -61,6 +61,7 @@ class PlayerController : Node() {
 				body.isJumpingInput = false
 				Input.setMouseMode(Input.MOUSE_MODE_VISIBLE)
 			}
+			body.moveDirection = body.directionInput(moveAxis)
 		}
 	}
 
@@ -106,8 +107,6 @@ class PlayerController : Node() {
 			if (isPlayerDead(Global.world?.deck)) {
 				deathCollapse(body.head!!)
 			}
-			val direction = body.directionInput(moveAxis)
-			body.walk(direction, delta.toFloat())
 		}
 	}
 }

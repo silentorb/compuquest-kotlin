@@ -1,5 +1,6 @@
 package scripts.entities
 
+import compuquest.simulation.general.isPlayerDead
 import godot.CapsuleShape
 import godot.CollisionShape
 import godot.KinematicBody
@@ -10,6 +11,7 @@ import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector3
 import godot.global.GD
+import scripts.Global
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
 
@@ -54,6 +56,7 @@ class CharacterBody : KinematicBody() {
 	var speed: Float = 0f
 	var isJumpingInput = false
 	var isActive = true
+	var moveDirection: Vector3 = Vector3.ZERO
 
 	@RegisterFunction
 	override fun _ready() {
@@ -147,5 +150,10 @@ class CharacterBody : KinematicBody() {
 		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
 		var k = isOnFloor()
 		isJumpingInput = false
+	}
+
+	@RegisterFunction
+	override fun _physicsProcess(delta: Double) {
+		walk(moveDirection, delta.toFloat())
 	}
 }

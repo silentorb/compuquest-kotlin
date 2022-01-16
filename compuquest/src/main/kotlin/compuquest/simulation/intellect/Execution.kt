@@ -65,8 +65,7 @@ fun moveTowardDestination(world: World, actor: Id, destination: Vector3): Events
 	if (body != null) {
 		val velocity = (destination - body.globalTransform.origin)
 		velocity.y = 0.0
-//		body.moveAndSlideWithSnap(velocity.normalized() * body.speed)
-		body.walk(velocity.normalized(), simulationDelta)
+		body.moveDirection = velocity.normalized()
 	}
 	return listOf()
 }

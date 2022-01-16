@@ -5,11 +5,10 @@ import compuquest.clienting.*
 import compuquest.clienting.display.applyDisplayOptions
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
-import compuquest.simulation.general.Player
-import compuquest.simulation.general.World
-import compuquest.simulation.general.getPlayer
 import compuquest.simulation.input.Commands
 import compuquest.clienting.input.gatherDefaultPlayerInput
+import compuquest.simulation.general.*
+import compuquest.simulation.general.World
 import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.*
@@ -36,7 +35,8 @@ class Global : Node() {
 	var worlds: List<World> = listOf()
 	val definitions = newDefinitions()
 	var client: Client = newClient()
-//	var sceneNode: Spatial? = null
+
+	//	var sceneNode: Spatial? = null
 	val partyUi: Boolean = false
 
 	@RegisterProperty
@@ -56,6 +56,16 @@ class Global : Node() {
 
 		fun addEvent(event: Event) {
 			eventQueue.add(event)
+		}
+
+		fun addHand(hand: Hand) {
+			addEvent(newHandEvent(hand))
+		}
+
+		fun addHands(hands: Collection<Hand>) {
+			for (hand in hands) {
+				addHand(hand)
+			}
 		}
 
 		fun addPlayerEvent(type: String, value: Any? = null) {

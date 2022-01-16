@@ -219,7 +219,7 @@ _global_script_class_icons={
 [application]
 
 config/name="test"
-run/main_scene="res://world/zones/Root4.tscn"
+run/main_scene="res://world/sim/Battle.tscn"
 config/icon="res://icon.png"
 
 [autoload]
