@@ -1,5 +1,6 @@
 package compuquest.simulation.general
 
+import compuquest.definition.Accessories
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.combat.Missile
 import compuquest.simulation.intellect.Spirit
@@ -32,8 +33,14 @@ val removeEntities = genericRemoveEntities(deckReflection)
 
 // bodies aren't added through this method because they are specially synced each frame
 fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
-	val (accessories, refreshed) = integrateNewAccessories(deck.accessories, extractComponents(idHands))
-	val refreshedTimers = refreshTimers(deck.timers, refreshed)
+	val accessories = integrateNewAccessories(deck.accessories, extractComponents(idHands))
+
+//	val k = accessories.filter { it.value.definition.name == Accessories.burning }
+//		.entries.groupBy { it.value.owner }
+//
+//	if (k.any { it.value.size > 1 }) {
+//		integrateNewAccessories(deck.accessories, extractComponents(idHands))
+//	}
 
 	return deck.copy(
 		accessories = accessories,
@@ -45,7 +52,7 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 		players = deck.players + extractComponents(idHands),
 		quests = deck.quests + extractComponents(idHands),
 		spirits = deck.spirits + extractComponents(idHands),
-		timers = deck.timers + extractComponents(idHands) + refreshedTimers,
+		timers = deck.timers + extractComponents(idHands),
 		wares = deck.wares + extractComponents(idHands),
 	)
 }

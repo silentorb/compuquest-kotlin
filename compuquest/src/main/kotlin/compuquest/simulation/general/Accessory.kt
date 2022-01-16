@@ -9,6 +9,7 @@ import silentorb.mythic.ent.NextId
 import silentorb.mythic.ent.Table
 import silentorb.mythic.happening.Events
 import silentorb.mythic.timing.IntTimer
+import silentorb.mythic.timing.floatToIntTime
 import silentorb.mythic.timing.newTimer
 import kotlin.math.max
 
@@ -43,6 +44,7 @@ data class Accessory(
 	val level: Int? = null,
 	val cooldown: Float = 0f,
 	val definition: AccessoryDefinition,
+	val duration: Int = -1,
 )
 
 object AccessoryEffects {
@@ -67,19 +69,19 @@ const val detrimentalEffectCommand = "detrementalEffect"
 
 fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key): Hand {
 	val definition = definitions.accessories[type] ?: throw Error("Invalid accessory type $type")
-	val duration = definition.duration
+	val duration = if (definition.duration == 0f)
+		-1
+	else
+		floatToIntTime(definition.duration)
 
 	return Hand(
 		id = nextId(),
-		components = listOfNotNull(
+		components = listOf(
 			Accessory(
 				owner = owner,
 				definition = definition,
+				duration = duration
 			),
-			if (duration > 0)
-				newTimer(duration)
-			else
-				null
 		)
 	)
 }
@@ -105,7 +107,7 @@ fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory 
 fun integrateNewAccessories(
 	accessories: Table<Accessory>,
 	newAccessories: Table<Accessory>
-): Pair<Table<Accessory>, List<Id>> {
+): Table<Accessory> {
 	val duplicates = newAccessories.mapNotNull { a ->
 		val existing = accessories.entries.firstOrNull {
 			!it.value.definition.stackable && it.value.owner == a.value.owner && it.value.definition == a.value.definition
@@ -123,7 +125,7 @@ fun integrateNewAccessories(
 		.map { it.first.key }
 		.distinct()
 
-	return Pair(accessories + uniqueAdditions, refreshed)
+	return accessories + uniqueAdditions
 }
 
 fun refreshTimers(timers: Table<IntTimer>, refreshed: Collection<Id>) =

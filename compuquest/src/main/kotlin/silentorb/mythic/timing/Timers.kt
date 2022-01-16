@@ -13,9 +13,12 @@ data class IntTimer(
 	val onFinished: Events = listOf(),
 )
 
+fun floatToIntTime(value: Float): Int =
+	ceil((value * simulationFps.toFloat())).toInt()
+
 fun newTimer(duration: Seconds, onFinished: Events = listOf()) =
 	IntTimer(
-		duration = ceil((duration * simulationFps.toFloat())).toInt(),
+		duration = floatToIntTime(duration),
 		onFinished = onFinished,
 	)
 
