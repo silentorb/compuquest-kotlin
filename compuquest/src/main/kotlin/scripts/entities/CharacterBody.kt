@@ -158,6 +158,7 @@ class CharacterBody : KinematicBody() {
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
 		walk(moveDirection, delta.toFloat())
+		moveDirection = Vector3.ZERO
 
 		val character = Global.world?.deck?.characters?.getOrDefault(id, null)
 		if (character != null) {
@@ -171,10 +172,6 @@ class CharacterBody : KinematicBody() {
 					CollisionMasks.characterLayers.toLong()
 				else
 					CollisionMasks.none.toLong()
-
-				if (!character.isAlive) {
-					moveDirection = Vector3.ZERO
-				}
 
 				isAlive = character.isAlive
 			}

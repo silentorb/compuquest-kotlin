@@ -69,8 +69,7 @@ fun updateWorldDay(world: World): World =
 	)
 
 fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
-	val previousWorld = worlds.last()
-	val world = updateWorldDay(previousWorld)
+	val world = updateWorldDay(worlds.last())
 
 	val world2 = syncMythic(world)
 
@@ -85,7 +84,7 @@ fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
 		)
 	)
 
-	val events2 = gatherEvents(world3, previousWorld, delta, events)
+	val events2 = gatherEvents(world3, worlds.dropLast(1).lastOrNull(), delta, events)
 	val deck = updateDeck(events2, world3, delta)
 	val world4 = world3.copy(
 		deck = deck,

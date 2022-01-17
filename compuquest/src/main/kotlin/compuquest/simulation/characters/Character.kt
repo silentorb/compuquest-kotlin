@@ -5,6 +5,7 @@ import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.FactionNames
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
+import godot.AnimatedSprite3D
 import godot.Node
 import godot.Spatial
 import godot.core.Vector3
@@ -26,7 +27,7 @@ data class CharacterDefinition(
 	val frame: Int = 0,
 	val faction: Key = FactionNames.neutral,
 	val health: Int,
-	val corpseDecay: Float = 10f,
+	val corpseDecay: Float = 20f,
 	val accessories: List<Key> = listOf(),
 )
 
@@ -81,7 +82,7 @@ fun modifyHealth(target: Id, amount: Int) =
 
 fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
 	val a = previous.deck.characters[actor]
-	if (a?.isAlive == true && !character.isAlive && character.corpseDecay > 0)
+	if (a?.isAlive == true && !character.isAlive && character.corpseDecay > 0f)
 		listOf(newHandEvent(Hand(id = actor, components = listOf(newTimer(character.corpseDecay)))))
 	else
 		listOf()
@@ -160,16 +161,20 @@ fun addCharacter(
 	additional: List<Any> = listOf()
 ): Hands {
 	return tempCatch {
-		val sprite = characterBody.findNode("sprite")
+		val sprite = characterBody.findNode("sprite") as AnimatedSprite3D?
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
 		characterBody.id = id
+		val character = newCharacter(definition, accessories, toolOffset, faction)
+		if (sprite != null) {
+			sprite.animation = character.depiction
+		}
 
 		listOf(
 			Hand(
 				id = id,
 				components = listOfNotNull(
-					newCharacter(definition, accessories, toolOffset, faction),
+					character,
 					sprite,
 					characterBody,
 				) + additional

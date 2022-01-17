@@ -3,9 +3,7 @@ package compuquest.simulation.intellect
 import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.getReadyAccessories
 import compuquest.simulation.general.*
-import godot.PhysicsDirectSpaceState
 import godot.core.Vector3
-import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 
 fun filterEnemyTargets(
@@ -78,10 +76,11 @@ fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 }
 
 fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
-	val target = getNextTarget(world, actor, spirit.target)
-	val body = world.deck.bodies[actor]
-	val targetRange = if (body != null && target != null)
-		getTargetRange(world, body, target)
+	val deck = world.deck
+	val visibleTarget = getNextTarget(world, actor, spirit.target)
+	val body = deck.bodies[actor]
+	val targetRange = if (body != null && visibleTarget != null)
+		getTargetRange(world, body, visibleTarget)
 	else
 		null
 
@@ -90,12 +89,15 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 	else
 		null
 
-	val targetBody = if (target != null)
-		world.deck.bodies[target]
+	val targetBody = if (visibleTarget != null)
+		deck.bodies[visibleTarget]
 	else
 		null
 
+	val targetJustDied = spirit.target != null && deck.characters[spirit.target]?.isAlive != true
+
 	val lastKnownTargetLocation = when {
+		targetJustDied -> null
 		targetBody != null -> targetBody.translation
 		spirit.lastKnownTargetLocation != null && body != null &&
 				spirit.lastKnownTargetLocation.distanceTo(body.translation) < 0.5f -> null
@@ -105,15 +107,21 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 	val isInRange = targetRange != null && accessory != null && targetRange <= accessory.value.definition.range
 
 	val destination = when {
-		target != null && targetRange != null && accessory != null && !isInRange ->
-			updateDestination(world, actor, world.deck.bodies[target]?.translation)
-		target == null && lastKnownTargetLocation != null -> updateDestination(world, actor, lastKnownTargetLocation)
+		visibleTarget != null && targetRange != null && accessory != null && !isInRange ->
+			updateDestination(world, actor, world.deck.bodies[visibleTarget]?.translation)
+		visibleTarget == null && lastKnownTargetLocation != null -> updateDestination(world, actor, lastKnownTargetLocation)
 		else -> null
 	}
 
+	val nextTarget = visibleTarget
+		?: if (targetJustDied)
+			null
+		else
+			spirit.target
+
 	spirit.copy(
 		focusedAction = accessory?.key,
-		target = target,
+		target = nextTarget,
 		nextDestination = destination,
 		lastKnownTargetLocation = lastKnownTargetLocation,
 		readyToUseAction = destination == null && isInRange,

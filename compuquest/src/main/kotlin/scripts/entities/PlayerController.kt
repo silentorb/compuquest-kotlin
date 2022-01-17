@@ -92,7 +92,7 @@ class PlayerController : Node() {
 
 	fun deathCollapse(head: Spatial) {
 		head.translation {
-			y = GD.lerp(head.translation.y.toFloat(), -0.35f, 0.05f).toDouble()
+			y = GD.lerp(head.translation.y.toFloat(), 0.15f, 0.05f).toDouble()
 		}
 
 		head.rotation {

@@ -29,15 +29,18 @@ class Spawner : Spatial() {
 
 	@Export
 	@RegisterProperty
+	var active: Boolean = true
+
+	@Export
+	@RegisterProperty
 	var quantity: Int = 1
 
 	var accumulator: Float = 0f
 	var firstSpawn = false
 
-	fun spawn() {
+	fun spawn(): Boolean {
 		val world = Global.world
-		if (world != null) {
-			firstSpawn = true
+		return if (world != null) {
 			val definitions = world.definitions
 			val definition = definitions.characters[type]
 			if (definition != null) {
@@ -50,20 +53,31 @@ class Spawner : Spatial() {
 						dice.getFloat(0f, 0.1f),
 						dice.getFloat(-0.1f, 0.1f)
 					)
+
+					// The body needs to be added to the world before addCharacter because
+					// Godot does not call _ready until the node is added to the scene tree
+					world.scene.addChild(body)
+
 					val nextId = world.nextId.source()
 					val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(Spirit()))
 					Global.addHands(hands)
 				}
 			}
-		}
+			true
+		} else
+			false
 	}
 
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
-		accumulator += delta.toFloat()
-		if (accumulator >= frequency || !firstSpawn) {
-			accumulator -= frequency
-			spawn()
+		if (active) {
+			accumulator += delta.toFloat()
+			if (!firstSpawn && spawn()) {
+				firstSpawn = true
+			}
+			if (accumulator >= frequency && spawn()) {
+				accumulator -= frequency
+			}
 		}
 	}
 }
