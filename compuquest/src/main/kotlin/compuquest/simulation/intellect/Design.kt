@@ -77,7 +77,12 @@ fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 
 fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 	val deck = world.deck
-	val visibleTarget = getNextTarget(world, actor, spirit.target)
+	val lastTarget = if (spirit.target != null && world.dice.getInt(100) > 5)
+		spirit.target
+	else
+		null
+
+	val visibleTarget = getNextTarget(world, actor, lastTarget)
 	val body = deck.bodies[actor]
 	val targetRange = if (body != null && visibleTarget != null)
 		getTargetRange(world, body, visibleTarget)
