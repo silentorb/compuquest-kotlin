@@ -141,9 +141,10 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 		else -> spirit.lastKnownTargetLocation
 	}
 
+	val isInRange = targetRange != null && accessory != null && targetRange <= accessory.value.definition.range
+
 	val destination = when {
-		target != null && targetRange != null && accessory != null &&
-				targetRange > accessory.value.definition.range ->
+		target != null && targetRange != null && accessory != null && !isInRange ->
 			updateDestination(world, actor, world.deck.bodies[target]?.translation)
 		target == null && lastKnownTargetLocation != null -> updateDestination(world, actor, lastKnownTargetLocation)
 		else -> null
@@ -153,6 +154,7 @@ fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
 		focusedAction = accessory?.key,
 		target = target,
 		nextDestination = destination,
-		lastKnownTargetLocation = lastKnownTargetLocation
+		lastKnownTargetLocation = lastKnownTargetLocation,
+		readyToUseAction = destination == null && isInRange,
 	)
 }

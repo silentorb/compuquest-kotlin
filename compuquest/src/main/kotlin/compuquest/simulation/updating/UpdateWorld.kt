@@ -34,12 +34,12 @@ fun syncGodot(world: World, events: Events) {
 		val character = world.deck.characters[player.key]
 		if (body != null && character != null) {
 			body.isActive = character.isAlive
-			player.value.interactingWith == null &&
-					Global.getMenuStack().none()
-					&& player.value.isPlaying
-      if (shouldRefreshPlayerSlowdown(player.key, events)) {
-        body.isSlowed = true
-      }
+//			player.value.interactingWith == null &&
+//					Global.getMenuStack().none()
+//					&& player.value.isPlaying
+//      if (shouldRefreshPlayerSlowdown(player.key, events)) {
+//        body.isSlowed = true
+//      }
 		}
 	}
 }

@@ -57,31 +57,6 @@ fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 		}
 }
 
-fun attackOld(world: World, actor: Id, character: Character, action: Id, accessory: Accessory, target: Id): Events {
-	throw Error("No longer supported")
-//  val definition = accessory.definition
-//  val spawns = definition.spawns ?: return listOf()
-//  val projectileBody = instantiateScene<Spatial>(spawns)
-//  val actorBody = world.deck.bodies[actor]!!
-//  projectileBody?.translation = actorBody.translation // + Vector3(0f, -1f, 0f)
-//  val projectile = Hand(
-//    components = listOfNotNull(
-//      HomingMissile(
-//        damage = definition.strength.toInt(),
-//        target = target,
-//        owner = actor,
-//        speed = 30f,
-//      ),
-//      projectileBody,
-//    ),
-//  )
-//
-//  return listOf(
-//    Event(useActionEvent, actor, action),
-//    newHandEvent(projectile),
-//  )
-}
-
 fun getToolOffset(world: World, actor: Id): Vector3 =
 	world.deck.characters[actor]?.toolOffset ?: Vector3.ZERO
 

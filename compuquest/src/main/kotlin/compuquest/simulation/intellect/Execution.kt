@@ -77,7 +77,8 @@ fun pursueGoals(world: World, actor: Id): Events {
 	return if (character.isAlive && spirit != null)
 		when {
 			spirit.nextDestination != null -> moveTowardDestination(world, actor, spirit.nextDestination)
-			else -> tryUseAction(world, actor, character, spirit)
+			spirit.readyToUseAction -> tryUseAction(world, actor, character, spirit)
+			else -> listOf()
 		}
 	else
 		listOf()

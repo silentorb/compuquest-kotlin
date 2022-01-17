@@ -29,3 +29,6 @@ far = 1000.0
 script = ExtResource( 2 )
 camera_path = NodePath("../Head/Camera")
 head_path = NodePath("../Head")
+
+[node name="toolOrigin" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0 )

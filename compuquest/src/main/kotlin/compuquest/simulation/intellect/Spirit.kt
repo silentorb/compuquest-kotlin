@@ -9,4 +9,5 @@ data class Spirit(
 	val target: Id? = null,
 	val nextDestination: Vector3? = null,
 	val lastKnownTargetLocation: Vector3? = null,
+	val readyToUseAction: Boolean = false,
 )

@@ -1,8 +1,7 @@
 package scripts.entities
 
 import compuquest.simulation.characters.addCharacter
-import compuquest.simulation.general.newHandEvent
-import godot.Node
+import compuquest.simulation.intellect.Spirit
 import godot.PackedScene
 import godot.Spatial
 import godot.annotation.Export
@@ -48,10 +47,14 @@ class Spawner : Spatial() {
 					for (i in (0 until quantity)) {
 						val body = scene.instance() as CharacterBody
 						val dice = world.dice
-						body.translation = globalTransform.origin + Vector3(dice.getFloat(-0.1f, 0.1f), dice.getFloat(0f, 0.1f), dice.getFloat(-0.1f, 0.1f))
+						body.translation = globalTransform.origin + Vector3(
+							dice.getFloat(-0.1f, 0.1f),
+							dice.getFloat(0f, 0.1f),
+							dice.getFloat(-0.1f, 0.1f)
+						)
 						getTree()!!.root!!.addChild(body)
 						val nextId = world.nextId.source()
-						val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction)
+						val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(Spirit()))
 						Global.addHands(hands)
 					}
 				}
