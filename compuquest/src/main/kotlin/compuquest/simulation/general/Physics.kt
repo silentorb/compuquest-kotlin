@@ -7,7 +7,7 @@ import silentorb.mythic.ent.Id
 
 // Eventually may need to return more information such as hit location but just the id is enough for now
 fun castCharacterRay(world: World, actor: Id, maxDistance: Float): Id? {
-  val space = getSpace(world) ?: return null
+  val space = world.space
   val body = world.bodies[actor]!!
   val target = body.translation - body.transform.basis.z * maxDistance
   val result = space.intersectRay(body.translation, target, variantArrayOf(body)).toMap()

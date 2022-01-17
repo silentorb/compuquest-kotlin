@@ -1,6 +1,7 @@
 package scripts.entities
 
 import compuquest.simulation.general.isPlayerDead
+import compuquest.simulation.physics.CollisionMasks
 import godot.CapsuleShape
 import godot.CollisionShape
 import godot.KinematicBody
@@ -12,6 +13,7 @@ import godot.annotation.RegisterProperty
 import godot.core.Vector3
 import godot.global.GD
 import scripts.Global
+import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
 
@@ -24,6 +26,8 @@ class CharacterBody : KinematicBody() {
 	var toolOffset: Vector3 = Vector3.ZERO
 	var radius: Float = 0f
 	var isSlowed: Boolean = false
+	var id: Id = 0L
+	var isAlive: Boolean = true
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)
@@ -148,12 +152,32 @@ class CharacterBody : KinematicBody() {
 		accelerate(direction, delta)
 
 		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
-		var k = isOnFloor()
 		isJumpingInput = false
 	}
 
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
 		walk(moveDirection, delta.toFloat())
+
+		val character = Global.world?.deck?.characters?.getOrDefault(id, null)
+		if (character != null) {
+			if (isAlive != character.isAlive) {
+				collisionMask = if (character.isAlive)
+					CollisionMasks.characterMask.toLong()
+				else
+					CollisionMasks.corpseMask.toLong()
+
+				collisionLayer = if (character.isAlive)
+					CollisionMasks.characterLayers.toLong()
+				else
+					CollisionMasks.none.toLong()
+
+				if (!character.isAlive) {
+					moveDirection = Vector3.ZERO
+				}
+
+				isAlive = character.isAlive
+			}
+		}
 	}
 }

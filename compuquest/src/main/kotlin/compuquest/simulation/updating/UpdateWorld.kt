@@ -54,8 +54,8 @@ fun updateDepictions(previous: World?, next: World) {
 			val node = next.sprites[after.key]
 			if (node != null) {
 				tempCatchStatement {
-					node.set("animation", animation)
-					node.set("frame", frame)
+					node.animation = animation
+					node.frame = frame.toLong()
 				}
 			}
 		}

@@ -2,10 +2,7 @@ package compuquest.simulation.general
 
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Zone
-import godot.Navigation
-import godot.Node
-import godot.PhysicsDirectSpaceState
-import godot.Spatial
+import godot.*
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.SharedNextId
@@ -16,20 +13,21 @@ data class World(
 	val definitions: Definitions,
 	val nextId: SharedNextId,
 	val bodies: Map<Id, Spatial> = mapOf(),
-	val sprites: Map<Id, Spatial> = mapOf(),
+	val sprites: Map<Id, AnimatedSprite3D> = mapOf(),
 	val zones: Map<Key, Zone> = mapOf(),
 	val deck: Deck = Deck(),
 	val factionRelationships: RelationshipTable = mapOf(),
 	val dice: Dice,
-	val scene: Node? = null,
+	val scene: Spatial,
 	val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
 	val day: DayState,
 	val previousEvents: Events = listOf(),
-	val navigation: Navigation? = null
+	val navigation: Navigation? = null,
+	val space: PhysicsDirectSpaceState,
 )
 
-fun getSpace(world: World): PhysicsDirectSpaceState? =
-	world.bodies.values.firstOrNull()?.getWorld()?.directSpaceState
+fun getSpace(spatial: Spatial): PhysicsDirectSpaceState? =
+	spatial.getWorld()?.directSpaceState
 
 fun getPlayer(deck: Deck?) =
 	deck?.players?.entries?.firstOrNull()

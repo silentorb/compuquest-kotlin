@@ -8,48 +8,6 @@ import godot.core.Vector3
 import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 
-const val spiritRangeBuffer = 0.1f
-
-fun inRangeAndVisible(
-	space: PhysicsDirectSpaceState,
-	world: World,
-	bodyId: Id,
-	body: Body,
-	other: Id,
-	range: Float
-): Boolean {
-	val otherBody = world.bodies[other]
-	val location = body.translation + Vector3(0f, 1f, 0f)
-
-	return otherBody != null
-			&& location.distanceTo(otherBody.translation + Vector3(0f, 1f, 0f)) <= range
-			&& space.intersectRay(body.translation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody))
-		.none()
-}
-
-fun getTargetRange(
-	world: World,
-	body: Body,
-	other: Id
-): Float {
-	val otherBody = world.bodies[other]!!
-	val location = body.translation + Vector3(0f, 1f, 0f)
-	return location.distanceTo(otherBody.translation + Vector3(0f, 1f, 0f)).toFloat()
-}
-
-fun isVisible(
-	space: PhysicsDirectSpaceState,
-	world: World,
-	bodyId: Id,
-	headLocation: Vector3,
-	other: Id
-): Boolean {
-	val otherBody = world.bodies[other]
-	return otherBody != null &&
-			space.intersectRay(headLocation, otherBody.translation, variantArrayOf(world.bodies[bodyId]!!, otherBody))
-				.none()
-}
-
 fun filterEnemyTargets(
 	world: World,
 	actor: Id,
@@ -58,6 +16,7 @@ fun filterEnemyTargets(
 	val deck = world.deck
 	val bodies = deck.bodies
 	val body = bodies[actor] ?: return mapOf()
+	val godotBody = world.bodies[actor] ?: return mapOf()
 	// Add a random offset as a heuristic to deal with complex terrain and a lack of sphere casting.
 	// Occasionally, a spirit will try to attack a character through a space that is wide enough
 	// for a ray but not for the spirit's projectile size.
@@ -66,13 +25,12 @@ fun filterEnemyTargets(
 	val r = 0.4f
 	val randomPadding = Vector3(world.dice.getFloat(-r, r), world.dice.getFloat(-r, r), world.dice.getFloat(-r, r))
 	val headLocation = body.translation + character.toolOffset + randomPadding
-	val space = getSpace(world) ?: return mapOf()
 	return deck.characters
 		.filter { (id, other) ->
 			id != actor
 					&& other.isAlive
 					&& isEnemy(world.factionRelationships, other.faction, character.faction)
-					&& isVisible(space, world, actor, headLocation, id)
+					&& isVisible(world, godotBody, headLocation, id)
 		}
 }
 
@@ -102,6 +60,9 @@ fun getNextTarget(
 fun updateDestination(world: World, actor: Id, targetLocation: Vector3?): Vector3? {
 	val navigation = world.navigation
 	val sourceLocation = world.deck.bodies[actor]?.translation
+	if (navigation == null) {
+		println("Current scene is not configured for pathfinding!")
+	}
 	return if (navigation != null && sourceLocation != null && targetLocation != null) {
 //		val start = navigation.getClosestPoint(sourceLocation)
 		val path = navigation.getSimplePath(sourceLocation, targetLocation)

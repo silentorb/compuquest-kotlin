@@ -16,6 +16,8 @@ import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.happening.handleEvents
+import silentorb.mythic.timing.IntTimer
+import silentorb.mythic.timing.newTimer
 
 data class CharacterDefinition(
 	val name: String,
@@ -24,6 +26,7 @@ data class CharacterDefinition(
 	val frame: Int = 0,
 	val faction: Key = FactionNames.neutral,
 	val health: Int,
+	val corpseDecay: Float = 10f,
 	val accessories: List<Key> = listOf(),
 )
 
@@ -41,8 +44,12 @@ data class Character(
 	val activeAccessory: Id? = null,
 	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState {
-	val isAlive: Boolean = health > 0
+	val isAlive: Boolean = isCharacterAlive(health)
+	val corpseDecay: Float get() = definition.corpseDecay
 }
+
+fun isCharacterAlive(health: Int): Boolean =
+	health > 0
 
 fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
 	accessories
@@ -72,16 +79,13 @@ const val modifyHealthCommand = "modifyHealth"
 fun modifyHealth(target: Id, amount: Int) =
 	Event(modifyHealthCommand, target, amount)
 
-//fun eventsFromCharacter(world: World, previous: World?): (Id, Character) -> Events = { actor, character ->
-//  if (previous != null) {
-//    val a = previous.deck.characters[actor]
-//    if (a?.isAlive ?: true && !character.isAlive)
-//      listOf(setDepiction)
-//    else
-//      listOf()
-//  } else
-//    listOf()
-//}
+fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
+	val a = previous.deck.characters[actor]
+	if (a?.isAlive == true && !character.isAlive && character.corpseDecay > 0)
+		listOf(newHandEvent(Hand(id = actor, components = listOf(newTimer(character.corpseDecay)))))
+	else
+		listOf()
+}
 
 val updateCharacterBody = handleEvents<Id?> { event, value ->
 	when (event.type) {
@@ -159,6 +163,7 @@ fun addCharacter(
 		val sprite = characterBody.findNode("sprite")
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
+		characterBody.id = id
 
 		listOf(
 			Hand(

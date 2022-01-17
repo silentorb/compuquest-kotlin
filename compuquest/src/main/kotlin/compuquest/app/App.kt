@@ -1,18 +1,15 @@
 package compuquest.app
 
+import compuquest.population.processSceneEntities
 import compuquest.serving.newWorld
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.World
-import compuquest.population.processSceneEntities
+import compuquest.simulation.general.getSpace
 import compuquest.simulation.updating.updateDepictions
-import godot.Node
+import godot.Spatial
 
-fun newGame(scene: Node, definitions: Definitions): World {
-  val world = newWorld(definitions)
-    .copy(scene = scene)
-
-//  populateZones(Dice(), scene)
-
+fun newGame(scene: Spatial, definitions: Definitions): World {
+  val world = newWorld(definitions, scene)
   val world2 = processSceneEntities(scene, world)
   updateDepictions(null, world2)
   return world2
