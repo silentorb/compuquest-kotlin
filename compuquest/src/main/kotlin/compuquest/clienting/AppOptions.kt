@@ -2,9 +2,9 @@ package compuquest.clienting
 
 import compuquest.clienting.audio.AudioOptions
 import compuquest.clienting.display.DisplayOptions
-import compuquest.clienting.input.InputOptions
 import silentorb.mythic.configuration.loadYamlFile
 import silentorb.mythic.configuration.saveYamlFile
+import silentorb.mythic.debugging.getDebugBoolean
 
 data class UiOptions(
   val showHud: Boolean = true,
@@ -13,7 +13,6 @@ data class UiOptions(
 data class AppOptions(
   val audio: AudioOptions = AudioOptions(),
   val display: DisplayOptions = DisplayOptions(),
-  val input: InputOptions = InputOptions(),
   val ui: UiOptions = UiOptions(),
 )
 
@@ -25,7 +24,7 @@ fun saveOptions(options: AppOptions) {
 
 fun loadOptions(): AppOptions {
   val config = loadYamlFile<AppOptions>(optionsFile)
-  if (config != null)
+  if (config != null && !getDebugBoolean("FORCE_DEFAULT_OPTIONS"))
     return config
 
   val newConfig = AppOptions()

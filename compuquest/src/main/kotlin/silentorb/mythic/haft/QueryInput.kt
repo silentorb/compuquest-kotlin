@@ -2,51 +2,93 @@ package silentorb.mythic.haft
 
 import godot.Input
 
-fun isButtonPressed(device: Int, scancode: Int): Boolean =
+data class AxisCommands(
+	val both: String,
+	val negative: String,
+	val positive: String,
+)
+
+fun isButtonPressed(device: Int, scancode: Int, gamepad: Int): Boolean =
 	when (device) {
 		InputDevices.keyboard -> Input.isKeyPressed(scancode.toLong())
 		InputDevices.mouse -> Input.isMouseButtonPressed(scancode.toLong())
-		else -> Input.isJoyButtonPressed(device.toLong(), scancode.toLong())
+		else -> if (gamepad != -1)
+			Input.isJoyButtonPressed(gamepad.toLong(), (scancode - gamepadButtonOffset).toLong())
+		else
+			false
 	}
 
-fun isButtonPressed(bindings: Bindings, command: String): Boolean =
+fun isButtonPressed(bindings: Bindings, gamepad: Int, command: String): Boolean =
 	bindings
 		.any { binding ->
-			binding.command == command && isButtonPressed(binding.device, binding.scancode)
+			binding.command == command && isButtonPressed(binding.device, binding.scancode, gamepad)
 		}
 
-fun getAxisState(bindings: Bindings, bothCommand: String, negativeCommand: String, positiveCommand: String): Float {
+fun isButtonJustPressed(device: Int, scancode: Int, gamepad: Int): Boolean {
+	val isPressed = isButtonPressed(device, scancode, gamepad)
+	setButtonDown(device, scancode, isPressed)
+	return !wasButtonDown(device, scancode) && isPressed
+}
+
+fun isButtonJustPressed(bindings: Bindings, gamepad: Int, command: String): Boolean =
+	bindings
+		.any { binding ->
+			binding.command == command && isButtonJustPressed(binding.device, binding.scancode, gamepad)
+		}
+
+fun getAxisState(
+	binding: Binding,
+	gamepad: Int,
+	commands: AxisCommands,
+): Float {
+	val device = binding.device
+	val scancode = binding.scancode
+
+	return when (binding.command) {
+		commands.both -> {
+			when (device) {
+				InputDevices.mouse -> when (scancode) {
+					MouseChannels.x -> globalMouseOffset.x.toFloat()
+					MouseChannels.y -> globalMouseOffset.y.toFloat()
+					else -> 0f
+				}
+				InputDevices.keyboard -> 0f
+				else -> if (gamepad != -1)
+					Input.getJoyAxis(gamepad.toLong(), scancode.toLong()).toFloat()
+				else
+					0f
+			}
+		}
+		commands.negative -> {
+			if (isButtonPressed(device, scancode, gamepad))
+				-1f
+			else
+				0f
+		}
+		commands.positive -> {
+			if (isButtonPressed(device, scancode, gamepad))
+				1f
+			else
+				0f
+		}
+		else -> 0f
+	}
+}
+
+fun getAxisState(
+	bindings: Bindings,
+	gamepad: Int,
+	commands: AxisCommands
+): Float {
 	var result = 0f
 	for (binding in bindings) {
-		val device = binding.device
-		val scancode = binding.scancode
+		var value = getAxisState(binding, gamepad, commands)
 
-		result += when (binding.command) {
-			bothCommand -> {
-				when (device) {
-					InputDevices.mouse -> when (scancode) {
-						0 -> globalMouseOffset.x.toFloat()
-						1 -> globalMouseOffset.y.toFloat()
-						else -> 0f
-					}
-					InputDevices.keyboard -> 0f
-					else -> Input.getJoyAxis(device.toLong(), scancode.toLong()).toFloat()
-				}
-			}
-			negativeCommand -> {
-				if (isButtonPressed(device, scancode))
-					-1f
-				else
-					0f
-			}
-			positiveCommand -> {
-				if (isButtonPressed(device, scancode))
-					1f
-				else
-					0f
-			}
-			else -> 0f
+		for (processor in binding.processors) {
+			value = applyInputProcessor(processor, value)
 		}
+
+		result += value
 	}
 	return result
 }

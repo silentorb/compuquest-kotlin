@@ -11,6 +11,7 @@ import godot.annotation.RegisterProperty
 import godot.core.Vector3
 import godot.global.GD
 import scripts.Global
+import silentorb.mythic.debugging.getDebugBoolean
 
 @RegisterClass
 class Spawner : Spatial() {
@@ -25,7 +26,7 @@ class Spawner : Spatial() {
 
 	@Export
 	@RegisterProperty
-	var frequency: Float = 0f
+	var interval: Float = 0f
 
 	@Export
 	@RegisterProperty
@@ -39,6 +40,9 @@ class Spawner : Spatial() {
 	var firstSpawn = false
 
 	fun spawn(): Boolean {
+		if (getDebugBoolean("NO_MONSTERS"))
+			return true
+
 		val world = Global.world
 		return if (world != null) {
 			val definitions = world.definitions
@@ -75,8 +79,8 @@ class Spawner : Spatial() {
 			if (!firstSpawn && spawn()) {
 				firstSpawn = true
 			}
-			if (accumulator >= frequency && spawn()) {
-				accumulator -= frequency
+			if (accumulator >= interval && spawn()) {
+				accumulator -= interval
 			}
 		}
 	}

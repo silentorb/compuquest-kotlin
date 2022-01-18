@@ -1,14 +1,11 @@
 package compuquest.clienting.input
 
 import silentorb.mythic.haft.Bindings
-
-data class InputProfile(
-  val bindings: Bindings,
-)
+import silentorb.mythic.haft.InputProfile
 
 const val defaultInputProfile: Int = 1
 
-data class InputOptions(
-  val profiles: Map<Int, InputProfile> = mapOf(),
-  val playerProfiles: Map<Long, Int>
-)
+fun defaultInputProfiles() =
+	mapOf(
+		defaultInputProfile to InputProfile(bindings = defaultInputProfile())
+	)

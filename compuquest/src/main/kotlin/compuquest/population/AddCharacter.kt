@@ -71,9 +71,6 @@ fun addCharacter(
     val accessories = newCharacterAccessories(definitions, definition, id, nextId)
     val characterBody = parent as? CharacterBody
     val toolOffset = characterBody?.toolOffset ?: Vector3.ZERO
-    if (characterBody != null) {
-      characterBody.id = id
-    }
 
     listOf(
       Hand(

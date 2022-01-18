@@ -15,6 +15,7 @@ data class DisplayOptions(
   val windowedResolution: Vector2i? = null,
   val windowMode: WindowMode = WindowMode.windowed,
   val vsync: Boolean = true,
+  val fov: Float = 80f,
 )
 
 

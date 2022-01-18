@@ -25,8 +25,8 @@ object Commands {
   const val moveUp = "moveUp"
   const val moveDown = "moveDown"
 
-  const val moveHorizontal = "moveHorizontal"
-  const val moveVertical = "moveVertical"
-  const val lookHorizontal = "lookHorizontal"
-  const val lookVertical = "lookVertical"
+  const val moveLengthwise = "moveHorizontal"
+  const val moveLateral = "moveVertical"
+  const val lookX = "lookHorizontal"
+  const val lookY = "lookVertical"
 }

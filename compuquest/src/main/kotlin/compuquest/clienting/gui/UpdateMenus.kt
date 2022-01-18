@@ -53,8 +53,8 @@ fun updateMenuStack(player: Player) = handleEvents<MenuStack> { event, menuStack
   when (event.type) {
     Commands.interact -> listOfNotNull(interactionAddress(player))
     Commands.finishInteraction -> listOf()
-    Commands.manageMembers -> listOf(MenuAddress(Screens.manageMembers))
-    Commands.manageQuests -> listOf(MenuAddress(Screens.manageQuests))
+//    Commands.manageMembers -> listOf(MenuAddress(Screens.manageMembers))
+//    Commands.manageQuests -> listOf(MenuAddress(Screens.manageQuests))
     Commands.menuBack -> menuStack.dropLast(1)
     Commands.navigate -> menuStack.plus(event.value as MenuAddress)
     else -> menuStack

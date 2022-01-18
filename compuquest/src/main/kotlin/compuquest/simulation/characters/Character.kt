@@ -164,7 +164,6 @@ fun addCharacter(
 		val sprite = characterBody.findNode("sprite") as AnimatedSprite3D?
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
-		characterBody.id = id
 		val character = newCharacter(definition, accessories, toolOffset, faction)
 		if (sprite != null) {
 			sprite.animation = character.depiction

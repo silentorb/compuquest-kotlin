@@ -1,18 +1,26 @@
 package silentorb.mythic.haft
 
-object InputDevices {
-	const val keyboard = 0
-	const val mouse = 1
-	const val gamepad = 2
+import silentorb.mythic.ent.Id
+
+fun createBindings(device: Int, bindings: Map<Long, Any>) =
+	bindings.map { (key, value) ->
+		val command = when (value) {
+			is String -> value
+			is CommandWithProcessors -> value.command
+			else -> throw Error("Invalid binding value")
+		}
+		val processors = if (value is CommandWithProcessors)
+			value.processors
+		else
+			listOf()
+
+		Binding(device, key.toInt(), command, processors)
+	}
+
+fun updateInput(delta: Float, players: Collection<Id>, state: InputState): InputState {
+	val gamepads = updateGamepads(delta, state.gamepads)
+	return state.copy(
+		gamepads = gamepads,
+		playerGamepads = updatePlayerGamepads(gamepads, players, state.playerGamepads)
+	)
 }
-
-data class Binding(
-	val device: Int,
-	val scancode: Int,
-	val command: String,
-)
-
-typealias Bindings = List<Binding>
-
-fun createBindings(device: Int, bindings: Map<Int, String>) =
-	bindings.map { Binding(device, it.key, it.value) }

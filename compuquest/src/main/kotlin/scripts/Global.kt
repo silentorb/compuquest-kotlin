@@ -6,15 +6,17 @@ import compuquest.clienting.display.applyDisplayOptions
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.input.Commands
-import compuquest.clienting.input.gatherDefaultPlayerInput
+import compuquest.clienting.input.gatherDefaultPlayerInputOld
 import compuquest.simulation.general.*
 import compuquest.simulation.general.World
+import compuquest.simulation.input.PlayerInputs
 import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
+import godot.core.Vector2
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
@@ -56,6 +58,10 @@ class Global : Node() {
 
 		fun addEvent(event: Event) {
 			eventQueue.add(event)
+		}
+
+		fun addEvents(events: Collection<Event>) {
+			eventQueue.addAll(events)
 		}
 
 		fun addHand(hand: Hand) {
@@ -124,16 +130,16 @@ class Global : Node() {
 	}
 
 	fun updateEvents(): Events {
-		val events = eventQueue.toList() + gatherDefaultPlayerInput(worlds.last())
+		val events = eventQueue.toList()
 		eventQueue.clear()
 		return events
 	}
 
-	fun updateWorlds(events: Events, worlds: List<World>, delta: Float) {
+	fun updateWorlds(events: Events, input: PlayerInputs, worlds: List<World>, delta: Float) {
 		if (events.any { it.type == Commands.newGame }) {
 			restartGame()
 		} else {
-			val nextWorld = updateWorld(events, delta, worlds)
+			val nextWorld = updateWorld(events, input, delta, worlds)
 			this.worlds = worlds.plus(nextWorld).takeLast(2)
 		}
 	}
@@ -162,6 +168,23 @@ class Global : Node() {
 			} else
 				null
 		}
+	}
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		val inputEvents = gatherDefaultPlayerInputOld(worlds.last())
+		val events = updateEvents() + inputEvents
+		val previousClient = client
+		val nextClient = updateClient(worlds.lastOrNull(), events, delta.toFloat(), previousClient)
+		val player = getPlayer()?.key
+		val clientEvents = if (player != null)
+			eventsFromClient(player, nextClient, previousClient)
+		else
+			listOf()
+
+		client = nextClient
+		addEvents(inputEvents + clientEvents)
+		globalMouseOffset = Vector2.ZERO
 	}
 
 	@RegisterFunction
@@ -204,16 +227,7 @@ class Global : Node() {
 							}
 						} else {
 							val events = updateEvents()
-							val previousClient = client
-							val nextClient = updateClient(localWorlds.lastOrNull(), events, previousClient)
-							val player = getPlayer()?.key
-							val clientEvents = if (player != null)
-								eventsFromClient(player, nextClient, previousClient)
-							else
-								listOf()
-
-							client = nextClient
-							updateWorlds(events + clientEvents, localWorlds, delta.toFloat())
+							updateWorlds(events, client.playerInputs, localWorlds, delta.toFloat())
 						}
 					}
 					InitMode.delayInit -> {

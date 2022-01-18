@@ -1,10 +1,12 @@
 package compuquest.simulation.updating
 
+import compuquest.simulation.characters.updatePlayerRig
 import compuquest.simulation.general.*
 import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
+import compuquest.simulation.input.PlayerInputs
+import compuquest.simulation.input.emptyPlayerInput
 import compuquest.simulation.intellect.updateSpirit
-import scripts.Global
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.mapTable
 import silentorb.mythic.godoting.tempCatchStatement
@@ -27,19 +29,38 @@ fun syncMythic(world: World): World {
 	)
 }
 
-fun syncGodot(world: World, events: Events) {
-	val player = getPlayer(world)
-	if (player != null) {
-		val body = world.bodies[player.key] as? CharacterBody
-		val character = world.deck.characters[player.key]
+fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
+	val deck = world.deck
+//	val player = getPlayer(world)
+//	if (player != null) {
+////			player.value.interactingWith == null &&
+////					Global.getMenuStack().none()
+////					&& player.value.isPlaying
+////      if (shouldRefreshPlayerSlowdown(player.key, events)) {
+////        body.isSlowed = true
+////      }
+//		}
+//	}
+
+	for (actor in deck.players.keys) {
+		val body = world.bodies[actor] as? CharacterBody
+		val character = deck.characters[actor]
 		if (body != null && character != null) {
 			body.isActive = character.isAlive
-//			player.value.interactingWith == null &&
-//					Global.getMenuStack().none()
-//					&& player.value.isPlaying
-//      if (shouldRefreshPlayerSlowdown(player.key, events)) {
-//        body.isSlowed = true
-//      }
+			val input = inputs[actor]
+			if (input != null) {
+				updatePlayerRig(body, input)
+			}
+		}
+	}
+
+	for ((actor, body) in world.bodies) {
+		if (body is CharacterBody) {
+			val character = deck.characters[actor]
+			if (character != null) {
+				val input = inputs[actor] ?: emptyPlayerInput
+				body.update(input, character, simulationDelta)
+			}
 		}
 	}
 }
@@ -68,7 +89,7 @@ fun updateWorldDay(world: World): World =
 		step = world.step + 1
 	)
 
-fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
+fun updateWorld(events: Events, inputs: PlayerInputs, delta: Float, worlds: List<World>): World {
 	val world = updateWorldDay(worlds.last())
 
 	val world2 = syncMythic(world)
@@ -92,6 +113,6 @@ fun updateWorld(events: Events, delta: Float, worlds: List<World>): World {
 	updateDepictions(world, world4)
 	val world5 = deleteEntities(events2, world4)
 	val world6 = newEntities(events2, world5)
-	syncGodot(world6, events2)
+	syncGodot(world6, events2, inputs)
 	return world6.copy(previousEvents = events2)
 }

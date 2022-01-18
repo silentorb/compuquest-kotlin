@@ -1,6 +1,8 @@
 package scripts.entities
 
+import compuquest.simulation.characters.Character
 import compuquest.simulation.general.isPlayerDead
+import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.physics.CollisionMasks
 import godot.CapsuleShape
 import godot.CollisionShape
@@ -26,7 +28,6 @@ class CharacterBody : KinematicBody() {
 	var toolOffset: Vector3 = Vector3.ZERO
 	var radius: Float = 0f
 	var isSlowed: Boolean = false
-	var id: Id = 0L
 	var isAlive: Boolean = true
 
 	companion object {
@@ -58,7 +59,6 @@ class CharacterBody : KinematicBody() {
 	var jumpHeight: Float = 10f
 
 	var speed: Float = 0f
-	var isJumpingInput = false
 	var isActive = true
 	var moveDirection: Vector3 = Vector3.ZERO
 
@@ -84,8 +84,12 @@ class CharacterBody : KinematicBody() {
 			else -> Vector3.ZERO
 		}
 
-		val result = directionA + directionB
-		return Vector3(result.x, 0f, result.z).normalized()
+		val result1 = directionA + directionB
+		val result2 = Vector3(result1.x, 0f, result1.z)
+		return if (result2.length() > 1f)
+			result2.normalized()
+		else
+			result2
 	}
 
 	fun accelerate(direction: Vector3, delta: Float) {
@@ -111,8 +115,8 @@ class CharacterBody : KinematicBody() {
 		}
 	}
 
-	fun jump() {
-		if (isJumpingInput) {
+	fun jump(input: PlayerInput) {
+		if (input.jump) {
 			velocity.y = jumpHeight.toDouble()
 			snap = Vector3.ZERO
 		}
@@ -130,14 +134,14 @@ class CharacterBody : KinematicBody() {
 		}
 	}
 
-	fun walk(direction: Vector3, delta: Float) {
+	fun walk(input: PlayerInput, direction: Vector3, delta: Float) {
 		if (isOnFloor()) {
 			snap = -getFloorNormal() - getFloorVelocity() * delta
 
 			if (velocity.y < 0f)
 				velocity.y = 0.0
 
-			jump()
+			jump(input)
 		} else {
 			if (snap != Vector3.ZERO && velocity.y != 0.0) {
 				velocity.y = 0.0
@@ -152,29 +156,24 @@ class CharacterBody : KinematicBody() {
 		accelerate(direction, delta)
 
 		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
-		isJumpingInput = false
 	}
 
-	@RegisterFunction
-	override fun _physicsProcess(delta: Double) {
-		walk(moveDirection, delta.toFloat())
+	fun update(input: PlayerInput, character: Character, delta: Float) {
+		walk(input, moveDirection, delta)
 		moveDirection = Vector3.ZERO
 
-		val character = Global.world?.deck?.characters?.getOrDefault(id, null)
-		if (character != null) {
-			if (isAlive != character.isAlive) {
-				collisionMask = if (character.isAlive)
-					CollisionMasks.characterMask.toLong()
-				else
-					CollisionMasks.corpseMask.toLong()
+		if (isAlive != character.isAlive) {
+			collisionMask = if (character.isAlive)
+				CollisionMasks.characterMask.toLong()
+			else
+				CollisionMasks.corpseMask.toLong()
 
-				collisionLayer = if (character.isAlive)
-					CollisionMasks.characterLayers.toLong()
-				else
-					CollisionMasks.none.toLong()
+			collisionLayer = if (character.isAlive)
+				CollisionMasks.characterLayers.toLong()
+			else
+				CollisionMasks.none.toLong()
 
-				isAlive = character.isAlive
-			}
+			isAlive = character.isAlive
 		}
 	}
 }
