@@ -18,8 +18,8 @@ import godot.annotation.RegisterProperty
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
-import silentorb.mythic.godoting.findChildren
 import silentorb.mythic.godoting.instantiateScene
+import silentorb.mythic.haft.globalMouseOffset
 import silentorb.mythic.happening.Events
 
 enum class InitMode {
@@ -223,6 +223,13 @@ class Global : Node() {
 					}
 				}
 			}
+		}
+	}
+
+	@RegisterFunction
+	override fun _input(event: InputEvent) {
+		if (event is InputEventMouseMotion) {
+			globalMouseOffset = event.relative
 		}
 	}
 

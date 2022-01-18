@@ -1,17 +1,14 @@
 package compuquest.clienting.input
 
-data class Binding(
-  val device: Int,
-  val scancode: Int,
-  val command: String,
-)
+import silentorb.mythic.haft.Bindings
 
 data class InputProfile(
-  val bindings: List<Binding>,
+  val bindings: Bindings,
 )
 
 const val defaultInputProfile: Int = 1
 
 data class InputOptions(
   val profiles: Map<Int, InputProfile> = mapOf(),
+  val playerProfiles: Map<Long, Int>
 )
