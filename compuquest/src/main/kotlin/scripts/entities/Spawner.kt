@@ -1,6 +1,7 @@
 package scripts.entities
 
 import compuquest.simulation.characters.addCharacter
+import compuquest.simulation.characters.spawnCharacter
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.newSpirit
 import godot.PackedScene
@@ -51,21 +52,7 @@ class Spawner : Spatial() {
 			if (definition != null) {
 				val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
 				for (i in (0 until quantity)) {
-					val body = scene.instance() as CharacterBody
-					val dice = world.dice
-					body.translation = globalTransform.origin + Vector3(
-						dice.getFloat(-0.1f, 0.1f),
-						dice.getFloat(0f, 0.1f),
-						dice.getFloat(-0.1f, 0.1f)
-					)
-
-					// The body needs to be added to the world before addCharacter because
-					// Godot does not call _ready until the node is added to the scene tree
-					world.scene.addChild(body)
-
-					val nextId = world.nextId.source()
-					val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(newSpirit()))
-					Global.addHands(hands)
+					spawnCharacter(world, scene, globalTransform.origin, rotation, definition, faction)
 				}
 			}
 			true

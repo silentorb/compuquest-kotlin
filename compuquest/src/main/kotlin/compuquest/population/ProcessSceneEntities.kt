@@ -9,6 +9,7 @@ import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Navigation
 import godot.Node
 import godot.Spatial
+import scripts.entities.PlayerSpawner
 import scripts.entities.actor.AttachPlayer
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
@@ -37,7 +38,17 @@ fun processComponentNode(
 fun newCharacterBody(
 	definitions: Definitions, nextId: NextId, spatial: Spatial, components: List<Node>
 ): List<Hand> {
-	return components.flatMap { processComponentNode(definitions, nextId(), nextId, spatial, null, it, listOf(newSpirit())) }
+	return components.flatMap {
+		processComponentNode(
+			definitions,
+			nextId(),
+			nextId,
+			spatial,
+			null,
+			it,
+			listOf(newSpirit())
+		)
+	}
 }
 
 fun processSceneEntities(root: Node, world: World): World {
@@ -63,9 +74,15 @@ fun processSceneEntities(root: Node, world: World): World {
 			}
 		}
 
+	val playerSpawners = if (getDebugBoolean("PLAYER_RESPAWN"))
+		findChildrenOfType<PlayerSpawner>(root)
+	else
+		listOf()
+
 	val nextWorld = newEntitiesFromHands(hands, world)
 		.copy(
 			navigation = root.findNode("Navigation") as? Navigation,
+			playerSpawners = playerSpawners,
 		)
 
 	return populateQuests(nextWorld)

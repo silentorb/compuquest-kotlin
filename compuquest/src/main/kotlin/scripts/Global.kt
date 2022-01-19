@@ -239,7 +239,12 @@ class Global : Node() {
 
 	@RegisterFunction
 	override fun _input(event: InputEvent) {
-		if (event is InputEventMouseMotion) {
+		// Certain cases of non-captured mouse mode are resulting in event.relative containing absolute coordinates.
+		// This seems like a Godot bug.
+		// It may be getting caused when switching between captured and non-captured mode, which should be returning (0,0)
+		// but may be diffing absolute and relative coordinates.
+		// The only occurrances run into so far were when starting a new game.
+		if (event is InputEventMouseMotion && Input.getMouseMode() == Input.MouseMode.MOUSE_MODE_CAPTURED) {
 			globalMouseOffset = event.relative
 		}
 	}

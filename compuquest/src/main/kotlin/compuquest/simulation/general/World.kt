@@ -3,6 +3,7 @@ package compuquest.simulation.general
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Zone
 import godot.*
+import scripts.entities.PlayerSpawner
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.SharedNextId
@@ -24,6 +25,7 @@ data class World(
 	val previousEvents: Events = listOf(),
 	val navigation: Navigation? = null,
 	val space: PhysicsDirectSpaceState,
+	val playerSpawners: List<PlayerSpawner> = listOf(),
 )
 
 fun getSpace(spatial: Spatial): PhysicsDirectSpaceState? =

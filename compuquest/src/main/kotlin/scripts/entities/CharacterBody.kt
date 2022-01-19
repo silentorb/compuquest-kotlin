@@ -1,10 +1,8 @@
 package scripts.entities
 
 import compuquest.simulation.characters.Character
-import compuquest.simulation.general.isPlayerDead
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.physics.CollisionMasks
-import godot.CapsuleShape
 import godot.CollisionShape
 import godot.KinematicBody
 import godot.Spatial
@@ -12,10 +10,9 @@ import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
+import godot.core.Transform
 import godot.core.Vector3
 import godot.global.GD
-import scripts.Global
-import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
 
@@ -29,6 +26,7 @@ class CharacterBody : KinematicBody() {
 	var radius: Float = 0f
 	var isSlowed: Boolean = false
 	var isAlive: Boolean = true
+	var headRestingState: Transform = Transform.IDENTITY
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)

@@ -1,6 +1,6 @@
 package compuquest.simulation.characters
 
-import compuquest.simulation.general.isPlayerDead
+import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInput
 import godot.Input
 import godot.Spatial
@@ -8,6 +8,7 @@ import godot.core.Vector3
 import godot.global.GD
 import scripts.Global
 import scripts.entities.CharacterBody
+import silentorb.mythic.ent.Id
 
 fun updatePlayerLook(body: CharacterBody, input: PlayerInput) {
 	body.rotateY(GD.deg2rad(-input.lookX))
@@ -33,15 +34,24 @@ fun playerDeathCollapse(head: Spatial) {
 	}
 }
 
-fun updatePlayerRig(body: CharacterBody, input: PlayerInput) {
+fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerInput) {
 	if (body.isActive) {
 		updatePlayerLook(body, input)
 		updatePlayerMovement(body, input)
 		Input.setMouseMode(Input.MOUSE_MODE_CAPTURED)
-		if (isPlayerDead(Global.world?.deck)) {
-			playerDeathCollapse(body.head!!)
+
+		// Reset head transform after respawning
+		if (!body.isAlive && isCharacterAlive(world.deck, actor)) {
+			body.head!!.transform = body.headRestingState
+			// A bug (probably with Godot Kotlin) is preventing the above line from setting rotation.
+			// The below line is currently a hack that seems to get the rotation part of the transform change to stick.
+			// TODO: Remove the below line of code once this engine / module bug is fixed
+			body.head!!.rotation
 		}
 	} else {
+		if (!isCharacterAlive(world.deck, actor)) {
+			playerDeathCollapse(body.head!!)
+		}
 		Input.setMouseMode(Input.MOUSE_MODE_VISIBLE)
 	}
 }

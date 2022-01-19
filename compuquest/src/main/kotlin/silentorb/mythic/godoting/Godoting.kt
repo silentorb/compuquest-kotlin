@@ -53,6 +53,9 @@ fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
 			selfList + findChildren(child, predicate)
 		}
 
+inline fun <reified T> findChildrenOfType(node: Node): List<T> =
+	findChildren(node) { it is T } as List<T>
+
 fun clearChildren(node: Node) {
 	for (child in node.getChildren()) {
 		node.removeChild(child as Node)

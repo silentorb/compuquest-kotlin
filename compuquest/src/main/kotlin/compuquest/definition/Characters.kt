@@ -5,9 +5,9 @@ import compuquest.simulation.definition.FactionNames
 import silentorb.mythic.ent.KeyTable
 
 object Characters {
-  val player = "player"
-  val skeleton = "skeleton"
-  val viking = "viking"
+  const val player = "player"
+  const val skeleton = "skeleton"
+  const val viking = "viking"
 }
 
 fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(

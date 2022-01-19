@@ -8,6 +8,7 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.NodePath
+import godot.core.Transform
 
 @RegisterClass
 class PlayerController : Node() {
@@ -30,6 +31,7 @@ class PlayerController : Node() {
 	override fun _ready() {
 		val body = getParent() as CharacterBody
 		body.head = getNode(headPath!!) as? Spatial
+		body.headRestingState = body.head?.transform ?: Transform.IDENTITY
 		camera = getNode(cameraPath!!) as? Camera
 		camera?.fov = fov.toDouble()
 	}

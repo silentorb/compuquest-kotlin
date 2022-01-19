@@ -8,6 +8,7 @@ import compuquest.simulation.general.dayMinutes
 import compuquest.simulation.general.getSpace
 import godot.PhysicsDirectSpaceState
 import godot.Spatial
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.ent.SharedNextId
 import silentorb.mythic.randomly.Dice

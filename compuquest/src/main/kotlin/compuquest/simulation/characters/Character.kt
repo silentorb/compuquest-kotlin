@@ -5,10 +5,13 @@ import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.FactionNames
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
+import compuquest.simulation.intellect.newSpirit
 import godot.AnimatedSprite3D
 import godot.Node
+import godot.PackedScene
 import godot.Spatial
 import godot.core.Vector3
+import scripts.Global
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.*
 import silentorb.mythic.godoting.getString
@@ -17,6 +20,7 @@ import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.happening.handleEvents
+import silentorb.mythic.randomly.Dice
 import silentorb.mythic.timing.IntTimer
 import silentorb.mythic.timing.newTimer
 
@@ -52,6 +56,9 @@ data class Character(
 fun isCharacterAlive(health: Int): Boolean =
 	health > 0
 
+fun isCharacterAlive(deck: Deck, actor: Id): Boolean =
+	deck.characters[actor]?.isAlive == true
+
 fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
 	accessories
 		.asSequence()
@@ -76,6 +83,7 @@ fun canUse(world: World, accessory: Id): Boolean =
 	canUse(world, world.deck.accessories[accessory]!!)
 
 const val modifyHealthCommand = "modifyHealth"
+const val setHealthCommand = "setHealth"
 
 fun modifyHealth(target: Id, amount: Int) =
 	Event(modifyHealthCommand, target, amount)
@@ -117,27 +125,35 @@ fun newCharacterAccessories(
 fun newCharacter(definition: CharacterDefinition, accessories: Hands, toolOffset: Vector3, faction: Key? = null) =
 	Character(
 		definition = definition,
-//            name = node.name,
 		name = definition.name,
 		faction = faction ?: definition.faction,
 		health = definition.health,
 		depiction = definition.depiction,
 		frame = definition.frame,
 //            fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
-//            key = getNonEmptyString(creature, "key"),
 //    attributes = definition.attributes,
 		activeAccessory = accessories.mapNotNull { it.id }.firstOrNull(),
 		toolOffset = toolOffset,
-//            enemyVisibilityRange = getFloat(creature, "enemyVisibilityRange"),
 	)
 
-fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
-	val characterEvents = events.filter { it.target == actor }
+fun updateCharacterHealth(deck: Deck, actor: Id, characterEvents: Events, character: Character): Int {
 	val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
 		.sum() +
-			applyDamage(world.deck, actor, characterEvents)
+			applyDamage(deck, actor, characterEvents)
 
-	val health = modifyResource(healthMod, character.definition.health, character.health)
+	val healthSet = filterEventValues<Int>(setHealthCommand, characterEvents)
+		.firstOrNull()
+
+	// Directly setting health overrides any other modifiers and is only intended for special cases where the
+	// character is effectively damage immune for a frame
+	return healthSet ?: modifyResource(healthMod, character.definition.health, character.health)
+}
+
+fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
+	val deck = world.deck
+	val characterEvents = events.filter { it.target == actor }
+	val health = updateCharacterHealth(deck, actor, characterEvents, character)
+
 	val depiction = if (health == 0)
 		"sprites"
 	else
@@ -180,4 +196,35 @@ fun addCharacter(
 			)
 		) + accessories
 	}
+}
+
+fun getRandomizedSpawnOffset(dice: Dice) =
+	Vector3(
+		dice.getFloat(-0.1f, 0.1f),
+		dice.getFloat(0f, 0.1f),
+		dice.getFloat(-0.1f, 0.1f)
+	)
+
+fun spawnCharacter(
+	world: World,
+	scene: PackedScene,
+	origin: Vector3,
+	rotation: Vector3,
+	definition: CharacterDefinition,
+	faction: Key
+) {
+	val body = scene.instance() as CharacterBody
+	val dice = world.dice
+	val definitions = world.definitions
+	body.translation = origin + getRandomizedSpawnOffset(dice)
+
+	body.rotation = rotation
+
+	// The body needs to be added to the world before addCharacter because
+	// Godot does not call _ready until the node is added to the scene tree
+	world.scene.addChild(body)
+
+	val nextId = world.nextId.source()
+	val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(newSpirit()))
+	Global.addHands(hands)
 }

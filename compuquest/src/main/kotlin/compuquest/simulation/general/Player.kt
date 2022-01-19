@@ -1,17 +1,23 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.characters.Character
+import compuquest.simulation.characters.getRandomizedSpawnOffset
+import compuquest.simulation.characters.setHealthCommand
 import compuquest.simulation.combat.Attack
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.input.Commands
-import scripts.Global
-import scripts.gui.gameOverScreen
+import compuquest.simulation.updating.simulationFps
+import godot.core.Vector3
+import scripts.entities.PlayerSpawner
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
 
 const val maxPartySize = 4
 const val playerFaction = "player"
+const val playerRespawnTime = 5 * simulationFps
 
 val hiredNpc = "hiredNpc"
 val joinedPlayer = "joinedPlayer"
@@ -24,6 +30,7 @@ data class Player(
 	val canInteractWith: Interactable? = null,
 	val interactingWith: Id? = null,
 	val isPlaying: Boolean = true,
+	val respawnTimer: Int = 0,
 )
 
 fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
@@ -60,21 +67,32 @@ fun shouldRefreshPlayerSlowdown(actor: Id, events: Events): Boolean =
 
 fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Player = { actor, player ->
 	val deck = world.deck
-	val canInteractWith = if (player.interactingWith == null && player.isPlaying)
+	val character = deck.characters[actor]
+	val isAlive = character?.isAlive == true
+	val isPlaying = isAlive
+	val canInteractWith = if (player.interactingWith == null && isPlaying)
 		getInteractable(world, actor)
 	else
 		null
 
-	val removedCharacters = events.filter { it.type == removeFactionMemberEvent }
-		.mapNotNull {
-			if (deck.characters[it.target]?.faction == player.faction)
-				it.target as? Id
-			else
-				null
-		}
+//	val removedCharacters = events.filter { it.type == removeFactionMemberEvent }
+//		.mapNotNull {
+//			if (deck.characters[it.target]?.faction == player.faction)
+//				it.target as? Id
+//			else
+//				null
+//		}
 
-	val playerEvents = events.filter { it.target == actor }
-	val interactingWith = updateInteractingWith(player)(playerEvents, player.interactingWith)
+	val interactingWith = if (isPlaying)
+		updateInteractingWith(player)(events.filter { it.target == actor }, player.interactingWith)
+	else
+		null
+
+	val respawnTimer = if (!isAlive && character != null && getPlayerRespawnPoint(world, character) != null)
+		player.respawnTimer + 1
+	else
+		0
+
 //  val party = updateParty()(playerEvents, player.party) - removedCharacters
 
 //  val isPlaying = party.any { deck.characters[it]?.isAlive ?: false }
@@ -88,7 +106,8 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 		canInteractWith = canInteractWith,
 		interactingWith = interactingWith,
 //    party = party,
-//    isPlaying = isPlaying,
+		isPlaying = isPlaying,
+		respawnTimer = respawnTimer,
 	)
 }
 
@@ -97,11 +116,27 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 //    .filterValues { it.faction == player.faction }
 //    .keys - player.party
 
-fun isPlayerDead(deck: Deck?): Boolean {
-	val player = getPlayer(deck)
-	return if (deck != null && player != null) {
-		val character = deck.characters[player.key]
-		return character != null && !character.isAlive
+fun getPlayerRespawnPoint(world: World, character: Character): PlayerSpawner? =
+	world.playerSpawners.firstOrNull { it.faction == character.faction }
+
+fun respawnPlayer(world: World, actor: Id): Events {
+	val deck = world.deck
+	val character = deck.characters[actor]!!
+	val respawner = getPlayerRespawnPoint(world, character)
+	return if (respawner != null) {
+		val dice = world.dice
+		val location = respawner.globalTransform.origin + getRandomizedSpawnOffset(dice)
+		listOf(
+			Event(setHealthCommand, actor, character.definition.health),
+			Event(setLocationEvent, actor, location),
+		)
 	} else
-		false
+		listOf()
+}
+
+fun eventsFromPlayer(world: World): (Id, Player) -> Events = { actor, player ->
+	if (player.respawnTimer >= playerRespawnTime)
+		respawnPlayer(world, actor)
+	else
+		listOf()
 }

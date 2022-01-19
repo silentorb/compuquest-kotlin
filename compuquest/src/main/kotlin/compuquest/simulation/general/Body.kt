@@ -3,6 +3,8 @@ package compuquest.simulation.general
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 
+const val setLocationEvent = "setLocation"
+
 data class Body(
   val translation: Vector3,
   val rotation: Vector3,
