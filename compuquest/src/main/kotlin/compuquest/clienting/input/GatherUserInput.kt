@@ -1,51 +1,28 @@
 package compuquest.clienting.input
 
 import compuquest.simulation.general.Deck
-import compuquest.simulation.general.World
-import compuquest.simulation.general.getPlayer
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
 import compuquest.simulation.input.Commands
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.input.PlayerInputs
-import godot.Input
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
 
-val keyStrokes = setOf(
-	Commands.interact,
-//  Commands.manageMembers,
-//  Commands.manageQuests,
-	Commands.menuBack,
-	Commands.newGame,
-)
-
-val actionPresses = setOf(
-	Commands.primaryAction,
-//  Commands.secondaryAction,
-)
-
-fun gatherUserInput(deck: Deck, player: Id): Events =
-//	keyStrokes.filter { Input.isActionJustReleased(it) }
-//		.map { newEvent(it, player) } +
-	actionPresses.filter { Input.isActionPressed(it) }
-		.mapNotNull {
-			val character = deck.characters[player]
-			if (character?.activeAccessory != null)
-				newEvent(tryActionEvent, player, TryActionEvent(action = character.activeAccessory))
-			else
+fun gatherPlayerUseActions(deck: Deck, playerInputs: PlayerInputs): Events =
+	deck.players.keys
+		.mapNotNull { actor ->
+			if (playerInputs[actor]?.primaryAction == true) {
+				val character = deck.characters[actor]
+				if (character?.activeAccessory != null)
+					newEvent(tryActionEvent, actor, TryActionEvent(action = character.activeAccessory))
+				else
+					null
+			} else
 				null
 		}
-
-fun gatherDefaultPlayerInputOld(world: World): Events {
-	val player = getPlayer(world)?.key
-	return if (player != null)
-		gatherUserInput(world.deck, player)
-	else
-		listOf()
-}
 
 fun getPlayerProfile(state: InputState, player: Id): InputProfile? =
 	state.profiles[state.playerProfiles[player]]

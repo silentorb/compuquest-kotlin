@@ -6,7 +6,6 @@ import compuquest.clienting.display.applyDisplayOptions
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.input.Commands
-import compuquest.clienting.input.gatherDefaultPlayerInputOld
 import compuquest.simulation.general.*
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
@@ -172,10 +171,8 @@ class Global : Node() {
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
-		val inputEvents = gatherDefaultPlayerInputOld(worlds.last())
-		val events = updateEvents() + inputEvents
 		val previousClient = client
-		val nextClient = updateClient(worlds.lastOrNull(), events, delta.toFloat(), previousClient)
+		val nextClient = updateClient(worlds.lastOrNull(), listOf(), delta.toFloat(), previousClient)
 		val player = getPlayer()?.key
 		val clientEvents = if (player != null)
 			eventsFromClient(player, nextClient, previousClient)
@@ -183,7 +180,7 @@ class Global : Node() {
 			listOf()
 
 		client = nextClient
-		addEvents(inputEvents + clientEvents)
+		addEvents(clientEvents)
 		globalMouseOffset = Vector2.ZERO
 	}
 

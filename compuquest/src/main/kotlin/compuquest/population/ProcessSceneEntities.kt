@@ -4,6 +4,7 @@ import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.newSpirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Navigation
 import godot.Node
@@ -36,7 +37,7 @@ fun processComponentNode(
 fun newCharacterBody(
 	definitions: Definitions, nextId: NextId, spatial: Spatial, components: List<Node>
 ): List<Hand> {
-	return components.flatMap { processComponentNode(definitions, nextId(), nextId, spatial, null, it, listOf(Spirit())) }
+	return components.flatMap { processComponentNode(definitions, nextId(), nextId, spatial, null, it, listOf(newSpirit())) }
 }
 
 fun processSceneEntities(root: Node, world: World): World {

@@ -6,6 +6,7 @@ import silentorb.mythic.happening.Events
 import compuquest.simulation.happening.gatherEvents
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
+import compuquest.simulation.intellect.getSpiritIntervalStep
 import compuquest.simulation.intellect.updateSpirit
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.mapTable
@@ -89,7 +90,7 @@ fun updateWorldDay(world: World): World =
 		step = world.step + 1
 	)
 
-fun updateWorld(events: Events, inputs: PlayerInputs, delta: Float, worlds: List<World>): World {
+fun updateWorld(events: Events, playerInputs: PlayerInputs, delta: Float, worlds: List<World>): World {
 	val world = updateWorldDay(worlds.last())
 
 	val world2 = syncMythic(world)
@@ -101,11 +102,11 @@ fun updateWorld(events: Events, inputs: PlayerInputs, delta: Float, worlds: List
 	// That in turn removes the need for a lot of defensive code.
 	val world3 = world2.copy(
 		deck = world2.deck.copy(
-			spirits = mapTable(world2.deck.spirits, updateSpirit(world)),
+			spirits = mapTable(world2.deck.spirits, updateSpirit(world, getSpiritIntervalStep(world.step))),
 		)
 	)
 
-	val events2 = gatherEvents(world3, worlds.dropLast(1).lastOrNull(), delta, events)
+	val events2 = gatherEvents(world3, worlds.dropLast(1).lastOrNull(), playerInputs, delta, events)
 	val deck = updateDeck(events2, world3, delta)
 	val world4 = world3.copy(
 		deck = deck,
@@ -113,6 +114,6 @@ fun updateWorld(events: Events, inputs: PlayerInputs, delta: Float, worlds: List
 	updateDepictions(world, world4)
 	val world5 = deleteEntities(events2, world4)
 	val world6 = newEntities(events2, world5)
-	syncGodot(world6, events2, inputs)
+	syncGodot(world6, events2, playerInputs)
 	return world6.copy(previousEvents = events2)
 }

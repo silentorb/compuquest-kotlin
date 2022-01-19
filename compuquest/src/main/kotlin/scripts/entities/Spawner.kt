@@ -2,6 +2,7 @@ package scripts.entities
 
 import compuquest.simulation.characters.addCharacter
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.newSpirit
 import godot.PackedScene
 import godot.Spatial
 import godot.annotation.Export
@@ -63,7 +64,7 @@ class Spawner : Spatial() {
 					world.scene.addChild(body)
 
 					val nextId = world.nextId.source()
-					val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(Spirit()))
+					val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(newSpirit()))
 					Global.addHands(hands)
 				}
 			}

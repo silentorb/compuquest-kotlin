@@ -68,7 +68,8 @@ fun updateMissile(world: World, actor: Id, missile: Missile, body: Area, offset:
 	val collisions = (body.getOverlappingBodies() as VariantArray<Spatial>)
 		.filter { (it as? Spatial)?.getInstanceId() != missile.ignore }
 	val hit = collisions.any()
-	val deletions = if (hit || missile.origin.distanceTo(body.transform.origin) > missile.range) {
+	val distanceTraveled = missile.origin.distanceTo(body.transform.origin)
+	val deletions = if (hit || distanceTraveled > missile.range) {
 		if (!hit) {
 			val k = 0
 		}

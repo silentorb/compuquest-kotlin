@@ -75,60 +75,71 @@ fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 //world.dice.takeOneOrNull(readyActions.entries)
 }
 
-fun updateSpirit(world: World): (Id, Spirit) -> Spirit = { actor, spirit ->
+fun updateSpirit(world: World, intervalStep: Int): (Id, Spirit) -> Spirit = { actor, spirit ->
 	val deck = world.deck
-	val lastTarget = if (spirit.target != null && world.dice.getInt(100) > 5)
-		spirit.target
-	else
-		null
-
-	val visibleTarget = getNextTarget(world, actor, lastTarget)
-	val body = deck.bodies[actor]
-	val targetRange = if (body != null && visibleTarget != null)
-		getTargetRange(world, body, visibleTarget)
-	else
-		null
-
-	val accessory = if (targetRange != null)
-		updateFocusedAction(world, actor)
-	else
-		null
-
-	val targetBody = if (visibleTarget != null)
-		deck.bodies[visibleTarget]
-	else
-		null
-
-	val targetJustDied = spirit.target != null && deck.characters[spirit.target]?.isAlive != true
-
-	val lastKnownTargetLocation = when {
-		targetJustDied -> null
-		targetBody != null -> targetBody.translation
-		spirit.lastKnownTargetLocation != null && body != null &&
-				spirit.lastKnownTargetLocation.distanceTo(body.translation) < 0.5f -> null
-		else -> spirit.lastKnownTargetLocation
-	}
-
-	val isInRange = targetRange != null && accessory != null && targetRange <= accessory.value.definition.range
-
-	val destination = when {
-		visibleTarget != null && targetRange != null && accessory != null && !isInRange ->
-			updateDestination(world, actor, world.deck.bodies[visibleTarget]?.translation)
-		visibleTarget == null && lastKnownTargetLocation != null -> updateDestination(world, actor, lastKnownTargetLocation)
-		else -> null
-	}
-
-	val nextTarget = visibleTarget
-		?: if (targetJustDied)
-			null
-		else
+	if (intervalStep == spirit.intervalOffset && deck.characters[actor]?.isAlive == true) {
+		val lastTarget = if (spirit.target != null && world.dice.getInt(100) > 5)
 			spirit.target
+		else
+			null
 
-	spirit.copy(
-		focusedAction = accessory?.key,
-		target = nextTarget,
-		nextDestination = destination,
-		lastKnownTargetLocation = lastKnownTargetLocation,
-		readyToUseAction = destination == null && isInRange,
-	)
+		val visibleTarget = getNextTarget(world, actor, lastTarget)
+		val body = deck.bodies[actor]
+		val targetRange = if (body != null && visibleTarget != null)
+			getTargetRange(world, body, visibleTarget)
+		else
+			null
+
+		val accessory = if (targetRange != null)
+			updateFocusedAction(world, actor)
+		else
+			null
+
+		val targetBody = if (visibleTarget != null)
+			deck.bodies[visibleTarget]
+		else
+			null
+
+		val targetJustDied = spirit.target != null && deck.characters[spirit.target]?.isAlive != true
+
+		val lastKnownTargetLocation = when {
+			targetJustDied -> null
+			targetBody != null -> targetBody.translation
+			spirit.lastKnownTargetLocation != null && body != null &&
+					spirit.lastKnownTargetLocation.distanceTo(body.translation) < 0.5f -> null
+			else -> spirit.lastKnownTargetLocation
+		}
+
+		val isInRange = targetRange != null && accessory != null && targetRange <= accessory.value.definition.range
+
+		val destination = when {
+			visibleTarget != null && targetRange != null && accessory != null && !isInRange ->
+				updateDestination(world, actor, world.deck.bodies[visibleTarget]?.translation)
+			visibleTarget == null && lastKnownTargetLocation != null -> updateDestination(
+				world,
+				actor,
+				lastKnownTargetLocation
+			)
+			else -> null
+		}
+
+		val nextTarget = visibleTarget
+			?: if (targetJustDied)
+				null
+			else
+				spirit.target
+
+		spirit.copy(
+			focusedAction = accessory?.key,
+			target = nextTarget,
+			nextDestination = destination,
+			lastKnownTargetLocation = lastKnownTargetLocation,
+			readyToUseAction = destination == null && isInRange,
+		)
+	} else if (spirit.readyToUseAction)
+		spirit.copy(
+			readyToUseAction = false
+		)
+	else
+		spirit
 }

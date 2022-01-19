@@ -1,19 +1,22 @@
 package compuquest.simulation.happening
 
+import compuquest.clienting.input.gatherPlayerUseActions
 import compuquest.simulation.characters.eventsFromCharacter
 import compuquest.simulation.combat.eventsFromBuffs
 import compuquest.simulation.combat.eventsFromMissile
 import compuquest.simulation.general.World
+import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.intellect.pursueGoals
 import silentorb.mythic.happening.Events
 
 fun <K, V> tableEvents(transform: (K, V) -> Events, table: Map<K, V>): Events =
 	table.flatMap { (id, record) -> transform(id, record) }
 
-fun gatherEvents(world: World, previous: World?, delta: Float, events: Events): Events {
+fun gatherEvents(world: World, previous: World?, playerInputs: PlayerInputs, delta: Float, events: Events): Events {
 	val deck = world.deck
 
 	val events2 = deck.spirits.flatMap { pursueGoals(world, it.key) } +
+			gatherPlayerUseActions(world.deck, playerInputs) +
 			tableEvents(eventsFromMissile(world, delta), deck.missiles) +
 			eventsFromBuffs(world) +
 			if (previous != null)
