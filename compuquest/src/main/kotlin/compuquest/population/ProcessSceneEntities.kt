@@ -9,6 +9,7 @@ import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Navigation
 import godot.Node
 import godot.Spatial
+import godot.Viewport
 import scripts.entities.PlayerSpawner
 import scripts.entities.actor.AttachPlayer
 import silentorb.mythic.debugging.getDebugBoolean

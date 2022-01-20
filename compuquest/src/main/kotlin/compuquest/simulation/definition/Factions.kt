@@ -1,12 +1,6 @@
 package compuquest.simulation.definition
 
-enum class Factions {
-  undead,
-  player,
-  neutral
-}
-
-object FactionNames {
+object Factions {
   val neutral = "neutral"
   val player = "player"
   val undead = "undead"

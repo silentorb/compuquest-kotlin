@@ -47,13 +47,10 @@ class Spawner : Spatial() {
 
 		val world = Global.world
 		return if (world != null) {
-			val definitions = world.definitions
-			val definition = definitions.characters[type]
-			if (definition != null) {
-				val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
-				for (i in (0 until quantity)) {
-					spawnCharacter(world, scene, globalTransform.origin, rotation, definition, faction)
-				}
+			val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
+			for (i in (0 until quantity)) {
+				val events = spawnCharacter(world, scene, globalTransform.origin, rotation, type, faction)
+				Global.addEvents(events)
 			}
 			true
 		} else

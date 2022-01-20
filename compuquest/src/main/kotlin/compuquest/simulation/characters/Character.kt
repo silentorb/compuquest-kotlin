@@ -2,14 +2,11 @@ package compuquest.simulation.characters
 
 import compuquest.simulation.combat.applyDamage
 import compuquest.simulation.definition.Definitions
-import compuquest.simulation.definition.FactionNames
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.newSpirit
 import godot.AnimatedSprite3D
-import godot.Node
 import godot.PackedScene
-import godot.Spatial
 import godot.core.Vector3
 import scripts.Global
 import scripts.entities.CharacterBody
@@ -29,7 +26,7 @@ data class CharacterDefinition(
 	val attributes: Set<Key> = setOf(),
 	val depiction: String,
 	val frame: Int = 0,
-	val faction: Key = FactionNames.neutral,
+	val faction: Key = Factions.neutral,
 	val health: Int,
 	val corpseDecay: Float = 20f,
 	val accessories: List<Key> = listOf(),
@@ -105,8 +102,8 @@ val updateCharacterBody = handleEvents<Id?> { event, value ->
 
 val updateCharacterFaction = handleEvents<Key> { event, value ->
 	when (event.type) {
-		joinedPlayer -> Factions.player.name
-		removeFactionMemberEvent -> Factions.neutral.name
+		joinedPlayer -> Factions.player
+		removeFactionMemberEvent -> Factions.neutral
 		else -> value
 	}
 }
@@ -122,10 +119,16 @@ fun newCharacterAccessories(
 			newAccessory(definitions, nextId, id, accessory)
 		}
 
-fun newCharacter(definition: CharacterDefinition, accessories: Hands, toolOffset: Vector3, faction: Key? = null) =
+fun newCharacter(
+	definition: CharacterDefinition,
+	accessories: Hands,
+	toolOffset: Vector3,
+	name: String = definition.name,
+	faction: Key? = null
+) =
 	Character(
 		definition = definition,
-		name = definition.name,
+		name = name,
 		faction = faction ?: definition.faction,
 		health = definition.health,
 		depiction = definition.depiction,
@@ -173,6 +176,7 @@ fun addCharacter(
 	id: Id,
 	nextId: NextId,
 	characterBody: CharacterBody,
+	name: String = definition.name,
 	faction: Key? = null,
 	additional: List<Any> = listOf()
 ): Hands {
@@ -180,7 +184,7 @@ fun addCharacter(
 		val sprite = characterBody.findNode("sprite") as AnimatedSprite3D?
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
-		val character = newCharacter(definition, accessories, toolOffset, faction)
+		val character = newCharacter(definition, accessories, toolOffset, name, faction)
 		if (sprite != null) {
 			sprite.animation = character.depiction
 		}
@@ -210,12 +214,16 @@ fun spawnCharacter(
 	scene: PackedScene,
 	origin: Vector3,
 	rotation: Vector3,
-	definition: CharacterDefinition,
-	faction: Key
-) {
-	val body = scene.instance() as CharacterBody
+	type: String,
+	faction: Key,
+	name: String? = null,
+	id: Id? = null
+): Events {
 	val dice = world.dice
 	val definitions = world.definitions
+	val definition = definitions.characters[type] ?: return listOf()
+
+	val body = scene.instance() as CharacterBody
 	body.translation = origin + getRandomizedSpawnOffset(dice)
 
 	body.rotation = rotation
@@ -225,6 +233,10 @@ fun spawnCharacter(
 	world.scene.addChild(body)
 
 	val nextId = world.nextId.source()
-	val hands = addCharacter(definitions, definition, nextId(), nextId, body, faction, listOf(newSpirit()))
-	Global.addHands(hands)
+	val hands = addCharacter(
+		definitions, definition, id ?: nextId(), nextId, body,
+		name ?: definition.name, faction, listOf(newSpirit())
+	)
+
+	return hands.map { newHandEvent(it) }
 }

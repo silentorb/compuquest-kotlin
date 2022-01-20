@@ -3,6 +3,7 @@ package compuquest.simulation.general
 import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.getRandomizedSpawnOffset
 import compuquest.simulation.characters.setHealthCommand
+import compuquest.simulation.characters.spawnCharacter
 import compuquest.simulation.combat.Attack
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.input.Commands
@@ -88,7 +89,7 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 	else
 		null
 
-	val respawnTimer = if (!isAlive && character != null && getPlayerRespawnPoint(world, character) != null)
+	val respawnTimer = if (!isAlive && character != null && getPlayerRespawnPoint(world, character.faction) != null)
 		player.respawnTimer + 1
 	else
 		0
@@ -116,13 +117,13 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 //    .filterValues { it.faction == player.faction }
 //    .keys - player.party
 
-fun getPlayerRespawnPoint(world: World, character: Character): PlayerSpawner? =
-	world.playerSpawners.firstOrNull { it.faction == character.faction }
+fun getPlayerRespawnPoint(world: World, faction: Key): PlayerSpawner? =
+	world.playerSpawners.firstOrNull { it.faction == faction }
 
 fun respawnPlayer(world: World, actor: Id): Events {
 	val deck = world.deck
 	val character = deck.characters[actor]!!
-	val respawner = getPlayerRespawnPoint(world, character)
+	val respawner = getPlayerRespawnPoint(world, character.faction)
 	return if (respawner != null) {
 		val dice = world.dice
 		val location = respawner.globalTransform.origin + getRandomizedSpawnOffset(dice)
@@ -138,5 +139,32 @@ fun eventsFromPlayer(world: World): (Id, Player) -> Events = { actor, player ->
 	if (player.respawnTimer >= playerRespawnTime)
 		respawnPlayer(world, actor)
 	else
+		listOf()
+}
+
+fun newPlayerName(playerNumber: Int): String =
+	"Player $playerNumber"
+
+fun spawnNewPlayer(world: World, faction: Key, playerNumber: Int = world.deck.players.size + 1): Events {
+	val spawner = getPlayerRespawnPoint(world, faction)
+	val scene = spawner?.scene
+	return if (scene != null) {
+		val nextId = world.nextId.source()
+		val actor = nextId()
+		val name = newPlayerName(playerNumber)
+		spawnCharacter(world, scene, spawner.globalTransform.origin, spawner.rotation, spawner.type, faction, name, actor) +
+				listOf(
+					newHandEvent(
+						Hand(
+							id = actor,
+							components = listOf(
+								Player(
+									faction = faction,
+								)
+							)
+						)
+					)
+				)
+	} else
 		listOf()
 }

@@ -12,6 +12,7 @@ import godot.annotation.RegisterFunction
 import godot.core.Color
 import godot.global.GD
 import scripts.Global
+import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.tempCatch
 
 const val respawnCountdownDelay = 1 * simulationFps
@@ -26,6 +27,7 @@ class Hud : Control() {
 	var lowerThird: Control? = null
 	var painOverlay: Panel? = null
 	var damageWeight: Float = 0f
+	var actor: Id = 0L
 
 	@RegisterFunction
 	override fun _ready() {
@@ -44,51 +46,53 @@ class Hud : Control() {
 //		if (client != null) {
 //			lowerThird?.visible = client.options.ui.showHud
 //		}
-			val player = Global.getPlayer()
-			val canInteractWith = player?.value?.canInteractWith
-			interact!!.visible = canInteractWith != null
-			debugText?.text = Global.instance?.debugText ?: ""
-			val localSlot = slot
-			if (client != null && player != null) {
-				val menuStack = getPlayerMenuStack(client, player.key)
+			val world = Global.world
+			val player = world?.deck?.players?.getOrDefault(actor, null)
+			if (player != null) {
+				val canInteractWith = player.canInteractWith
+				interact!!.visible = canInteractWith != null
+				debugText?.text = Global.instance?.debugText ?: ""
+				val localSlot = slot
+				if (client != null) {
+					val menuStack = getPlayerMenuStack(client, actor)
 
-				if (localSlot != null) {
-					syncGuiToState(localSlot, player.key, Global.world!!, lastMenu, menuStack)
-					lastMenu = menuStack.lastOrNull()
+					if (localSlot != null) {
+						syncGuiToState(localSlot, actor, Global.world!!, lastMenu, menuStack)
+						lastMenu = menuStack.lastOrNull()
+					}
 				}
-			}
 
-			val countdown = respawnCountdown!!
-			if (player != null && player.value.respawnTimer > respawnCountdownDelay) {
-				val remainingTime = (playerRespawnTime - player.value.respawnTimer) / simulationFps + 1
-				if (remainingTime > 0) {
-					countdown.visible = true
-					countdown.text = remainingTime.toString()
+				val countdown = respawnCountdown!!
+				if (player.respawnTimer > respawnCountdownDelay) {
+					val remainingTime = (playerRespawnTime - player.respawnTimer) / simulationFps + 1
+					if (remainingTime > 0) {
+						countdown.visible = true
+						countdown.text = remainingTime.toString()
+					} else {
+						countdown.visible = false
+					}
 				} else {
 					countdown.visible = false
 				}
-			} else {
-				countdown.visible = false
-			}
 
-			val overlay = painOverlay
-			if (overlay != null && player != null) {
-				val world = Global.world
-				val deck = world?.deck
-				val isPainOverlayVisible = deck != null && !isCharacterAlive(deck, player.key)
-				overlay.visible = isPainOverlayVisible
-				if (isPainOverlayVisible) {
-					val style = overlay.getStylebox("panel") as StyleBoxFlat
-					style.bgColor = Color(1f, 0f, 0f, 0.6f)
-				} else {
-					if (world != null && world.previousEvents.any { event -> event.target == player.key && event.type == damageEvent }) {
-						damageWeight = 0.4f
-					}
-					if (damageWeight > 0f) {
-						overlay.visible = true
+				val overlay = painOverlay
+				if (overlay != null) {
+					val deck = world.deck
+					val isPainOverlayVisible = !isCharacterAlive(deck, actor)
+					overlay.visible = isPainOverlayVisible
+					if (isPainOverlayVisible) {
 						val style = overlay.getStylebox("panel") as StyleBoxFlat
-						damageWeight = GD.lerp(damageWeight, 0f, 0.1f)
-						style.bgColor = Color(1f, 0f, 0f, damageWeight)
+						style.bgColor = Color(1f, 0f, 0f, 0.6f)
+					} else {
+						if (world.previousEvents.any { event -> event.target == actor && event.type == damageEvent }) {
+							damageWeight = 0.4f
+						}
+						if (damageWeight > 0f) {
+							overlay.visible = true
+							val style = overlay.getStylebox("panel") as StyleBoxFlat
+							damageWeight = GD.lerp(damageWeight, 0f, 0.1f)
+							style.bgColor = Color(1f, 0f, 0f, damageWeight)
+						}
 					}
 				}
 			}

@@ -1,5 +1,8 @@
 package compuquest.clienting
 
+import compuquest.clienting.dev.updateDev
+import compuquest.clienting.display.SplitViewports
+import compuquest.clienting.display.updateSplitScreenViewports
 import compuquest.clienting.gui.MenuStack
 import compuquest.clienting.gui.updateMenuStack
 import compuquest.clienting.input.defaultInputProfile
@@ -28,6 +31,7 @@ data class Client(
 		playerProfiles = mapOf(1L to defaultInputProfile)
 	),
 	val playerInputs: PlayerInputs = mapOf(),
+	val viewports: SplitViewports = listOf(), // Does not include the root viewport
 )
 
 fun newClient() =
@@ -49,6 +53,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		val players = world.deck.players
 		val input = updateInput(delta, players.keys, client.input)
 		val playerInputs = newPlayerInputs(client.input, players.keys)
+		updateDev()
 		updateButtonPressHistory()
 
 		client.copy(
@@ -59,6 +64,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 				client.menuStack,
 			input = input,
 			playerInputs = playerInputs,
+			viewports = updateSplitScreenViewports(world, client),
 		)
 	} else
 		client

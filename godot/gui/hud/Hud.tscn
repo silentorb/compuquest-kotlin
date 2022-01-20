@@ -18,11 +18,13 @@ __meta__ = {
 }
 
 [node name="pain-overlay" type="Panel" parent="."]
+visible = false
 margin_right = 1024.0
 margin_bottom = 600.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="respawn-countdown" type="Label" parent="."]
+visible = false
 margin_top = 249.0
 margin_right = 1024.0
 margin_bottom = 351.0
@@ -43,7 +45,7 @@ margin_bottom = 483.0
 size_flags_vertical = 3
 
 [node name="margin" type="MarginContainer" parent="vbox/overlay"]
-margin_top = 438.0
+margin_top = 463.0
 margin_right = 1024.0
 margin_bottom = 483.0
 size_flags_vertical = 8
@@ -51,9 +53,10 @@ custom_constants/margin_top = 10
 custom_constants/margin_bottom = 10
 
 [node name="interact" type="Label" parent="vbox/overlay/margin"]
-margin_top = 10.0
+visible = false
+margin_top = -3.0
 margin_right = 1024.0
-margin_bottom = 35.0
+margin_bottom = 22.0
 text = "Talk"
 align = 1
 valign = 1

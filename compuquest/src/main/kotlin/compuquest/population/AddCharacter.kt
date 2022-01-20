@@ -20,7 +20,7 @@ import silentorb.mythic.godoting.*
 fun parseFaction(faction: Key?, node: Node): Key {
   val rawFaction = faction ?: getString(node, "faction")
   return if (rawFaction == "")
-    Factions.neutral.name
+    Factions.neutral
   else
     rawFaction
 }

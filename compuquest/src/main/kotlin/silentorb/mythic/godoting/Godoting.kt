@@ -56,6 +56,19 @@ fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
 inline fun <reified T> findChildrenOfType(node: Node): List<T> =
 	findChildren(node) { it is T } as List<T>
 
+inline fun <reified T> findParentOfType(node: Node): T? {
+	var current = node
+	for (i in 0..100) {
+		current = when (val parent = current.getParent()) {
+			is T -> return parent
+			null -> return null
+			else -> parent
+		}
+	}
+	throw Error("Infinite loop detected trying to find node parent of type")
+}
+
+
 fun clearChildren(node: Node) {
 	for (child in node.getChildren()) {
 		node.removeChild(child as Node)

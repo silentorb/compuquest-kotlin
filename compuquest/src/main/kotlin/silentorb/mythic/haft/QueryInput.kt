@@ -24,7 +24,7 @@ fun isButtonPressed(bindings: Bindings, gamepad: Int, command: String): Boolean 
 			binding.command == command && isButtonPressed(binding.device, binding.scancode, gamepad)
 		}
 
-fun isButtonJustPressed(device: Int, scancode: Int, gamepad: Int): Boolean {
+fun isButtonJustPressed(device: Int, scancode: Int, gamepad: Int = -1): Boolean {
 	val isPressed = isButtonPressed(device, scancode, gamepad)
 	setButtonDown(device, scancode, isPressed)
 	return !wasButtonDown(device, scancode) && isPressed

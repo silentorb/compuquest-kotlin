@@ -121,13 +121,6 @@ class Global : Node() {
 		}
 	}
 
-	@RegisterFunction
-	override fun _ready() {
-		val hud = instantiateScene<Node>("res://gui/hud/Hud.tscn")!!
-		hud.owner = getTree()!!.editedSceneRoot
-		getParent()!!.callDeferred("add_child", hud)
-	}
-
 	fun updateEvents(): Events {
 		val events = eventQueue.toList()
 		eventQueue.clear()

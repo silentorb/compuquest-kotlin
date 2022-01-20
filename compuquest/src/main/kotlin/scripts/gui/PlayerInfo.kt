@@ -11,14 +11,17 @@ import godot.annotation.RegisterFunction
 import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.clearChildren
+import silentorb.mythic.godoting.findParentOfType
 
 @RegisterClass
 class PlayerInfo : Control() {
 
-	private var lastCharacter: Character? = null
-	private var resourcesGrid: GridContainer? = null
-	private val resourceIntLabels: MutableMap<Any, IntLabel> = mutableMapOf()
-	private var buffsGrid: GridContainer? = null
+	var lastCharacter: Character? = null
+	var resourcesGrid: GridContainer? = null
+	val resourceIntLabels: MutableMap<Any, IntLabel> = mutableMapOf()
+	var buffsGrid: GridContainer? = null
+	var nameLabel: Label? = null
+	var actor: Id = 0L
 
 	fun updateResource(resources: GridContainer, key: String, value: Int) {
 		val existing = resourceIntLabels[key]
@@ -62,23 +65,27 @@ class PlayerInfo : Control() {
 	override fun _ready() {
 		resourcesGrid = findNode("resources") as? GridContainer
 		buffsGrid = findNode("buffs") as? GridContainer
+		nameLabel = findNode("name") as? Label
 	}
 
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		val world = Global.world
 		val deck = world?.deck
-		val player = Global.getPlayer()
-		if (player == null || deck == null) {
+		if (actor == 0L) {
+			actor = findParentOfType<Hud>(this)?.actor ?: 0L
+		}
+		if (actor == 0L || deck == null) {
 			visible = false
 		} else {
-			val character = deck.characters[player.key]
+			val character = deck.characters[actor]
 			if (character == null) {
 				visible = false
 			} else {
 				visible = true
 				updateResources(character, lastCharacter)
-				updateBuffs(deck, player.key)
+				updateBuffs(deck, actor)
+				nameLabel?.text = character.name
 				lastCharacter = character
 			}
 		}
