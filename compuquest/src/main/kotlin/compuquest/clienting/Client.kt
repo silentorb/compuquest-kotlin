@@ -3,17 +3,14 @@ package compuquest.clienting
 import compuquest.clienting.dev.updateDev
 import compuquest.clienting.gui.MenuStack
 import compuquest.clienting.gui.MenuStacks
-import compuquest.clienting.gui.updateMenuStack
 import compuquest.clienting.gui.updateMenuStacks
 import compuquest.clienting.input.*
 import compuquest.clienting.multiplayer.SplitViewports
 import compuquest.clienting.multiplayer.updateClientPlayers
 import compuquest.clienting.multiplayer.updateSplitScreenViewports
-import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
 import silentorb.mythic.ent.HashedMap
-import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 
@@ -31,14 +28,19 @@ data class Client(
 )
 
 fun newClient(): Client {
-	val profileOptions = defaultInputProfiles()
+	val serializedOptions = loadOptions()
+	val profiles = serializedOptions.input.profiles
 	return Client(
 		input = InputState(
-			profileOptions = HashedMap.from(profileOptions),
-			profiles = compileInputProfiles(profileOptions),
-			playerProfiles = defaultPlayerInputProfiles(),
+			profileOptions = HashedMap.from(profiles),
+			profiles = compileInputProfiles(profiles),
+			playerProfiles = serializedOptions.input.playerProfiles,
 		),
-		options = loadOptions(),
+		options = AppOptions(
+			audio = serializedOptions.audio,
+			display = serializedOptions.display,
+			ui = serializedOptions.ui,
+		),
 	)
 }
 

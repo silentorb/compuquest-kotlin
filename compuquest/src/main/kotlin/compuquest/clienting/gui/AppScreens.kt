@@ -43,3 +43,50 @@ fun optionsMenu() =
 			)
 		}
 	)
+
+fun optionsInputMenu() =
+	GameScreen(
+		title = staticTitle("Input"),
+		content = { context, _ ->
+			newPopupMenu(
+				"Input",
+				context.actor,
+				listOf(
+					GameMenuItem(
+						address = MenuAddress(Screens.optionsInputProfiles),
+					),
+					GameMenuItem(
+						address = MenuAddress(Screens.optionsInputPlayerProfiles),
+					),
+				)
+			)
+		}
+	)
+
+fun optionsInputProfilesMenu() =
+	GameScreen(
+		title = staticTitle("Input Profiles"),
+		content = { context, _ ->
+			newPopupMenu(
+				"Input Profiles",
+				context.actor,
+				listOf(
+
+				)
+			)
+		}
+	)
+
+fun optionsInputPlayerProfilesMenu() =
+	GameScreen(
+		title = staticTitle("Input Player Profiles"),
+		content = { context, _ ->
+			newPopupMenu(
+				"Input Player Profiles",
+				context.actor,
+				listOf(
+
+				)
+			)
+		}
+	)
