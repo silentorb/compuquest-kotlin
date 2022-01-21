@@ -2,6 +2,7 @@ package silentorb.mythic.haft
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 
 object InputDevices {
 	const val keyboard = 0
@@ -24,23 +25,25 @@ data class Binding(
 	val device: Int,
 	val scancode: Int,
 	val command: String,
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT) val argument: Any? = null,
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT) val processors: List<InputProcessor> = listOf()
 )
 
 typealias Bindings = List<Binding>
 
-data class CommandWithProcessors(
+data class AdvancedCommand(
 	val command: String,
-	val processors: List<InputProcessor>,
-)
-
-data class InputProfile(
-	val bindings: Bindings,
+	val argument: Any? = null,
+	val processors: List<InputProcessor> = listOf(),
 )
 
 data class InputState(
-	val profiles: Map<Int, InputProfile>,
-	val playerProfiles: Map<Long, Int>,
+	val profileOptions: HashedInputProfileOptionsMap,
+	val profiles: InputProfileMap,
+	val playerProfiles: Map<Int, Int>,
 	val gamepads: Gamepads = listOf(),
-	val playerGamepads: Map<Id, Int> = mapOf(),
+	val playerGamepads: Map<Int, Int> = mapOf(),
+	val playerInputContexts: Map<Id, Key> = mapOf(),
 )
+
+typealias PlayerMap = Map<Id, Int>

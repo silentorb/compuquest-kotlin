@@ -36,6 +36,12 @@ fun isButtonJustPressed(bindings: Bindings, gamepad: Int, command: String): Bool
 			binding.command == command && isButtonJustPressed(binding.device, binding.scancode, gamepad)
 		}
 
+fun getJustPressedBindings(bindings: Bindings, gamepad: Int, command: String): Bindings =
+	bindings
+		.filter { binding ->
+			binding.command == command && isButtonJustPressed(binding.device, binding.scancode, gamepad)
+		}
+
 fun getAxisState(
 	binding: Binding,
 	gamepad: Int,

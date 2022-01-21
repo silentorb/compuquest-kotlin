@@ -18,6 +18,7 @@ data class MenuAddress(
 )
 
 typealias MenuStack = List<MenuAddress>
+typealias MenuStacks = Map<Id, MenuStack>
 
 data class MenuItem<Context>(
   val title: String,

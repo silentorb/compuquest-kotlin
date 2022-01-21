@@ -1,5 +1,6 @@
 package silentorb.mythic.haft
 
+import compuquest.clienting.input.getPlayerProfile
 import godot.Input
 import silentorb.mythic.ent.Id
 
@@ -18,14 +19,14 @@ fun updateGamepads(delta: Float, gamepads: Gamepads): Gamepads {
 		gamepads
 }
 
-fun updatePlayerGamepads(gamepads: Gamepads, players: Collection<Id>, playerGamepads: Map<Id, Int>): Map<Id, Int> =
-	if (playerGamepads.none() && gamepads.any() && players.any())
-		mapOf(players.first() to gamepads.first())
+fun updatePlayerGamepads(gamepads: Gamepads, players: PlayerMap, state: InputState): Map<Int, Int> =
+	if (state.playerGamepads.none() && gamepads.any() && players.any() && getPlayerProfile(state, 0)?.usesGamepad == true)
+		mapOf(0 to gamepads.first())
 	else
-		playerGamepads
+		state.playerGamepads
 
-fun getPlayerGamepad(state: InputState, player: Id): Int {
-	val index = state.playerGamepads[player]
+fun getPlayerGamepad(state: InputState, playerIndex: Int): Int {
+	val index = state.playerGamepads[playerIndex]
 	return if (index != null)
 		state.gamepads.getOrElse(index) { -1 }
 	else

@@ -38,7 +38,6 @@ fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerI
 	if (body.isActive) {
 		updatePlayerLook(body, input)
 		updatePlayerMovement(body, input)
-		Input.setMouseMode(Input.MOUSE_MODE_CAPTURED)
 
 		// Reset head transform after respawning
 		if (!body.isAlive && isCharacterAlive(world.deck, actor)) {
@@ -52,6 +51,5 @@ fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerI
 		if (!isCharacterAlive(world.deck, actor)) {
 			playerDeathCollapse(body.head!!)
 		}
-		Input.setMouseMode(Input.MOUSE_MODE_VISIBLE)
 	}
 }

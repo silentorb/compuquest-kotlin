@@ -1,4 +1,4 @@
-package compuquest.clienting.display
+package compuquest.clienting.multiplayer
 
 import compuquest.clienting.Client
 import compuquest.clienting.gui.addHud

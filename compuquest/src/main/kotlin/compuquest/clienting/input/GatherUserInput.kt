@@ -1,11 +1,14 @@
 package compuquest.clienting.input
 
+import compuquest.clienting.Client
+import compuquest.clienting.gui.Screens
 import compuquest.simulation.general.Deck
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
 import compuquest.simulation.input.Commands
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.input.PlayerInputs
+import compuquest.simulation.input.emptyPlayerInput
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
@@ -24,8 +27,46 @@ fun gatherPlayerUseActions(deck: Deck, playerInputs: PlayerInputs): Events =
 				null
 		}
 
-fun getPlayerProfile(state: InputState, player: Id): InputProfile? =
-	state.profiles[state.playerProfiles[player]]
+fun getPlayerProfile(state: InputState, playerIndex: Int): InputProfile? =
+	state.profiles[state.playerProfiles[playerIndex]]
+
+val uiCommands = listOf(
+	Commands.activate,
+	Commands.navigate,
+	Commands.menuBack,
+	Commands.newGame,
+	Commands.addPlayer,
+)
+
+fun getUiCommandEvents(bindings: Bindings, gamepad: Int, player: Id): Events =
+	uiCommands.flatMap { command ->
+		getJustPressedBindings(bindings, gamepad, command)
+			.map { binding ->
+				newEvent(command, player, binding.argument)
+			}
+	}
+
+fun getPlayerBindings(state: InputState, player: Id, playerIndex: Int): Bindings? {
+	val context = state.playerInputContexts[player]
+	return if (context != null)
+		getPlayerProfile(state, playerIndex)?.bindings?.getOrDefault(context, null)
+	else
+		null
+}
+
+fun getUiCommandEvents(state: InputState, player: Id, playerIndex: Int): Events {
+	val bindings = getPlayerBindings(state, player, playerIndex)
+	return if (bindings != null) {
+		val gamepad = getPlayerGamepad(state, playerIndex)
+		getUiCommandEvents(bindings, gamepad, player)
+	} else
+		listOf()
+}
+
+fun getUiCommandEvents(client: Client): Events =
+	client.players.flatMap { (player, index) ->
+		getUiCommandEvents(client.input, player, index)
+	}
 
 object StandardAxisCommands {
 	val lookX = AxisCommands(Commands.lookX, Commands.lookDown, Commands.lookUp)
@@ -45,21 +86,16 @@ fun newPlayerInput(bindings: Bindings, gamepad: Int): PlayerInput {
 	)
 }
 
-fun newPlayerInput(state: InputState, player: Id): PlayerInput? {
-	val profile = getPlayerProfile(state, player)
-	return if (profile != null) {
-		val gamepad = getPlayerGamepad(state, player)
-		newPlayerInput(profile.bindings, gamepad)
+fun newPlayerInput(state: InputState, player: Id, playerIndex: Int): PlayerInput {
+	val bindings = getPlayerBindings(state, player, playerIndex)
+	return if (bindings != null) {
+		val gamepad = getPlayerGamepad(state, playerIndex)
+		newPlayerInput(bindings, gamepad)
 	} else
-		null
+		emptyPlayerInput
 }
 
-fun newPlayerInputs(state: InputState, players: Collection<Id>): PlayerInputs =
-	players.mapNotNull {
-		val input = newPlayerInput(state, it)
-		if (input != null)
-			it to input
-		else
-			null
+fun newPlayerInputs(state: InputState, players: PlayerMap): PlayerInputs =
+	players.mapValues { (player, index) ->
+		newPlayerInput(state, player, index)
 	}
-		.associate { it }

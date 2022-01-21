@@ -1,9 +1,11 @@
 package scripts.gui
 
-import compuquest.clienting.getPlayerMenuStack
+import compuquest.clienting.Client
+import compuquest.clienting.gui.getPlayerMenuStack
 import compuquest.clienting.gui.syncGuiToState
 import compuquest.simulation.characters.isCharacterAlive
 import compuquest.simulation.combat.damageEvent
+import compuquest.simulation.general.World
 import compuquest.simulation.general.playerRespawnTime
 import compuquest.simulation.updating.simulationFps
 import godot.*
@@ -19,7 +21,7 @@ const val respawnCountdownDelay = 1 * simulationFps
 
 @RegisterClass
 class Hud : Control() {
-	var slot: Node? = null
+	var menuContainer: Node? = null
 	var interact: Label? = null
 	var respawnCountdown: Label? = null
 	var debugText: Label? = null
@@ -31,12 +33,56 @@ class Hud : Control() {
 
 	@RegisterFunction
 	override fun _ready() {
-		slot = findNode("slot")
+		menuContainer = findNode("menus")
 		interact = findNode("interact") as? Label
 		respawnCountdown = findNode("respawn-countdown") as? Label
 		debugText = findNode("debug") as? Label
 		lowerThird = findNode("lower-third") as? Control
 		painOverlay = findNode("pain-overlay") as? Panel
+	}
+
+	fun updateMenus(client: Client) {
+		val localSlot = menuContainer
+		if (localSlot != null) {
+			val menuStack = getPlayerMenuStack(client, actor)
+			syncGuiToState(localSlot, actor, Global.world!!, lastMenu, menuStack)
+			lastMenu = menuStack.lastOrNull()
+		}
+	}
+
+	fun updateOverlay(world: World, overlay: Panel) {
+		val deck = world.deck
+		val isPainOverlayVisible = !isCharacterAlive(deck, actor)
+		overlay.visible = isPainOverlayVisible
+		if (isPainOverlayVisible) {
+			val style = overlay.getStylebox("panel") as StyleBoxFlat
+			style.bgColor = Color(1f, 0f, 0f, 0.6f)
+		} else {
+			if (world.previousEvents.any { event -> event.target == actor && event.type == damageEvent }) {
+				damageWeight = 0.4f
+			}
+			if (damageWeight > 0f) {
+				overlay.visible = true
+				val style = overlay.getStylebox("panel") as StyleBoxFlat
+				damageWeight = GD.lerp(damageWeight, 0f, 0.1f)
+				style.bgColor = Color(1f, 0f, 0f, damageWeight)
+			}
+		}
+	}
+
+	fun updateRespawnCountdown(respawnTimer: Int) {
+		val countdown = respawnCountdown!!
+		if (respawnTimer > respawnCountdownDelay) {
+			val remainingTime = (playerRespawnTime - respawnTimer) / simulationFps + 1
+			if (remainingTime > 0) {
+				countdown.visible = true
+				countdown.text = remainingTime.toString()
+			} else {
+				countdown.visible = false
+			}
+		} else {
+			countdown.visible = false
+		}
 	}
 
 	@RegisterFunction
@@ -51,50 +97,17 @@ class Hud : Control() {
 			if (player != null) {
 				val canInteractWith = player.canInteractWith
 				interact!!.visible = canInteractWith != null
-				debugText?.text = Global.instance?.debugText ?: ""
-				val localSlot = slot
-				if (client != null) {
-					val menuStack = getPlayerMenuStack(client, actor)
+				updateRespawnCountdown(player.respawnTimer)
+			}
 
-					if (localSlot != null) {
-						syncGuiToState(localSlot, actor, Global.world!!, lastMenu, menuStack)
-						lastMenu = menuStack.lastOrNull()
-					}
-				}
+			debugText?.text = Global.instance?.debugText ?: ""
+			if (client != null) {
+				updateMenus(client)
+			}
 
-				val countdown = respawnCountdown!!
-				if (player.respawnTimer > respawnCountdownDelay) {
-					val remainingTime = (playerRespawnTime - player.respawnTimer) / simulationFps + 1
-					if (remainingTime > 0) {
-						countdown.visible = true
-						countdown.text = remainingTime.toString()
-					} else {
-						countdown.visible = false
-					}
-				} else {
-					countdown.visible = false
-				}
-
-				val overlay = painOverlay
-				if (overlay != null) {
-					val deck = world.deck
-					val isPainOverlayVisible = !isCharacterAlive(deck, actor)
-					overlay.visible = isPainOverlayVisible
-					if (isPainOverlayVisible) {
-						val style = overlay.getStylebox("panel") as StyleBoxFlat
-						style.bgColor = Color(1f, 0f, 0f, 0.6f)
-					} else {
-						if (world.previousEvents.any { event -> event.target == actor && event.type == damageEvent }) {
-							damageWeight = 0.4f
-						}
-						if (damageWeight > 0f) {
-							overlay.visible = true
-							val style = overlay.getStylebox("panel") as StyleBoxFlat
-							damageWeight = GD.lerp(damageWeight, 0f, 0.1f)
-							style.bgColor = Color(1f, 0f, 0f, damageWeight)
-						}
-					}
-				}
+			val overlay = painOverlay
+			if (overlay != null && world != null) {
+				updateOverlay(world, overlay)
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package scripts
 import compuquest.app.newGame
 import compuquest.clienting.*
 import compuquest.clienting.display.applyDisplayOptions
+import compuquest.clienting.input.updateMouseMode
 import compuquest.definition.newDefinitions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.input.Commands
@@ -19,7 +20,6 @@ import godot.core.Vector2
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
-import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.haft.globalMouseOffset
 import silentorb.mythic.happening.Events
 
@@ -28,14 +28,14 @@ enum class InitMode {
 	readyInitOrInitialized,
 	delayRestart,
 	readyRestart,
-	debugNone,
+//	debugNone,
 }
 
 @RegisterClass
 class Global : Node() {
 	var worlds: List<World> = listOf()
 	val definitions = newDefinitions()
-	var client: Client = newClient()
+	var client: Client? = null
 
 	//	var sceneNode: Spatial? = null
 	val partyUi: Boolean = false
@@ -83,9 +83,6 @@ class Global : Node() {
 
 		fun getPlayer(): Map.Entry<Id, Player>? =
 			getPlayer(world)
-
-		fun getMenuStack() =
-			instance!!.client.menuStack
 	}
 
 	init {
@@ -162,19 +159,19 @@ class Global : Node() {
 		}
 	}
 
-	@RegisterFunction
-	override fun _process(delta: Double) {
-		val previousClient = client
-		val nextClient = updateClient(worlds.lastOrNull(), listOf(), delta.toFloat(), previousClient)
-		val player = getPlayer()?.key
-		val clientEvents = if (player != null)
-			eventsFromClient(player, nextClient, previousClient)
-		else
-			listOf()
-
+	fun updateClient(delta: Float) {
+		val localClient = client ?: newClient()
+		val clientEvents = eventsFromClient(localClient)
+		val nextClient = updateClient(worlds.lastOrNull(), clientEvents, delta, localClient)
 		client = nextClient
+		updateMouseMode(nextClient)
 		addEvents(clientEvents)
 		globalMouseOffset = Vector2.ZERO
+	}
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		updateClient(delta.toFloat())
 	}
 
 	@RegisterFunction
@@ -185,6 +182,9 @@ class Global : Node() {
 
 			debugText = ""
 			tempCatch {
+				if (client == null) {
+					client = newClient()
+				}
 				if (Input.isActionJustReleased("quit"))
 					getTree()!!.quit()
 
@@ -203,7 +203,7 @@ class Global : Node() {
 						// This needs to happen *after* the scene is reloaded
 						if (world != null) {
 							worlds = listOf(world)
-							client = restartClient(client)
+							client = restartClient(client!!)
 							initMode = InitMode.readyInitOrInitialized
 						}
 					}
@@ -213,11 +213,11 @@ class Global : Node() {
 							val world = newGameWorld()
 							if (world != null) {
 								worlds = listOf(world)
-								applyDisplayOptions(client.options.display)
+								applyDisplayOptions(client!!.options.display)
 							}
 						} else {
 							val events = updateEvents()
-							updateWorlds(events, client.playerInputs, localWorlds, delta.toFloat())
+							updateWorlds(events, client!!.playerInputs, localWorlds, delta.toFloat())
 						}
 					}
 					InitMode.delayInit -> {
