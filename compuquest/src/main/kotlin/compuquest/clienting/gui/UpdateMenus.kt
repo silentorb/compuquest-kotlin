@@ -37,9 +37,11 @@ fun newMenuScreen(content: GameMenuContent): MenuScreen {
 	}
 }
 
-fun newPopupMenu(items: List<MenuItem<GameContext>>): MenuScreen {
+fun newPopupMenu(title: String, actor: Id, items: List<MenuItem<GameContext>>): MenuScreen {
 	val screen = instantiateScene<MenuScreen>("res://gui/menus/MenuPopup.tscn")!!
+	screen.title = title
 	screen.items = items
+	screen.actor = actor
 	return screen
 }
 
@@ -69,7 +71,8 @@ fun updateMenuStack(player: Player) = handleEvents<MenuStack> { event, menuStack
 		Commands.interact -> listOfNotNull(interactionAddress(player))
 		Commands.finishInteraction -> listOf()
 		Commands.menuBack -> menuStack.dropLast(1)
-		Commands.navigate -> menuStack.plus(toMenuAddress(event.value))
+		Commands.drillDown -> menuStack.plus(toMenuAddress(event.value))
+		Commands.navigate -> listOf(toMenuAddress(event.value))
 		else -> menuStack
 	}
 }

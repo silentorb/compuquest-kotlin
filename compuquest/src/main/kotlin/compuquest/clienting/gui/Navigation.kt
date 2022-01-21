@@ -2,8 +2,9 @@ package compuquest.clienting.gui
 
 import compuquest.simulation.input.Commands
 import scripts.Global
+import silentorb.mythic.ent.Id
 
-fun <Context>activateMenuItem(context: Context, item: MenuItem<Context>) {
+fun <Context>activateMenuItem(context: Context, player: Id, item: MenuItem<Context>) {
   val eventSource = item.events
   when {
     eventSource != null -> {
@@ -11,13 +12,13 @@ fun <Context>activateMenuItem(context: Context, item: MenuItem<Context>) {
       for (event in events) {
         Global.addEvent(event)
       }
-      Global.addPlayerEvent(Commands.menuBack)
+      Global.addPlayerEvent(Commands.menuBack, player)
     }
     item.address != null -> {
-      Global.addPlayerEvent(Commands.navigate, item.address)
+      Global.addPlayerEvent(Commands.drillDown, player, item.address)
     }
     else -> {
-      Global.addPlayerEvent(Commands.menuBack)
+      Global.addPlayerEvent(Commands.menuBack, player)
     }
   }
 }

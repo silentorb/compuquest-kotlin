@@ -37,10 +37,6 @@ margin_bottom = 25.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="menus" type="MarginContainer" parent="."]
-margin_right = 1024.0
-margin_bottom = 600.0
-
 [node name="vbox" type="VBoxContainer" parent="."]
 margin_right = 1024.0
 margin_bottom = 600.0
@@ -95,3 +91,7 @@ anchor_bottom = 0.0
 margin_right = 103.0
 margin_bottom = 113.0
 size_flags_vertical = 1
+
+[node name="menus" type="MarginContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0

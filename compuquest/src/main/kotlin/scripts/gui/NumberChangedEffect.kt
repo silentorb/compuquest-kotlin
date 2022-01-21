@@ -7,7 +7,7 @@ import scripts.Global
 import silentorb.mythic.godoting.instantiateScene
 
 fun numberChangedEffect(label: Label, value: Int, previous: Int?) {
-  if (previous != null && value != previous && Global.getPlayer()?.value?.isPlaying == true) {
+  if (previous != null && value != previous) {
     val root = label.getTree()?.root
     if (root != null) {
       val diff = value - previous

@@ -20,6 +20,9 @@ object Screens {
 
 	const val mainMenu = "mainMenu"
 	const val options = "options"
+	const val optionsAudio = "optionsAudio"
+	const val optionsInput = "optionsInput"
+	const val optionsDisplay = "optionsDisplay"
 }
 
 val managementScreens = listOf(
@@ -285,6 +288,7 @@ fun conversationMenu() =
 val gameScreens: Map<Key, GameScreen> = mapOf(
 	// App
 	Screens.mainMenu to mainMenu(),
+	Screens.options to optionsMenu(),
 
 	// Game
 	Screens.completeQuest to completeQuestConversation(),

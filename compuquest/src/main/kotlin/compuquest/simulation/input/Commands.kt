@@ -10,6 +10,7 @@ object Commands {
   val newGame = "newGame"
   val addPlayer = "addPlayer"
   val navigate = "navigate"
+  val drillDown = "drillDown"
   val primaryAction = "primaryAction"
   val jump = "jump"
   val secondaryAction = "secondaryAction"

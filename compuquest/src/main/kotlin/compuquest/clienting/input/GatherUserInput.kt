@@ -33,6 +33,7 @@ fun getPlayerProfile(state: InputState, playerIndex: Int): InputProfile? =
 val uiCommands = listOf(
 	Commands.activate,
 	Commands.navigate,
+	Commands.drillDown,
 	Commands.menuBack,
 	Commands.newGame,
 	Commands.addPlayer,

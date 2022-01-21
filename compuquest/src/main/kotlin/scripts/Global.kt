@@ -53,14 +53,17 @@ class Global : Node() {
 
 	companion object {
 		var instance: Global? = null
-		private var eventQueue: MutableList<Event> = mutableListOf()
+		private var serverEventQueue: MutableList<Event> = mutableListOf()
+		private var clientEventQueue: MutableList<Event> = mutableListOf()
 
 		fun addEvent(event: Event) {
-			eventQueue.add(event)
+			serverEventQueue.add(event)
+			clientEventQueue.add(event)
 		}
 
 		fun addEvents(events: Collection<Event>) {
-			eventQueue.addAll(events)
+			serverEventQueue.addAll(events)
+			clientEventQueue.addAll(events)
 		}
 
 		fun addHand(hand: Hand) {
@@ -73,16 +76,12 @@ class Global : Node() {
 			}
 		}
 
-		fun addPlayerEvent(type: String, value: Any? = null) {
-			val player = world?.deck?.players?.keys?.firstOrNull()
+		fun addPlayerEvent(type: String, player: Id, value: Any? = null) {
 			addEvent((Event(type, player, value)))
 		}
 
 		val world: World?
 			get() = instance?.worlds?.lastOrNull()
-
-		fun getPlayer(): Map.Entry<Id, Player>? =
-			getPlayer(world)
 	}
 
 	init {
@@ -118,9 +117,15 @@ class Global : Node() {
 		}
 	}
 
-	fun updateEvents(): Events {
-		val events = eventQueue.toList()
-		eventQueue.clear()
+	fun updateServerEvents(): Events {
+		val events = serverEventQueue.toList()
+		serverEventQueue.clear()
+		return events
+	}
+
+	fun updateClientEvents(): Events {
+		val events = clientEventQueue.toList()
+		clientEventQueue.clear()
 		return events
 	}
 
@@ -162,10 +167,10 @@ class Global : Node() {
 	fun updateClient(delta: Float) {
 		val localClient = client ?: newClient()
 		val clientEvents = eventsFromClient(localClient)
-		val nextClient = updateClient(worlds.lastOrNull(), clientEvents, delta, localClient)
+		addEvents(clientEvents)
+		val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
 		client = nextClient
 		updateMouseMode(nextClient)
-		addEvents(clientEvents)
 		globalMouseOffset = Vector2.ZERO
 	}
 
@@ -216,7 +221,7 @@ class Global : Node() {
 								applyDisplayOptions(client!!.options.display)
 							}
 						} else {
-							val events = updateEvents()
+							val events = updateServerEvents()
 							updateWorlds(events, client!!.playerInputs, localWorlds, delta.toFloat())
 						}
 					}
