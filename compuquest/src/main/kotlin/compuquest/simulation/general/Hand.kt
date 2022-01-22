@@ -4,13 +4,16 @@ import silentorb.mythic.happening.Event
 import silentorb.mythic.ent.Id
 
 data class Hand(
-  val id: Id? = null,
-  val components: List<Any>,
+	val id: Id? = null,
+	val components: List<Any>,
 )
 
 typealias Hands = List<Hand>
 
-const val newHandCommandKey = "newHand"
+const val newHandCommand = "newHand"
 
 fun newHandEvent(hand: Hand) =
-  Event(newHandCommandKey, value = hand)
+	Event(newHandCommand, value = hand)
+
+fun newHandEvents(hands: Hands) =
+	hands.map(::newHandEvent)

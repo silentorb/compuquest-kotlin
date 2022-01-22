@@ -33,6 +33,10 @@ inline fun <reified T> filterEventTargets(type: Key, events: Events) =
 		.filter { it.type == type }
 		.mapNotNull { it.target as? T }
 
+fun filterEventsByTarget(target: Any, events: Events) =
+	events
+		.filter { it.target == target }
+
 fun <T> handleEvents(handler: (Event, T) -> T): (Events, T) -> T = { events, initial ->
 	events.fold(initial) { a, b -> handler(b, a) }
 }

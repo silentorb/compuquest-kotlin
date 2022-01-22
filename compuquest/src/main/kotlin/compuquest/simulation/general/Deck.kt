@@ -1,15 +1,15 @@
 package compuquest.simulation.general
 
-import compuquest.definition.Accessories
+import compuquest.simulation.characters.Character
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.combat.Missile
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.physics.Body
 import compuquest.simulation.updating.extractComponents
 import silentorb.mythic.ent.KeyTable
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.genericRemoveEntities
 import silentorb.mythic.ent.newDeckReflection
-import compuquest.simulation.characters.Character
 import silentorb.mythic.timing.IntTimer
 
 data class Deck(

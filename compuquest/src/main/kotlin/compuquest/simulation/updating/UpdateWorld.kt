@@ -33,7 +33,7 @@ fun updateDepictions(previous: World?, next: World) {
 
 fun updateWorldDay(world: World): World =
 	world.copy(
-		day = updateDay(world.day),
+//		day = updateDay(world.day),
 		step = world.step + 1
 	)
 

@@ -1,5 +1,6 @@
 package scripts.entities
 
+import godot.AnimatedSprite3D
 import godot.Camera
 import godot.Node
 import godot.Spatial
@@ -9,6 +10,7 @@ import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.NodePath
 import godot.core.Transform
+import scripts.Global
 
 @RegisterClass
 class PlayerController : Node() {
@@ -34,5 +36,17 @@ class PlayerController : Node() {
 		body.headRestingState = body.head?.transform ?: Transform.IDENTITY
 		camera = getNode(cameraPath!!) as? Camera
 		camera?.fov = fov.toDouble()
+
+		val client = Global.instance!!.client!!
+		val playerIndex = client.players[body.actor] ?: 0
+
+		val sprite = body.findNode("sprite") as AnimatedSprite3D
+
+		sprite.setLayerMaskBit(0L, false)
+		for (i in 0..3) {
+			sprite.setLayerMaskBit((i + 1).toLong(), i != playerIndex)
+		}
+
+		camera?.setCullMaskBit((playerIndex + 1).toLong(), false)
 	}
 }

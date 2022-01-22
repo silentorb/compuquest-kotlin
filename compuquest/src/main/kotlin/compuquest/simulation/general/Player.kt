@@ -7,6 +7,7 @@ import compuquest.simulation.characters.spawnCharacter
 import compuquest.simulation.combat.Attack
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.input.Commands
+import compuquest.simulation.physics.setLocationEvent
 import compuquest.simulation.updating.simulationFps
 import godot.core.Vector3
 import scripts.entities.PlayerSpawner
@@ -89,7 +90,12 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 	else
 		null
 
-	val respawnTimer = if (!isAlive && character != null && getPlayerRespawnPoint(world, character.faction) != null)
+	val respawnTimer = if (
+		!isAlive &&
+		character != null &&
+		world.scenario.playerRespawning &&
+		getPlayerRespawnPoint(world, character.faction) != null
+	)
 		player.respawnTimer + 1
 	else
 		0
@@ -145,7 +151,7 @@ fun eventsFromPlayer(world: World): (Id, Player) -> Events = { actor, player ->
 fun newPlayerName(playerNumber: Int): String =
 	"Player $playerNumber"
 
-fun spawnNewPlayer(world: World, faction: Key, playerNumber: Int = world.deck.players.size + 1): Events {
+fun spawnNewPlayer(world: World, faction: Key, playerNumber: Int = world.deck.players.size + 1): Hands {
 	val spawner = getPlayerRespawnPoint(world, faction)
 	val scene = spawner?.scene
 	return if (scene != null) {
@@ -154,13 +160,11 @@ fun spawnNewPlayer(world: World, faction: Key, playerNumber: Int = world.deck.pl
 		val name = newPlayerName(playerNumber)
 		spawnCharacter(world, scene, spawner.globalTransform.origin, spawner.rotation, spawner.type, faction, name, actor) +
 				listOf(
-					newHandEvent(
-						Hand(
-							id = actor,
-							components = listOf(
-								Player(
-									faction = faction,
-								)
+					Hand(
+						id = actor,
+						components = listOf(
+							Player(
+								faction = faction,
 							)
 						)
 					)

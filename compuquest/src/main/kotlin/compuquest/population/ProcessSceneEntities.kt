@@ -3,13 +3,12 @@ package compuquest.population
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
-import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.general.spawnNewPlayer
 import compuquest.simulation.intellect.newSpirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Navigation
 import godot.Node
 import godot.Spatial
-import godot.Viewport
 import scripts.entities.PlayerSpawner
 import scripts.entities.actor.AttachPlayer
 import silentorb.mythic.debugging.getDebugBoolean
@@ -62,29 +61,25 @@ fun processSceneEntities(root: Node, world: World): World {
 	val spatialNodes = parents.filterIsInstance<Spatial>()
 	val nextId = world.nextId.source()
 
+	val playerSpawners = findChildrenOfType<PlayerSpawner>(root)
+
+	val world2 = world.copy(
+		navigation = root.findNode("Navigation") as? Navigation,
+		playerSpawners = playerSpawners,
+	)
+
 	val excludeNonPlayers = getDebugBoolean("NO_MONSTERS")
 	val hands = spatialNodes
 		.flatMap { spatial ->
 			val components = componentNodes.filter { it.getParent() == spatial }
 			when {
-				components.any { it is AttachPlayer } -> addPlayer(definitions, nextId, spatial, components)
 				!excludeNonPlayers -> {
 					newCharacterBody(definitions, nextId, spatial, components)
 				}
 				else -> listOf()
 			}
-		}
+		} + spawnNewPlayer(world2, world2.scenario.defaultPlayerFaction)
 
-	val playerSpawners = if (getDebugBoolean("PLAYER_RESPAWN"))
-		findChildrenOfType<PlayerSpawner>(root)
-	else
-		listOf()
-
-	val nextWorld = newEntitiesFromHands(hands, world)
-		.copy(
-			navigation = root.findNode("Navigation") as? Navigation,
-			playerSpawners = playerSpawners,
-		)
-
-	return populateQuests(nextWorld)
+	val world3 = newEntitiesFromHands(hands, world2)
+	return populateQuests(world3)
 }

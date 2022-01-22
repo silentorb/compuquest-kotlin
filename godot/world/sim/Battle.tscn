@@ -1,9 +1,6 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
-[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachResource.kt" type="Script" id=2]
-[ext_resource path="res://src/main/kotlin/scripts/entities/actor/AttachPlayer.kt" type="Script" id=3]
-[ext_resource path="res://src/main/kotlin/scripts/entities/AttachCharacter.kt" type="Script" id=4]
 [ext_resource path="res://entities/world/Slot.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/main/kotlin/scripts/entities/Spawner.kt" type="Script" id=7]
@@ -16,7 +13,7 @@ polygons = [ PoolIntArray( 2, 1, 0 ), PoolIntArray( 5, 4, 3 ), PoolIntArray( 8, 
 [node name="battle" type="Spatial"]
 
 [node name="player-spawn" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.0585, 0, 21.7682 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -29.7327, 0, 27.0177 )
 script = ExtResource( 8 )
 faction = "player"
 scene = ExtResource( 6 )
@@ -36,26 +33,6 @@ faction = "undead"
 interval = 5.0
 quantity = 3
 type = "skeleton"
-
-[node name="player" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.8609, 0.5, 17.7388 )
-
-[node name="player" type="Node" parent="player"]
-script = ExtResource( 3 )
-
-[node name="mana" type="Node" parent="player"]
-script = ExtResource( 2 )
-amount = 200
-resource = "mana"
-
-[node name="gold" type="Node" parent="player"]
-script = ExtResource( 2 )
-amount = 200
-resource = "gold"
-
-[node name="char" type="Node" parent="player"]
-script = ExtResource( 4 )
-type = "player"
 
 [node name="Navigation" type="Navigation" parent="."]
 

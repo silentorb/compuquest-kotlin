@@ -6,44 +6,10 @@ import godot.GlobalConstants
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.haft.*
 
-val defaultGamepadDeadZone = InputProcessor(InputProcessorType.deadzone, 0.1f)
-val defaultGamepadLookScalar = InputProcessor(InputProcessorType.scale, 1.8f)
-
 object DefaultBindings {
-	fun gamepadGame() = mapOf(
-		GlobalConstants.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
-		GlobalConstants.JOY_AXIS_1 to AdvancedCommand(
-			Commands.moveLengthwise, processors = listOf(
-				defaultGamepadDeadZone,
-				InputProcessor(InputProcessorType.invert),
-			)
-		),
-		GlobalConstants.JOY_AXIS_0 to AdvancedCommand(
-			Commands.moveLateral, processors = listOf(
-				defaultGamepadDeadZone,
-			)
-		),
-		GlobalConstants.JOY_AXIS_2 to AdvancedCommand(
-			Commands.lookX, processors = listOf(
-				defaultGamepadDeadZone,
-				defaultGamepadLookScalar,
-			)
-		),
-		GlobalConstants.JOY_AXIS_3 to AdvancedCommand(
-			Commands.lookY, processors = listOf(
-				defaultGamepadDeadZone,
-				defaultGamepadLookScalar,
-			)
-		),
-		GamepadChannels.JOY_XBOX_X to Commands.primaryAction,
-		GamepadChannels.JOY_XBOX_A to Commands.jump,
-	)
 
-	fun gamepadUi() = mapOf(
-		GamepadChannels.JOY_XBOX_X to Commands.menuBack,
-		GamepadChannels.JOY_XBOX_B to Commands.menuBack,
-		GamepadChannels.JOY_XBOX_A to Commands.activate,
-	)
+	val gamepadDeadZone = InputProcessor(InputProcessorType.deadzone, 0.25f)
+	val gamepadLookScalar = InputProcessor(InputProcessorType.scale, 1.8f)
 
 	fun keyboardGame() = mapOf(
 		GlobalConstants.KEY_W to Commands.moveForward,
@@ -80,6 +46,41 @@ object DefaultBindings {
 
 	fun mouseUi() = mapOf(
 		GlobalConstants.BUTTON_LEFT to Commands.activate,
+	)
+
+	fun gamepadGame() = mapOf(
+		GlobalConstants.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
+		GlobalConstants.JOY_AXIS_1 to AdvancedCommand(
+			Commands.moveLengthwise, processors = listOf(
+				gamepadDeadZone,
+				InputProcessor(InputProcessorType.invert),
+			)
+		),
+		GlobalConstants.JOY_AXIS_0 to AdvancedCommand(
+			Commands.moveLateral, processors = listOf(
+				gamepadDeadZone,
+			)
+		),
+		GlobalConstants.JOY_AXIS_2 to AdvancedCommand(
+			Commands.lookX, processors = listOf(
+				gamepadDeadZone,
+				gamepadLookScalar,
+			)
+		),
+		GlobalConstants.JOY_AXIS_3 to AdvancedCommand(
+			Commands.lookY, processors = listOf(
+				gamepadDeadZone,
+				gamepadLookScalar,
+			)
+		),
+		GamepadChannels.JOY_XBOX_X to Commands.primaryAction,
+		GamepadChannels.JOY_XBOX_A to Commands.jump,
+	)
+
+	fun gamepadUi() = mapOf(
+		GamepadChannels.JOY_XBOX_X to Commands.menuBack,
+		GamepadChannels.JOY_XBOX_B to Commands.menuBack,
+		GamepadChannels.JOY_XBOX_A to Commands.activate,
 	)
 }
 

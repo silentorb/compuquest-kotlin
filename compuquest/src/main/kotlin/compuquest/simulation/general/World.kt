@@ -12,6 +12,7 @@ import silentorb.mythic.randomly.Dice
 
 data class World(
 	val definitions: Definitions,
+	val scenario: Scenario,
 	val nextId: SharedNextId,
 	val bodies: Map<Id, Spatial> = mapOf(),
 	val sprites: Map<Id, AnimatedSprite3D> = mapOf(),

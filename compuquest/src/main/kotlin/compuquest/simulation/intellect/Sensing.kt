@@ -1,7 +1,7 @@
 package compuquest.simulation.intellect
 
-import compuquest.simulation.general.Body
 import compuquest.simulation.general.World
+import compuquest.simulation.physics.Body
 import compuquest.simulation.physics.CollisionMasks
 import godot.PhysicsDirectSpaceState
 import godot.Spatial

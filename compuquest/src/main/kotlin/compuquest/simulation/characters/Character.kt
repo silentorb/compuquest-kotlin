@@ -155,7 +155,11 @@ fun updateCharacterHealth(deck: Deck, actor: Id, characterEvents: Events, charac
 fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
 	val deck = world.deck
 	val characterEvents = events.filter { it.target == actor }
-	val health = updateCharacterHealth(deck, actor, characterEvents, character)
+	val body = deck.bodies[actor]
+	val health = if (body != null && body.translation.y < -50f)
+		0
+	else
+		updateCharacterHealth(deck, actor, characterEvents, character)
 
 	val depiction = if (health == 0)
 		"sprites"
@@ -217,8 +221,9 @@ fun spawnCharacter(
 	type: String,
 	faction: Key,
 	name: String? = null,
-	id: Id? = null
-): Events {
+	id: Id? = null,
+	additional: List<Any> = listOf()
+): Hands {
 	val dice = world.dice
 	val definitions = world.definitions
 	val definition = definitions.characters[type] ?: return listOf()
@@ -233,10 +238,8 @@ fun spawnCharacter(
 	world.scene.addChild(body)
 
 	val nextId = world.nextId.source()
-	val hands = addCharacter(
+	return addCharacter(
 		definitions, definition, id ?: nextId(), nextId, body,
-		name ?: definition.name, faction, listOf(newSpirit())
+		name ?: definition.name, faction, additional
 	)
-
-	return hands.map { newHandEvent(it) }
 }

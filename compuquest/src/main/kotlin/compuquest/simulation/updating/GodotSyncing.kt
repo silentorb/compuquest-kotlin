@@ -1,11 +1,11 @@
 package compuquest.simulation.updating
 
 import compuquest.simulation.characters.updatePlayerRig
-import compuquest.simulation.general.Body
 import compuquest.simulation.general.World
-import compuquest.simulation.general.setLocationEvent
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
+import compuquest.simulation.physics.Body
+import compuquest.simulation.physics.setLocationEvent
 import godot.core.Vector3
 import scripts.entities.CharacterBody
 import silentorb.mythic.happening.Events

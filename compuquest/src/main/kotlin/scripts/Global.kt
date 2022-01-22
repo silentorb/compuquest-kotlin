@@ -5,6 +5,7 @@ import compuquest.clienting.*
 import compuquest.clienting.display.applyDisplayOptions
 import compuquest.clienting.input.updateMouseMode
 import compuquest.definition.newDefinitions
+import compuquest.simulation.definition.Factions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.input.Commands
 import compuquest.simulation.general.*
@@ -158,7 +159,12 @@ class Global : Node() {
 //            null
 //        }
 //        else
-				newGame(scene!!, definitions)
+				val scenario = Scenario(
+					name = "Dev Scenario",
+					defaultPlayerFaction = Factions.player,
+					playerRespawning = getDebugBoolean("PLAYER_RESPAWN"),
+				)
+				newGame(scene!!, scenario, definitions)
 			} else
 				null
 		}

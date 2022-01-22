@@ -1,12 +1,15 @@
 package compuquest.simulation.updating
 
-import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.general.*
+import compuquest.simulation.input.Commands
 import godot.AnimatedSprite3D
-import silentorb.mythic.happening.Events
 import godot.Spatial
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.Table
+import silentorb.mythic.godoting.tempCatch
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventValues
 
 inline fun <reified T> extractComponentsRaw(hands: List<Hand>): List<Pair<Id, T>> =
 	hands
@@ -53,9 +56,6 @@ fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
 }
 
 fun newEntities(events: Events, world: World): World {
-	val hands = events
-		.filter { it.type == newHandCommandKey }
-		.mapNotNull { it.value as? Hand }
-
+	val hands = filterEventValues<Hand>(newHandCommand, events)
 	return newEntitiesFromHands(hands, world)
 }

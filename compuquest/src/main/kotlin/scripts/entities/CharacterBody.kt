@@ -13,6 +13,7 @@ import godot.annotation.RegisterProperty
 import godot.core.Transform
 import godot.core.Vector3
 import godot.global.GD
+import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
 
@@ -27,6 +28,7 @@ class CharacterBody : KinematicBody() {
 	var isSlowed: Boolean = false
 	var isAlive: Boolean = true
 	var headRestingState: Transform = Transform.IDENTITY
+	var actor: Id = 0L
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)

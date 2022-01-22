@@ -11,7 +11,7 @@ fun updateClientPlayers(worldPlayers: Collection<Id>, clientPlayers: PlayerMap):
 			clientPlayers
 				.filterKeys { worldPlayers.contains(it) }
 
-		val availableSlots = (0..3).minus(same.keys).map { it.toInt() }
+		val availableSlots = (0..3).minus(same.values).map { it }
 		val additions = worldPlayers
 			.minus(clientPlayers.keys)
 			.zip(availableSlots) { a, b -> a to b }

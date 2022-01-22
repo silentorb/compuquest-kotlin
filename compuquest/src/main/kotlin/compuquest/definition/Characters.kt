@@ -13,7 +13,7 @@ object Characters {
 fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
   Characters.player to CharacterDefinition(
     name = "Player",
-    depiction = "viking",
+    depiction = "deevee",
     corpseDecay = 0f,
     faction = Factions.player,
     health = 100,

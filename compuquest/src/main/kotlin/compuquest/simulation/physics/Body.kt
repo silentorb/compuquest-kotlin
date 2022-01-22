@@ -1,5 +1,6 @@
-package compuquest.simulation.general
+package compuquest.simulation.physics
 
+import compuquest.simulation.general.World
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 

@@ -1,5 +1,6 @@
 package compuquest.simulation.general
 
+import compuquest.simulation.physics.castCharacterRay
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 

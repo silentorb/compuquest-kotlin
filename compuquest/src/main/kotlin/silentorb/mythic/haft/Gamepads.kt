@@ -19,11 +19,39 @@ fun updateGamepads(delta: Float, gamepads: Gamepads): Gamepads {
 		gamepads
 }
 
-fun updatePlayerGamepads(gamepads: Gamepads, players: PlayerMap, state: InputState): Map<Int, Int> =
-	if (state.playerGamepads.none() && gamepads.any() && players.any() && getPlayerProfile(state, 0)?.usesGamepad == true)
-		mapOf(0 to gamepads.first())
-	else
+private object Cache {
+	var gamepads: Gamepads = listOf()
+	var playerGamepads: Map<Int, Int> = mapOf()
+	var playersWithGamepads: List<Int> = listOf()
+}
+
+fun updatePlayerGamepads(gamepads: Gamepads, players: PlayerMap, state: InputState): Map<Int, Int> {
+	val playersWithGamepads = players.values.filter { index -> getPlayerProfile(state, index)?.usesGamepad == true }
+	val playerGamepads = state.playerGamepads
+	return if (gamepads != Cache.gamepads ||
+		playerGamepads != Cache.playerGamepads ||
+		playersWithGamepads != Cache.playersWithGamepads
+	) {
+		Cache.gamepads = gamepads
+		Cache.playerGamepads = playerGamepads
+		Cache.playersWithGamepads = playersWithGamepads
+		val pruned = playerGamepads
+			.filter { (playerIndex, gamepad) ->
+				playersWithGamepads.contains(playerIndex) && gamepads.contains(gamepad)
+			}
+
+		val availableGamepads = gamepads - pruned.values
+		val additions = playersWithGamepads
+			.minus(pruned.keys)
+			.sorted()
+			.take(availableGamepads.size)
+			.zip(availableGamepads) { a, b -> a to b }
+			.associate { it }
+
+		pruned + additions
+	} else
 		state.playerGamepads
+}
 
 fun getPlayerGamepad(state: InputState, playerIndex: Int): Int {
 	val index = state.playerGamepads[playerIndex]
