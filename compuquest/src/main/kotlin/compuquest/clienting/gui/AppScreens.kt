@@ -1,5 +1,8 @@
 package compuquest.clienting.gui
 
+import scripts.gui.PlayerInputProfiles
+import silentorb.mythic.godoting.instantiateScene
+
 fun mainMenu() =
 	GameScreen(
 		title = staticTitle("Main Menu"),
@@ -79,14 +82,10 @@ fun optionsInputProfilesMenu() =
 
 fun optionsInputPlayerProfilesMenu() =
 	GameScreen(
-		title = staticTitle("Input Player Profiles"),
+		title = staticTitle("Player Input Profiles"),
 		content = { context, _ ->
-			newPopupMenu(
-				"Input Player Profiles",
-				context.actor,
-				listOf(
-
-				)
-			)
+			val control = instantiateScene<PlayerInputProfiles>("res://gui/menus/PlayerInputProfiles.tscn")!!
+			control.actor = context.actor
+			control
 		}
 	)

@@ -39,11 +39,11 @@ fun defaultInputProfiles(): InputProfileOptionsMap =
 	)
 
 fun defaultPlayerInputProfiles() =
-	mapOf(
-		0 to DefaultInputProfiles.keyboardMouseGamepad,
-		1 to DefaultInputProfiles.gamepad,
-		2 to DefaultInputProfiles.gamepad,
-		3 to DefaultInputProfiles.gamepad,
+	listOf(
+		DefaultInputProfiles.keyboardMouseGamepad,
+		DefaultInputProfiles.gamepad,
+		DefaultInputProfiles.gamepad,
+		DefaultInputProfiles.gamepad,
 	)
 
 // Defaults to InputContexts.ui

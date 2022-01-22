@@ -55,7 +55,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		val players = updateClientPlayers(deck.players.keys, client.players)
 		val menuStacks = updateMenuStacks(players, deck, events, client.menuStacks)
 		val playerInputContexts = players.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
-		val input = updateInput(delta, players, playerInputContexts, client.input)
+		val input = updateInput(delta, players, playerInputContexts, events, client.input)
 		val playerInputs = newPlayerInputs(client.input, players)
 		updateDev()
 		updateButtonPressHistory()

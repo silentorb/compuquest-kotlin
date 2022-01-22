@@ -31,4 +31,6 @@ object Commands {
   const val moveLateral = "moveVertical"
   const val lookX = "lookHorizontal"
   const val lookY = "lookVertical"
+
+  // Additional UI
 }

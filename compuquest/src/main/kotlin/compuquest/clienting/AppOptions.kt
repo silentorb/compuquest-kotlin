@@ -21,7 +21,7 @@ data class AppOptions(
 
 data class SerializableInputOptions(
 	val profiles: InputProfileOptionsMap = defaultInputProfiles(),
-	val playerProfiles: Map<Int, Int> = defaultPlayerInputProfiles(),
+	val playerProfiles: List<Int> = defaultPlayerInputProfiles(),
 )
 
 data class SerializedAppOptions(
@@ -64,7 +64,7 @@ fun newSerializableAppOptions(client: Client): SerializedAppOptions =
 
 fun checkSaveOptions(previous: Client, next: Client) {
 	if (
-		previous.options != next.options ||
+//		previous.options != next.options ||
 		previous.input.profileOptions != next.input.profileOptions ||
 		previous.input.playerProfiles != next.input.playerProfiles
 	) {

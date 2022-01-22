@@ -40,7 +40,7 @@ data class AdvancedCommand(
 data class InputState(
 	val profileOptions: HashedInputProfileOptionsMap,
 	val profiles: InputProfileMap,
-	val playerProfiles: Map<Int, Int>,
+	val playerProfiles: List<Int>,
 	val gamepads: Gamepads = listOf(),
 	val playerGamepads: Map<Int, Int> = mapOf(),
 	val playerInputContexts: Map<Id, Key> = mapOf(),

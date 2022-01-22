@@ -169,7 +169,7 @@ class Global : Node() {
 		val clientEvents = eventsFromClient(localClient)
 		addEvents(clientEvents)
 		val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
-		checkSaveOptions(localClient, nextClient, delta)
+		checkSaveOptions(localClient, nextClient)
 		client = nextClient
 		updateMouseMode(nextClient)
 		globalMouseOffset = Vector2.ZERO

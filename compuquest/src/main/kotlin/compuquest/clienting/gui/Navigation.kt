@@ -4,6 +4,10 @@ import compuquest.simulation.input.Commands
 import scripts.Global
 import silentorb.mythic.ent.Id
 
+fun navigateBack(player: Id) {
+  Global.addPlayerEvent(Commands.menuBack, player)
+}
+
 fun <Context>activateMenuItem(context: Context, player: Id, item: MenuItem<Context>) {
   val eventSource = item.events
   when {
@@ -12,13 +16,13 @@ fun <Context>activateMenuItem(context: Context, player: Id, item: MenuItem<Conte
       for (event in events) {
         Global.addEvent(event)
       }
-      Global.addPlayerEvent(Commands.menuBack, player)
+      navigateBack(player)
     }
     item.address != null -> {
       Global.addPlayerEvent(Commands.drillDown, player, item.address)
     }
     else -> {
-      Global.addPlayerEvent(Commands.menuBack, player)
+      navigateBack(player)
     }
   }
 }
