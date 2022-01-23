@@ -1,6 +1,5 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.getRandomizedSpawnOffset
 import compuquest.simulation.characters.setHealthCommand
 import compuquest.simulation.characters.spawnCharacter
@@ -9,7 +8,6 @@ import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.input.Commands
 import compuquest.simulation.physics.setLocationEvent
 import compuquest.simulation.updating.simulationFps
-import godot.core.Vector3
 import scripts.entities.PlayerSpawner
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -20,6 +18,7 @@ import silentorb.mythic.happening.handleEvents
 const val maxPartySize = 4
 const val playerFaction = "player"
 const val playerRespawnTime = 5 * simulationFps
+const val newPlayerEvent = "newPlayerEvent"
 
 val hiredNpc = "hiredNpc"
 val joinedPlayer = "joinedPlayer"
@@ -27,12 +26,18 @@ val addMemberToParty = "addMemberToParty"
 val removeMemberFromParty = "removeMemberFromParty"
 
 data class Player(
+	val index: Int,
 	val faction: Key,
 //  val party: List<Id> = listOf(),
 	val canInteractWith: Interactable? = null,
 	val interactingWith: Id? = null,
 	val isPlaying: Boolean = true,
 	val respawnTimer: Int = 0,
+)
+
+data class NewPlayer(
+	val index: Int,
+	val faction: Key? = null,
 )
 
 fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
@@ -148,22 +153,23 @@ fun eventsFromPlayer(world: World): (Id, Player) -> Events = { actor, player ->
 		listOf()
 }
 
-fun newPlayerName(playerNumber: Int): String =
-	"Player $playerNumber"
+fun newPlayerName(index: Int): String =
+	"Player ${index + 1}"
 
-fun spawnNewPlayer(world: World, faction: Key, playerNumber: Int = world.deck.players.size + 1): Hands {
+fun spawnNewPlayer(world: World, index: Int, faction: Key): Hands {
 	val spawner = getPlayerRespawnPoint(world, faction)
 	val scene = spawner?.scene
 	return if (scene != null) {
 		val nextId = world.nextId.source()
 		val actor = nextId()
-		val name = newPlayerName(playerNumber)
+		val name = newPlayerName(index)
 		spawnCharacter(world, scene, spawner.globalTransform.origin, spawner.rotation, spawner.type, faction, name, actor) +
 				listOf(
 					Hand(
 						id = actor,
 						components = listOf(
 							Player(
+								index = index,
 								faction = faction,
 							)
 						)

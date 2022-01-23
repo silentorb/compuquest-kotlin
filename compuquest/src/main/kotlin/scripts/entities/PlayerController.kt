@@ -38,7 +38,7 @@ class PlayerController : Node() {
 		camera?.fov = fov.toDouble()
 
 		val client = Global.instance!!.client!!
-		val playerIndex = client.players[body.actor] ?: 0
+		val playerIndex = client.playerMap[body.actor] ?: 0
 
 		val sprite = body.findNode("sprite") as AnimatedSprite3D
 

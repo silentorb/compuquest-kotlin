@@ -54,7 +54,7 @@ fun getPlayerInputContext(menuStacks: MenuStacks, player: Id): Key =
 		InputContexts.ui
 
 fun getMousePlayer(client: Client): Id? =
-	client.players
+	client.playerMap
 		.entries
 		.firstOrNull { (id, index) ->
 			val profile = getPlayerProfile(client.input, index)

@@ -33,8 +33,8 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 				mapEvents(attackEvent, eventsFromAttacks(world)),
 			)
 				.fold(events) { a, b -> a + b(a) } +
-			filterEventsByType<Key?>(Commands.addPlayer, events)
+			filterEventsByType<NewPlayer>(newPlayerEvent, events)
 				.flatMap {
-					newHandEvents(spawnNewPlayer(world, it.value ?: world.scenario.defaultPlayerFaction))
+					newHandEvents(spawnNewPlayer(world,it.value.index, it.value.faction ?: world.scenario.defaultPlayerFaction))
 				}
 }

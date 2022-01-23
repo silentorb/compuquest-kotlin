@@ -8,12 +8,15 @@ data class AxisCommands(
 	val positive: String,
 )
 
+fun isGamepadButtonPressed(gamepad: Int, scancode: Int, ): Boolean =
+	Input.isJoyButtonPressed(gamepad.toLong(), (scancode - gamepadButtonOffset).toLong())
+
 fun isButtonPressed(device: Int, scancode: Int, gamepad: Int): Boolean =
 	when (device) {
 		InputDevices.keyboard -> Input.isKeyPressed(scancode.toLong())
 		InputDevices.mouse -> Input.isMouseButtonPressed(scancode.toLong())
 		else -> if (gamepad != -1)
-			Input.isJoyButtonPressed(gamepad.toLong(), (scancode - gamepadButtonOffset).toLong())
+			isGamepadButtonPressed(gamepad, scancode)
 		else
 			false
 	}
@@ -26,8 +29,18 @@ fun isButtonPressed(bindings: Bindings, gamepad: Int, command: String): Boolean 
 
 fun isButtonJustPressed(device: Int, scancode: Int, gamepad: Int = -1): Boolean {
 	val isPressed = isButtonPressed(device, scancode, gamepad)
-	setButtonDown(device, scancode, isPressed)
-	return !wasButtonDown(device, scancode) && isPressed
+	val adjustedDevice = if (gamepad > -1)
+		device + gamepad
+	else
+		device
+
+	return updateButtonDown(adjustedDevice, scancode, isPressed)
+}
+
+fun isGamepadButtonJustPressed(gamepad: Int, scancode: Int): Boolean {
+	val isPressed = isGamepadButtonPressed(gamepad, scancode)
+	val adjustedDevice = InputDevices.gamepad + gamepad
+	return updateButtonDown(adjustedDevice, scancode, isPressed)
 }
 
 fun isButtonJustPressed(bindings: Bindings, gamepad: Int, command: String): Boolean =

@@ -3,6 +3,9 @@ package silentorb.mythic.haft
 import compuquest.clienting.input.getPlayerProfile
 import godot.Input
 import silentorb.mythic.ent.Id
+import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventValues
+import silentorb.mythic.happening.filterEventsByType
 
 const val gamepadEnumerationInterval = 2f
 
@@ -25,12 +28,19 @@ private object Cache {
 	var playersWithGamepads: List<Int> = listOf()
 }
 
-fun updatePlayerGamepads(gamepads: Gamepads, players: PlayerMap, state: InputState): Map<Int, Int> {
-	val playersWithGamepads = players.values.filter { index -> getPlayerProfile(state, index)?.usesGamepad == true }
+const val setPlayerGamepad = "setPlayerGamepad" // target = playerIndex: Int, value = gamepad: Int
+
+fun <T> mergePair(value: Pair<List<T>, List<T>>): List<T> =
+	value.first + value.second
+
+fun updatePlayerGamepads(gamepads: Gamepads, events: Events, players: List<Int>, state: InputState): Map<Int, Int> {
+	val playersWithGamepads = players.filter { index -> getPlayerProfile(state, index)?.usesGamepad == true }
 	val playerGamepads = state.playerGamepads
+	val setPlayerGamepadEvents = filterEventValues<Int>(setPlayerGamepad, events)
 	return if (gamepads != Cache.gamepads ||
 		playerGamepads != Cache.playerGamepads ||
-		playersWithGamepads != Cache.playersWithGamepads
+		playersWithGamepads != Cache.playersWithGamepads ||
+		setPlayerGamepadEvents.any()
 	) {
 		Cache.gamepads = gamepads
 		Cache.playerGamepads = playerGamepads
@@ -40,7 +50,12 @@ fun updatePlayerGamepads(gamepads: Gamepads, players: PlayerMap, state: InputSta
 				playersWithGamepads.contains(playerIndex) && gamepads.contains(gamepad)
 			}
 
-		val availableGamepads = gamepads - pruned.values
+		// Prioritize gamepads with associated setPlayerGamepad events
+		val availableGamepads = mergePair(
+			(gamepads - pruned.values)
+				.partition { setPlayerGamepadEvents.contains(it) }
+		)
+
 		val additions = playersWithGamepads
 			.minus(pruned.keys)
 			.sorted()

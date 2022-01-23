@@ -1,7 +1,6 @@
 package compuquest.clienting.input
 
 import compuquest.clienting.Client
-import compuquest.clienting.gui.Screens
 import compuquest.simulation.general.Deck
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
@@ -9,6 +8,8 @@ import compuquest.simulation.input.Commands
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
+import godot.GlobalConstants
+import godot.Input
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
@@ -64,10 +65,47 @@ fun getUiCommandEvents(state: InputState, player: Id, playerIndex: Int): Events 
 		listOf()
 }
 
+val gamepadJoinGameButtons = listOf(
+	GamepadChannels.JOY_XBOX_A.toInt(),
+	GamepadChannels.JOY_XBOX_B.toInt(),
+	GamepadChannels.JOY_XBOX_X.toInt(),
+	GamepadChannels.JOY_XBOX_Y.toInt(),
+	GamepadChannels.JOY_START.toInt(),
+)
+
+fun newPlayerGamepadEvents(input: InputState): Events =
+	if (input.playerGamepads.size < 4)
+		input.gamepads
+			.flatMap { gamepad ->
+				if (Input.isJoyButtonPressed(0, GlobalConstants.JOY_XBOX_A)) {
+					val k = 0
+				}
+				if (Input.isJoyButtonPressed(1, GlobalConstants.JOY_XBOX_A)) {
+					val k = 0
+				}
+				if (
+					!input.playerGamepads.values.contains(gamepad) &&
+					gamepadJoinGameButtons.any { channel ->
+						isGamepadButtonJustPressed(gamepad, channel)
+					}
+				)
+					listOf(
+						newEvent(Commands.addPlayer, null),
+						newEvent(setPlayerGamepad, null, gamepad),
+					)
+				else
+					listOf()
+			}
+	else
+		listOf()
+
 fun getUiCommandEvents(client: Client): Events =
-	client.players.flatMap { (player, index) ->
-		getUiCommandEvents(client.input, player, index)
-	}
+	client.playerMap
+		.flatMap { (player, index) ->
+			getUiCommandEvents(client.input, player, index)
+		} +
+			newPlayerGamepadEvents(client.input)
+
 
 object StandardAxisCommands {
 	val lookX = AxisCommands(Commands.lookX, Commands.lookDown, Commands.lookUp)

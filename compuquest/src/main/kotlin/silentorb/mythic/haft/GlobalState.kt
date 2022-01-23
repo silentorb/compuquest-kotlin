@@ -32,3 +32,8 @@ fun setButtonDown(device: Int, index: Int, isPressed: Boolean) {
 		ButtonPresses.next += Pair(device, index)
 	}
 }
+
+fun updateButtonDown(device: Int, scancode: Int, isPressed: Boolean): Boolean {
+	setButtonDown(device, scancode, isPressed)
+	return !wasButtonDown(device, scancode) && isPressed
+}

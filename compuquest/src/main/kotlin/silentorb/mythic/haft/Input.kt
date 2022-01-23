@@ -34,7 +34,7 @@ fun createBindings(device: Int, bindings: Map<Long, Any>) =
 
 fun updateInput(
 	delta: Float,
-	players: PlayerMap,
+	players: List<Int>,
 	playerInputContexts: Map<Id, Key>,
 	events: Events,
 	state: InputState
@@ -42,7 +42,7 @@ fun updateInput(
 	val gamepads = updateGamepads(delta, state.gamepads)
 	return state.copy(
 		gamepads = gamepads,
-		playerGamepads = updatePlayerGamepads(gamepads, players, state),
+		playerGamepads = updatePlayerGamepads(gamepads, events, players, state),
 		playerInputContexts = playerInputContexts,
 		playerProfiles = firstEventByType<List<Int>>(setPlayerInputProfiles, events)?.value ?: state.playerProfiles
 	)

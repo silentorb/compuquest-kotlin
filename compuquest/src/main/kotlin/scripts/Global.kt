@@ -172,7 +172,7 @@ class Global : Node() {
 
 	fun updateClient(delta: Float) {
 		val localClient = client ?: newClient()
-		val clientEvents = eventsFromClient(localClient)
+		val clientEvents = eventsFromClient(localClient, world)
 		addEvents(clientEvents)
 		val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
 		checkSaveOptions(localClient, nextClient)

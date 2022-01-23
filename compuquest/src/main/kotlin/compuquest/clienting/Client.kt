@@ -5,9 +5,7 @@ import compuquest.clienting.gui.MenuStack
 import compuquest.clienting.gui.MenuStacks
 import compuquest.clienting.gui.updateMenuStacks
 import compuquest.clienting.input.*
-import compuquest.clienting.multiplayer.SplitViewports
-import compuquest.clienting.multiplayer.updateClientPlayers
-import compuquest.clienting.multiplayer.updateSplitScreenViewports
+import compuquest.clienting.multiplayer.*
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
 import silentorb.mythic.ent.HashedMap
@@ -21,7 +19,8 @@ data class PlayerGui(
 data class Client(
 	val menuStacks: MenuStacks = mapOf(),
 	val options: AppOptions,
-	val players: PlayerMap = mapOf(),
+	val players: List<Int> = listOf(0),
+	val playerMap: PlayerMap = mapOf(),
 	val input: InputState,
 	val playerInputs: PlayerInputs = mapOf(),
 	val viewports: SplitViewports = listOf(), // Does not include the root viewport
@@ -52,16 +51,18 @@ fun restartClient(client: Client) =
 fun updateClient(world: World?, events: Events, delta: Float, client: Client): Client {
 	return if (world != null) {
 		val deck = world.deck
-		val players = updateClientPlayers(deck.players.keys, client.players)
-		val menuStacks = updateMenuStacks(players, deck, events, client.menuStacks)
-		val playerInputContexts = players.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
+		val players = updateClientPlayers(events, client.players)
+		val playerMap = updatePlayerMap(deck)
+		val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
+		val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
 		val input = updateInput(delta, players, playerInputContexts, events, client.input)
-		val playerInputs = newPlayerInputs(client.input, players)
+		val playerInputs = newPlayerInputs(client.input, playerMap)
 		updateDev()
 		updateButtonPressHistory()
 
 		client.copy(
 			players = players,
+			playerMap = playerMap,
 			menuStacks = menuStacks,
 			input = input,
 			playerInputs = playerInputs,
@@ -71,5 +72,9 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		client
 }
 
-fun eventsFromClient(client: Client): Events =
-	getUiCommandEvents(client)
+fun eventsFromClient(client: Client, world: World?): Events =
+	getUiCommandEvents(client) +
+			if (world != null)
+				newPlayerEvents(client, world)
+			else
+				listOf()

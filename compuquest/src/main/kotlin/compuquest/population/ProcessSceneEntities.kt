@@ -78,7 +78,7 @@ fun processSceneEntities(root: Node, world: World): World {
 				}
 				else -> listOf()
 			}
-		} + spawnNewPlayer(world2, world2.scenario.defaultPlayerFaction)
+		}
 
 	val world3 = newEntitiesFromHands(hands, world2)
 	return populateQuests(world3)
