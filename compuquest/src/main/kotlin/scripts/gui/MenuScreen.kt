@@ -27,7 +27,7 @@ class MenuScreen : Node() {
 		}
 	}
 
-		@RegisterFunction
+	@RegisterFunction
 	override fun _ready() {
 		if (actor == 0L)
 			throw Error("MenuScreen.actor is not initialized")
@@ -38,7 +38,7 @@ class MenuScreen : Node() {
 		titleLabel?.text = title
 		messageLabel?.text = message.joinToString("\n\n")
 		val context = getGameContext(actor)!!
-		items.forEachIndexed { index, item ->
+		val buttons = items.mapIndexed { index, item ->
 			val enabled = item.enabled
 			val button = Button()
 			button.text = getMenuItemTitle(context, item)
@@ -46,6 +46,13 @@ class MenuScreen : Node() {
 			button.disabled = !(enabled == null || enabled(context, null))
 			button.connect("pressed", this, "on_pressed", variantArrayOf(index))
 			itemsContainer.addChild(button)
+			button
 		}
+
+		buttons.firstOrNull()?.grabFocus()
+//		buttons.dropLast(1).forEachIndexed { index, button ->
+//			button.focusNeighbourBottom =
+//				buttons[index + 1].getPath()
+//		}
 	}
 }

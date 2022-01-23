@@ -73,6 +73,7 @@ object DefaultBindings {
 				gamepadLookScalar,
 			)
 		),
+		GamepadChannels.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
 		GamepadChannels.JOY_XBOX_X to Commands.primaryAction,
 		GamepadChannels.JOY_XBOX_A to Commands.jump,
 	)

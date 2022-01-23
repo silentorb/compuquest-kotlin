@@ -1,22 +1,40 @@
 package compuquest.clienting.gui
 
+import compuquest.simulation.general.deleteEntityCommand
+import compuquest.simulation.input.Commands
 import scripts.gui.PlayerInputProfiles
 import silentorb.mythic.godoting.instantiateScene
+import silentorb.mythic.happening.newEvent
 
 fun mainMenu() =
 	GameScreen(
 		title = staticTitle("Main Menu"),
 		content = { context, _ ->
+			val actor = context.actor
+			val deck = context.world.deck
 			newPopupMenu(
 				"Main Menu",
-				context.actor,
-				listOf(
+				actor,
+				listOfNotNull(
 					GameMenuItem(
 						title = "Continue",
 					),
 					GameMenuItem(
 						address = MenuAddress(Screens.options),
 					),
+					if (deck.players[actor]?.index != 0)
+						GameMenuItem(
+							title = "Leave",
+							events = { context2 ->
+								val player = context2.world.deck.players[context2.actor]!!
+								listOf(
+									newEvent(Commands.removePlayer, player.index),
+									newEvent(deleteEntityCommand, actor),
+								)
+							}
+						)
+					else
+						null,
 				)
 			)
 		}

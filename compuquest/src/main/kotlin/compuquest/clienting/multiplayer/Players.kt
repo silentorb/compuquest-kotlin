@@ -9,25 +9,25 @@ import compuquest.simulation.input.Commands
 import silentorb.mythic.haft.PlayerMap
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventTargets
 
 fun updatePlayerMap(deck: Deck): PlayerMap =
 	deck.players.mapValues { it.value.index }
 
-fun updateClientPlayers(events: Events, players: List<Int>): List<Int> =
-	if (players.size == 4)
+fun updateClientPlayers(events: Events, players: List<Int>): List<Int> {
+	val newPlayersCount = events.count { it.type == Commands.addPlayer }
+	val removedPlayers = filterEventTargets<Int>(Commands.removePlayer, events)
+	return if (newPlayersCount > 0 || removedPlayers.any()) {
+		val pruned = players - removedPlayers
+		pruned
+			.plus(
+				(0..3)
+					.minus(pruned)
+					.take(newPlayersCount)
+			)
+	} else
 		players
-	else {
-		val newPlayersCount = events.count { it.type == Commands.addPlayer }
-		if (newPlayersCount > 0)
-			players
-				.plus(
-					(0..3)
-						.minus(players)
-						.take(newPlayersCount)
-				)
-		else
-			players
-	}
+}
 
 fun newPlayerEvents(client: Client, world: World): Events =
 	client.players

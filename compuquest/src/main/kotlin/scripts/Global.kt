@@ -140,6 +140,9 @@ class Global : Node() {
 	}
 
 	fun newGameWorld(): World? {
+		val event = InputEventKey()
+		event.scancode = GlobalConstants.KEY_J
+		InputMap.actionAddEvent("toggleHud", event)
 		return tempCatch {
 			val tree = getTree()
 			val root = tree?.root

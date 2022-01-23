@@ -9,6 +9,7 @@ object Commands {
 //  val manageQuests = "manageQuests"
   val newGame = "newGame"
   val addPlayer = "addPlayer"
+  val removePlayer = "removePlayer"
   val navigate = "navigate"
   val drillDown = "drillDown"
   val primaryAction = "primaryAction"

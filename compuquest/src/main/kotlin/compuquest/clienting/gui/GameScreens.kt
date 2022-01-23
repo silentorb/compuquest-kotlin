@@ -64,8 +64,8 @@ fun offerQuestsConversation() =
 					items = listOf(
 						GameMenuItem(
 							title = "Accept",
-							events = { context ->
-								val player = context.actor
+							events = { context2 ->
+								val player = context2.actor
 								listOf(
 									Event(setQuestHeroEvent, quest, player),
 									Event(setQuestStatusEvent, quest, QuestStatus.active),
