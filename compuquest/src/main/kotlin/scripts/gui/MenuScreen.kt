@@ -7,7 +7,6 @@ import godot.Node
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.variantArrayOf
-import scripts.Global
 import silentorb.mythic.ent.Id
 
 @RegisterClass
@@ -50,6 +49,12 @@ class MenuScreen : Node() {
 		}
 
 		buttons.firstOrNull()?.grabFocus()
+	//		if (buttons.size > 1) {
+//			buttons.first().getPath()
+//			buttons.last().getPath()
+//				buttons.last().focusNeighbourBottom = buttons.first().getPath()
+//			buttons.first().focusNeighbourTop = buttons.last().getPath()
+//		}
 //		buttons.dropLast(1).forEachIndexed { index, button ->
 //			button.focusNeighbourBottom =
 //				buttons[index + 1].getPath()

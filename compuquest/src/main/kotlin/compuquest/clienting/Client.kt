@@ -46,6 +46,8 @@ fun newClient(): Client {
 fun restartClient(client: Client) =
 	client.copy(
 		menuStacks = mapOf(),
+		playerMap = mapOf(),
+		viewports = listOf(),
 	)
 
 fun updateClient(world: World?, events: Events, delta: Float, client: Client): Client {
@@ -57,6 +59,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
 		val input = updateInput(delta, players, playerInputContexts, events, client.input)
 		val playerInputs = newPlayerInputs(client.input, playerMap)
+		syncGodotUiEvents(playerMap, menuStacks, input)
 		updateDev()
 		updateButtonPressHistory()
 

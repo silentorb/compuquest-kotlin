@@ -22,12 +22,19 @@ object DefaultBindings {
 		mapOf(
 			GlobalConstants.KEY_F5 to Commands.newGame,
 			GlobalConstants.KEY_F11 to Commands.addPlayer,
-			)
+		)
 	else
 		mapOf()
 
 	fun keyboardUi() = mapOf(
 		GlobalConstants.KEY_ESCAPE to Commands.menuBack,
+		GlobalConstants.KEY_LEFT to Commands.moveLeft,
+		GlobalConstants.KEY_RIGHT to Commands.moveRight,
+		GlobalConstants.KEY_UP to Commands.moveUp,
+		GlobalConstants.KEY_DOWN to Commands.moveDown,
+		GlobalConstants.KEY_ENTER to Commands.activate,
+		GlobalConstants.KEY_KP_ENTER to Commands.activate,
+		GlobalConstants.KEY_SPACE to Commands.activate,
 	)
 
 	fun mouseGame() = mapOf(
@@ -82,6 +89,10 @@ object DefaultBindings {
 		GamepadChannels.JOY_XBOX_X to Commands.menuBack,
 		GamepadChannels.JOY_XBOX_B to Commands.menuBack,
 		GamepadChannels.JOY_XBOX_A to Commands.activate,
+		GlobalConstants.JOY_DPAD_LEFT to Commands.moveLeft,
+		GlobalConstants.JOY_DPAD_RIGHT to Commands.moveRight,
+		GlobalConstants.JOY_DPAD_UP to Commands.moveUp,
+		GlobalConstants.JOY_DPAD_DOWN to Commands.moveDown,
 	)
 }
 

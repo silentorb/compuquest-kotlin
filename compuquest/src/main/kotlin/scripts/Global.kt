@@ -174,14 +174,16 @@ class Global : Node() {
 	}
 
 	fun updateClient(delta: Float) {
-		val localClient = client ?: newClient()
-		val clientEvents = eventsFromClient(localClient, world)
-		addEvents(clientEvents)
-		val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
-		checkSaveOptions(localClient, nextClient)
-		client = nextClient
-		updateMouseMode(nextClient)
-		globalMouseOffset = Vector2.ZERO
+		if (initMode == InitMode.readyInitOrInitialized) {
+			val localClient = client ?: newClient()
+			val clientEvents = eventsFromClient(localClient, world)
+			addEvents(clientEvents)
+			val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
+			checkSaveOptions(localClient, nextClient)
+			client = nextClient
+			updateMouseMode(nextClient)
+			globalMouseOffset = Vector2.ZERO
+		}
 	}
 
 	@RegisterFunction

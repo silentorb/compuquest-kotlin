@@ -8,8 +8,14 @@ data class AxisCommands(
 	val positive: String,
 )
 
-fun isGamepadButtonPressed(gamepad: Int, scancode: Int, ): Boolean =
-	Input.isJoyButtonPressed(gamepad.toLong(), (scancode - gamepadButtonOffset).toLong())
+fun isGamepadButtonPressed(gamepad: Int, scancode: Int): Boolean {
+	val rawScancode = if (scancode >= gamepadButtonOffset)
+		scancode - gamepadButtonOffset
+	else
+		scancode
+
+	return Input.isJoyButtonPressed(gamepad.toLong(), rawScancode.toLong())
+}
 
 fun isButtonPressed(device: Int, scancode: Int, gamepad: Int): Boolean =
 	when (device) {

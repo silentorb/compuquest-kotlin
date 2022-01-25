@@ -156,20 +156,20 @@ fun eventsFromPlayer(world: World): (Id, Player) -> Events = { actor, player ->
 fun newPlayerName(index: Int): String =
 	"Player ${index + 1}"
 
-fun spawnNewPlayer(world: World, index: Int, faction: Key): Hands {
+fun spawnNewPlayer(world: World, playerIndex: Int, faction: Key): Hands {
 	val spawner = getPlayerRespawnPoint(world, faction)
 	val scene = spawner?.scene
-	return if (scene != null) {
+	return if (scene != null && world.deck.players.none { it.value.index == playerIndex }) {
 		val nextId = world.nextId.source()
 		val actor = nextId()
-		val name = newPlayerName(index)
+		val name = newPlayerName(playerIndex)
 		spawnCharacter(world, scene, spawner.globalTransform.origin, spawner.rotation, spawner.type, faction, name, actor) +
 				listOf(
 					Hand(
 						id = actor,
 						components = listOf(
 							Player(
-								index = index,
+								index = playerIndex,
 								faction = faction,
 							)
 						)

@@ -34,7 +34,10 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 			)
 				.fold(events) { a, b -> a + b(a) } +
 			filterEventsByType<NewPlayer>(newPlayerEvent, events)
-				.flatMap {
-					newHandEvents(spawnNewPlayer(world,it.value.index, it.value.faction ?: world.scenario.defaultPlayerFaction))
+				.groupBy { it.value.index }
+				.flatMap { (_, it) ->
+					val request = it.first().value
+					val faction = request.faction ?: world.scenario.defaultPlayerFaction
+					newHandEvents(spawnNewPlayer(world, request.index, faction))
 				}
 }
