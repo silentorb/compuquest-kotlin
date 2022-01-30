@@ -54,14 +54,13 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 	return if (world != null) {
 		val deck = world.deck
 		val players = updateClientPlayers(events, client.players)
-		val playerMap = updatePlayerMap(deck)
+		val playerMap = updatePlayerMap(deck, players)
 		val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
 		val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
 		val input = updateInput(delta, players, playerInputContexts, events, client.input)
-		val playerInputs = newPlayerInputs(client.input, playerMap)
+		val playerInputs = newPlayerInputs(menuStacks, client.input, playerMap)
 		syncGodotUiEvents(playerMap, menuStacks, input)
 		updateDev()
-		updateButtonPressHistory()
 
 		client.copy(
 			players = players,
@@ -69,13 +68,13 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 			menuStacks = menuStacks,
 			input = input,
 			playerInputs = playerInputs,
-			viewports = updateSplitScreenViewports(world, client),
+			viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
 		)
 	} else
 		client
 }
 
-fun eventsFromClient(client: Client, world: World?): Events =
+fun serverEventsFromClient(client: Client, world: World?): Events =
 	getUiCommandEvents(client) +
 			if (world != null)
 				newPlayerEvents(client, world)

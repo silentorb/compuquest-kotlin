@@ -11,8 +11,10 @@ import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventTargets
 
-fun updatePlayerMap(deck: Deck): PlayerMap =
-	deck.players.mapValues { it.value.index }
+fun updatePlayerMap(deck: Deck, players: List<Int>): PlayerMap =
+	deck.players
+		.filterValues { players.contains(it.index) }
+		.mapValues { it.value.index }
 
 fun updateClientPlayers(events: Events, players: List<Int>): List<Int> {
 	val newPlayersCount = events.count { it.type == Commands.addPlayer }

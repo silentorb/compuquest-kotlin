@@ -9,3 +9,6 @@ fun applyInputProcessor(processor: InputProcessor, value: Float): Float =
 		InputProcessorType.invert -> -value
 		InputProcessorType.scale -> value * processor.float1
 	}
+
+fun applyInputProcessors(processors: List<InputProcessor>, value: Float) =
+	processors.fold(value) { a, processor -> applyInputProcessor(processor, a) }

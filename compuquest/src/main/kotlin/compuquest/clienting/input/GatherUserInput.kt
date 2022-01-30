@@ -1,6 +1,7 @@
 package compuquest.clienting.input
 
 import compuquest.clienting.Client
+import compuquest.clienting.gui.MenuStacks
 import compuquest.simulation.general.Deck
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
@@ -11,6 +12,7 @@ import compuquest.simulation.input.emptyPlayerInput
 import godot.GlobalConstants
 import godot.Input
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
@@ -40,8 +42,14 @@ val uiCommands = listOf(
 	Commands.addPlayer,
 )
 
-fun getUiCommandEvents(bindings: Bindings, gamepad: Int, player: Id): Events =
-	uiCommands.flatMap { command ->
+val gameUiCommands = listOf(
+	Commands.navigate,
+	Commands.newGame,
+	Commands.addPlayer,
+)
+
+fun getUiCommandEvents(commands: List<String>, bindings: Bindings, gamepad: Int, player: Id): Events =
+	commands.flatMap { command ->
 		getJustPressedBindings(bindings, gamepad, command)
 			.map { binding ->
 				newEvent(command, player, binding.argument)
@@ -56,11 +64,23 @@ fun getPlayerBindings(state: InputState, player: Id, playerIndex: Int): Bindings
 		null
 }
 
+fun getUiCommands(playerInputContexts: Map<Id, Key>, player: Id): List<String> {
+	val context = playerInputContexts[player]
+	return if (context != null) {
+		if (context == InputContexts.ui)
+			uiCommands
+		else
+			gameUiCommands
+	} else
+		listOf()
+}
+
 fun getUiCommandEvents(state: InputState, player: Id, playerIndex: Int): Events {
 	val bindings = getPlayerBindings(state, player, playerIndex)
 	return if (bindings != null) {
 		val gamepad = getPlayerGamepad(state, playerIndex)
-		getUiCommandEvents(bindings, gamepad, player)
+		val commands = getUiCommands(state.playerInputContexts, player)
+		getUiCommandEvents(commands, bindings, gamepad, player)
 	} else
 		listOf()
 }
@@ -77,16 +97,13 @@ fun newPlayerGamepadEvents(input: InputState): Events =
 	if (input.playerGamepads.size < 4)
 		input.gamepads
 			.flatMap { gamepad ->
-				if (Input.isJoyButtonPressed(0, GlobalConstants.JOY_XBOX_A)) {
-					val k = 0
-				}
-				if (Input.isJoyButtonPressed(1, GlobalConstants.JOY_XBOX_A)) {
-					val k = 0
-				}
 				if (
 					!input.playerGamepads.values.contains(gamepad) &&
 					gamepadJoinGameButtons.any { channel ->
-						isGamepadButtonJustPressed(gamepad, channel)
+						// Any empty list is passed for bindings because bindings are only
+						// needed for axis processing and new player joining events are
+						// only triggered by gamepad button events, not axis events
+						isGamepadButtonJustPressed(listOf(), gamepad, channel)
 					}
 				)
 					listOf(
@@ -134,7 +151,10 @@ fun newPlayerInput(state: InputState, player: Id, playerIndex: Int): PlayerInput
 		emptyPlayerInput
 }
 
-fun newPlayerInputs(state: InputState, players: PlayerMap): PlayerInputs =
+fun newPlayerInputs(menuStacks: MenuStacks, state: InputState, players: PlayerMap): PlayerInputs =
 	players.mapValues { (player, index) ->
-		newPlayerInput(state, player, index)
+		if (getPlayerInputContext(menuStacks, player) == InputContexts.game)
+			newPlayerInput(state, player, index)
+		else
+			emptyPlayerInput
 	}

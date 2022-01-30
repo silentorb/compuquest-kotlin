@@ -22,6 +22,7 @@ import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.globalMouseOffset
+import silentorb.mythic.haft.updateButtonPressHistory
 import silentorb.mythic.happening.Events
 
 enum class InitMode {
@@ -176,9 +177,10 @@ class Global : Node() {
 	fun updateClient(delta: Float) {
 		if (initMode == InitMode.readyInitOrInitialized) {
 			val localClient = client ?: newClient()
-			val clientEvents = eventsFromClient(localClient, world)
-			addEvents(clientEvents)
 			val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
+			val clientEvents = serverEventsFromClient(nextClient, world)
+			updateButtonPressHistory()
+			addEvents(clientEvents)
 			checkSaveOptions(localClient, nextClient)
 			client = nextClient
 			updateMouseMode(nextClient)

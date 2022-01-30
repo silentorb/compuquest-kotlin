@@ -1,12 +1,12 @@
 package compuquest.clienting.multiplayer
 
-import compuquest.clienting.Client
 import compuquest.clienting.gui.addHud
 import compuquest.simulation.general.World
 import godot.*
 import scripts.gui.Hud
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.findChildrenOfType
+import silentorb.mythic.haft.PlayerMap
 
 data class SplitViewport(
 	val player: Id,
@@ -111,11 +111,10 @@ fun arrangeViewports(root: Viewport, viewports: List<ViewportContainer>) {
 	}
 }
 
-fun rebuildSplitScreenViewports(world: World, oldViewports: SplitViewports): SplitViewports {
-	val players = world.deck.players.keys
+fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: SplitViewports): SplitViewports {
 	val root = getRootViewport(world.scene)!!
 
-	val viewportsContainer = oldViewports
+	val viewportsContainer = viewports
 		.map { it.viewport }
 		.minus(root)
 		.map { getViewportRoot(it) }
@@ -132,19 +131,19 @@ fun rebuildSplitScreenViewports(world: World, oldViewports: SplitViewports): Spl
 	return if (players.size == 1) {
 		root.usage = Viewport.Usage.USAGE_3D.id
 		listOf(
-			initializeSingleViewportMode(root, players.first())
+			initializeSingleViewportMode(root, players.keys.first())
 		)
 	} else {
 		root.usage = Viewport.Usage.USAGE_2D.id
 		val godotWorld = root.world!!
-		val viewports = players.map {
-			val body = world.bodies[it]!!
+		val nextViewports = players.entries.sortedBy { it.value }.map { (actor, _) ->
+			val body = world.bodies[actor]!!
 			val rigCamera = findChildrenOfType<Camera>(body).first()
-			newSplitScreenViewport(godotWorld, it, rigCamera)
+			newSplitScreenViewport(godotWorld, actor, rigCamera)
 		}
-		val mounted = viewports.map { mountViewport(it.viewport) }
+		val mounted = nextViewports.map { mountViewport(it.viewport) }
 		arrangeViewports(root, mounted)
-		viewports
+		nextViewports
 	}
 }
 
@@ -158,16 +157,16 @@ fun syncViewportCameras(viewports: SplitViewports) {
 	}
 }
 
-fun updateSplitScreenViewports(world: World, client: Client): SplitViewports {
-	val viewports = if (world.deck.players.size == client.viewports.size)
-		client.viewports
+fun updateSplitScreenViewports(world: World, playerMap: PlayerMap, viewports: SplitViewports): SplitViewports {
+	val nextViewports = if (playerMap.size == viewports.size)
+		viewports
 	else
-		rebuildSplitScreenViewports(world, client.viewports)
+		rebuildSplitScreenViewports(world, playerMap, viewports)
 
 	// No camera syncing is needed for a single viewport
-	if (viewports.size > 1) {
-		syncViewportCameras(viewports)
+	if (nextViewports.size > 1) {
+		syncViewportCameras(nextViewports)
 	}
 
-	return viewports
+	return nextViewports
 }

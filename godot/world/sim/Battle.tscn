@@ -29,6 +29,7 @@ type = "viking"
 [node name="monster-spawner" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.77003, 0.903915, 9.21309 )
 script = ExtResource( 7 )
+active = false
 faction = "undead"
 interval = 5.0
 quantity = 3

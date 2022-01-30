@@ -9,7 +9,8 @@ import silentorb.mythic.haft.*
 object DefaultBindings {
 
 	val gamepadDeadZone = InputProcessor(InputProcessorType.deadzone, 0.25f)
-	val gamepadLookScalar = InputProcessor(InputProcessorType.scale, 1.8f)
+	val gamepadLookScalarX = InputProcessor(InputProcessorType.scale, 1.8f)
+	val gamepadLookScalarY = InputProcessor(InputProcessorType.scale, 1.2f)
 
 	fun keyboardGame() = mapOf(
 		GlobalConstants.KEY_W to Commands.moveForward,
@@ -51,12 +52,12 @@ object DefaultBindings {
 		),
 	)
 
-	fun mouseUi() = mapOf(
-		GlobalConstants.BUTTON_LEFT to Commands.activate,
-	)
+//	fun mouseUi() = mapOf(
+//		GlobalConstants.BUTTON_LEFT to Commands.activate,
+//	)
 
 	fun gamepadGame() = mapOf(
-		GlobalConstants.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
+		GamepadChannels.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
 		GlobalConstants.JOY_AXIS_1 to AdvancedCommand(
 			Commands.moveLengthwise, processors = listOf(
 				gamepadDeadZone,
@@ -71,17 +72,18 @@ object DefaultBindings {
 		GlobalConstants.JOY_AXIS_2 to AdvancedCommand(
 			Commands.lookX, processors = listOf(
 				gamepadDeadZone,
-				gamepadLookScalar,
+				gamepadLookScalarX,
 			)
 		),
 		GlobalConstants.JOY_AXIS_3 to AdvancedCommand(
 			Commands.lookY, processors = listOf(
 				gamepadDeadZone,
-				gamepadLookScalar,
+				gamepadLookScalarY,
 			)
 		),
 		GamepadChannels.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
 		GamepadChannels.JOY_XBOX_X to Commands.primaryAction,
+		GamepadChannels.JOY_RIGHT_TRIGGER to Commands.primaryAction,
 		GamepadChannels.JOY_XBOX_A to Commands.jump,
 	)
 
@@ -93,14 +95,26 @@ object DefaultBindings {
 		GlobalConstants.JOY_DPAD_RIGHT to Commands.moveRight,
 		GlobalConstants.JOY_DPAD_UP to Commands.moveUp,
 		GlobalConstants.JOY_DPAD_DOWN to Commands.moveDown,
+		GamepadChannels.JOY_LEFT_STICK_LEFT to AdvancedCommand(
+			Commands.moveLeft, processors = listOf(gamepadDeadZone)
+		),
+		GamepadChannels.JOY_LEFT_STICK_RIGHT to AdvancedCommand(
+			Commands.moveRight, processors = listOf(gamepadDeadZone)
+		),
+		GamepadChannels.JOY_LEFT_STICK_UP to AdvancedCommand(
+			Commands.moveUp, processors = listOf(gamepadDeadZone)
+		),
+		GamepadChannels.JOY_LEFT_STICK_DOWN to AdvancedCommand(
+			Commands.moveDown, processors = listOf(gamepadDeadZone)
+		),
 	)
 }
 
 fun defaultKeyboardMouseInputBindings(): ContextBindings = mapOf(
 	InputContexts.game to createBindings(InputDevices.keyboard, DefaultBindings.keyboardGame()) +
 			createBindings(InputDevices.mouse, DefaultBindings.mouseGame()),
-	InputContexts.ui to createBindings(InputDevices.keyboard, DefaultBindings.keyboardUi()) +
-			createBindings(InputDevices.mouse, DefaultBindings.mouseUi()),
+	InputContexts.ui to createBindings(InputDevices.keyboard, DefaultBindings.keyboardUi())// +
+//			createBindings(InputDevices.mouse, DefaultBindings.mouseUi()),
 )
 
 fun defaultGamepadInputBindings(): ContextBindings =
