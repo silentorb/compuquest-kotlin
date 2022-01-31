@@ -1,7 +1,6 @@
 package compuquest.simulation.updating
 
 import compuquest.simulation.general.World
-import compuquest.simulation.general.updateDay
 import compuquest.simulation.happening.gatherEvents
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.intellect.getSpiritIntervalStep

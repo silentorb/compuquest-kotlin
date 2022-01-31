@@ -1,4 +1,4 @@
-package compuquest.simulation.intellect
+package compuquest.simulation.intellect.knowledge
 
 import compuquest.simulation.general.World
 import compuquest.simulation.physics.Body
@@ -42,10 +42,17 @@ fun isVisible(
 	world: World,
 	body: Spatial,
 	headLocation: Vector3,
-	other: Id
+	other: Id,
+	visibilityRange: Float
 ): Boolean {
 	val otherBody = world.bodies[other]
 	return otherBody != null &&
-			world.space.intersectRay(headLocation, otherBody.translation, variantArrayOf(body, otherBody), CollisionMasks.visibility.toLong())
+			body.globalTransform.origin.distanceTo(otherBody.globalTransform.origin) <= visibilityRange &&
+			world.space.intersectRay(
+				headLocation,
+				otherBody.translation,
+				variantArrayOf(body, otherBody),
+				CollisionMasks.visibility.toLong()
+			)
 				.none()
 }

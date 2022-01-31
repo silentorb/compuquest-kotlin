@@ -10,6 +10,5 @@ func _ready():
 	mesh_instance.name = old_name
 	mesh_instance.mesh = meshes[1]
 	mesh_instance.transform = meshes[0]
-	mesh_instance.material_override = 
-	get_parent().call_deferred("add_child", mesh_instance)
+	mesh_instance.material_override = get_parent().call_deferred("add_child", mesh_instance)
 	queue_free()

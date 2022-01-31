@@ -1,19 +1,21 @@
 package compuquest.simulation.intellect
 
+import compuquest.simulation.general.World
+import compuquest.simulation.intellect.design.Goal
+import compuquest.simulation.intellect.design.Goals
+import compuquest.simulation.intellect.design.updateGoals
+import compuquest.simulation.intellect.knowledge.Knowledge
+import compuquest.simulation.intellect.knowledge.updateKnowledge
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
-import silentorb.mythic.randomly.Dice
 
 const val spiritUpdateInterval = 20
 
 data class Spirit(
 	val intervalOffset: Int,
-	val actionChanceAccumulator: Int = 0,
-	val focusedAction: Id? = null,
-	val target: Id? = null,
-	val nextDestination: Vector3? = null,
-	val lastKnownTargetLocation: Vector3? = null,
-	val readyToUseAction: Boolean = false,
+	val visibilityRange: Float = 20f,
+	val knowledge: Knowledge = Knowledge(),
+	val goal: Goal = Goal(),
 )
 
 private var newSpiritIntervalStep: Int = 0
@@ -35,3 +37,22 @@ fun newSpirit(): Spirit =
 
 fun getSpiritIntervalStep(step: Long): Int =
 	(step % spiritUpdateInterval.toLong()).toInt()
+
+fun updateSpirit(world: World, intervalStep: Int): (Id, Spirit) -> Spirit = { actor, spirit ->
+	val deck = world.deck
+	if (intervalStep == spirit.intervalOffset && deck.characters[actor]?.isAlive == true) {
+		val knowledge = updateKnowledge(world, actor, spirit)
+		val goal = updateGoals(world, actor, spirit, knowledge)
+		spirit.copy(
+			knowledge = knowledge,
+			goal = goal,
+		)
+	} else if (spirit.goal.readyToUseAction)
+		spirit.copy(
+			goal = spirit.goal.copy(
+				readyToUseAction = false
+			)
+		)
+	else
+		spirit
+}

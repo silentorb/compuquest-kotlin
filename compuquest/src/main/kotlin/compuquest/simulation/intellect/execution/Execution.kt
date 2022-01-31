@@ -1,11 +1,11 @@
-package compuquest.simulation.intellect
+package compuquest.simulation.intellect.execution
 
 import compuquest.simulation.characters.Character
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.World
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
-import compuquest.simulation.updating.simulationDelta
+import compuquest.simulation.intellect.Spirit
 import godot.core.Vector3
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
@@ -13,13 +13,14 @@ import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
 
 fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit): Events {
-	val action = spirit.focusedAction
+	val goal = spirit.goal
+	val action = goal.focusedAction
 	val accessory = world.deck.accessories[action]
 	val effect = accessory?.definition?.actionEffects?.firstOrNull()
 	return if (effect != null && action != null) {
 		when (effect.type) {
 			AccessoryEffects.attack -> {
-				val target = spirit.target
+				val target = goal.targetEntity
 				if (target != null) {
 
 					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetEntity = target)))
@@ -27,7 +28,7 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
 					listOf()
 			}
 			AccessoryEffects.summonAtTarget -> {
-				val target = spirit.target
+				val target = goal.targetEntity
 				if (target != null) {
 					val body = world.bodies[target]!!
 					val targetLocation = body.translation //+ offset
@@ -74,12 +75,13 @@ fun pursueGoals(world: World, actor: Id): Events {
 	val deck = world.deck
 	val character = deck.characters[actor]!!
 	val spirit = world.deck.spirits[actor]
-	return if (character.isAlive && spirit != null)
+	return if (character.isAlive && spirit != null) {
+		val goal = spirit.goal
 		when {
-			spirit.nextDestination != null -> moveTowardDestination(world, actor, spirit.nextDestination)
-			spirit.readyToUseAction -> tryUseAction(world, actor, character, spirit)
+			goal.immediateDestination != null -> moveTowardDestination(world, actor, goal.immediateDestination)
+			goal.readyToUseAction -> tryUseAction(world, actor, character, spirit)
 			else -> listOf()
 		}
-	else
+	} else
 		listOf()
 }

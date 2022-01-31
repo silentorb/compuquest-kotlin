@@ -1,8 +1,7 @@
 package scripts.entities
 
-import compuquest.simulation.characters.addCharacter
 import compuquest.simulation.characters.spawnCharacter
-import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.design.Goal
 import compuquest.simulation.intellect.newSpirit
 import godot.PackedScene
 import godot.Spatial
@@ -10,7 +9,6 @@ import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
-import godot.core.Vector3
 import godot.global.GD
 import scripts.Global
 import silentorb.mythic.debugging.getDebugBoolean
@@ -48,7 +46,16 @@ class Spawner : Spatial() {
 		val world = Global.world
 		return if (world != null) {
 			val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
+			val goals = getChildren().filterIsInstance<GoalAttachment>()
+			val pathDestinations = goals.mapNotNull { it.destination }
+
 			for (i in (0 until quantity)) {
+				val spirit = newSpirit().copy(
+					goal = Goal(
+						pathDestinations = pathDestinations,
+					)
+				)
+
 				val hands = spawnCharacter(
 					world,
 					scene,
@@ -56,7 +63,7 @@ class Spawner : Spatial() {
 					rotation,
 					type,
 					faction,
-					additional = listOf(newSpirit())
+					additional = listOf(spirit)
 				)
 				Global.addHands(hands)
 			}

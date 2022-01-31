@@ -1,2 +1,0 @@
-package compuquest.simulation.intellect
-

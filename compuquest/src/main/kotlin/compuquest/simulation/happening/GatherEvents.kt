@@ -7,7 +7,7 @@ import compuquest.simulation.combat.eventsFromMissile
 import compuquest.simulation.general.World
 import compuquest.simulation.general.eventsFromPlayer
 import compuquest.simulation.input.PlayerInputs
-import compuquest.simulation.intellect.pursueGoals
+import compuquest.simulation.intellect.execution.pursueGoals
 import silentorb.mythic.happening.Events
 
 fun <K, V> tableEvents(transform: (K, V) -> Events, table: Map<K, V>): Events =
