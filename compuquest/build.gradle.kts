@@ -16,6 +16,10 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
   implementation(group = "org.jetbrains.kotlin", name = "kotlin-reflect", version = "1.6.0")
   implementation(group = "com.fasterxml.jackson.module", name = "jackson-module-afterburner", version = "2.12.5")
+
+  api(group = "org.recast4j", name = "recast", version = "1.5.2")
+  api(group = "org.recast4j", name = "detour", version = "1.5.2")
+  api(group = "org.recast4j", name = "detour-crowd", version = "1.5.2")
 }
 
 //kotlin.sourceSets.main {

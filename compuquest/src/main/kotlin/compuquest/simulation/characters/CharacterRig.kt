@@ -7,6 +7,7 @@ import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 
 const val defaultCharacterHeight = 1.2f
+const val defaultCharacterRadius = 0.3f
 
 fun getCharacterFacing(world: World, actor: Id): Vector3? {
   val body = world.bodies[actor] as? CharacterBody

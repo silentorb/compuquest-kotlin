@@ -4,6 +4,7 @@ import compuquest.simulation.characters.Character
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.combat.Missile
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.navigation.NavigationDirection
 import compuquest.simulation.physics.Body
 import compuquest.simulation.updating.extractComponents
 import silentorb.mythic.ent.KeyTable
@@ -20,6 +21,7 @@ data class Deck(
 	val factions: KeyTable<Faction> = mapOf(),
 	val homingMissiles: Table<HomingMissile> = mapOf(),
 	val missiles: Table<Missile> = mapOf(),
+	val navigationDirections: Table<NavigationDirection> = mapOf(),
 	val players: Table<Player> = mapOf(),
 	val quests: Table<Quest> = mapOf(),
 	val spirits: Table<Spirit> = mapOf(),
@@ -49,6 +51,7 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 		factions = deck.factions + extractFactions(idHands),
 		homingMissiles = deck.homingMissiles + extractComponents(idHands),
 		missiles = deck.missiles + extractComponents(idHands),
+		navigationDirections = deck.navigationDirections + extractComponents(idHands),
 		players = deck.players + extractComponents(idHands),
 		quests = deck.quests + extractComponents(idHands),
 		spirits = deck.spirits + extractComponents(idHands),

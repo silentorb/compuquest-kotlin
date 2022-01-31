@@ -64,7 +64,7 @@ fun processSceneEntities(root: Node, world: World): World {
 	val playerSpawners = findChildrenOfType<PlayerSpawner>(root)
 
 	val world2 = world.copy(
-		navigation = root.findNode("Navigation") as? Navigation,
+//		navigation = root.findNode("Navigation") as? Navigation,
 		playerSpawners = playerSpawners,
 	)
 

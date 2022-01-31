@@ -4,6 +4,7 @@ import compuquest.simulation.general.World
 import compuquest.simulation.happening.gatherEvents
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.intellect.getSpiritIntervalStep
+import compuquest.simulation.intellect.navigation.updateNavigation
 import compuquest.simulation.intellect.updateSpirit
 import silentorb.mythic.ent.mapTable
 import silentorb.mythic.godoting.tempCatchStatement
@@ -53,9 +54,15 @@ fun updateWorld(events: Events, playerInputs: PlayerInputs, delta: Float, worlds
 	)
 
 	val events2 = gatherEvents(world3, worlds.dropLast(1).lastOrNull(), playerInputs, delta, events)
-	val deck = updateDeck(events2, world3, delta)
+	val navigation = if (world3.navigation != null)
+		updateNavigation(world3.deck, delta, world3.navigation)
+	else
+		null
+
+	val deck = updateDeck(events2, world3, navigation, delta)
 	val world4 = world3.copy(
 		deck = deck,
+		navigation = navigation,
 	)
 	updateDepictions(world, world4)
 	val world5 = deleteEntities(events2, world4)

@@ -16,9 +16,12 @@ data class Goal(
 	val focusedAction: Id? = null,
 	val targetEntity: Id? = null,
 
-	// Location that needs to be reached before performing a given action.
-	// Mostly used to get within action range.
-	// Temporarily overrides ultimateDestination
+	// Indirect location to move toward.
+	// Input for navigation.
+	val destination: Vector3? = null,
+
+	// Direct location to move toward.
+	// Derived from navigation.
 	val immediateDestination: Vector3? = null,
 
 	// Used to define a long-term destination and how to get there.

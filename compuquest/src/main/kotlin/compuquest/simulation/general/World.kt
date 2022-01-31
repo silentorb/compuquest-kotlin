@@ -2,6 +2,7 @@ package compuquest.simulation.general
 
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Zone
+import compuquest.simulation.intellect.navigation.NavigationState
 import godot.*
 import scripts.entities.PlayerSpawner
 import silentorb.mythic.ent.Id
@@ -24,9 +25,9 @@ data class World(
 	val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
 	val day: DayState,
 	val previousEvents: Events = listOf(),
-	val navigation: Navigation? = null,
 	val space: PhysicsDirectSpaceState,
 	val playerSpawners: List<PlayerSpawner> = listOf(),
+	val navigation: NavigationState?,
 )
 
 fun getSpace(spatial: Spatial): PhysicsDirectSpaceState? =
