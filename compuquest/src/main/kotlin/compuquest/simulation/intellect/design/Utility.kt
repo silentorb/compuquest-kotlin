@@ -65,7 +65,6 @@ fun updateDestination(world: World, actor: Id, targetLocation: Vector3?): Vector
 		println("Current scene is not configured for pathfinding!")
 	}
 	return if (navigation != null && sourceLocation != null && targetLocation != null) {
-		// TODO: Hook up new navigation system
 		throw Error("Need to hook up new navigation system to updateDestination")
 //		val path = navigation.getSimplePath(sourceLocation, targetLocation)
 //		path.drop(1).firstOrNull { it.distanceTo(sourceLocation) > 0.1f }

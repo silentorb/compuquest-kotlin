@@ -53,7 +53,7 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 
 	val destination = when {
 		visibleTarget != null && targetRange != null && accessory != null && !isInRange ->
-			updateDestination(world, actor, world.deck.bodies[visibleTarget]?.translation)
+			world.deck.bodies[visibleTarget]?.translation
 		visibleTarget == null && lastKnownTargetLocation != null -> lastKnownTargetLocation
 		isInRange -> null
 		pathDestinations.any() -> pathDestinations.first()

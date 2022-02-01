@@ -76,8 +76,9 @@ fun moveTowardDestination(world: World, actor: Id): Events {
 	val body = world.bodies[actor] as? CharacterBody
 	if (body != null) {
 		val velocity = getNavigationAgentVelocity(world, actor)
-		velocity.y = 0.0
-		body.moveDirection = velocity.normalized()
+		if (velocity != null) {
+			body.moveDirection = Vector3(velocity.x, 0.0, velocity.z).normalized()
+		}
 	}
 	return listOf()
 }

@@ -2,6 +2,7 @@ package compuquest.simulation.intellect.navigation
 
 import compuquest.simulation.general.Deck
 import godot.core.Vector3
+import org.recast4j.detour.crowd.CrowdAgent
 import org.recast4j.detour.crowd.CrowdAgentParams
 import org.recast4j.detour.crowd.debug.CrowdAgentDebugInfo
 import silentorb.mythic.ent.Id
@@ -31,11 +32,15 @@ fun mythicToDetour(deck: Deck, navigation: NavigationState): NavigationState {
 	val spirits = deck.spirits
 	val agents = navigation.agents
 	val missing = spirits - agents.keys
-	val removed = agents - spirits.keys
+	val removed = agents
+		.filterKeys { !spirits.containsKey(it) || deck.characters[it]?.isAlive != true }
 
 	val newAgents = missing.mapValues { (actor, _) ->
 		val body = deck.bodies[actor]!!
 		val agent = crowd.addAgent(toRecastVector3(body.translation), newCrowdAgentParams(actor, 1f))
+		if (agent.state == CrowdAgent.CrowdAgentState.DT_CROWDAGENT_STATE_INVALID)
+			throw Error("Error creating navigation agent")
+
 		assert(agent != null)
 		agent!!
 	}
@@ -49,7 +54,10 @@ fun mythicToDetour(deck: Deck, navigation: NavigationState): NavigationState {
 		if (targetPosition != null) {
 			val nearest = nearestPolygon(navigation, targetPosition)
 			if (nearest != null) {
-				crowd.requestMoveTarget(agent, nearest.result.nearestRef, nearest.result.nearestPos)
+				val result = crowd.requestMoveTarget(agent, nearest.result.nearestRef, nearest.result.nearestPos)
+				if (!result) {
+					val k = 0
+				}
 			}
 		}
 	}
