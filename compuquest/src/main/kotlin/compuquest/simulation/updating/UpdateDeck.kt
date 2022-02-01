@@ -16,7 +16,7 @@ fun updateDeck(events: Events, world: World, navigation: NavigationState?, delta
 		characters = mapTable(deck.characters, updateCharacter(world, events)),
 		factions = mapTable(deck.factions, updateFaction(world, events)),
 //    missiles = mapTable(deck.missiles, updateMissile(world, events)),
-		navigationDirections = if (navigation != null) updateNavigationDirections(navigation) else mapOf(),
+//		navigationDirections = if (navigation != null) updateNavigationDirections(navigation) else mapOf(),
 		players = mapTable(deck.players, updatePlayer(world, events, delta)),
 		quests = mapTable(deck.quests, updateQuest(events)),
 		timers = mapTableValues(deck.timers, updateTimer),

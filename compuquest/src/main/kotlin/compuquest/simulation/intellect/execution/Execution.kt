@@ -6,6 +6,7 @@ import compuquest.simulation.general.World
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.navigation.getNavigationAgentVelocity
 import godot.core.Vector3
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
@@ -71,6 +72,16 @@ fun moveTowardDestination(world: World, actor: Id, destination: Vector3): Events
 	return listOf()
 }
 
+fun moveTowardDestination(world: World, actor: Id): Events {
+	val body = world.bodies[actor] as? CharacterBody
+	if (body != null) {
+		val velocity = getNavigationAgentVelocity(world, actor)
+		velocity.y = 0.0
+		body.moveDirection = velocity.normalized()
+	}
+	return listOf()
+}
+
 fun pursueGoals(world: World, actor: Id): Events {
 	val deck = world.deck
 	val character = deck.characters[actor]!!
@@ -78,7 +89,7 @@ fun pursueGoals(world: World, actor: Id): Events {
 	return if (character.isAlive && spirit != null) {
 		val goal = spirit.goal
 		when {
-			goal.immediateDestination != null -> moveTowardDestination(world, actor, goal.immediateDestination)
+			goal.destination != null -> moveTowardDestination(world, actor)
 			goal.readyToUseAction -> tryUseAction(world, actor, character, spirit)
 			else -> listOf()
 		}

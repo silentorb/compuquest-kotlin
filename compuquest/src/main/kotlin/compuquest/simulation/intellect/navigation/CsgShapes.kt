@@ -11,9 +11,9 @@ fun getCsgShape(primitive: CSGPrimitive): Shape? =
 		is CSGBox -> {
 			val shape = BoxShape()
 			shape.extents = Vector3(
-				primitive.width,
-				primitive.depth,
-				primitive.height
+				primitive.width / 2,
+				primitive.height / 2,
+				primitive.depth / 2,
 			)
 			shape
 		}

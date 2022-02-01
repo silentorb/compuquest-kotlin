@@ -20,7 +20,10 @@ fun newNavigationState(collisionObjects: List<Spatial>): NavigationState? {
 		)
 }
 
+fun getSceneCollisionObjects(scene: Node): List<Spatial> =
+	findChildren(scene, ::isCollisionObject) as List<Spatial>
+
 fun newNavigationState(scene: Node): NavigationState? {
-	val collisionObjects = findChildren(scene, ::isCollisionObject) as List<Spatial>
+	val collisionObjects = getSceneCollisionObjects(scene)
 	return newNavigationState(collisionObjects)
 }

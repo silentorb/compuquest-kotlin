@@ -51,21 +51,14 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 	else
 		goal.pathDestinations
 
-	val immediateDestination = when {
+	val destination = when {
 		visibleTarget != null && targetRange != null && accessory != null && !isInRange ->
 			updateDestination(world, actor, world.deck.bodies[visibleTarget]?.translation)
-		visibleTarget == null && lastKnownTargetLocation != null -> updateDestination(
-			world,
-			actor,
-			lastKnownTargetLocation
-		)
+		visibleTarget == null && lastKnownTargetLocation != null -> lastKnownTargetLocation
 		isInRange -> null
-		pathDestinations.any() -> updateDestination(world, actor, pathDestinations.first())
+		pathDestinations.any() -> pathDestinations.first()
 		else -> null
 	}
-
-	// TODO: Set goal.destination in updateGoals
-	throw Error("Need to set goal.destination in updateGoals")
 
 	val nextTarget = visibleTarget
 		?: if (goal.targetEntity != null && deck.characters[goal.targetEntity]?.isAlive != true)
@@ -76,8 +69,9 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 	return goal.copy(
 		focusedAction = accessory?.key,
 		targetEntity = nextTarget,
-		immediateDestination = immediateDestination,
-		readyToUseAction = immediateDestination == null && isInRange,
+		destination = destination,
+//		navigationVelocity = immediateDestination,
+		readyToUseAction = destination == null && isInRange,
 		pathDestinations = pathDestinations,
 	)
 }

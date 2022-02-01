@@ -33,8 +33,8 @@ fun getCollisionShape(spatial: Spatial): Shape? =
 		else -> null
 	}
 
-fun newNavMeshTriMeshes(collisionObjects: List<Spatial>): List<TriMesh> {
-	return collisionObjects
+fun collisionObjectsToIntermediateMeshes(collisionObjects: List<Spatial>): List<IntermediateMesh> =
+	collisionObjects
 		.mapNotNull { collisionObject ->
 			val shape = getCollisionShape(collisionObject)
 			val mesh = if (shape != null)
@@ -42,16 +42,21 @@ fun newNavMeshTriMeshes(collisionObjects: List<Spatial>): List<TriMesh> {
 			else
 				null
 
-			if (mesh != null) {
-				val vertices = mesh.vertices.flatMap {
-					val temp = collisionObject.globalTransform.xform(it)
-					listOf(temp.x.toFloat(), temp.y.toFloat(), temp.z.toFloat())
+			mesh?.copy(
+				vertices = mesh.vertices.map {
+					collisionObject.globalTransform.xform(it)
 				}
-					.toFloatArray()
-
-				val faces = mesh.triangles.toIntArray()
-				TriMesh(vertices, faces)
-			} else
-				null
+			)
 		}
-}
+
+fun newNavMeshTriMeshes(collisionObjects: List<Spatial>): List<TriMesh> =
+	collisionObjectsToIntermediateMeshes(collisionObjects)
+		.map { mesh ->
+			val vertices = mesh.vertices.flatMap {
+				listOf(it.x.toFloat(), it.y.toFloat(), it.z.toFloat())
+			}
+				.toFloatArray()
+
+			val faces = mesh.triangles.toIntArray()
+			TriMesh(vertices, faces)
+		}

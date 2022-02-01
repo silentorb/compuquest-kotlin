@@ -22,7 +22,7 @@ data class Goal(
 
 	// Direct location to move toward.
 	// Derived from navigation.
-	val immediateDestination: Vector3? = null,
+//	val navigationVelocity: Vector3? = null,
 
 	// Used to define a long-term destination and how to get there.
 	// May eventually be replaced by a more general list of goals

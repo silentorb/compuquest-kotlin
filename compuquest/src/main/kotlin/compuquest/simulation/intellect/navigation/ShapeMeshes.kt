@@ -5,41 +5,41 @@ import godot.CollisionShape
 import godot.Shape
 import godot.core.Vector3
 
-
 data class IntermediateMesh(
-  val vertices: List<Vector3>,
-  val triangles: List<Int>
+	val vertices: List<Vector3>,
+	val triangles: List<Int>
 )
 
 private val boxLength = 1f
 
 private val boxVertices = listOf(
-    Vector3(boxLength, boxLength, boxLength),
-    Vector3(boxLength, -boxLength, boxLength),
-    Vector3(-boxLength, -boxLength, boxLength),
-    Vector3(-boxLength, boxLength, boxLength),
+	Vector3(boxLength, boxLength, boxLength),
+	Vector3(boxLength, boxLength, -boxLength),
+	Vector3(-boxLength, boxLength, -boxLength),
+	Vector3(-boxLength, boxLength, boxLength),
 
-    Vector3(boxLength, boxLength, -boxLength),
-    Vector3(boxLength, -boxLength, -boxLength),
-    Vector3(-boxLength, -boxLength, -boxLength),
-    Vector3(-boxLength, boxLength, -boxLength)
+	Vector3(boxLength, -boxLength, boxLength),
+	Vector3(boxLength, -boxLength, -boxLength),
+	Vector3(-boxLength, -boxLength, -boxLength),
+	Vector3(-boxLength, -boxLength, boxLength),
 )
 
 private fun square(a: Int, b: Int, c: Int, d: Int): List<Int> =
-    listOf(a, b, c, a, c, d)
+	listOf(a, b, c, a, c, d)
 
 private fun box(halfExtents: Vector3) =
-    IntermediateMesh(
-        vertices = boxVertices.map { it * halfExtents },
-        triangles = listOf(
-            square(0, 1, 2, 3), //  top
-            square(3, 2, 6, 7),
-            square(2, 1, 5, 6),
-            square(1, 0, 4, 5),
-            square(0, 3, 7, 4),
-            square(4, 7, 6, 5) // bottom
-        ).flatten()
-    )
+	IntermediateMesh(
+		vertices = boxVertices.map { it * halfExtents },
+		triangles = listOf(
+			square(0, 1, 2, 3), //  top
+			square(3, 2, 6, 7),
+			square(2, 1, 5, 6),
+			square(1, 0, 4, 5),
+			square(0, 3, 7, 4),
+			square(4, 7, 6, 5) // bottom
+		)
+			.flatten()
+	)
 
 //fun transformShapeVertices(transform: Matrix, mesh: IntermediateMesh): IntermediateMesh =
 //    mesh.copy(
@@ -117,9 +117,9 @@ private fun box(halfExtents: Vector3) =
 //}
 
 fun getShapeMesh(shape: Shape): IntermediateMesh? =
-    when (shape) {
+	when (shape) {
 
-      is BoxShape -> box(shape.extents)
+		is BoxShape -> box(shape.extents)
 
 //      is Cylinder -> cylinder(shape)
 //
@@ -131,5 +131,5 @@ fun getShapeMesh(shape: Shape): IntermediateMesh? =
 //
 //      is Sphere -> box(Vector3(shape.radius))
 
-      else -> null
-    }
+		else -> null
+	}

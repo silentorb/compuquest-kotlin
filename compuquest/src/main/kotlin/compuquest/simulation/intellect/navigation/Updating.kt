@@ -43,7 +43,6 @@ fun mythicToDetour(deck: Deck, navigation: NavigationState): NavigationState {
 	val updated = (agents - removed.keys)
 
 	for ((actor, agent) in updated) {
-//    val editable = crowd.ag .getEditableAgent(agent)!!
 		val body = deck.bodies[actor]!!
 		agent.npos = toRecastVector3(body.translation)
 		val targetPosition = spirits[actor]!!.goal.destination
