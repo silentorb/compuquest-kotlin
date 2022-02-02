@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/main/kotlin/scripts/entities/PlayerSpawner.kt" type="Script" id=1]
+[ext_resource path="res://assets/materials/cliff-edge.tres" type="Material" id=2]
+[ext_resource path="res://assets/materials/water.tres" type="Material" id=3]
+[ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=4]
+[ext_resource path="res://world/props/bush.tscn" type="PackedScene" id=5]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="player-spawn" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1 )
+script = ExtResource( 1 )
+faction = "player"
+scene = ExtResource( 4 )
+
+[node name="floor" type="CSGBox" parent="."]
+use_collision = true
+collision_layer = 18
+width = 38.0
+height = 1.0
+depth = 20.0
+material = ExtResource( 3 )
+
+[node name="floor2" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 11 )
+use_collision = true
+collision_layer = 18
+width = 20.0
+height = 8.0
+material = ExtResource( 2 )
+
+[node name="pine-tree" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 0 )

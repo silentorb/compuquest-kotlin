@@ -26,21 +26,6 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 	else
 		null
 
-//	val targetBody = if (visibleTarget != null)
-//		deck.bodies[visibleTarget]
-//	else
-//		null
-//
-//	val targetJustDied = spirit.target != null && deck.characters[spirit.target]?.isAlive != true
-//
-//	val lastKnownTargetLocation = when {
-//		targetJustDied -> null
-//		targetBody != null -> targetBody.translation
-//		spirit.lastKnownTargetLocation != null && body != null &&
-//				spirit.lastKnownTargetLocation.distanceTo(body.translation) < 0.5f -> null
-//		else -> spirit.lastKnownTargetLocation
-//	}
-
 	val isInRange = targetRange != null && accessory != null && targetRange <= accessory.value.definition.range
 
 	val lastKnownTargetLocation = knowledge.entityLocations[goal.targetEntity]
@@ -56,7 +41,7 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 			world.deck.bodies[visibleTarget]?.translation
 		visibleTarget == null && lastKnownTargetLocation != null -> lastKnownTargetLocation
 		isInRange -> null
-		pathDestinations.any() -> pathDestinations.first()
+		pathDestinations.any() && visibleTarget == null -> pathDestinations.first()
 		else -> null
 	}
 
@@ -70,7 +55,6 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 		focusedAction = accessory?.key,
 		targetEntity = nextTarget,
 		destination = destination,
-//		navigationVelocity = immediateDestination,
 		readyToUseAction = destination == null && isInRange,
 		pathDestinations = pathDestinations,
 	)

@@ -1,10 +1,10 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.characters.getRandomizedSpawnOffset
-import compuquest.simulation.characters.setHealthCommand
 import compuquest.simulation.characters.spawnCharacter
 import compuquest.simulation.combat.Attack
 import compuquest.simulation.combat.attackEvent
+import compuquest.simulation.combat.restoreFullHealthEvent
 import compuquest.simulation.input.Commands
 import compuquest.simulation.physics.setLocationEvent
 import compuquest.simulation.updating.simulationFps
@@ -14,6 +14,7 @@ import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
+import silentorb.mythic.happening.newEvent
 
 const val maxPartySize = 4
 const val playerFaction = "player"
@@ -139,7 +140,7 @@ fun respawnPlayer(world: World, actor: Id): Events {
 		val dice = world.dice
 		val location = respawner.globalTransform.origin + getRandomizedSpawnOffset(dice)
 		listOf(
-			Event(setHealthCommand, actor, character.definition.health),
+			newEvent(restoreFullHealthEvent, actor),
 			Event(setLocationEvent, actor, location),
 		)
 	} else

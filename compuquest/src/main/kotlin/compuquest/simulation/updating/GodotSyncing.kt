@@ -1,6 +1,7 @@
 package compuquest.simulation.updating
 
 import compuquest.simulation.characters.updatePlayerRig
+import compuquest.simulation.combat.applyDamageNodeEvents
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
@@ -66,4 +67,6 @@ fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 			body.translation = moveEvent.value
 		}
 	}
+
+	applyDamageNodeEvents(world, events)
 }

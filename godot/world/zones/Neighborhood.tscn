@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://entities/world/CharacterSlot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Levels/Main/Geometry/Floor.tscn" type="PackedScene" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/images/old-tiles/tile_2.png" type="Texture" id=7]
 [ext_resource path="res://assets/meshes/architecture/wall-4x4.scn" type="PackedScene" id=8]
-[ext_resource path="res://world/creatures/viking.tres" type="Resource" id=9]
 [ext_resource path="res://defining/AttachCharacter.gd" type="Script" id=10]
 [ext_resource path="res://assets/images/old-tiles/tile_1.png" type="Texture" id=11]
 [ext_resource path="res://assets/meshes/architecture/wall-2x1-flat.scn" type="PackedScene" id=12]
@@ -17,15 +16,9 @@
 [ext_resource path="res://assets/meshes/architecture/wall-2x2.scn" type="PackedScene" id=15]
 [ext_resource path="res://assets/images/old-tiles/tile_5.png" type="Texture" id=16]
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=17]
-[ext_resource path="res://world/accessories/heal.tres" type="Resource" id=18]
-[ext_resource path="res://world/accessories/fireball.tres" type="Resource" id=19]
-[ext_resource path="res://defining/Creature.gd" type="Script" id=20]
-[ext_resource path="res://defining/Ware.gd" type="Script" id=21]
 [ext_resource path="res://entities/actor/ActorBodyCapsule.tscn" type="PackedScene" id=22]
 [ext_resource path="res://entities/actor/LargeSprite.tscn" type="PackedScene" id=23]
 [ext_resource path="res://defining/ZoneInstance.gd" type="Script" id=24]
-[ext_resource path="res://world/npcs/npc.tres" type="Resource" id=25]
-[ext_resource path="res://world/npcs/merchant-of-magic.tres" type="Resource" id=26]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_texture = ExtResource( 7 )
@@ -53,40 +46,6 @@ extents = Vector3( 8, 0.1, 8 )
 
 [sub_resource type="SpatialMaterial" id=7]
 albedo_texture = ExtResource( 7 )
-
-[sub_resource type="Resource" id=8]
-script = ExtResource( 20 )
-depiction = "viking"
-frame = 0
-health = 50
-accessories = [ ExtResource( 19 ), ExtResource( 18 ) ]
-fee = 10
-quests = [  ]
-key = "vik"
-attributes = [ "forHire", "talk" ]
-wares = [  ]
-enemyVisibilityRange = 0.0
-
-[sub_resource type="Resource" id=9]
-script = ExtResource( 21 )
-quantity = 100
-pricePerUnit = 2
-priceType = "gold"
-resourceType = "mana"
-quantityPerPurchase = 50
-
-[sub_resource type="Resource" id=10]
-script = ExtResource( 20 )
-depiction = "deevee"
-frame = 0
-health = 50
-accessories = [ ExtResource( 19 ), ExtResource( 18 ) ]
-fee = 0
-quests = [  ]
-key = "deevee"
-attributes = [ "talk" ]
-wares = [ SubResource( 9 ) ]
-enemyVisibilityRange = 0.0
 
 [node name="neighborhood" type="Spatial"]
 script = ExtResource( 24 )
@@ -120,11 +79,9 @@ resource = "gold"
 
 [node name="bob" type="Node" parent="player"]
 script = ExtResource( 10 )
-creature = ExtResource( 9 )
 
 [node name="joe" type="Node" parent="player"]
 script = ExtResource( 10 )
-creature = ExtResource( 9 )
 
 [node name="street" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3467, -0.529197, -1 )
@@ -414,8 +371,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0013, -0.0353752, 2.81605 )
 
 [node name="char" type="Node" parent="employee"]
 script = ExtResource( 10 )
-creature = SubResource( 8 )
-faction = "neutral"
 
 [node name="proto-house" type="Spatial" parent="."]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 29.727, 2, 0 )
@@ -546,8 +501,6 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.4329
 
 [node name="char" type="Node" parent="proto-house/deevee"]
 script = ExtResource( 10 )
-creature = SubResource( 10 )
-faction = "neutral"
 
 [node name="tree" parent="." instance=ExtResource( 23 )]
 transform = Transform( 1.79765, 0, 0, 0, 1.79765, 0, 0, 0, 1.79765, 6.84888, 3.08805, 6.15336 )
@@ -593,21 +546,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 24 )
 
 [node name="frank" type="Node" parent="frank"]
 script = ExtResource( 10 )
-creature = ExtResource( 25 )
-faction = "neutral"
 
 [node name="merchant" parent="." instance=ExtResource( 22 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -11 )
 
 [node name="merchant-of-magic" type="Node" parent="merchant"]
 script = ExtResource( 10 )
-creature = ExtResource( 26 )
-faction = "neutral"
 
 [node name="backyard-guy" parent="." instance=ExtResource( 22 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 2.12349, 5 )
 
 [node name="backyard-guy" type="Node" parent="backyard-guy"]
 script = ExtResource( 10 )
-creature = ExtResource( 25 )
-faction = "neutral"

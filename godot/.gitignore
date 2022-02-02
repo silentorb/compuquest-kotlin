@@ -21,3 +21,6 @@ autosave
 # Temporary Symlinked until Godot Kotlin is finished
 /src
 /build
+
+# External Git repos are placed here
+/scenarios

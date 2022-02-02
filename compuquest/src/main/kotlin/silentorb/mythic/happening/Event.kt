@@ -28,7 +28,7 @@ inline fun <reified T> firstEventByType(type: Key, events: Events): GenericEvent
 	events
 		.firstOrNull { it.type == type && it.value is T } as GenericEvent<T>?
 
-inline fun <reified T> filterEventTargets(type: Key, events: Events) =
+inline fun <reified T> filterEventTargets(type: Key, events: Events): List<T> =
 	events
 		.filter { it.type == type }
 		.mapNotNull { it.target as? T }

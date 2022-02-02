@@ -1,24 +1,20 @@
 package compuquest.simulation.characters
 
-import compuquest.simulation.combat.applyDamage
+import compuquest.simulation.combat.Destructible
+import compuquest.simulation.combat.updateDestructible
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
-import compuquest.simulation.intellect.newSpirit
 import godot.AnimatedSprite3D
 import godot.PackedScene
 import godot.core.Vector3
-import scripts.Global
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.*
-import silentorb.mythic.godoting.getString
 import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.randomly.Dice
-import silentorb.mythic.timing.IntTimer
 import silentorb.mythic.timing.newTimer
 
 data class CharacterDefinition(
@@ -36,7 +32,7 @@ data class Character(
 	val definition: CharacterDefinition,
 	val name: String,
 	val faction: Key,
-	val health: Int,
+	val destructible: Destructible,
 	val attributes: Set<Key> = setOf(),
 	val fee: Int = 0,
 	val enemyVisibilityRange: Float = 0f,
@@ -48,6 +44,7 @@ data class Character(
 ) : SpriteState {
 	val isAlive: Boolean = isCharacterAlive(health)
 	val corpseDecay: Float get() = definition.corpseDecay
+	val health: Int get() = destructible.health
 }
 
 fun isCharacterAlive(health: Int): Boolean =
@@ -130,36 +127,43 @@ fun newCharacter(
 		definition = definition,
 		name = name,
 		faction = faction ?: definition.faction,
-		health = definition.health,
+		destructible = Destructible(
+			health = definition.health,
+			maxHealth = definition.health,
+			drainDuration = healthTimeDrainDuration,
+		),
 		depiction = definition.depiction,
 		frame = definition.frame,
-//            fee = if (getBoolean(node, "includeFees")) getInt(creature, "fee") else 0,
 //    attributes = definition.attributes,
 		activeAccessory = accessories.mapNotNull { it.id }.firstOrNull(),
 		toolOffset = toolOffset,
 	)
 
-fun updateCharacterHealth(deck: Deck, actor: Id, characterEvents: Events, character: Character): Int {
-	val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
-		.sum() +
-			applyDamage(deck, actor, characterEvents)
-
-	val healthSet = filterEventValues<Int>(setHealthCommand, characterEvents)
-		.firstOrNull()
-
-	// Directly setting health overrides any other modifiers and is only intended for special cases where the
-	// character is effectively damage immune for a frame
-	return healthSet ?: modifyResource(healthMod, character.definition.health, character.health)
-}
+//fun updateCharacterHealth(deck: Deck, actor: Id, characterEvents: Events, character: Character): Int {
+//	val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
+//		.sum() +
+//			applyDamage(deck, actor, characterEvents)
+//
+//	val healthSet = filterEventValues<Int>(setHealthCommand, characterEvents)
+//		.firstOrNull()
+//
+//	// Directly setting health overrides any other modifiers and is only intended for special cases where the
+//	// character is effectively damage immune for a frame
+//	return healthSet ?: modifyResource(healthMod, character.definition.health, character.health)
+//}
 
 fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
 	val deck = world.deck
 	val characterEvents = events.filter { it.target == actor }
 	val body = deck.bodies[actor]
-	val health = if (body != null && body.translation.y < -50f)
-		0
+	val destructible = if (body != null && body.translation.y < -50f)
+		character.destructible.copy(
+			health = 0,
+		)
 	else
-		updateCharacterHealth(deck, actor, characterEvents, character)
+		updateDestructible(events)(actor, character.destructible)
+
+	val health = destructible.health
 
 	val depiction = if (health == 0)
 		"sprites"
@@ -167,7 +171,7 @@ fun updateCharacter(world: World, events: Events): (Id, Character) -> Character 
 		character.originalDepiction
 
 	character.copy(
-		health = health,
+		destructible = destructible,
 		depiction = depiction,
 //    body = updateCharacterBody(characterEvents, character.body),
 		faction = updateCharacterFaction(characterEvents, character.faction),
