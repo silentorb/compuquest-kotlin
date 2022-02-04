@@ -1,17 +1,19 @@
 package scripts.entities
 
+import compuquest.definition.Accessories
 import compuquest.simulation.combat.DamageTarget
-import compuquest.simulation.general.World
+import compuquest.simulation.general.*
 import godot.AnimatedSprite3D
 import godot.CollisionShape
 import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
+import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.getChildOfType
 
 @RegisterClass
-class Bush : Spatial(), DamageTarget {
+class Bush : Spatial(), DamageTarget, Interactive {
 
 	enum class BushMode {
 		normal,
@@ -68,5 +70,16 @@ class Bush : Spatial(), DamageTarget {
 		if (mode == BushMode.normal || mode == BushMode.berries) {
 			mode = BushMode.fire
 		}
+	}
+
+	override fun getInteractable(world: World): Interactable? {
+		return if (mode == BushMode.berries)
+			newNodeInteractable(this)
+		else
+			null
+	}
+
+	override fun onInteraction(world: World, actor: Id) {
+		Global.addHand(newAccessory(world, actor, Accessories.berries))
 	}
 }

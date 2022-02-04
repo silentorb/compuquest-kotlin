@@ -3,6 +3,7 @@ package compuquest.simulation.updating
 import compuquest.simulation.characters.updatePlayerRig
 import compuquest.simulation.combat.applyDamageNodeEvents
 import compuquest.simulation.general.World
+import compuquest.simulation.general.applyNodeInteractions
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
 import compuquest.simulation.physics.Body
@@ -69,4 +70,5 @@ fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 	}
 
 	applyDamageNodeEvents(world, events)
+	applyNodeInteractions(world, events)
 }

@@ -13,6 +13,11 @@ import silentorb.mythic.timing.floatToIntTime
 import silentorb.mythic.timing.newTimer
 import kotlin.math.max
 
+enum class EffectRecipient {
+	self,
+	target,
+}
+
 data class AccessoryEffect(
 	val type: String,
 	val strength: Float = 0f,
@@ -20,6 +25,7 @@ data class AccessoryEffect(
 	val speed: Float = 0f,
 	val interval: Int = 0,
 	val duration: Float = 0f,
+	val recipient: EffectRecipient = EffectRecipient.target,
 ) {
 	val strengthInt: Int get() = strength.toInt()
 }
@@ -35,6 +41,8 @@ data class AccessoryDefinition(
 	val duration: Float = 0f,
 	val animation: Key? = null,
 	val stackable: Boolean = false,
+	val consumable: Boolean = false,
+	val wieldingFrame: Int = -1,
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
 }
@@ -45,7 +53,9 @@ data class Accessory(
 	val cooldown: Float = 0f,
 	val definition: AccessoryDefinition,
 	val duration: Int = -1,
-)
+) {
+	val canBeActivated: Boolean = definition.actionEffects.any()
+}
 
 object AccessoryEffects {
 	val armor = "armor"
@@ -86,10 +96,17 @@ fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key)
 	)
 }
 
-fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
-	val uses = events
+fun newAccessory(world: World, owner: Id, type: Key): Hand =
+	newAccessory(world.definitions, world.nextId.source(), owner, type)
+
+fun getUseEvents(events: Events) =
+	events
 		.filter { it.type == useActionEvent }
 		.mapNotNull { (it.value as? UseAction)?.action }
+
+fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
+	val uses = getUseEvents(events)
+
 	return { id, accessory ->
 		val used = uses.contains(id)
 		val cooldown = if (used)
@@ -102,6 +119,10 @@ fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory 
 		)
 	}
 }
+
+fun getConsumedAccessories(accessories: Table<Accessory>, events: Events) =
+	getUseEvents(events)
+		.filter { accessories[it]?.definition?.consumable == true }
 
 // This function exists to handle redundant non-stackable accessories
 fun integrateNewAccessories(

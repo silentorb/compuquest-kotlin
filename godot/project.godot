@@ -380,4 +380,5 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+quality/depth/hdr=false
 environment/default_environment="res://assets/materials/environment.tres"

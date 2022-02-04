@@ -4,6 +4,7 @@ import compuquest.simulation.general.*
 import silentorb.mythic.ent.KeyTable
 
 object Accessories {
+	val berries = "berries"
 	val burning = "burning"
 	val fireRing = "fireRing"
 	val rifle = "rifle"
@@ -11,6 +12,18 @@ object Accessories {
 }
 
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
+	Accessories.berries to AccessoryDefinition(
+		name = Accessories.berries,
+		consumable = true,
+		wieldingFrame = 13,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.heal,
+				recipient = EffectRecipient.self,
+				strength = 10f,
+			),
+		)
+	),
 	Accessories.fireRing to AccessoryDefinition(
 		name = Accessories.fireRing,
 		cooldown = 8f,

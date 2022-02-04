@@ -30,6 +30,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0 )
 current = true
 far = 1000.0
 
+[node name="equipped" parent="Head" instance=ExtResource( 3 )]
+transform = Transform( 0.797239, 0, 0, 0, 0.797239, 0, 0, 0, 0.797239, 0, -0.399856, -1.01537 )
+visible = false
+billboard = 0
+double_sided = false
+animation = "props"
+frame = 13
+
 [node name="controller" type="Node" parent="."]
 script = ExtResource( 2 )
 camera_path = NodePath("../Head/Camera")
