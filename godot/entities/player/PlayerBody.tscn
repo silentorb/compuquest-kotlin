@@ -34,7 +34,6 @@ far = 1000.0
 transform = Transform( 0.797239, 0, 0, 0, 0.797239, 0, 0, 0, 0.797239, 0, -0.399856, -1.01537 )
 visible = false
 billboard = 0
-double_sided = false
 animation = "props"
 frame = 13
 

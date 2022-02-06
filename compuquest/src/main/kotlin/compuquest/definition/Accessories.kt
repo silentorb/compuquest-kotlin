@@ -15,7 +15,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 	Accessories.berries to AccessoryDefinition(
 		name = Accessories.berries,
 		consumable = true,
-		wieldingFrame = 13,
+		equippedFrame = 13,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.heal,
@@ -44,7 +44,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		range = 30f,
 		actionEffects = listOf(
 			AccessoryEffect(
-				type = AccessoryEffects.attack,
+				type = AccessoryEffects.damage,
 				strength = 10f,
 				spawns = "res://entities/effect/Fireball.tscn",
 				speed = 60f,
@@ -58,7 +58,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		range = 15f,
 		actionEffects = listOf(
 			AccessoryEffect(
-				type = AccessoryEffects.attack,
+				type = AccessoryEffects.damage,
 				strength = 20f,
 				spawns = "res://entities/effect/Fireball.tscn",
 				speed = 20f,
@@ -73,7 +73,8 @@ fun buffDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		duration = 4f,
 		passiveEffects = listOf(
 			AccessoryEffect(
-				type = AccessoryEffects.damageSelf,
+				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.self,
 				strength = 4f,
 				interval = AccessoryIntervals.default,
 			),

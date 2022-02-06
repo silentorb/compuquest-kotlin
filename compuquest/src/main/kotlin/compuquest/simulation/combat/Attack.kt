@@ -6,7 +6,6 @@ import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
-import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.getCharacterFacing
 
 const val attackEvent = "attackEvent"
@@ -50,7 +49,7 @@ fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 	accessory.definition.actionEffects
 		.flatMap { effect ->
 			when (effect.type) {
-				AccessoryEffects.attack -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
+				AccessoryEffects.damage -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
 				AccessoryEffects.summonAtTarget -> summonAtTarget(world, actor, accessory, attack.targetLocation!!)
 				else -> listOf()
 			}

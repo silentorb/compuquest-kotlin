@@ -18,7 +18,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
     faction = Factions.player,
     health = 100,
     accessories = listOf(
-      Accessories.rifle,
+//      Accessories.rifle,
     ),
   ),
   Characters.skeleton to CharacterDefinition(

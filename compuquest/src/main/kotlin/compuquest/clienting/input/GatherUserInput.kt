@@ -5,14 +5,10 @@ import compuquest.clienting.gui.MenuStacks
 import compuquest.simulation.general.Deck
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
-import compuquest.simulation.input.Commands
-import compuquest.simulation.input.PlayerInput
-import compuquest.simulation.input.PlayerInputs
-import compuquest.simulation.input.emptyPlayerInput
-import godot.GlobalConstants
-import godot.Input
+import compuquest.simulation.input.*
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
@@ -22,7 +18,7 @@ fun gatherPlayerUseActions(deck: Deck, playerInputs: PlayerInputs): Events =
 		.mapNotNull { actor ->
 			if (playerInputs[actor]?.primaryAction == true) {
 				val character = deck.characters[actor]
-				if (character?.activeAccessory != null)
+				if (character != null && character.activeAccessory != emptyId)
 					newEvent(tryActionEvent, actor, TryActionEvent(action = character.activeAccessory))
 				else
 					null
@@ -139,6 +135,12 @@ fun newPlayerInput(bindings: Bindings, gamepad: Int): PlayerInput {
 		lookY = getAxisState(bindings, gamepad, StandardAxisCommands.lookY),
 		moveLengthwise = getAxisState(bindings, gamepad, StandardAxisCommands.moveLengthwise),
 		moveLateral = getAxisState(bindings, gamepad, StandardAxisCommands.moveLateral),
+		interact = isButtonJustPressed(bindings, gamepad, Commands.interact),
+		actionChange = when {
+			isButtonJustPressed(bindings, gamepad, Commands.nextAction) -> ActionChange.next
+			isButtonJustPressed(bindings, gamepad, Commands.previousAction) -> ActionChange.previous
+			else -> ActionChange.noChange
+		}
 	)
 }
 

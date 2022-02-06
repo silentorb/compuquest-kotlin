@@ -63,6 +63,12 @@ class Bush : Spatial(), DamageTarget, Interactive {
 				accumulator = 0
 				mode = BushMode.stump
 			}
+		} else if (mode == BushMode.normal) {
+			++accumulator
+			if (accumulator > 60 * 1) {
+				accumulator = 0
+				mode = BushMode.berries
+			}
 		}
 	}
 
@@ -80,6 +86,9 @@ class Bush : Spatial(), DamageTarget, Interactive {
 	}
 
 	override fun onInteraction(world: World, actor: Id) {
-		Global.addHand(newAccessory(world, actor, Accessories.berries))
+		if (mode == BushMode.berries) {
+			Global.addHand(newAccessory(world, actor, Accessories.berries))
+			mode = BushMode.normal
+		}
 	}
 }

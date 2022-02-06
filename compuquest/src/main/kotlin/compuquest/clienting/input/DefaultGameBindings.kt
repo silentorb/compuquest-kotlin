@@ -18,6 +18,9 @@ object DefaultBindings {
 		GlobalConstants.KEY_D to Commands.moveRight,
 		GlobalConstants.KEY_S to Commands.moveBackward,
 		GlobalConstants.KEY_SPACE to Commands.jump,
+		GlobalConstants.KEY_E to Commands.interact,
+		GlobalConstants.KEY_1 to Commands.previousAction,
+		GlobalConstants.KEY_2 to Commands.nextAction,
 		GlobalConstants.KEY_ESCAPE to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
 	) + if (getDebugBoolean("DEV_MODE"))
 		mapOf(
@@ -83,8 +86,11 @@ object DefaultBindings {
 		),
 		GamepadChannels.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
 		GamepadChannels.JOY_XBOX_X to Commands.primaryAction,
+		GamepadChannels.JOY_XBOX_B to Commands.interact,
 		GamepadChannels.JOY_RIGHT_TRIGGER to Commands.primaryAction,
 		GamepadChannels.JOY_XBOX_A to Commands.jump,
+		GlobalConstants.JOY_DPAD_LEFT to Commands.previousAction,
+		GlobalConstants.JOY_DPAD_RIGHT to Commands.nextAction,
 	)
 
 	fun gamepadUi() = mapOf(

@@ -1,9 +1,6 @@
 package compuquest.simulation.combat
 
-import compuquest.simulation.general.Accessory
-import compuquest.simulation.general.AccessoryEffect
-import compuquest.simulation.general.AccessoryEffects
-import compuquest.simulation.general.World
+import compuquest.simulation.general.*
 import compuquest.simulation.updating.simulationFps
 import silentorb.mythic.happening.Events
 
@@ -15,7 +12,11 @@ fun isIntervalStep(step: Long, interval: Int): Boolean {
 
 fun eventsFromBuffEffect(accessory: Accessory, effect: AccessoryEffect): Events =
 	when (effect.type) {
-		AccessoryEffects.damageSelf -> listOf(newDamage(accessory.owner, effect.strengthInt))
+		AccessoryEffects.damage -> if (effect.recipient == EffectRecipient.self)
+			listOf(newDamage(accessory.owner, effect.strengthInt))
+		else
+			listOf()
+
 		else -> listOf()
 	}
 

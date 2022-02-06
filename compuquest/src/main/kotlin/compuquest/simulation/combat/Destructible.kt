@@ -6,9 +6,7 @@ import compuquest.simulation.general.highIntScale
 import compuquest.simulation.general.modifyResource
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
-import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventTargets
-import silentorb.mythic.happening.filterEventsByType
+import silentorb.mythic.happening.*
 
 data class Destructible(
 	val health: Int,
@@ -42,12 +40,16 @@ val restoreFullHealth: (Destructible) -> Destructible = { destructible ->
 	)
 }
 
-fun modifyDestructible(events: Events, actor: Id, destructible: Destructible, mod: Int = 0) =
+fun modifyDestructible(events: ModifyResourceEvents, actor: Id, destructible: Destructible, mod: Int = 0) =
 	modifyResourceWithEvents(events, actor, ResourceTypes.health, destructible.health, destructible.maxHealth, mod)
+
+fun modifyHealth(actor: Id, amount: Int) =
+	newEvent(modifyResourceEvent, actor, ModifyResource(ResourceTypes.health, amount))
 
 fun updateDestructible(events: Events): (Id, Destructible) -> Destructible {
 	val damageEvents = filterEventsByType<DamageEvent>(damageEvent, events)
 	val restoreEvents = filterEventTargets<Long>(restoreFullHealthEvent, events)
+	val modifyEvents = filterEventsByType<ModifyResource>(modifyResourceEvent, events)
 
 	return { actor, destructible ->
 		val result = if (restoreEvents.contains(actor))
@@ -69,7 +71,7 @@ fun updateDestructible(events: Events): (Id, Destructible) -> Destructible {
 		val healthAccumulation = getRoundedAccumulation(healthAccumulator)
 		val mod = healthAccumulation + nourishmentAdjustment
 		result.copy(
-			health = modifyDestructible(events, actor, result, mod),
+			health = modifyDestructible(modifyEvents, actor, result, mod),
 			healthAccumulator = healthAccumulator - healthAccumulation * highIntScale,
 		)
 	}

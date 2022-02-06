@@ -8,9 +8,9 @@ import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
 import silentorb.mythic.ent.Table
 import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.filterEventValues
 import silentorb.mythic.timing.IntTimer
 import silentorb.mythic.timing.floatToIntTime
-import silentorb.mythic.timing.newTimer
 import kotlin.math.max
 
 enum class EffectRecipient {
@@ -28,6 +28,7 @@ data class AccessoryEffect(
 	val recipient: EffectRecipient = EffectRecipient.target,
 ) {
 	val strengthInt: Int get() = strength.toInt()
+	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.target
 }
 
 data class AccessoryDefinition(
@@ -36,15 +37,16 @@ data class AccessoryDefinition(
 	val range: Float = 0f,
 	val cost: ResourceMap = mapOf(),
 	val attributes: Set<Key> = setOf(),
-	val actionEffects: List<AccessoryEffect> = listOf(), // Currently only zero or one action effects are fully supported.  Stored as an array to minimize future refactoring
+	val actionEffects: List<AccessoryEffect> = listOf(),
 	val passiveEffects: List<AccessoryEffect> = listOf(),
 	val duration: Float = 0f,
 	val animation: Key? = null,
 	val stackable: Boolean = false,
 	val consumable: Boolean = false,
-	val wieldingFrame: Int = -1,
+	val equippedFrame: Int = -1,
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
+	val isAttack: Boolean = actionEffects.any { it.isAttack }
 }
 
 data class Accessory(
@@ -59,8 +61,7 @@ data class Accessory(
 
 object AccessoryEffects {
 	val armor = "armor"
-	val attack = "attack"
-	val damageSelf = "damageSelf"
+	val damage = "damage"
 	val heal = "heal"
 	val resurrect = "resurrect"
 	val summonAtTarget = "summonAtTarget"
@@ -99,13 +100,12 @@ fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key)
 fun newAccessory(world: World, owner: Id, type: Key): Hand =
 	newAccessory(world.definitions, world.nextId.source(), owner, type)
 
-fun getUseEvents(events: Events) =
-	events
-		.filter { it.type == useActionEvent }
-		.mapNotNull { (it.value as? UseAction)?.action }
+fun getUsedAccessories(events: Events): Collection<Id> =
+	filterEventValues<UseAction>(useActionEvent, events)
+		.map { it.action }
 
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
-	val uses = getUseEvents(events)
+	val uses = getUsedAccessories(events)
 
 	return { id, accessory ->
 		val used = uses.contains(id)
@@ -120,8 +120,8 @@ fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory 
 	}
 }
 
-fun getConsumedAccessories(accessories: Table<Accessory>, events: Events) =
-	getUseEvents(events)
+fun getConsumedAccessories(accessories: Table<Accessory>, events: Events): Collection<Id> =
+	getUsedAccessories(events)
 		.filter { accessories[it]?.definition?.consumable == true }
 
 // This function exists to handle redundant non-stackable accessories

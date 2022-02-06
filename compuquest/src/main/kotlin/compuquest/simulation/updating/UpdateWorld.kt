@@ -59,7 +59,7 @@ fun updateWorld(events: Events, playerInputs: PlayerInputs, delta: Float, worlds
 	else
 		null
 
-	val deck = updateDeck(events2, world3, delta)
+	val deck = updateDeck(events2, world3, playerInputs, delta)
 	val world4 = world3.copy(
 		deck = deck,
 		navigation = navigation,

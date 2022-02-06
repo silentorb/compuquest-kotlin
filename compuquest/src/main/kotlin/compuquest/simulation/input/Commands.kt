@@ -15,6 +15,8 @@ object Commands {
   val primaryAction = "primaryAction"
   val jump = "jump"
   val secondaryAction = "secondaryAction"
+  val nextAction = "nextAction"
+  val previousAction = "previousAction"
 
   const val lookLeft = "lookLeft"
   const val lookRight = "lookRight"

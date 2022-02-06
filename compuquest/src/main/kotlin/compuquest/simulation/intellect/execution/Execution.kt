@@ -17,31 +17,32 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
 	val goal = spirit.goal
 	val action = goal.focusedAction
 	val accessory = world.deck.accessories[action]
-	val effect = accessory?.definition?.actionEffects?.firstOrNull()
-	return if (effect != null && action != null) {
-		when (effect.type) {
-			AccessoryEffects.attack -> {
-				val target = goal.targetEntity
-				if (target != null) {
+	val effects = accessory?.definition?.actionEffects ?: listOf()
+	return if (action != null)
+		effects.flatMap { effect ->
+			when (effect.type) {
+				AccessoryEffects.damage -> {
+					val target = goal.targetEntity
+					if (target != null) {
 
-					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetEntity = target)))
-				} else
-					listOf()
-			}
-			AccessoryEffects.summonAtTarget -> {
-				val target = goal.targetEntity
-				if (target != null) {
-					val body = world.bodies[target]!!
-					val targetLocation = body.translation //+ offset
-					val value = TryActionEvent(
-						action = action,
-						targetLocation = targetLocation,
-						targetEntity = target, // Not needed for the summoning but used to trigger user targeting effects
-					)
-					listOf(newEvent(tryActionEvent, actor, value))
-				} else
-					listOf()
-			}
+						listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetEntity = target)))
+					} else
+						listOf()
+				}
+				AccessoryEffects.summonAtTarget -> {
+					val target = goal.targetEntity
+					if (target != null) {
+						val body = world.bodies[target]!!
+						val targetLocation = body.translation //+ offset
+						val value = TryActionEvent(
+							action = action,
+							targetLocation = targetLocation,
+							targetEntity = target, // Not needed for the summoning but used to trigger user targeting effects
+						)
+						listOf(newEvent(tryActionEvent, actor, value))
+					} else
+						listOf()
+				}
 //      AccessoryEffects.heal -> {
 //        val strength = definition.strengthInt
 //        val targets = filterAllyTargets(world, actor, character)
@@ -56,9 +57,9 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
 //        } else
 //          listOf()
 //      }
-			else -> listOf()
-		}
-	} else
+				else -> listOf()
+			}
+		} else
 		listOf()
 }
 

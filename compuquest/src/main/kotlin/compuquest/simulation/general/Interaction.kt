@@ -3,6 +3,7 @@ package compuquest.simulation.general
 import compuquest.simulation.combat.DamageNodeInfo
 import compuquest.simulation.combat.damageNodeEvent
 import compuquest.simulation.input.Commands
+import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.physics.castCharacterRay
 import compuquest.simulation.physics.castRay
 import godot.Node
@@ -83,12 +84,13 @@ fun getInteractable(world: World, actor: Id): Interactable? {
 		null
 }
 
-fun applyNodeInteractions(world: World, events: Events) {
+fun applyNodeInteractions(world: World, playerInputs: PlayerInputs) {
 	val deck = world.deck
 	for ((actor, player) in deck.players) {
 		val node = player.canInteractWith?.targetNode
 		if (node != null) {
-			if (events.any { it.target == actor && it.type == Commands.interact }) {
+			val input = playerInputs[actor]
+			if (input?.interact == true) {
 				node.onInteraction(world, actor)
 			}
 		}

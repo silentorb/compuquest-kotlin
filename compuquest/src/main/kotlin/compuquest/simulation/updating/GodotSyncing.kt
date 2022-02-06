@@ -70,5 +70,5 @@ fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 	}
 
 	applyDamageNodeEvents(world, events)
-	applyNodeInteractions(world, events)
+	applyNodeInteractions(world, inputs)
 }

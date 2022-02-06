@@ -5,13 +5,16 @@ import compuquest.simulation.combat.updateDestructible
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
+import compuquest.simulation.input.ActionChange
+import compuquest.simulation.input.PlayerInput
+import compuquest.simulation.input.PlayerInputs
+import compuquest.simulation.input.emptyPlayerInput
 import godot.AnimatedSprite3D
 import godot.PackedScene
 import godot.core.Vector3
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.*
 import silentorb.mythic.godoting.tempCatch
-import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.randomly.Dice
@@ -39,7 +42,7 @@ data class Character(
 	override val depiction: String,
 	override val frame: Int = 0,
 	val originalDepiction: String = depiction,
-	val activeAccessory: Id? = null,
+	val activeAccessory: Id = emptyId,
 	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState {
 	val isAlive: Boolean = isCharacterAlive(health)
@@ -58,6 +61,10 @@ fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
 		.asSequence()
 		.filter { it.value.owner == actor }
 
+fun getActionsSequence(accessories: Table<Accessory>, actor: Id) =
+	getAccessoriesSequence(accessories, actor)
+		.filter { it.value.canBeActivated }
+
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
 	getOwnerAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
@@ -75,12 +82,6 @@ fun canUse(world: World, accessory: Accessory): Boolean {
 
 fun canUse(world: World, accessory: Id): Boolean =
 	canUse(world, world.deck.accessories[accessory]!!)
-
-const val modifyHealthCommand = "modifyHealth"
-const val setHealthCommand = "setHealth"
-
-fun modifyHealth(target: Id, amount: Int) =
-	Event(modifyHealthCommand, target, amount)
 
 fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
 	val a = previous.deck.characters[actor]
@@ -116,6 +117,15 @@ fun newCharacterAccessories(
 			newAccessory(definitions, nextId, id, accessory)
 		}
 
+fun selectActiveAccessoryFromHands(accessories: Hands): Id =
+	accessories.mapNotNull { hand ->
+		val accessory = getHandComponent<Accessory>(hand)
+		if (accessory?.canBeActivated == true)
+			hand.id
+		else
+			null
+	}.firstOrNull() ?: emptyId
+
 fun newCharacter(
 	definition: CharacterDefinition,
 	accessories: Hands,
@@ -128,14 +138,14 @@ fun newCharacter(
 		name = name,
 		faction = faction ?: definition.faction,
 		destructible = Destructible(
-			health = definition.health,
+			health = definition.health / 2,
 			maxHealth = definition.health,
 			drainDuration = healthTimeDrainDuration,
 		),
 		depiction = definition.depiction,
 		frame = definition.frame,
 //    attributes = definition.attributes,
-		activeAccessory = accessories.mapNotNull { it.id }.firstOrNull(),
+		activeAccessory = selectActiveAccessoryFromHands(accessories),
 		toolOffset = toolOffset,
 	)
 
@@ -152,31 +162,54 @@ fun newCharacter(
 //	return healthSet ?: modifyResource(healthMod, character.definition.health, character.health)
 //}
 
-fun updateCharacter(world: World, events: Events): (Id, Character) -> Character = { actor, character ->
-	val deck = world.deck
-	val characterEvents = events.filter { it.target == actor }
-	val body = deck.bodies[actor]
-	val destructible = if (body != null && body.translation.y < -50f)
-		character.destructible.copy(
-			health = 0,
-		)
-	else
-		updateDestructible(events)(actor, character.destructible)
-
-	val health = destructible.health
-
-	val depiction = if (health == 0)
-		"sprites"
-	else
-		character.originalDepiction
-
-	character.copy(
-		destructible = destructible,
-		depiction = depiction,
-//    body = updateCharacterBody(characterEvents, character.body),
-		faction = updateCharacterFaction(characterEvents, character.faction),
-	)
+fun shiftActiveAction(accessories: Table<Accessory>, actor: Id, accessory: Id, offset: Int): Id {
+	val actions = getActionsSequence(accessories, actor).toList()
+	val index = actions.indexOfFirst { it.key == accessory }
+	val rawIndex = index - offset
+	val nextIndex = (rawIndex + actions.size) % actions.size
+	return actions[nextIndex].key
 }
+
+fun updateActiveAccessory(accessories: Table<Accessory>, input: PlayerInput, actor: Id, activeAccessory: Id): Id =
+	if (activeAccessory != emptyId && accessories.containsKey(activeAccessory))
+		when (input.actionChange) {
+			ActionChange.noChange -> activeAccessory
+			ActionChange.previous -> shiftActiveAction(accessories, actor, activeAccessory, -1)
+			ActionChange.next -> shiftActiveAction(accessories, actor, activeAccessory, 1)
+		}
+	else
+		getActionsSequence(accessories, actor)
+			.firstOrNull()
+			?.key ?: emptyId
+
+fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Character) -> Character =
+	{ actor, character ->
+		val deck = world.deck
+		val input = inputs[actor] ?: emptyPlayerInput
+		val characterEvents = events.filter { it.target == actor }
+		val body = deck.bodies[actor]
+		val destructible = if (body != null && body.translation.y < -50f)
+			character.destructible.copy(
+				health = 0,
+			)
+		else
+			updateDestructible(events)(actor, character.destructible)
+
+		val health = destructible.health
+
+		val depiction = if (health == 0)
+			"sprites"
+		else
+			character.originalDepiction
+
+		character.copy(
+			destructible = destructible,
+			depiction = depiction,
+//    body = updateCharacterBody(characterEvents, character.body),
+			faction = updateCharacterFaction(characterEvents, character.faction),
+			activeAccessory = updateActiveAccessory(deck.accessories, input, actor, character.activeAccessory),
+		)
+	}
 
 fun addCharacter(
 	definitions: Definitions,
@@ -233,6 +266,7 @@ fun spawnCharacter(
 	val definition = definitions.characters[type] ?: return listOf()
 
 	val body = scene.instance() as CharacterBody
+	body.actor = id ?: emptyId
 	body.translation = origin + getRandomizedSpawnOffset(dice)
 
 	body.rotation = rotation
