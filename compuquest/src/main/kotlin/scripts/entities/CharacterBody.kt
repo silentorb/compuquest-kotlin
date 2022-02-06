@@ -3,6 +3,7 @@ package scripts.entities
 import compuquest.simulation.characters.Character
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.physics.CollisionMasks
+import godot.AnimatedSprite3D
 import godot.CollisionShape
 import godot.KinematicBody
 import godot.Spatial
@@ -13,6 +14,7 @@ import godot.annotation.RegisterProperty
 import godot.core.Transform
 import godot.core.Vector3
 import godot.global.GD
+import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.getCollisionShapeRadius
@@ -62,6 +64,21 @@ class CharacterBody : KinematicBody() {
 	var speed: Float = 0f
 	var isActive = true
 	var moveDirection: Vector3 = Vector3.ZERO
+	var equippedFrame: Int = -1
+		set(value) {
+			if (field != value) {
+				val localSprite = equippedSprite
+				if (localSprite != null) {
+					if (value != -1) {
+						localSprite.frame = value.toLong()
+					}
+					localSprite.visible = value != -1
+				}
+				field = value
+			}
+		}
+
+	var equippedSprite: AnimatedSprite3D? = null
 
 	@RegisterFunction
 	override fun _ready() {
@@ -69,6 +86,7 @@ class CharacterBody : KinematicBody() {
 		toolOffset = (findNode("toolOrigin") as? Spatial)?.translation ?: Vector3.ZERO
 		val collisionShape = findNode("shape") as CollisionShape
 		radius = getCollisionShapeRadius(collisionShape)
+		equippedSprite = findNode("equipped") as? AnimatedSprite3D
 	}
 
 	fun directionInput(moveAxis: Vector3): Vector3 {
@@ -156,7 +174,12 @@ class CharacterBody : KinematicBody() {
 
 		accelerate(direction, delta)
 
-		var newVelocity = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
+		// moveAndSlideWithSnap seems to be an expensive operation so try to minimize how often it is called.
+		// maxSlides was originally set to 4 but is now reduced to 1 in hopes of reducing the operation cost,
+		// but this change may cause problems and need to be reverted.
+		if (velocity != Vector3.ZERO) {
+			moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 1, floorMaxAngle)
+		}
 	}
 
 	fun update(input: PlayerInput, character: Character, delta: Float) {
@@ -175,6 +198,29 @@ class CharacterBody : KinematicBody() {
 				CollisionMasks.none.toLong()
 
 			isAlive = character.isAlive
+		}
+	}
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		val world = Global.world
+		if (world != null && equippedSprite != null) {
+			val deck = world.deck
+			val character = deck.characters[actor]
+			val activeAccessory = if (character?.isAlive == true)
+				character.activeAccessory
+			else
+				emptyId
+
+			if (activeAccessory != emptyId) {
+				val accessory = deck.accessories[activeAccessory]
+				if (accessory != null) {
+					val nextEquippedFrame = accessory.definition.equippedFrame
+					equippedFrame = nextEquippedFrame
+				}
+			} else {
+				equippedFrame = -1
+			}
 		}
 	}
 }

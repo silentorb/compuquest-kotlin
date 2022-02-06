@@ -264,9 +264,11 @@ fun spawnCharacter(
 	val dice = world.dice
 	val definitions = world.definitions
 	val definition = definitions.characters[type] ?: return listOf()
+	val nextId = world.nextId.source()
+	val actor = id ?: nextId()
 
 	val body = scene.instance() as CharacterBody
-	body.actor = id ?: emptyId
+	body.actor = actor
 	body.translation = origin + getRandomizedSpawnOffset(dice)
 
 	body.rotation = rotation
@@ -275,9 +277,8 @@ fun spawnCharacter(
 	// Godot does not call _ready until the node is added to the scene tree
 	world.scene.addChild(body)
 
-	val nextId = world.nextId.source()
 	return addCharacter(
-		definitions, definition, id ?: nextId(), nextId, body,
+		definitions, definition, actor, nextId, body,
 		name ?: definition.name, faction, additional
 	)
 }

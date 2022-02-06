@@ -32,21 +32,6 @@ class PlayerController : Node() {
 	var fov: Float = 80f
 
 	var actor: Id = emptyId
-	var equippedFrame: Int = -1
-		set(value) {
-			if (field != value) {
-				val localSprite = equippedSprite
-				if (localSprite != null) {
-					if (value != -1) {
-						localSprite.frame = value.toLong()
-					}
-					localSprite.visible = value != -1
-				}
-				field = value
-			}
-		}
-
-	var equippedSprite: AnimatedSprite3D? = null
 
 	@RegisterFunction
 	override fun _ready() {
@@ -61,7 +46,6 @@ class PlayerController : Node() {
 		val playerIndex = client.playerMap[actor] ?: 0
 
 		val playerSprite = body.findNode("sprite") as AnimatedSprite3D
-		equippedSprite = body.findNode("equipped") as AnimatedSprite3D
 
 		playerSprite.setLayerMaskBit(0L, false)
 		for (i in 0..3) {
@@ -69,23 +53,5 @@ class PlayerController : Node() {
 		}
 
 		camera?.setCullMaskBit((playerIndex + 1).toLong(), false)
-	}
-
-	@RegisterFunction
-	override fun _process(delta: Double) {
-		val world = Global.world
-		if (world != null) {
-			val deck = world.deck
-			val activeAccessory = deck.characters[actor]?.activeAccessory ?: emptyId
-			if (activeAccessory != emptyId) {
-				val accessory = deck.accessories[activeAccessory]
-				if (accessory != null) {
-					val nextEquippedFrame = accessory.definition.equippedFrame
-					equippedFrame = nextEquippedFrame
-				}
-			} else {
-				equippedFrame = -1
-			}
-		}
 	}
 }

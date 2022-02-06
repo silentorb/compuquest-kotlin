@@ -47,7 +47,7 @@ fun modifyHealth(actor: Id, amount: Int) =
 	newEvent(modifyResourceEvent, actor, ModifyResource(ResourceTypes.health, amount))
 
 fun updateDestructible(events: Events): (Id, Destructible) -> Destructible {
-	val damageEvents = filterEventsByType<DamageEvent>(damageEvent, events)
+	val damageEvents = filterEventsByType<Damage>(damageEvent, events)
 	val restoreEvents = filterEventTargets<Long>(restoreFullHealthEvent, events)
 	val modifyEvents = filterEventsByType<ModifyResource>(modifyResourceEvent, events)
 
@@ -58,8 +58,11 @@ fun updateDestructible(events: Events): (Id, Destructible) -> Destructible {
 			val damages =
 				damageEvents
 					.filter { it.target == actor }
-					.map { it.value.damage }
+					.map { it.value }
 
+			if (damages.any()) {
+				val k = 0
+			}
 			damageDestructible(damages)(destructible)
 		}
 		val nourishmentAdjustment = 0 // getNourishmentEventsAdjustment(definitions, deck, actor, events)
