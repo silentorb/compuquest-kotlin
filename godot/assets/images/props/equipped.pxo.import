@@ -1,0 +1,16 @@
+[remap]
+
+importer="com.technohacker.pixelorama.spriteframe"
+type="SpriteFrames"
+path="res://.import/equipped.pxo-d53b31c2d4d26ff91e5c455be8d9ff91.tres"
+
+[deps]
+
+files=[ "res://.import/equipped.pxo-d53b31c2d4d26ff91e5c455be8d9ff91.spritesheet.stex" ]
+
+source_file="res://assets/images/props/equipped.pxo"
+dest_files=[ "res://.import/equipped.pxo-d53b31c2d4d26ff91e5c455be8d9ff91.tres", "res://.import/equipped.pxo-d53b31c2d4d26ff91e5c455be8d9ff91.spritesheet.stex" ]
+
+[params]
+
+animation_fps=6

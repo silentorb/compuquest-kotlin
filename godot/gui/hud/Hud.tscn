@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/main/kotlin/scripts/gui/Hud.kt" type="Script" id=1]
 [ext_resource path="res://gui/fonts/large-font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://gui/hud/BlackBackground.tres" type="StyleBox" id=3]
 [ext_resource path="res://gui/hud/PlayerInfo.tscn" type="PackedScene" id=4]
 [ext_resource path="res://gui/style/Theme.tres" type="Theme" id=5]
 
@@ -13,6 +14,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 5 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="pain-overlay" type="Panel" parent="."]
 visible = false
@@ -46,19 +50,28 @@ margin_right = 1024.0
 margin_bottom = 483.0
 size_flags_vertical = 3
 
-[node name="margin" type="MarginContainer" parent="vbox/overlay"]
-margin_top = 463.0
+[node name="interact" type="MarginContainer" parent="vbox/overlay"]
+visible = false
+margin_top = 418.0
 margin_right = 1024.0
 margin_bottom = 483.0
 size_flags_vertical = 8
-custom_constants/margin_top = 10
-custom_constants/margin_bottom = 10
 
-[node name="interact" type="Label" parent="vbox/overlay/margin"]
-visible = false
-margin_top = -3.0
+[node name="black" type="Panel" parent="vbox/overlay/interact"]
 margin_right = 1024.0
-margin_bottom = 22.0
+margin_bottom = 65.0
+custom_styles/panel = ExtResource( 3 )
+
+[node name="margin" type="MarginContainer" parent="vbox/overlay/interact"]
+margin_right = 1024.0
+margin_bottom = 65.0
+custom_constants/margin_top = 15
+custom_constants/margin_bottom = 15
+
+[node name="interact-label" type="Label" parent="vbox/overlay/interact/margin"]
+margin_top = 20.0
+margin_right = 1024.0
+margin_bottom = 45.0
 text = "Talk"
 align = 1
 valign = 1

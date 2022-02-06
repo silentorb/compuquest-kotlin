@@ -11,11 +11,16 @@ object Accessories {
 	val rocketLauncher = "rocketLauncher"
 }
 
+object EquipmentFrames {
+	const val berries = 0
+	const val fireball = 1
+}
+
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 	Accessories.berries to AccessoryDefinition(
 		name = Accessories.berries,
 		consumable = true,
-		equippedFrame = 13,
+		equippedFrame = EquipmentFrames.berries,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.heal,
@@ -29,6 +34,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		cooldown = 8f,
 		attributes = setOf(AccessoryAttributes.attack),
 		range = 15f,
+		equippedFrame = EquipmentFrames.fireball,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
@@ -42,6 +48,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		cooldown = 0.2f,
 		attributes = setOf(AccessoryAttributes.attack),
 		range = 30f,
+		equippedFrame = EquipmentFrames.fireball,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
@@ -56,6 +63,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		cooldown = 1f,
 		attributes = setOf(AccessoryAttributes.attack),
 		range = 15f,
+		equippedFrame = EquipmentFrames.fireball,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,

@@ -80,7 +80,7 @@ class Bush : Spatial(), DamageTarget, Interactive {
 
 	override fun getInteractable(world: World): Interactable? {
 		return if (mode == BushMode.berries)
-			newNodeInteractable(this)
+			newNodeInteractable(this, InteractionBehaviors.take)
 		else
 			null
 	}

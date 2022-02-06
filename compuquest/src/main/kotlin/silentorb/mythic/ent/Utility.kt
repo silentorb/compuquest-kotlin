@@ -28,3 +28,6 @@ fun <T, B> Collection<T>.firstNotNull(mapper: (T) -> B?): B? {
 	}
 	return null
 }
+
+fun capitalize(value: String): String =
+	value.replaceFirstChar(Char::titlecase)

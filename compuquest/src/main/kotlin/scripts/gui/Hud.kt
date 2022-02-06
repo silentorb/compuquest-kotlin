@@ -15,6 +15,7 @@ import godot.core.Color
 import godot.global.GD
 import scripts.Global
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.capitalize
 import silentorb.mythic.godoting.tempCatch
 
 const val respawnCountdownDelay = 1 * simulationFps
@@ -22,7 +23,8 @@ const val respawnCountdownDelay = 1 * simulationFps
 @RegisterClass
 class Hud : Control() {
 	var menuContainer: Node? = null
-	var interact: Label? = null
+	var interact: Control? = null
+	var interactLabel: Label? = null
 	var respawnCountdown: Label? = null
 	var debugText: Label? = null
 	var lastMenu: Any? = null
@@ -34,7 +36,8 @@ class Hud : Control() {
 	@RegisterFunction
 	override fun _ready() {
 		menuContainer = findNode("menus")
-		interact = findNode("interact") as? Label
+		interact = findNode("interact") as? Control
+		interactLabel = findNode("interact-label") as? Label
 		respawnCountdown = findNode("respawn-countdown") as? Label
 		debugText = findNode("debug") as? Label
 		lowerThird = findNode("lower-third") as? Control
@@ -89,14 +92,14 @@ class Hud : Control() {
 	override fun _process(delta: Double) {
 		tempCatch {
 			val client = Global.instance?.client
-//		if (client != null) {
-//			lowerThird?.visible = client.options.ui.showHud
-//		}
 			val world = Global.world
 			val player = world?.deck?.players?.getOrDefault(actor, null)
 			if (player != null) {
 				val canInteractWith = player.canInteractWith
 				interact!!.visible = canInteractWith != null
+				if (canInteractWith != null) {
+					interactLabel!!.text = capitalize(canInteractWith.action)
+				}
 				updateRespawnCountdown(player.respawnTimer)
 			}
 

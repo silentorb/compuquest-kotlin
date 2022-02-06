@@ -43,8 +43,8 @@ data class Interactable(
 	val targetNode: Interactive? = null,
 )
 
-fun newNodeInteractable(node: Interactive) =
-	Interactable(target = null, action = "", onInteract = "", targetNode = node)
+fun newNodeInteractable(node: Interactive, action: String) =
+	Interactable(target = null, action = action, onInteract = "", targetNode = node)
 
 interface Interactive {
 	fun getInteractable(world: World): Interactable?
