@@ -11,6 +11,7 @@ import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.NodePath
 import scripts.Global
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 
 @RegisterClass
@@ -42,10 +43,13 @@ class CharacterFloatingTextController : Node() {
 			}
 			val localActor = actor
 			if (localActor != null) {
-				val text = getOwnerAccessories(world, localActor)
-					.filter { it.value.definition.passiveEffects.any() }
-					.map { it.value.definition.name }
-					.joinToString("\n")
+				val text = if (getDebugBoolean("DISPLAY_CHARACTER_IDS"))
+					actor.toString()
+				else
+					getOwnerAccessories(world, localActor)
+						.filter { it.value.definition.passiveEffects.any() }
+						.map { it.value.definition.name }
+						.joinToString("\n")
 
 				setText(text)
 			}

@@ -27,7 +27,7 @@ data class CharacterDefinition(
 	val frame: Int = 0,
 	val faction: Key = Factions.neutral,
 	val health: Int,
-	val corpseDecay: Float = 20f,
+	val corpseDecay: Float = 10f,
 	val accessories: List<Key> = listOf(),
 )
 

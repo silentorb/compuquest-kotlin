@@ -22,7 +22,7 @@ private var newSpiritIntervalStep: Int = 0
 
 fun nextNewSpiritInterval(): Int {
 	val value = newSpiritIntervalStep
-	newSpiritIntervalStep = if (value >= spiritUpdateInterval)
+	newSpiritIntervalStep = if (value >= spiritUpdateInterval - 1)
 		0
 	else
 		value + 1

@@ -33,7 +33,7 @@ fun tryUseAction(world: World, actor: Id, character: Character, spirit: Spirit):
 	val accessory = world.deck.accessories[action]
 	val effects = accessory?.definition?.actionEffects ?: listOf()
 	lookAtTarget(world, actor, goal)
-	
+
 	return if (action != null)
 		effects.flatMap { effect ->
 			when (effect.type) {
