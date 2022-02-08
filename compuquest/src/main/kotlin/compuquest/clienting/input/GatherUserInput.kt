@@ -13,19 +13,6 @@ import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
 
-fun gatherPlayerUseActions(deck: Deck, playerInputs: PlayerInputs): Events =
-	deck.players.keys
-		.mapNotNull { actor ->
-			if (playerInputs[actor]?.primaryAction == true) {
-				val character = deck.characters[actor]
-				if (character != null && character.activeAccessory != emptyId)
-					newEvent(tryActionEvent, actor, TryActionEvent(action = character.activeAccessory))
-				else
-					null
-			} else
-				null
-		}
-
 fun getPlayerProfile(state: InputState, playerIndex: Int): InputProfile? =
 	state.profiles[state.playerProfiles[playerIndex]]
 

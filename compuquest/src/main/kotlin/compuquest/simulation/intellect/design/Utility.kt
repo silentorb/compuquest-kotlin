@@ -1,6 +1,7 @@
 package compuquest.simulation.intellect.design
 
 import compuquest.simulation.characters.Character
+import compuquest.simulation.characters.getAccessoriesSequence
 import compuquest.simulation.characters.getReadyAccessories
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.knowledge.getTargetRange
@@ -8,6 +9,7 @@ import compuquest.simulation.intellect.knowledge.isVisible
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
+import kotlin.math.abs
 
 fun filterEnemyTargets(
 	world: World,
@@ -76,4 +78,35 @@ fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 	val readyActions = getReadyAccessories(world, actor)
 	return readyActions.maxByOrNull { it.value.definition.range }
 //world.dice.takeOneOrNull(readyActions.entries)
+}
+
+typealias AccessoryMapList = List<Map.Entry<Id, Accessory>>
+
+fun getReadyHealingAccessories(deck: Deck, actor: Id): AccessoryMapList =
+	getAccessoriesSequence(deck.accessories, actor)
+		.filter { it.value.cooldown == 0f && canHeal(it.value) }
+		.toList()
+
+fun getAccessoryHealAmount(accessory: Accessory): Int =
+	accessory.definition.actionEffects
+		.sumOf {
+			if (it.type == AccessoryEffects.heal)
+				it.strengthInt
+			else
+				0
+		}
+
+fun getMostEfficientHealingAccessory(accessories: AccessoryMapList, gap: Int): Map.Entry<Id, Accessory> =
+	accessories.map { entry ->
+		val amount = getAccessoryHealAmount(entry.value)
+		Pair(entry, abs(gap - amount))
+	}.minByOrNull { it.second }!!
+		.first
+
+fun getMostEfficientHealingAccessory(deck: Deck, actor: Id, gap: Int): Map.Entry<Id, Accessory>? {
+	val healingAccessories = getReadyHealingAccessories(deck, actor)
+	return if (healingAccessories.any())
+		getMostEfficientHealingAccessory(healingAccessories, gap)
+	else
+		null
 }

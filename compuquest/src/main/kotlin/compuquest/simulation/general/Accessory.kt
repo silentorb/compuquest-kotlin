@@ -9,6 +9,8 @@ import silentorb.mythic.ent.NextId
 import silentorb.mythic.ent.Table
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
+import silentorb.mythic.happening.filterEventsByType
+import silentorb.mythic.happening.newEvent
 import silentorb.mythic.timing.IntTimer
 import silentorb.mythic.timing.floatToIntTime
 import kotlin.math.max
@@ -16,6 +18,14 @@ import kotlin.math.max
 enum class EffectRecipient {
 	self,
 	target,
+}
+
+object AccessoryEffects {
+	val armor = "armor"
+	val damage = "damage"
+	val heal = "heal"
+	val resurrect = "resurrect"
+	val summonAtTarget = "summonAtTarget"
 }
 
 data class AccessoryEffect(
@@ -59,14 +69,6 @@ data class Accessory(
 	val canBeActivated: Boolean = definition.actionEffects.any()
 }
 
-object AccessoryEffects {
-	val armor = "armor"
-	val damage = "damage"
-	val heal = "heal"
-	val resurrect = "resurrect"
-	val summonAtTarget = "summonAtTarget"
-}
-
 object AccessoryAttributes {
 	const val attack = "attack"
 }
@@ -104,8 +106,17 @@ fun getUsedAccessories(events: Events): Collection<Id> =
 	filterEventValues<UseAction>(useActionEvent, events)
 		.map { it.action }
 
+const val transferAccessoryEvent = "transferAccessory"
+
+fun transferAccessory(accessory: Id, to: Id) =
+	newEvent(transferAccessoryEvent, accessory, to)
+
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
 	val uses = getUsedAccessories(events)
+	val transfers = filterEventsByType<Id>(transferAccessoryEvent, events)
+	if (transfers.any()) {
+		val k = 0
+	}
 
 	return { id, accessory ->
 		val used = uses.contains(id)
@@ -114,8 +125,11 @@ fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory 
 		else
 			max(0f, accessory.cooldown - delta)
 
+		val owner = transfers.firstOrNull { it.target == id }?.value ?: accessory.owner
+
 		accessory.copy(
-			cooldown = cooldown
+			cooldown = cooldown,
+			owner = owner,
 		)
 	}
 }
@@ -162,3 +176,7 @@ fun getOwnerAccessories(accessories: Table<Accessory>, owner: Id): Table<Accesso
 
 fun getOwnerAccessories(world: World, owner: Id): Table<Accessory> =
 	getOwnerAccessories(world.deck.accessories, owner)
+
+fun canHeal(accessory: Accessory): Boolean =
+	accessory.definition.actionEffects
+		.any { it.type == AccessoryEffects.heal }

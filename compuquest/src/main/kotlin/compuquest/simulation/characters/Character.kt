@@ -13,6 +13,7 @@ import godot.AnimatedSprite3D
 import godot.PackedScene
 import godot.core.Vector3
 import scripts.entities.CharacterBody
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.*
 import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.happening.Events
@@ -41,7 +42,6 @@ data class Character(
 	val enemyVisibilityRange: Float = 0f,
 	override val depiction: String,
 	override val frame: Int = 0,
-	val originalDepiction: String = depiction,
 	val activeAccessory: Id = emptyId,
 	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState {
@@ -70,18 +70,14 @@ fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key
 
 fun getReadyAccessories(world: World, actor: Id): Table<Accessory> =
 	getOwnerAccessories(world.deck.accessories, actor)
-		.filter { canUse(world, it.value) }
+		.filter { canUse(it.value) }
 
-fun canUse(world: World, accessory: Accessory): Boolean {
-//	val deck = world.deck
-//	val actor = deck.characters[accessory.owner]
-//	val faction = deck.factions[actor?.faction]
-//	val cost = accessory.definition.cost
+fun canUse(accessory: Accessory): Boolean {
 	return accessory.definition.actionEffects.any() && accessory.cooldown == 0f
 }
 
 fun canUse(world: World, accessory: Id): Boolean =
-	canUse(world, world.deck.accessories[accessory]!!)
+	canUse(world.deck.accessories[accessory]!!)
 
 fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
 	val a = previous.deck.characters[actor]
@@ -138,29 +134,15 @@ fun newCharacter(
 		name = name,
 		faction = faction ?: definition.faction,
 		destructible = Destructible(
-			health = definition.health / 2,
+			health = if (getDebugBoolean("HALF_HEALTH")) definition.health / 2 else definition.health,
 			maxHealth = definition.health,
 			drainDuration = healthTimeDrainDuration,
 		),
 		depiction = definition.depiction,
 		frame = definition.frame,
-//    attributes = definition.attributes,
 		activeAccessory = selectActiveAccessoryFromHands(accessories),
 		toolOffset = toolOffset,
 	)
-
-//fun updateCharacterHealth(deck: Deck, actor: Id, characterEvents: Events, character: Character): Int {
-//	val healthMod = filterEventValues<Int>(modifyHealthCommand, characterEvents)
-//		.sum() +
-//			applyDamage(deck, actor, characterEvents)
-//
-//	val healthSet = filterEventValues<Int>(setHealthCommand, characterEvents)
-//		.firstOrNull()
-//
-//	// Directly setting health overrides any other modifiers and is only intended for special cases where the
-//	// character is effectively damage immune for a frame
-//	return healthSet ?: modifyResource(healthMod, character.definition.health, character.health)
-//}
 
 fun shiftActiveAction(accessories: Table<Accessory>, actor: Id, accessory: Id, offset: Int): Id {
 	val actions = getActionsSequence(accessories, actor).toList()
@@ -200,14 +182,21 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 		val depiction = if (health == 0)
 			"sprites"
 		else
-			character.originalDepiction
+			character.definition.depiction
+
+		val frame = if (health == 0)
+			0
+		else
+			character.definition.frame
+
+		val accessories = deck.accessories.filter { it.value.owner == actor }
 
 		character.copy(
 			destructible = destructible,
 			depiction = depiction,
-//    body = updateCharacterBody(characterEvents, character.body),
+			frame = frame,
 			faction = updateCharacterFaction(characterEvents, character.faction),
-			activeAccessory = updateActiveAccessory(deck.accessories, input, actor, character.activeAccessory),
+			activeAccessory = updateActiveAccessory(accessories, input, actor, character.activeAccessory),
 		)
 	}
 

@@ -45,7 +45,13 @@ class CharacterFloatingTextController : Node() {
 			if (localActor != null) {
 				val text = if (getDebugBoolean("DISPLAY_CHARACTER_IDS"))
 					actor.toString()
-				else
+				else if (getDebugBoolean("DISPLAY_CHARACTER_HEALTH")) {
+					val character = world.deck.characters[actor]
+					if (character != null)
+						"${character.destructible.health} / ${character.destructible.maxHealth}"
+					else
+						""
+				} else
 					getOwnerAccessories(world, localActor)
 						.filter { it.value.definition.passiveEffects.any() }
 						.map { it.value.definition.name }

@@ -11,6 +11,7 @@ import godot.Node
 import godot.Resource
 import godot.Spatial
 import godot.core.Vector3
+import scripts.entities.AttachCharacter
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -48,25 +49,14 @@ fun addCharacter(
   definitions: Definitions,
   id: Id,
   nextId: NextId,
-  spatial: Spatial?,
-  faction: Key?,
-  node: Node,
+  node: AttachCharacter,
   additional: List<Any> = listOf()
 ): Hands {
   return tempCatch {
     val parent = node.getParent()
     val sprite = parent?.findNode("sprite")
-//    val depiction = getString(creature, "depiction")
-//    sprite?.set("animation", depiction)
-//    val refinedFaction = parseFaction(faction, node)
-//    val maxHealth = getIntOrNull(creature, "health") ?: 1
-//    val wares = getList<Resource>(creature, "wares")
-//      .map { addWare(nextId, id, it) }
-
-    val type = getString(node, "type")
-    val definition = definitions.characters[type]
-    if (definition == null)
-      throw Error("Unknown character type: $type")
+    val type = node.type
+    val definition = definitions.characters[type] ?: throw Error("Unknown character type: $type")
 
     val accessories = newCharacterAccessories(definitions, definition, id, nextId)
     val characterBody = parent as? CharacterBody
@@ -77,9 +67,9 @@ fun addCharacter(
         id = id,
         components =
         listOfNotNull(
-          newCharacter(definition, accessories, toolOffset),
+          newCharacter(definition, accessories, toolOffset, faction = node.faction),
           sprite,
-          spatial,
+          node.getParent() as Spatial,
         ) + additional
       )
     ) + accessories

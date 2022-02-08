@@ -1,12 +1,12 @@
 package compuquest.simulation.happening
 
-import compuquest.clienting.input.gatherPlayerUseActions
 import compuquest.simulation.characters.eventsFromCharacter
 import compuquest.simulation.combat.eventsFromBuffs
 import compuquest.simulation.combat.eventsFromMissile
 import compuquest.simulation.general.World
 import compuquest.simulation.general.eventsFromPlayer
 import compuquest.simulation.input.PlayerInputs
+import compuquest.simulation.input.gatherPlayerUseActions
 import compuquest.simulation.intellect.execution.pursueGoals
 import silentorb.mythic.happening.Events
 

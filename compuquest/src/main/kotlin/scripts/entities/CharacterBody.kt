@@ -174,11 +174,9 @@ class CharacterBody : KinematicBody() {
 
 		accelerate(direction, delta)
 
-		// moveAndSlideWithSnap seems to be an expensive operation so try to minimize how often it is called.
-		// maxSlides was originally set to 4 but is now reduced to 1 in hopes of reducing the operation cost,
-		// but this change may cause problems and need to be reverted.
+		// moveAndSlideWithSnap seems to be an expensive operation so try to minimize how often it is called
 		if (velocity != Vector3.ZERO) {
-			moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 1, floorMaxAngle)
+			moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
 		}
 	}
 

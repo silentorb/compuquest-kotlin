@@ -5,5 +5,5 @@ import compuquest.simulation.definition.Definitions
 fun newDefinitions() =
   Definitions(
     accessories = accessoryDefinitions(),
-    characters = characterDefinitions(),
+    characters = staticCharacterDefinitions,
   )

@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/main/kotlin/scripts/entities/PlayerSpawner.kt" type="Script" id=1]
+[ext_resource path="res://assets/meshes/entities/editor-arrow.glb" type="PackedScene" id=2]
+[ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/tooling/editor-only.gd" type="Script" id=4]
+
+[node name="player-spawn" type="Spatial"]
+script = ExtResource( 1 )
+faction = "player"
+scene = ExtResource( 3 )
+
+[node name="editor-arrow" parent="." instance=ExtResource( 2 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+script = ExtResource( 4 )

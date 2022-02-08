@@ -1,16 +1,12 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.combat.DamageNodeInfo
-import compuquest.simulation.combat.damageNodeEvent
-import compuquest.simulation.input.Commands
+import compuquest.simulation.characters.Character
 import compuquest.simulation.input.PlayerInputs
-import compuquest.simulation.physics.castCharacterRay
 import compuquest.simulation.physics.castRay
-import godot.Node
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventValues
 
 object InteractionActions {
 	val close = "close"
@@ -24,6 +20,7 @@ object InteractionActions {
 
 object InteractionBehaviors {
 	val close = "close"
+	val give = "give"
 	val harvest = "harvest"
 	val open = "open"
 	val openClose = "openClose"
@@ -38,7 +35,7 @@ object InteractionBehaviors {
 
 data class Interactable(
 	val target: Id?,
-	val action: String,
+	val action: String, // The distinction between action and onInteract may eventually be deprecated
 	val onInteract: Key,
 	val targetNode: Interactive? = null,
 )
@@ -53,6 +50,13 @@ interface Interactive {
 
 private const val interactableMaxDistance = 4f
 
+fun canGiveToCharacter(world: World, actor: Id, targetCharacter: Character): Boolean {
+	val character = world.deck.characters[actor]
+	return character != null &&
+			isFriendly(world.factionRelationships, character.faction, targetCharacter.faction) &&
+			character.activeAccessory != emptyId
+}
+
 fun getInteractable(world: World, actor: Id): Interactable? {
 	val collider = castRay(world, actor, interactableMaxDistance)
 	val target = if (collider != null)
@@ -63,15 +67,15 @@ fun getInteractable(world: World, actor: Id): Interactable? {
 	return if (target != null) {
 		val character = world.deck.characters[target]
 		if (character != null) {
-			val onInteract = if (character.attributes.contains("talk"))
-				InteractionBehaviors.talk
-			else
-				null
-//        getOnInteracts(world.deck, target, character)
+			val onInteract = when {
+				canGiveToCharacter(world, actor, character) -> InteractionBehaviors.give
+				character.attributes.contains("talk") -> InteractionBehaviors.talk
+				else -> null
+			}
 			if (onInteract != null)
 				Interactable(
 					target = target,
-					action = InteractionActions.talk,
+					action = onInteract,
 					onInteract = onInteract,
 				)
 			else
@@ -82,6 +86,20 @@ fun getInteractable(world: World, actor: Id): Interactable? {
 		collider.getInteractable(world)
 	} else
 		null
+}
+
+fun getPlayerInteractionEvents(deck: Deck, actor: Id, player: Player): Events {
+	val interaction = player.canInteractWith
+	val accessory = deck.characters[actor]?.activeAccessory
+	return if (interaction?.target != null && accessory != null)
+		when (interaction.onInteract) {
+			InteractionBehaviors.give -> {
+				listOf(transferAccessory(accessory, interaction.target))
+			}
+			else -> listOf()
+		}
+	else
+		listOf()
 }
 
 fun applyNodeInteractions(world: World, playerInputs: PlayerInputs) {
