@@ -13,7 +13,7 @@ fun updateDeck(events: Events, world: World, inputs: PlayerInputs, delta: Float)
 	return deck.copy(
 		accessories = mapTable(deck.accessories, updateAccessory(events, delta)),
 		characters = mapTable(deck.characters, updateCharacter(world, inputs, events)),
-		factions = mapTable(deck.factions, updateFaction(world, events)),
+//		factions = mapTable(deck.factions, updateFaction(world, events)),
 //    missiles = mapTable(deck.missiles, updateMissile(world, events)),
 		players = mapTable(deck.players, updatePlayer(world, events, delta)),
 		quests = mapTable(deck.quests, updateQuest(events)),

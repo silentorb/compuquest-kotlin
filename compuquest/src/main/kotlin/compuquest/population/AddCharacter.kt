@@ -6,7 +6,6 @@ import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.*
-import compuquest.simulation.intellect.Spirit
 import godot.Node
 import godot.Resource
 import godot.Spatial
@@ -67,7 +66,7 @@ fun addCharacter(
         id = id,
         components =
         listOfNotNull(
-          newCharacter(definition, accessories, toolOffset, faction = node.faction),
+          newCharacter(definition, accessories, toolOffset),
           sprite,
           node.getParent() as Spatial,
         ) + additional

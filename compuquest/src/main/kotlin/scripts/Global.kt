@@ -18,9 +18,11 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector2
+import scripts.world.ScenarioNode
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
+import silentorb.mythic.godoting.findChildrenOfType
 import silentorb.mythic.haft.globalMouseOffset
 import silentorb.mythic.haft.updateButtonPressHistory
 import silentorb.mythic.happening.Events
@@ -163,9 +165,10 @@ class Global : Node() {
 //            null
 //        }
 //        else
+				val scenarioNode = findChildrenOfType<ScenarioNode>(scene!!).firstOrNull()
 				val scenario = Scenario(
 					name = "Dev Scenario",
-					defaultPlayerFaction = Factions.player,
+					defaultPlayerFaction = scenarioNode?.defaultPlayerFaction ?: Factions.player,
 					playerRespawning = getDebugBoolean("PLAYER_RESPAWN"),
 				)
 				newGame(scene!!, scenario, definitions)

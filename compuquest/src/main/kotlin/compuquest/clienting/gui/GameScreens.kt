@@ -78,68 +78,69 @@ fun offerQuestsConversation() =
 		}
 	)
 
-fun shoppingConversation() =
-	GameScreen(
-		title = staticTitle("Purchase Something"),
-		content = { context, argument ->
-			val other = argument as Id
-			val wares = context.world.deck.wares.filterValues { it.owner == other }
-			newConversationMenu(
-				GameMenuContent(
-					message = listOf("What would you like to buy?"),
-					items = wares
-						.filterValues { it.quantity >= it.quantityPerPurchase }
-						.map { (ware, wareRecord) ->
-							val price = wareRecord.price.entries.first()
-							val purchasePrice = price.value * wareRecord.quantityPerPurchase
-							val resourceName = wareRecord.resourceType!!.name
-							val name = " ${wareRecord.quantityPerPurchase} $resourceName for $purchasePrice ${price.key} "
-							GameMenuItem(
-								title = name,
-								enabled = { context, _ ->
-									val player = context.actor
-									val deck = context.world.deck
-									val faction = deck.players[player]!!.faction
-									val balance = deck.factions[faction]!!.resources[price.key] ?: 0
-									balance >= purchasePrice
-								},
-								events = { context ->
-									val player = context.actor
-									purchase(context.world.deck, player, ware, wareRecord.quantityPerPurchase)
-								}
-							)
-						},
-				)
-			)
-		}
-	)
+//fun shoppingConversation() =
+//	GameScreen(
+//		title = staticTitle("Purchase Something"),
+//		content = { context, argument ->
+//			val other = argument as Id
+//			val wares = context.world.deck.wares.filterValues { it.owner == other }
+//			newConversationMenu(
+//				GameMenuContent(
+//					message = listOf("What would you like to buy?"),
+//					items = wares
+//						.filterValues { it.quantity >= it.quantityPerPurchase }
+//						.map { (ware, wareRecord) ->
+//							val price = wareRecord.price.entries.first()
+//							val purchasePrice = price.value * wareRecord.quantityPerPurchase
+//							val resourceName = wareRecord.resourceType!!.name
+//							val name = " ${wareRecord.quantityPerPurchase} $resourceName for $purchasePrice ${price.key} "
+//							GameMenuItem(
+//								title = name,
+//								enabled = { context, _ ->
+//									val player = context.actor
+//									val deck = context.world.deck
+////									val faction = deck.players[player]!!.faction
+////									val balance = deck.factions[faction]!!.resources[price.key] ?: 0
+////									balance >= purchasePrice
+//									false
+//								},
+//								events = { context ->
+//									val player = context.actor
+//									purchase(context.world.deck, player, ware, wareRecord.quantityPerPurchase)
+//								}
+//							)
+//						},
+//				)
+//			)
+//		}
+//	)
 
-fun completeQuestConversation() =
-	GameScreen(
-		title = staticTitle("Complete Quest"),
-		content = { _, argument ->
-			newConversationMenu(
-				GameMenuContent(
-					message = listOf("Thank you!"),
-					items = listOf(
-						GameMenuItem(
-							title = "Accept",
-							events = { context ->
-								val quest = argument as Id
-								val deck = context.world.deck
-								val faction = deck.players[context.actor]!!.faction
-								val questRecord = deck.quests[quest]!!
-								listOf(
-									Event(setQuestStatusEvent, quest, QuestStatus.completed),
-									modifyFactionResources(faction, questRecord.reward),
-								)
-							}
-						)
-					)
-				),
-			)
-		}
-	)
+//fun completeQuestConversation() =
+//	GameScreen(
+//		title = staticTitle("Complete Quest"),
+//		content = { _, argument ->
+//			newConversationMenu(
+//				GameMenuContent(
+//					message = listOf("Thank you!"),
+//					items = listOf(
+//						GameMenuItem(
+//							title = "Accept",
+//							events = { context ->
+//								val quest = argument as Id
+//								val deck = context.world.deck
+//								val faction = deck.players[context.actor]!!.faction
+//								val questRecord = deck.quests[quest]!!
+//								listOf(
+//									Event(setQuestStatusEvent, quest, QuestStatus.completed),
+//									modifyFactionResources(faction, questRecord.reward),
+//								)
+//							}
+//						)
+//					)
+//				),
+//			)
+//		}
+//	)
 
 //fun resurrectMenuItem(actor: Id, character: Character) =
 //  GameMenuItem(

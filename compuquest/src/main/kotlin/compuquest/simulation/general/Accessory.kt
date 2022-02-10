@@ -114,9 +114,6 @@ fun transferAccessory(accessory: Id, to: Id) =
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
 	val uses = getUsedAccessories(events)
 	val transfers = filterEventsByType<Id>(transferAccessoryEvent, events)
-	if (transfers.any()) {
-		val k = 0
-	}
 
 	return { id, accessory ->
 		val used = uses.contains(id)

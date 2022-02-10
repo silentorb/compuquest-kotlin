@@ -1,5 +1,6 @@
 package compuquest.simulation.happening
 
+import compuquest.simulation.characters.getGroupByKey
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.combat.eventsFromAttacks
 import compuquest.simulation.general.*
@@ -37,7 +38,10 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 				.groupBy { it.value.index }
 				.flatMap { (_, it) ->
 					val request = it.first().value
-					val faction = request.faction ?: world.scenario.defaultPlayerFaction
-					newHandEvents(spawnNewPlayer(world, request.index, faction))
+					val faction = request.faction ?: getGroupByKey(world.deck.groups, world.scenario.defaultPlayerFaction)?.key
+					if (faction != null)
+						newHandEvents(spawnNewPlayer(world, request.index, faction))
+					else
+						listOf()
 				}
 }

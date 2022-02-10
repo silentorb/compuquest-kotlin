@@ -1,7 +1,6 @@
 package compuquest.serving
 
 import compuquest.simulation.definition.Definitions
-import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.navigation.generateNavMeshInputVisualization
 import compuquest.simulation.intellect.navigation.generateNavMeshVisualization
@@ -26,9 +25,6 @@ fun newWorld(definitions: Definitions, scenario: Scenario, scene: Spatial): Worl
 		scenario = scenario,
 		nextId = SharedNextId(),
 		dice = Dice(),
-		factionRelationships = mapOf(
-			setOf(Factions.undead, Factions.player) to 10,
-		),
 		day = DayState(dayLength = getDebugInt("DAY_LENGTH") ?: 5 * dayMinutes),
 		scene = scene,
 		space = space,

@@ -5,6 +5,7 @@ import compuquest.simulation.characters.getAccessoriesSequence
 import compuquest.simulation.characters.getReadyAccessories
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.knowledge.getTargetRange
+import compuquest.simulation.intellect.knowledge.isEnemy
 import compuquest.simulation.intellect.knowledge.isVisible
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
@@ -33,7 +34,7 @@ fun filterEnemyTargets(
 		.filter { (id, other) ->
 			id != actor
 					&& other.isAlive
-					&& isEnemy(world.factionRelationships, other.faction, character.faction)
+					&& isEnemy(world, actor, id)
 					&& isVisible(world, godotBody, headLocation, id, visibilityRange)
 		}
 }

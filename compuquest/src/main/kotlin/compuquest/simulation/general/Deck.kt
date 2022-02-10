@@ -1,6 +1,7 @@
 package compuquest.simulation.general
 
 import compuquest.simulation.characters.Character
+import compuquest.simulation.characters.Group
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.combat.Missile
 import compuquest.simulation.intellect.Spirit
@@ -17,8 +18,9 @@ data class Deck(
 	val accessories: Table<Accessory> = mapOf(),
 	val bodies: Table<Body> = mapOf(),
 	val characters: Table<Character> = mapOf(),
+	val groups: Table<Group> = mapOf(),
 	val interactables: Table<Interactable> = mapOf(),
-	val factions: KeyTable<Faction> = mapOf(),
+//	val factions: KeyTable<Faction> = mapOf(),
 	val homingMissiles: Table<HomingMissile> = mapOf(),
 	val missiles: Table<Missile> = mapOf(),
 	val navigationDirections: Table<NavigationDirection> = mapOf(),
@@ -47,8 +49,9 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 	return deck.copy(
 		accessories = accessories,
 		characters = deck.characters + extractComponents(idHands),
+		groups = deck.groups + extractComponents(idHands),
 		interactables = deck.interactables + extractComponents(idHands),
-		factions = deck.factions + extractFactions(idHands),
+//		factions = deck.factions + extractFactions(idHands),
 		homingMissiles = deck.homingMissiles + extractComponents(idHands),
 		missiles = deck.missiles + extractComponents(idHands),
 		navigationDirections = deck.navigationDirections + extractComponents(idHands),

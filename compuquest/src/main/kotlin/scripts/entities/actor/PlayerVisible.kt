@@ -1,11 +1,8 @@
 package scripts.entities.actor
 
-import compuquest.simulation.general.getBodyEntityId
-import compuquest.simulation.general.isFriendly
 import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
-import scripts.Global
 
 @RegisterClass
 class PlayerVisible : Spatial() {

@@ -1,5 +1,7 @@
 package scripts.entities
 
+import compuquest.population.getDirectRelationshipAttachments
+import compuquest.simulation.characters.Relationships
 import compuquest.simulation.characters.spawnCharacter
 import compuquest.simulation.intellect.design.Goal
 import compuquest.simulation.intellect.newSpirit
@@ -22,10 +24,6 @@ class Spawner : Spatial() {
 
 	@Export
 	@RegisterProperty
-	var faction: String = ""
-
-	@Export
-	@RegisterProperty
 	var interval: Float = 0f
 
 	@Export
@@ -38,6 +36,7 @@ class Spawner : Spatial() {
 
 	var accumulator: Float = 0f
 	var firstSpawn = false
+	var relationshipCache: Relationships? = null
 
 	fun spawn(): Boolean {
 		if (getDebugBoolean("NO_MONSTERS"))
@@ -45,6 +44,8 @@ class Spawner : Spatial() {
 
 		val world = Global.world
 		return if (world != null) {
+			val relationships = relationshipCache ?: getDirectRelationshipAttachments(world, this)
+			relationshipCache = relationships
 			val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
 			val goals = getChildren().filterIsInstance<GoalAttachment>()
 			val pathDestinations = goals.mapNotNull { it.destination }
@@ -62,7 +63,7 @@ class Spawner : Spatial() {
 					globalTransform.origin,
 					rotation,
 					type,
-					faction,
+					relationships = relationships,
 					additional = listOf(spirit)
 				)
 				Global.addHands(hands)

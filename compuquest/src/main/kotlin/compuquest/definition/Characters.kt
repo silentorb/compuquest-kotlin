@@ -16,7 +16,6 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		name = "Player",
 		depiction = "deevee",
 		corpseDecay = 0f,
-		faction = Factions.player,
 		health = 100,
 		accessories = listOf(
 			Accessories.rifle,
@@ -26,7 +25,6 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 	Characters.skeleton to CharacterDefinition(
 		name = Characters.skeleton,
 		depiction = "skeleton",
-		faction = Factions.undead,
 		health = 50,
 		accessories = listOf(
 			Accessories.rocketLauncher,
@@ -35,7 +33,6 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 	Characters.viking to CharacterDefinition(
 		name = Characters.viking,
 		depiction = "viking",
-		faction = Factions.undead,
 		health = 50,
 		accessories = listOf(
 			Accessories.rocketLauncher,

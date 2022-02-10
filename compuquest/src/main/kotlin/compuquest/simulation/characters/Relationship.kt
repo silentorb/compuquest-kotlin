@@ -1,0 +1,22 @@
+package compuquest.simulation.characters
+
+import silentorb.mythic.ent.Id
+
+enum class RelationshipType {
+	none,
+	child,
+	member,
+	enemy,
+	friend,
+}
+
+data class Relationship(
+	val isA: RelationshipType,
+	val of: Id,
+)
+
+typealias Relationships = Collection<Relationship>
+
+interface Relational {
+	val relationships: Relationships
+}

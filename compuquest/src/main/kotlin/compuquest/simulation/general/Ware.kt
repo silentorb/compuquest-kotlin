@@ -19,21 +19,21 @@ const val modifyWareQuantityEvent = "modifyWareQuantity"
 fun modifyWareQuantity(ware: Id, mod: Int) =
   Event(modifyWareQuantityEvent, ware, mod)
 
-fun purchase(deck: Deck, actor: Id, ware: Id, quantity: Int): Events {
-  val faction = deck.players[actor]!!.faction
-  val wareRecord = deck.wares[ware]!!
-
-  val expenseMod = wareRecord.price
-    .mapValues { (_, value) -> -value * quantity }
-
-  val resourceType = wareRecord.resourceType!!
-  val gain = mapOf(resourceType to quantity + (expenseMod[resourceType] ?: 0))
-
-  return listOf(
-    modifyFactionResources(faction, expenseMod + gain),
-    modifyWareQuantity(ware, -quantity)
-  )
-}
+//fun purchase(deck: Deck, actor: Id, ware: Id, quantity: Int): Events {
+//  val faction = deck.players[actor]!!.faction
+//  val wareRecord = deck.wares[ware]!!
+//
+//  val expenseMod = wareRecord.price
+//    .mapValues { (_, value) -> -value * quantity }
+//
+//  val resourceType = wareRecord.resourceType!!
+//  val gain = mapOf(resourceType to quantity + (expenseMod[resourceType] ?: 0))
+//
+//  return listOf(
+//    modifyFactionResources(faction, expenseMod + gain),
+//    modifyWareQuantity(ware, -quantity)
+//  )
+//}
 
 fun eventsFromWares(deck: Deck): Events =
   deck.wares

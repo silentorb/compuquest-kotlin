@@ -44,9 +44,7 @@ fun newNavMesh(meshes: List<TriMesh>): NavMesh? {
   val builder = RecastBuilder()
   val buildResult = builder.build(geometry, builderConfig)
   val params = newNavMeshDataCreateParams(geometry, buildResult)
-  val meshData = NavMeshBuilder.createNavMeshData(params)
-  if (meshData == null)
-    throw Error("Error generating NavMesh")
+  val meshData = NavMeshBuilder.createNavMeshData(params) ?: throw Error("Error generating NavMesh")
 
   globalHeightMap = buildResult.solidHeightfield
   return NavMesh(meshData, vertsPerPoly, 0)

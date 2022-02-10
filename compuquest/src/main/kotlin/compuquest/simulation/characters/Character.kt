@@ -26,7 +26,6 @@ data class CharacterDefinition(
 	val attributes: Set<Key> = setOf(),
 	val depiction: String,
 	val frame: Int = 0,
-	val faction: Key = Factions.neutral,
 	val health: Int,
 	val corpseDecay: Float = 10f,
 	val accessories: List<Key> = listOf(),
@@ -35,16 +34,16 @@ data class CharacterDefinition(
 data class Character(
 	val definition: CharacterDefinition,
 	val name: String,
-	val faction: Key,
 	val destructible: Destructible,
 	val attributes: Set<Key> = setOf(),
 	val fee: Int = 0,
 	val enemyVisibilityRange: Float = 0f,
+	override val relationships: Relationships = listOf(),
 	override val depiction: String,
 	override val frame: Int = 0,
 	val activeAccessory: Id = emptyId,
 	val toolOffset: Vector3 = Vector3.ZERO,
-) : SpriteState {
+) : SpriteState, Relational {
 	val isAlive: Boolean = isCharacterAlive(health)
 	val corpseDecay: Float get() = definition.corpseDecay
 	val health: Int get() = destructible.health
@@ -127,12 +126,11 @@ fun newCharacter(
 	accessories: Hands,
 	toolOffset: Vector3,
 	name: String = definition.name,
-	faction: Key? = null
+	relationships: Relationships = listOf(),
 ) =
 	Character(
 		definition = definition,
 		name = name,
-		faction = faction ?: definition.faction,
 		destructible = Destructible(
 			health = if (getDebugBoolean("HALF_HEALTH")) definition.health / 2 else definition.health,
 			maxHealth = definition.health,
@@ -141,6 +139,7 @@ fun newCharacter(
 		depiction = definition.depiction,
 		frame = definition.frame,
 		activeAccessory = selectActiveAccessoryFromHands(accessories),
+		relationships = relationships,
 		toolOffset = toolOffset,
 	)
 
@@ -195,7 +194,6 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 			destructible = destructible,
 			depiction = depiction,
 			frame = frame,
-			faction = updateCharacterFaction(characterEvents, character.faction),
 			activeAccessory = updateActiveAccessory(accessories, input, actor, character.activeAccessory),
 		)
 	}
@@ -207,14 +205,14 @@ fun addCharacter(
 	nextId: NextId,
 	characterBody: CharacterBody,
 	name: String = definition.name,
-	faction: Key? = null,
+	relationships: Relationships,
 	additional: List<Any> = listOf()
 ): Hands {
 	return tempCatch {
 		val sprite = characterBody.findNode("sprite") as AnimatedSprite3D?
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
-		val character = newCharacter(definition, accessories, toolOffset, name, faction)
+		val character = newCharacter(definition, accessories, toolOffset, name, relationships = relationships)
 		if (sprite != null) {
 			sprite.animation = character.depiction
 		}
@@ -245,7 +243,7 @@ fun spawnCharacter(
 	origin: Vector3,
 	rotation: Vector3,
 	type: String,
-	faction: Key,
+	relationships: Relationships,
 	name: String? = null,
 	id: Id? = null,
 	additional: List<Any> = listOf()
@@ -268,6 +266,23 @@ fun spawnCharacter(
 
 	return addCharacter(
 		definitions, definition, actor, nextId, body,
-		name ?: definition.name, faction, additional
+		name ?: definition.name, relationships, additional
 	)
+}
+
+fun getCharacterGroupRelationships(character: Character): Sequence<Relationship> =
+	character.relationships
+		.asSequence()
+		.filter { it.isA == RelationshipType.member }
+
+fun getCharacterGroups(character: Character): Sequence<Id> =
+	getCharacterGroupRelationships(character)
+		.map { it.of }
+
+fun getCharacterGroups(deck: Deck, actor: Id): List<Id> {
+	val character = deck.characters[actor]
+	return if (character != null)
+		getCharacterGroups(character).toList()
+	else
+		listOf()
 }

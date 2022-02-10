@@ -135,5 +135,8 @@ fun getCollisionShapeRadius(collisionShape: CollisionShape): Float {
 		0f
 }
 
+inline fun <reified T> getChildrenOfType(node: Node): List<T> =
+	node.getChildren().filterIsInstance<T>()
+
 inline fun <reified T> getChildOfType(node: Node): T? =
 	node.getChildren().filterIsInstance<T>().firstOrNull()

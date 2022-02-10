@@ -19,7 +19,6 @@ data class World(
 	val sprites: Map<Id, AnimatedSprite3D> = mapOf(),
 	val zones: Map<Key, Zone> = mapOf(),
 	val deck: Deck = Deck(),
-	val factionRelationships: RelationshipTable = mapOf(),
 	val dice: Dice,
 	val scene: Spatial,
 	val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
@@ -39,5 +38,5 @@ fun getPlayer(deck: Deck?) =
 fun getPlayer(world: World?) =
 	getPlayer(world?.deck)
 
-fun getBodyEntityId(world: World, body: Spatial): Id? =
+fun getBodyEntityId(world: World, body: Node): Id? =
 	world.bodies.entries.firstOrNull { it.value == body }?.key

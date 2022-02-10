@@ -48,22 +48,22 @@ const val setQuestStatusEvent = "setQuestStatus"
 fun isQuestOver(quest: Quest): Boolean =
   quest.status == QuestStatus.completed || quest.status == QuestStatus.failed
 
-fun eventsFromQuests(deck: Deck): Events =
-  deck.quests.flatMap { (id, quest) ->
-    when {
-      !isQuestOver(quest) && quest.duration > 0 && quest.elapsedFrames > quest.duration * 60 -> {
-        listOfNotNull(
-          Event(setQuestStatusEvent, id, QuestStatus.failed),
-          if (quest.hero != null && quest.penaltyValue > 0) {
-            val faction = deck.players[quest.hero]!!.faction
-            modifyFactionResources(faction, mapOf(ResourceType.gold to -quest.penaltyValue))
-          } else
-            null
-        )
-      }
-      else -> listOf()
-    }
-  }
+//fun eventsFromQuests(deck: Deck): Events =
+//  deck.quests.flatMap { (id, quest) ->
+//    when {
+//      !isQuestOver(quest) && quest.duration > 0 && quest.elapsedFrames > quest.duration * 60 -> {
+//        listOfNotNull(
+//          Event(setQuestStatusEvent, id, QuestStatus.failed),
+//          if (quest.hero != null && quest.penaltyValue > 0) {
+//            val faction = deck.players[quest.hero]!!.faction
+//            modifyFactionResources(faction, mapOf(ResourceType.gold to -quest.penaltyValue))
+//          } else
+//            null
+//        )
+//      }
+//      else -> listOf()
+//    }
+//  }
 
 fun updateQuest(events: Events): (Id, Quest) -> Quest = { id, quest ->
   val hero = events

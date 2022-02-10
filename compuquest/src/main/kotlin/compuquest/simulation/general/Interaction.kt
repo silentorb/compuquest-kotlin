@@ -50,10 +50,9 @@ interface Interactive {
 
 private const val interactableMaxDistance = 4f
 
-fun canGiveToCharacter(world: World, actor: Id, targetCharacter: Character): Boolean {
+fun canGiveToCharacter(world: World, actor: Id, target: Id): Boolean {
 	val character = world.deck.characters[actor]
 	return character != null &&
-			isFriendly(world.factionRelationships, character.faction, targetCharacter.faction) &&
 			character.activeAccessory != emptyId
 }
 
@@ -68,7 +67,7 @@ fun getInteractable(world: World, actor: Id): Interactable? {
 		val character = world.deck.characters[target]
 		if (character != null) {
 			val onInteract = when {
-				canGiveToCharacter(world, actor, character) -> InteractionBehaviors.give
+				canGiveToCharacter(world, actor, target) -> InteractionBehaviors.give
 				character.attributes.contains("talk") -> InteractionBehaviors.talk
 				else -> null
 			}

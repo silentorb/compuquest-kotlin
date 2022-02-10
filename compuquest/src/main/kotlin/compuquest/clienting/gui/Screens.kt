@@ -34,11 +34,11 @@ val gameScreens: Map<Key, GameScreen> = mapOf(
 	Screens.optionsInputPlayerProfiles to optionsInputPlayerProfilesMenu(),
 
 	// Game
-	Screens.completeQuest to completeQuestConversation(),
+//	Screens.completeQuest to completeQuestConversation(),
 	Screens.jobInterview to jobInterviewConversation(),
 	Screens.conversation to conversationMenu(),
 	Screens.offerQuest to offerQuestsConversation(),
 	Screens.manageQuests to questManagementScreen(),
 	Screens.manageMembers to memberManagementScreen(),
-	Screens.shopping to shoppingConversation(),
+//	Screens.shopping to shoppingConversation(),
 )
