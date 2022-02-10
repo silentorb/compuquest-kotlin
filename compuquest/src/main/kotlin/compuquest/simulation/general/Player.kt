@@ -90,7 +90,7 @@ fun getPlayerRespawnPoint(world: World, groups: Collection<Id>): PlayerSpawner? 
 		.firstOrNull { spawner ->
 			spawner.relationships
 				.any { it.isA == RelationshipType.member && groups.contains(it.of) }
-		}
+		} ?: world.playerSpawners.firstOrNull()
 
 fun getPlayerRespawnPoint(world: World, actor: Id): PlayerSpawner? =
 	getPlayerRespawnPoint(world, getCharacterGroups(world.deck, actor) + actor)

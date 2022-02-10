@@ -7,7 +7,6 @@
 
 [node name="player-spawn" type="Spatial"]
 script = ExtResource( 1 )
-faction = "player"
 scene = ExtResource( 3 )
 
 [node name="editor-arrow" parent="." instance=ExtResource( 2 )]

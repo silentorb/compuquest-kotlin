@@ -19,11 +19,14 @@ data class Knowledge(
 )
 
 fun updateRelationships(world: World, actor: Id): Relationships {
-	val character = world.deck.characters[actor]
-	return if (character != null)
-		(character.relationships + getCharacterGroupRelationships(character))
-			.distinct()
-	else
+	val deck = world.deck
+	val character = deck.characters[actor]
+	return if (character != null) {
+		val groupRelationships = getCharacterGroups(character)
+			.flatMap { deck.groups[it]?.relationships ?: listOf() }
+
+		(character.relationships + groupRelationships).distinct()
+	} else
 		listOf()
 }
 

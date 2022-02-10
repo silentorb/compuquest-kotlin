@@ -1,28 +1,25 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/entities/GoalAttachment.kt" type="Script" id=2]
-[ext_resource path="res://src/main/kotlin/scripts/world/GroupNode.kt" type="Script" id=3]
-[ext_resource path="res://src/main/kotlin/scripts/world/RelationshipNode.kt" type="Script" id=4]
+[ext_resource path="res://world/sim/CommonScenario.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/world/Slot.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/main/kotlin/scripts/entities/Spawner.kt" type="Script" id=7]
 [ext_resource path="res://src/main/kotlin/scripts/entities/PlayerSpawner.kt" type="Script" id=8]
 [ext_resource path="res://src/main/kotlin/scripts/entities/AttachRelationship.kt" type="Script" id=9]
-[ext_resource path="res://src/main/kotlin/scripts/world/ScenarioNode.kt" type="Script" id=10]
 
 [node name="battle" type="Spatial"]
 
 [node name="player-spawn" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47.2793, 0, -0.447075 )
 script = ExtResource( 8 )
-faction = "heroes"
 scene = ExtResource( 6 )
 
 [node name="member-of-heroes" type="Node" parent="player-spawn"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Heroes")
+of = NodePath("")
 
 [node name="heroes-spawner" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, 1.14439 )
@@ -38,7 +35,7 @@ destination_path = NodePath("../../end-targetB")
 [node name="member-of-heroes" type="Node" parent="heroes-spawner"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Heroes")
+of = NodePath("")
 
 [node name="heroes-spawner2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, 34.1444 )
@@ -58,7 +55,7 @@ destination_path = NodePath("../../end-targetB")
 [node name="member-of-heroes" type="Node" parent="heroes-spawner2"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Heroes")
+of = NodePath("")
 
 [node name="monster-spawner" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, 1.00418 )
@@ -74,7 +71,7 @@ destination_path = NodePath("../../end-targetA")
 [node name="member-of-undead" type="Node" parent="monster-spawner"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Undead")
+of = NodePath("")
 
 [node name="monster-spawner2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, 39.0042 )
@@ -94,7 +91,7 @@ destination_path = NodePath("../../end-targetA")
 [node name="member-of-undead" type="Node" parent="monster-spawner2"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Undead")
+of = NodePath("")
 
 [node name="heroes-spawner3" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, -32.8556 )
@@ -114,7 +111,7 @@ destination_path = NodePath("../../end-targetB")
 [node name="member-of-heroes" type="Node" parent="heroes-spawner3"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Heroes")
+of = NodePath("")
 
 [node name="monster-spawner3" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, -27.9958 )
@@ -134,7 +131,7 @@ destination_path = NodePath("../../end-targetA")
 [node name="member-of-undead" type="Node" parent="monster-spawner3"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("../../common-scenario/Undead")
+of = NodePath("")
 
 [node name="end-targetA" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -69.7266, 0, -0.135735 )
@@ -212,20 +209,4 @@ height = 10.0
 depth = 200.0
 material = ExtResource( 1 )
 
-[node name="common-scenario" type="Node" parent="."]
-script = ExtResource( 10 )
-default_player_faction = "heroes"
-
-[node name="Heroes" type="Node" parent="common-scenario"]
-script = ExtResource( 3 )
-key = "heroes"
-
-[node name="Undead" type="Node" parent="common-scenario"]
-script = ExtResource( 3 )
-key = "heroes"
-
-[node name="relationship-heroes-undead" type="Node" parent="common-scenario"]
-script = ExtResource( 4 )
-is_a = "enemy"
-of = NodePath("../Undead")
-entity = NodePath("../Heroes")
+[node name="common-scenario" parent="." instance=ExtResource( 3 )]
