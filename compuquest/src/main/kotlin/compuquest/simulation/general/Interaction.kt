@@ -1,6 +1,5 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.characters.Character
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.physics.castRay
 import silentorb.mythic.ent.Id
@@ -48,7 +47,7 @@ interface Interactive {
 	fun onInteraction(world: World, actor: Id)
 }
 
-private const val interactableMaxDistance = 4f
+const val interactionMaxDistance = 4f
 
 fun canGiveToCharacter(world: World, actor: Id, target: Id): Boolean {
 	val character = world.deck.characters[actor]
@@ -57,7 +56,7 @@ fun canGiveToCharacter(world: World, actor: Id, target: Id): Boolean {
 }
 
 fun getInteractable(world: World, actor: Id): Interactable? {
-	val collider = castRay(world, actor, interactableMaxDistance)
+	val collider = castRay(world, actor, interactionMaxDistance)
 	val target = if (collider != null)
 		getBodyEntityId(world, collider)
 	else

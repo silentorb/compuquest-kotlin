@@ -13,7 +13,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.getChildOfType
 
 @RegisterClass
-class Bush : Spatial(), DamageTarget, Interactive {
+class Bush : Spatial(), DamageTarget, Interactive, EntityNode {
 
 	enum class BushMode {
 		normal,

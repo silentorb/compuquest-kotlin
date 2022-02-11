@@ -2,11 +2,10 @@ package compuquest.simulation.intellect
 
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.design.Goal
-import compuquest.simulation.intellect.design.Goals
+import compuquest.simulation.intellect.design.ReadyMode
 import compuquest.simulation.intellect.design.updateGoals
 import compuquest.simulation.intellect.knowledge.Knowledge
 import compuquest.simulation.intellect.knowledge.updateKnowledge
-import godot.core.Vector3
 import silentorb.mythic.ent.Id
 
 const val spiritUpdateInterval = 20
@@ -47,10 +46,10 @@ fun updateSpirit(world: World, intervalStep: Int): (Id, Spirit) -> Spirit = { ac
 			knowledge = knowledge,
 			goal = goal,
 		)
-	} else if (spirit.goal.readyToUseAction)
+	} else if (spirit.goal.readyTo != ReadyMode.none)
 		spirit.copy(
 			goal = spirit.goal.copy(
-				readyToUseAction = false
+				readyTo = ReadyMode.none,
 			)
 		)
 	else

@@ -28,11 +28,10 @@ depth = 20.0
 material = ExtResource( 3 )
 
 [node name="floor5" type="CSGBox" parent="static"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 12, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 13, 0 )
 use_collision = true
 collision_layer = 18
 width = 22.0
-height = 1.0
 depth = 20.0
 material = ExtResource( 3 )
 

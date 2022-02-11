@@ -1,11 +1,14 @@
 package compuquest.population
 
 import compuquest.simulation.characters.*
+import compuquest.simulation.general.EntityNode
+import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getBodyEntityId
 import compuquest.simulation.intellect.newSpirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
+import godot.Spatial
 import godot.core.NodePath
 import scripts.entities.AttachCharacter
 import scripts.entities.AttachRelationship
@@ -15,7 +18,6 @@ import scripts.world.RelationshipNode
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
-import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.findChildrenOfType
 import silentorb.mythic.godoting.getChildrenOfType
 
@@ -117,7 +119,11 @@ fun processSceneEntities(scene: Node, world: World): World {
 		),
 	)
 
-	val hands = if (getDebugBoolean("NO_MONSTERS"))
+	val entityNodeHands = findChildrenOfType<EntityNode>(scene)
+		.filterIsInstance<Spatial>()
+		.map { Hand(components = listOf(it)) }
+
+	val characterHands = if (getDebugBoolean("NO_MONSTERS"))
 		listOf()
 	else
 		attachments
@@ -130,6 +136,8 @@ fun processSceneEntities(scene: Node, world: World): World {
 					listOf(newSpirit())
 				)
 			}
+
+	val hands = characterHands + entityNodeHands
 
 	val playerSpawners = findChildrenOfType<PlayerSpawner>(scene)
 	for (playerSpawner in playerSpawners) {

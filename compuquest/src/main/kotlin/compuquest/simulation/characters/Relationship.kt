@@ -3,11 +3,11 @@ package compuquest.simulation.characters
 import silentorb.mythic.ent.Id
 
 enum class RelationshipType {
-	none,
 	child,
-	member,
 	enemy,
 	friend,
+	member,
+	parent,
 }
 
 data class Relationship(
