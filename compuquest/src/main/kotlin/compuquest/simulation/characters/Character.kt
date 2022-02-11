@@ -67,6 +67,9 @@ fun getActionsSequence(accessories: Table<Accessory>, actor: Id) =
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
 	getOwnerAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
+fun getAccessoriesWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key) =
+	getOwnerAccessories(accessories, actor).filter { it.value.definition.actionEffects.any { a -> a.type == effect } }
+
 fun getReadyAccessories(world: World, actor: Id): Table<Accessory> =
 	getOwnerAccessories(world.deck.accessories, actor)
 		.filter { canUse(it.value) }

@@ -1,6 +1,7 @@
 package compuquest.simulation.intellect.knowledge
 
 import compuquest.simulation.characters.RelationshipType
+import compuquest.simulation.characters.getAccessoriesWithEffect
 import compuquest.simulation.characters.hasAccessoryWithEffect
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.Deck
@@ -11,3 +12,6 @@ fun isAParent(knowledge: Knowledge): Boolean =
 
 fun hasFood(deck: Deck, actor: Id): Boolean =
 	hasAccessoryWithEffect(deck.accessories, actor, AccessoryEffects.heal)
+
+fun getFood(deck: Deck, actor: Id) =
+	getAccessoriesWithEffect(deck.accessories, actor, AccessoryEffects.heal)

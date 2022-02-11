@@ -2,6 +2,7 @@ package compuquest.simulation.intellect.design
 
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 
 enum class ReadyMode {
 	none,
@@ -30,6 +31,7 @@ data class Goal(
 	// * * * The following fields are used just as output of design and input for execution
 	val readyTo: ReadyMode = ReadyMode.none,
 	val focusedAction: Id? = null,
+	val interactionBehavior: Key = "",
 
 	// Indirect location to move toward.
 	// Input for navigation.

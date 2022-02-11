@@ -2,9 +2,11 @@ package compuquest.simulation.intellect.design
 
 import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.RelationshipType
+import compuquest.simulation.general.InteractionBehaviors
 import compuquest.simulation.general.World
 import compuquest.simulation.general.interactionMaxDistance
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.knowledge.getFood
 import compuquest.simulation.intellect.knowledge.hasFood
 import compuquest.simulation.intellect.knowledge.isAParent
 import compuquest.simulation.physics.getNearest
@@ -30,13 +32,19 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 				}
 				.firstOrNull()
 
-			if (child != null) {
+			val food = getFood(deck, actor)
+				.entries
+				.firstOrNull()
+
+			if (child != null && food != null) {
 				val body = world.bodies[actor]!!
 				val destination = child.second.globalTransform.origin
 				moveWithinRange(body.globalTransform.origin, destination, interactionMaxDistance, goal) {
 					goal.copy(
 						targetEntity = child.first,
 						readyTo = ReadyMode.interact,
+						interactionBehavior = InteractionBehaviors.give,
+						focusedAction = food.key,
 					)
 				}
 			} else
@@ -54,12 +62,18 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 			} else
 				goal.targetEntity to previousBush
 
-			if (targetEntity != null && bush != null)
-				moveWithinRange(body.globalTransform.origin, bush.globalTransform.origin, interactionMaxDistance, goal) {
+			if (targetEntity != null && bush != null) {
+				val nextGoal = goal.copy(
+					targetEntity = targetEntity,
+				)
+
+				moveWithinRange(body.globalTransform.origin, bush.globalTransform.origin, interactionMaxDistance, nextGoal) {
 					goal.copy(
 						readyTo = ReadyMode.interact,
+						interactionBehavior = InteractionBehaviors.take,
 					)
-				} else
+				}
+			} else
 				null
 		}
 	} else

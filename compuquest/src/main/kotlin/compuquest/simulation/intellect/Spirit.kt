@@ -46,7 +46,7 @@ fun updateSpirit(world: World, intervalStep: Int): (Id, Spirit) -> Spirit = { ac
 			knowledge = knowledge,
 			goal = goal,
 		)
-	} else if (spirit.goal.readyTo != ReadyMode.none)
+	} else if (spirit.goal.readyTo != ReadyMode.none && spirit.goal.readyTo != ReadyMode.move)
 		spirit.copy(
 			goal = spirit.goal.copy(
 				readyTo = ReadyMode.none,
