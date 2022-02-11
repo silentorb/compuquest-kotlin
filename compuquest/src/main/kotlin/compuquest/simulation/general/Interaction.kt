@@ -57,33 +57,35 @@ fun canGiveToCharacter(world: World, actor: Id, target: Id): Boolean {
 
 fun getInteractable(world: World, actor: Id): Interactable? {
 	val collider = castRay(world, actor, interactionMaxDistance)
-	val target = if (collider != null)
-		getBodyEntityId(world, collider)
-	else
-		null
+	return if (collider is Interactive)
+		collider.getInteractable(world)
+	else {
+		val target = if (collider != null)
+			getBodyEntityId(world, collider)
+		else
+			null
 
-	return if (target != null) {
-		val character = world.deck.characters[target]
-		if (character != null) {
-			val onInteract = when {
-				canGiveToCharacter(world, actor, target) -> InteractionBehaviors.give
-				character.attributes.contains("talk") -> InteractionBehaviors.talk
-				else -> null
-			}
-			if (onInteract != null)
-				Interactable(
-					target = target,
-					action = onInteract,
-					onInteract = onInteract,
-				)
-			else
+		if (target != null) {
+			val character = world.deck.characters[target]
+			if (character != null) {
+				val onInteract = when {
+					canGiveToCharacter(world, actor, target) -> InteractionBehaviors.give
+					character.attributes.contains("talk") -> InteractionBehaviors.talk
+					else -> null
+				}
+				if (onInteract != null)
+					Interactable(
+						target = target,
+						action = onInteract,
+						onInteract = onInteract,
+					)
+				else
+					null
+			} else
 				null
 		} else
 			null
-	} else if (collider is Interactive) {
-		collider.getInteractable(world)
-	} else
-		null
+	}
 }
 
 fun getPlayerInteractionEvents(deck: Deck, actor: Id, player: Player): Events {
