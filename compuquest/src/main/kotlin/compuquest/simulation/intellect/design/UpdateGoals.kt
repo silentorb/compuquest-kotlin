@@ -1,15 +1,10 @@
 package compuquest.simulation.intellect.design
 
 import compuquest.simulation.characters.Character
-import compuquest.simulation.general.*
-import compuquest.simulation.intellect.knowledge.Knowledge
+import compuquest.simulation.general.Deck
+import compuquest.simulation.general.World
 import compuquest.simulation.intellect.Spirit
-import compuquest.simulation.intellect.knowledge.getTargetRange
-import compuquest.simulation.intellect.knowledge.hasFood
-import compuquest.simulation.intellect.knowledge.isAParent
-import compuquest.simulation.physics.Body
-import compuquest.simulation.physics.getNearest
-import scripts.entities.Bush
+import compuquest.simulation.intellect.knowledge.Knowledge
 import silentorb.mythic.ent.Id
 
 fun checkSelfHealing(deck: Deck, actor: Id, character: Character): Id? {

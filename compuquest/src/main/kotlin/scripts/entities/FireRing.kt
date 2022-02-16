@@ -36,7 +36,7 @@ class FireRing : Spatial() {
 				val bodyRadius = collision.radius
 				val distance = collision.globalTransform.origin.distanceTo(location)
 				if (distance > radius - bodyRadius) {
-					val actor = getBodyEntityId(world, collision)
+					val actor = getBodyEntityId(world.deck, collision)
 					if (actor != null) {
 						Global.addEvent(
 							newHandEvent(

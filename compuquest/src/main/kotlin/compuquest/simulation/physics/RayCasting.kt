@@ -9,7 +9,7 @@ import silentorb.mythic.ent.Id
 // Eventually may need to return more information such as hit location but just the id is enough for now
 fun castRay(world: World, actor: Id, maxDistance: Float): Spatial? {
   val space = world.space
-  val body = world.bodies[actor]!!
+  val body = world.deck.bodies[actor]!!
   val target = body.translation - body.transform.basis.z * maxDistance
   val result = space.intersectRay(body.translation, target, variantArrayOf(body)).toMap()
   val collider = result["collider"] as? Spatial
@@ -23,7 +23,7 @@ fun castRay(world: World, actor: Id, maxDistance: Float): Spatial? {
 fun castCharacterRay(world: World, actor: Id, maxDistance: Float): Id? {
   val collider = castRay(world, actor, maxDistance)
   return if (collider != null)
-    world.bodies.entries
+    world.deck.bodies.entries
       .firstOrNull { it.value == collider }
       ?.key
   else

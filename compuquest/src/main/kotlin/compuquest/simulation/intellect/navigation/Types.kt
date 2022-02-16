@@ -5,6 +5,7 @@ import org.recast4j.detour.NavMesh
 import org.recast4j.detour.NavMeshQuery
 import org.recast4j.detour.crowd.Crowd
 import org.recast4j.detour.crowd.CrowdAgent
+import org.recast4j.detour.crowd.CrowdAgentParams
 import silentorb.mythic.ent.Id
 
 data class NavigationState(
@@ -15,3 +16,7 @@ data class NavigationState(
 )
 
 typealias NavigationDirection = Vector3
+
+interface CrowdAgentNode {
+    fun getCrowdAgentParams(): CrowdAgentParams
+}

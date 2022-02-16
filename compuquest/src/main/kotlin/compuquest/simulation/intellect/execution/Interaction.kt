@@ -9,7 +9,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
 
 fun tryInteraction(world: World, actor: Id, goal: Goal): Events {
-	val interactive = world.bodies[goal.targetEntity] as? Interactive
+	val interactive = world.deck.bodies[goal.targetEntity] as? Interactive
 	return if (interactive != null) {
 		interactive.onInteraction(world, actor)
 		listOf()

@@ -5,7 +5,7 @@ import compuquest.simulation.general.Accessory
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.Deck
 import compuquest.simulation.general.canHeal
-import compuquest.simulation.physics.Body
+import godot.Spatial
 import silentorb.mythic.ent.Id
 import kotlin.math.abs
 
@@ -40,7 +40,7 @@ fun getMostEfficientHealingAccessory(deck: Deck, actor: Id, gap: Int): Map.Entry
 		null
 }
 
-fun getPathDestinations(goal: Goal, body: Body?) =
+fun getPathDestinations(goal: Goal, body: Spatial?) =
 	if (goal.pathDestinations.any() && body != null &&
 		body.translation.distanceTo(goal.pathDestinations.first()) < 1f
 	)

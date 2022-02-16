@@ -18,7 +18,7 @@ fun gatherEvents(world: World, previous: World?, playerInputs: PlayerInputs, del
 
 	val events2 = deck.spirits.flatMap { pursueGoals(world, it.key) } +
 			gatherPlayerUseActions(world.deck, playerInputs) +
-			tableEvents(eventsFromMissile(world, delta), deck.missiles) +
+			tableEvents(eventsFromMissile(deck, delta), deck.missiles) +
 			tableEvents(eventsFromPlayer(world), deck.players) +
 			eventsFromBuffs(world) +
 			if (previous != null)

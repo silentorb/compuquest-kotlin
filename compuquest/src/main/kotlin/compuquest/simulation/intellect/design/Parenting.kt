@@ -16,13 +16,15 @@ import silentorb.mythic.ent.Id
 fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit): Goal? {
 	val deck = world.deck
 	val goal = spirit.goal
+	val bodies = deck.bodies
 	return if (isAParent(spirit.knowledge)) {
+		val navigation = world.navigation!!
 		if (hasFood(deck, actor)) {
 			val child = character.relationships
 				.asSequence()
 				.mapNotNull { relationship ->
 					if (relationship.isA == RelationshipType.parent) {
-						val child = world.bodies[relationship.of]
+						val child = bodies[relationship.of]
 						if (child != null)
 							relationship.of to child
 						else
@@ -37,9 +39,9 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 				.firstOrNull()
 
 			if (child != null && food != null) {
-				val body = world.bodies[actor]!!
+				val body = bodies[actor]!!
 				val destination = child.second.globalTransform.origin
-				moveWithinRange(body.globalTransform.origin, destination, interactionMaxDistance, goal) {
+				moveWithinRange(navigation, body.globalTransform.origin, destination, interactionMaxDistance, goal) {
 					goal.copy(
 						targetEntity = child.first,
 						readyTo = ReadyMode.interact,
@@ -50,10 +52,10 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 			} else
 				null
 		} else {
-			val previousBush = world.bodies[goal.targetEntity] as? Bush
-			val body = world.bodies[actor]!!
+			val previousBush = bodies[goal.targetEntity] as? Bush
+			val body = bodies[actor]!!
 			val (targetEntity, bush) = if (previousBush == null || previousBush.mode != Bush.BushMode.berries) {
-				val options = world.bodies.entries.filter { (_, value) -> value is Bush && value.mode == Bush.BushMode.berries }
+				val options = bodies.entries.filter { (_, value) -> value is Bush && value.mode == Bush.BushMode.berries }
 				val value = getNearest(options, body.globalTransform.origin)
 				if (value != null)
 					value.key to (value.value as Bush)
@@ -67,7 +69,9 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 					targetEntity = targetEntity,
 				)
 
-				moveWithinRange(body.globalTransform.origin, bush.globalTransform.origin, interactionMaxDistance, nextGoal) {
+				val origin = body.globalTransform.origin
+				val target = bush.globalTransform.origin
+				moveWithinRange(navigation, origin, target, interactionMaxDistance, nextGoal) {
 					goal.copy(
 						readyTo = ReadyMode.interact,
 						interactionBehavior = InteractionBehaviors.take,

@@ -15,8 +15,8 @@ data class HomingMissile(
 
 fun eventsFromHomingMissile(world: World, delta: Float): (Id, HomingMissile) -> Events = { actor, missile ->
   val deck = world.deck
-  val body = world.bodies[actor]
-  val targetBody = world.bodies[missile.target]
+  val body = deck.bodies[actor]
+  val targetBody = deck.bodies[missile.target]
   if (body != null && targetBody != null) {
     val vector = targetBody.translation - body.translation
     val distance = vector.length()

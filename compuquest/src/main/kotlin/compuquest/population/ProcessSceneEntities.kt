@@ -1,10 +1,7 @@
 package compuquest.population
 
 import compuquest.simulation.characters.*
-import compuquest.simulation.general.EntityNode
-import compuquest.simulation.general.Hand
-import compuquest.simulation.general.World
-import compuquest.simulation.general.getBodyEntityId
+import compuquest.simulation.general.*
 import compuquest.simulation.intellect.newSpirit
 import compuquest.simulation.updating.newEntitiesFromHands
 import godot.Node
@@ -21,21 +18,21 @@ import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.findChildrenOfType
 import silentorb.mythic.godoting.getChildrenOfType
 
-fun mapNodeToId(world: World, node: Node?): Id? =
+fun mapNodeToId(deck: Deck, node: Node?): Id? =
 	if (node != null)
-		getBodyEntityId(world, node) ?: if (node is GroupNode && node.key != "")
-			world.deck.groups.entries.firstOrNull { it.value.key == node.key }?.key
+		getBodyEntityId(deck, node) ?: if (node is GroupNode && node.key != "")
+			deck.groups.entries.firstOrNull { it.value.key == node.key }?.key
 		else
 			null
 	else
 		null
 
-fun mapNodeToId(world: World, anchor: Node, path: NodePath?): Id? =
+fun mapNodeToId(deck: Deck, anchor: Node, path: NodePath?): Id? =
 	if (path == null)
 		null
 	else {
 		val node = anchor.getNode(path)
-		mapNodeToId(world, node)
+		mapNodeToId(deck, node)
 	}
 
 fun <T : Relational> applyRelationships(
@@ -51,11 +48,11 @@ fun <T : Relational> applyRelationships(
 fun getRelationshipType(name: String): RelationshipType? =
 	RelationshipType.values().firstOrNull { it.toString() == name }
 
-fun getDirectRelationshipAttachments(world: World, root: Node): Relationships =
+fun getDirectRelationshipAttachments(deck: Deck, root: Node): Relationships =
 	getChildrenOfType<AttachRelationship>(root)
 		.mapNotNull { node ->
 			val isA = getRelationshipType(node.isA)
-			val of = mapNodeToId(world, node, node.of)
+			val of = mapNodeToId(deck, node, node.of)
 			if (of != null && isA != null) {
 				Relationship(isA, of)
 			} else
@@ -65,9 +62,9 @@ fun getDirectRelationshipAttachments(world: World, root: Node): Relationships =
 fun applyRelationships(world: World): World {
 	val attachedRelationships = findChildrenOfType<AttachRelationship>(world.scene)
 		.mapNotNull { node ->
-			val entity = mapNodeToId(world, node.getParent())
+			val entity = mapNodeToId(world.deck, node.getParent())
 			val isA = getRelationshipType(node.isA)
-			val of = mapNodeToId(world, node, node.of)
+			val of = mapNodeToId(world.deck, node, node.of)
 			if (entity != null && of != null && isA != null) {
 				Triple(entity, isA, of)
 			} else
@@ -76,8 +73,8 @@ fun applyRelationships(world: World): World {
 
 	val dualRelationships = findChildrenOfType<RelationshipNode>(world.scene)
 		.flatMap { node ->
-			val entity = mapNodeToId(world, node, node.entity)
-			val of = mapNodeToId(world, node, node.of)
+			val entity = mapNodeToId(world.deck, node, node.entity)
+			val of = mapNodeToId(world.deck, node, node.of)
 			val isA = getRelationshipType(node.isA)
 			if (entity != null && of != null && isA != null) {
 				listOf(
@@ -141,7 +138,7 @@ fun processSceneEntities(scene: Node, world: World): World {
 
 	val playerSpawners = findChildrenOfType<PlayerSpawner>(scene)
 	for (playerSpawner in playerSpawners) {
-		playerSpawner.relationships = getDirectRelationshipAttachments(world2, playerSpawner)
+		playerSpawner.relationships = getDirectRelationshipAttachments(world2.deck, playerSpawner)
 	}
 
 	val world3 = newEntitiesFromHands(hands, world2)

@@ -3,9 +3,12 @@ package compuquest.simulation.intellect.navigation
 import godot.Node
 import godot.Spatial
 import org.recast4j.detour.NavMeshQuery
+import org.recast4j.detour.crowd.CrowdAgent
+import org.recast4j.detour.crowd.PathQueryResult
 import silentorb.mythic.godoting.findChildren
 
 fun newNavigationState(collisionObjects: List<Spatial>): NavigationState? {
+	initNavigationHacks()
 	val meshes = newNavMeshTriMeshes(collisionObjects)
 	val mesh = newNavMesh(meshes)
 

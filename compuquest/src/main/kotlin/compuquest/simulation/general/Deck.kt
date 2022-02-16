@@ -6,9 +6,8 @@ import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.combat.Missile
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.navigation.NavigationDirection
-import compuquest.simulation.physics.Body
 import compuquest.simulation.updating.extractComponents
-import silentorb.mythic.ent.KeyTable
+import godot.Spatial
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.genericRemoveEntities
 import silentorb.mythic.ent.newDeckReflection
@@ -16,7 +15,7 @@ import silentorb.mythic.timing.IntTimer
 
 data class Deck(
 	val accessories: Table<Accessory> = mapOf(),
-	val bodies: Table<Body> = mapOf(),
+	val bodies: Table<Spatial> = mapOf(),
 	val characters: Table<Character> = mapOf(),
 	val groups: Table<Group> = mapOf(),
 	val interactables: Table<Interactable> = mapOf(),
@@ -49,6 +48,7 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 	return deck.copy(
 		accessories = accessories,
 		characters = deck.characters + extractComponents(idHands),
+		bodies = deck.bodies + extractComponents(idHands),
 		groups = deck.groups + extractComponents(idHands),
 		interactables = deck.interactables + extractComponents(idHands),
 //		factions = deck.factions + extractFactions(idHands),

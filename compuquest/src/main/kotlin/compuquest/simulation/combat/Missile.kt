@@ -40,7 +40,7 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 			listOf()
 		else {
 			val radius = getCollisionShapeRadius(shape)
-			val characterBody = world.bodies[actor]!!.getInstanceId()
+			val characterBody = world.deck.bodies[actor]!!.getInstanceId()
 
 			listOf(
 				newHandEvent(
@@ -63,7 +63,7 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 	}
 }
 
-fun updateMissile(world: World, actor: Id, missile: Missile, body: Area, offset: Vector3): Events {
+fun updateMissile(deck: Deck, actor: Id, missile: Missile, body: Area, offset: Vector3): Events {
 	body.translate(offset)
 	val collisions = (body.getOverlappingBodies() as VariantArray<Spatial>)
 		.filter { (it as? Spatial)?.getInstanceId() != missile.ignore }
@@ -78,9 +78,9 @@ fun updateMissile(world: World, actor: Id, missile: Missile, body: Area, offset:
 		listOf()
 
 	val damages = collisions.flatMap { collision ->
-		val collisionId = getBodyEntityId(world, collision)
+		val collisionId = getBodyEntityId(deck, collision)
 		val damageNodeEvents = getDamageNodeEvents(collision, missile.damage)
-		if (world.deck.characters.containsKey(collisionId))
+		if (deck.characters.containsKey(collisionId))
 			damageNodeEvents + newDamage(collisionId!!, missile.damage)
 		else
 			damageNodeEvents
@@ -88,15 +88,15 @@ fun updateMissile(world: World, actor: Id, missile: Missile, body: Area, offset:
 	return deletions + damages
 }
 
-fun eventsFromMissile(world: World, delta: Float): (Id, Missile) -> Events = { actor, missile ->
-	val body = world.bodies[actor] as? Area
+fun eventsFromMissile(deck: Deck, delta: Float): (Id, Missile) -> Events = { actor, missile ->
+	val body = deck.bodies[actor] as? Area
 	val ccdPadding = 1.1f
 	if (body != null) {
 		val iterations = ceil(missile.velocity.length() * delta * missile.diameter * ccdPadding).toInt()
 		var events: Events = listOf()
 		val offset = missile.velocity * delta / iterations.toFloat()
 		for (i in (0 until iterations)) {
-			events = updateMissile(world, actor, missile, body, offset)
+			events = updateMissile(deck, actor, missile, body, offset)
 			if (events.any())
 				break
 		}

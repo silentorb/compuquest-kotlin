@@ -38,15 +38,16 @@ class CharacterFloatingTextController : Node() {
 	override fun _process(delta: Double) {
 		val world = Global.world
 		if (world != null) {
+			val deck = world.deck
 			if (actor == null) {
-				actor = getBodyEntityId(world, getParent() as Spatial)
+				actor = getBodyEntityId(deck, getParent() as Spatial)
 			}
 			val localActor = actor
 			if (localActor != null) {
 				val text = if (getDebugBoolean("DISPLAY_CHARACTER_IDS"))
 					actor.toString()
 				else if (getDebugBoolean("DISPLAY_CHARACTER_HEALTH")) {
-					val character = world.deck.characters[actor]
+					val character = deck.characters[actor]
 					if (character != null)
 						"${character.destructible.health} / ${character.destructible.maxHealth}"
 					else

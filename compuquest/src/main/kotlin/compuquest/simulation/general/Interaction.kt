@@ -61,7 +61,7 @@ fun getInteractable(world: World, actor: Id): Interactable? {
 		collider.getInteractable(world)
 	else {
 		val target = if (collider != null)
-			getBodyEntityId(world, collider)
+			getBodyEntityId(world.deck, collider)
 		else
 			null
 

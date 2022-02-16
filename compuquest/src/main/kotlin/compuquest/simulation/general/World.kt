@@ -16,7 +16,6 @@ data class World(
 	val definitions: Definitions,
 	val scenario: Scenario,
 	val nextId: SharedNextId,
-	val bodies: Table<Spatial> = mapOf(),
 	val sprites: Table<AnimatedSprite3D> = mapOf(),
 	val zones: Map<Key, Zone> = mapOf(),
 	val deck: Deck = Deck(),
@@ -39,5 +38,5 @@ fun getPlayer(deck: Deck?) =
 fun getPlayer(world: World?) =
 	getPlayer(world?.deck)
 
-fun getBodyEntityId(world: World, body: Node): Id? =
-	world.bodies.entries.firstOrNull { it.value == body }?.key
+fun getBodyEntityId(deck: Deck, body: Node): Id? =
+	deck.bodies.entries.firstOrNull { it.value == body }?.key

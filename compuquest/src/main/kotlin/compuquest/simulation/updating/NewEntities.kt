@@ -49,7 +49,6 @@ fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
 	}
 
 	return world.copy(
-		bodies = world.bodies + bodies,
 		sprites = world.sprites + sprites,
 		deck = allHandsToDeck(idHands, deck),
 	)

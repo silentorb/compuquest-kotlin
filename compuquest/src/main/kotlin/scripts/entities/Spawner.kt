@@ -44,7 +44,7 @@ class Spawner : Spatial() {
 
 		val world = Global.world
 		return if (world != null) {
-			val relationships = relationshipCache ?: getDirectRelationshipAttachments(world, this)
+			val relationships = relationshipCache ?: getDirectRelationshipAttachments(world.deck, this)
 			relationshipCache = relationships
 			val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
 			val goals = getChildren().filterIsInstance<GoalAttachment>()

@@ -137,7 +137,7 @@ fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: Spl
 		root.usage = Viewport.Usage.USAGE_2D.id
 		val godotWorld = root.world!!
 		val nextViewports = players.entries.sortedBy { it.value }.map { (actor, _) ->
-			val body = world.bodies[actor]!!
+			val body = world.deck.bodies[actor]!!
 			val rigCamera = findChildrenOfType<Camera>(body).first()
 			newSplitScreenViewport(godotWorld, actor, rigCamera)
 		}

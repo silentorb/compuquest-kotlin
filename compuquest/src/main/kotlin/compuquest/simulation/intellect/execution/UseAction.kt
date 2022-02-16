@@ -22,7 +22,7 @@ fun tryUseAction(world: World, actor: Id, goal: Goal): Events {
 				AccessoryEffects.summonAtTarget -> {
 					val target = goal.targetEntity
 					if (target != null) {
-						val body = world.bodies[target]!!
+						val body = world.deck.bodies[target]!!
 						val targetLocation = body.translation //+ offset
 						val value = TryActionEvent(
 							action = action,

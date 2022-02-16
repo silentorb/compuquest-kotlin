@@ -6,27 +6,26 @@ import compuquest.simulation.general.World
 import compuquest.simulation.general.applyNodeInteractions
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
-import compuquest.simulation.physics.Body
 import compuquest.simulation.physics.setLocationEvent
 import godot.core.Vector3
 import scripts.entities.CharacterBody
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventsByType
 
-fun syncMythic(world: World): World {
-	val deck = world.deck
-	val bodies = world.bodies.mapValues { spatial ->
-		Body(
-			translation = spatial.value.globalTransform.origin,
-			rotation = spatial.value.rotation,
-		)
-	}
-	return world.copy(
-		deck = deck.copy(
-			bodies = bodies,
-		)
-	)
-}
+//fun syncMythic(world: World): World {
+//	val deck = world.deck
+//	val bodies = world.bodies.mapValues { spatial ->
+//		Body(
+//			translation = spatial.value.globalTransform.origin,
+//			rotation = spatial.value.rotation,
+//		)
+//	}
+//	return world.copy(
+//		deck = deck.copy(
+//			bodies = bodies,
+//		)
+//	)
+//}
 
 fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 	val deck = world.deck
@@ -44,7 +43,7 @@ fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 	val moveEvents = filterEventsByType<Vector3>(setLocationEvent, events)
 
 	for (actor in deck.players.keys) {
-		val body = world.bodies[actor] as? CharacterBody
+		val body = world.deck.bodies[actor] as? CharacterBody
 		val character = deck.characters[actor]
 		if (body != null && character != null) {
 			body.isActive = character.isAlive
@@ -55,7 +54,7 @@ fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 		}
 	}
 
-	for ((actor, body) in world.bodies) {
+	for ((actor, body) in world.deck.bodies) {
 		if (body is CharacterBody) {
 			val character = deck.characters[actor]
 			if (character != null) {

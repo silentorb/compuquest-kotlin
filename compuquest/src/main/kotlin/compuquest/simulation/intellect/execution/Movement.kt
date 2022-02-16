@@ -8,7 +8,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
 
 fun moveTowardDestination(world: World, actor: Id, destination: Vector3): Events {
-	val body = world.bodies[actor] as? CharacterBody
+	val body = world.deck.bodies[actor] as? CharacterBody
 	if (body != null) {
 		val origin = body.globalTransform.origin
 		val velocity = (destination - origin)
@@ -21,7 +21,7 @@ fun moveTowardDestination(world: World, actor: Id, destination: Vector3): Events
 }
 
 fun moveTowardDestination(world: World, actor: Id): Events {
-	val body = world.bodies[actor] as? CharacterBody
+	val body = world.deck.bodies[actor] as? CharacterBody
 	if (body != null) {
 		val velocity = getNavigationAgentVelocity(world, actor)
 		if (velocity != null) {

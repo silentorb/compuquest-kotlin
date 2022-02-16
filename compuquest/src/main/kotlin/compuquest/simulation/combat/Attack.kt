@@ -78,7 +78,7 @@ fun getAttackerOriginAndFacing(
 	val baseOrigin = body.translation + toolOffset
 
 	val vector = if (target == null)
-		getCharacterFacing(world, attacker)
+		getCharacterFacing(deck, attacker)
 	else
 		((target + targetOffset) - baseOrigin).normalized()
 
