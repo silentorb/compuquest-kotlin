@@ -98,16 +98,21 @@ fun checkRoaming(world: World, actor: Id, spirit: Spirit): Goal {
 		if (body != null) {
 			val location = body.globalTransform.origin
 			val previousDestination = goal.destination
-			val destination =
-				if (previousDestination == null || location.distanceTo(previousDestination) < interactionMaxDistance * 1.5f)
-					newRoamingDestination(world, actor, location)
-				else
-					previousDestination
-
-			goal.copy(
-				readyTo = ReadyMode.move,
-				destination = destination,
-			)
+			if (previousDestination == null || location.distanceTo(previousDestination) < interactionMaxDistance * 1.5f) {
+				val dice = world.dice
+				checkGoalPause(goal)
+					?: if (dice.getInt(100) < 70)
+						goal.copy(
+							readyTo = ReadyMode.move,
+							destination = newRoamingDestination(world, actor, location),
+						)
+					else
+						goal.copy(
+							readyTo = ReadyMode.none,
+							pause = 20,
+						)
+			} else
+				goal
 		} else
 			goal
 	} else

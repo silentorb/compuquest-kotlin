@@ -3,6 +3,7 @@ package compuquest.simulation.intellect.design
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.timing.Frames
 
 enum class ReadyMode {
 	none,
@@ -20,6 +21,11 @@ data class Goal(
 	// Used to define a long-term destination and how to get there.
 	// May eventually be replaced by a more general list of goals
 	val pathDestinations: List<Vector3> = listOf(),
+
+	// Used to insert gaps between actions and make behavior feel more
+	// natural instead of the character always immediately rushing from one action to the next.
+	// A value of zero means there is currently no pause.
+	val pause: Frames = 0,
 
 	// * * * End design-only fields
 
