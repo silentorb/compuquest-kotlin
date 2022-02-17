@@ -39,6 +39,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.target,
 				strength = 6f,
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
@@ -53,6 +54,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
+				recipient = EffectRecipient.target,
 				duration = 4f,
 				spawnsScene = "res://entities/effect/FireRing.tscn",
 			),
@@ -66,6 +68,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.target,
 				strength = 10f,
 				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 60f,
@@ -80,6 +83,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.target,
 				strength = 20f,
 				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 20f,
@@ -88,14 +92,15 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 	),
 	Accessories.summonFox to AccessoryDefinition(
 		name = Accessories.summonFox,
-		cooldown = 0.2f,
+		cooldown = 5f,
 		range = 1f,
 		equippedFrame = EquipmentFrames.summonFox,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summon,
+				recipient = EffectRecipient.inFront,
 				spawnsCharacter = Characters.fox,
-				duration = 60f
+				duration = 20f
 			),
 		)
 	),

@@ -10,6 +10,7 @@ object Characters {
 	const val fox = "fox"
 	const val player = "player"
 	const val skeleton = "skeleton"
+	const val skeletonSage = "skeletonSage"
 	const val viking = "viking"
 }
 
@@ -30,6 +31,14 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		health = 50,
 		accessories = listOf(
 			Accessories.rocketLauncher,
+		),
+	),
+	Characters.skeletonSage to CharacterDefinition(
+		name = Characters.skeletonSage,
+		depiction = "skeleton",
+		health = 50,
+		accessories = listOf(
+			Accessories.summonFox,
 		),
 	),
 	Characters.viking to CharacterDefinition(

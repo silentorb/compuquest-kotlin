@@ -1,8 +1,8 @@
 package compuquest.simulation.intellect.design
 
 import compuquest.simulation.characters.Character
-import compuquest.simulation.general.Deck
-import compuquest.simulation.general.World
+import compuquest.simulation.characters.getReadyAccessories
+import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.knowledge.Knowledge
 import compuquest.simulation.intellect.knowledge.getTargetRange
@@ -69,6 +69,19 @@ fun getVisibleTarget(world: World, goal: Goal, knowledge: Knowledge, actor: Id):
 	return getNextTarget(world.deck, knowledge.visibleEnemies, actor, lastTarget)
 }
 
+fun updateSelectedAttack(world: World, actor: Id): Map.Entry<Id, Accessory>? {
+	val readyActions = getReadyAccessories(world, actor)
+		.filter { (_, accessory) ->
+			accessory.definition.actionEffects.any {
+				it.isAttack || it.type == AccessoryEffects.summon
+			}
+		}
+	return readyActions.maxByOrNull { it.value.definition.range }
+}
+
+fun requiresTarget(accessory: Accessory): Boolean =
+	accessory.definition.actionEffects.any { it.recipient == EffectRecipient.target }
+
 fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val deck = world.deck
 	val goal = spirit.goal
@@ -80,11 +93,13 @@ fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowl
 		null
 
 	val accessory = if (targetRange != null)
-		updateFocusedAction(world, actor)
+		updateSelectedAttack(world, actor)
 	else
 		null
 
-	val isInRange = targetRange != null && accessory != null && targetRange <= accessory.value.definition.range
+	val isInRange =
+		accessory != null &&
+				(!requiresTarget(accessory.value) || (targetRange != null && targetRange <= accessory.value.definition.range))
 
 	val pathDestinations = getPathDestinations(goal, body)
 	val lastKnownTargetLocation = knowledge.entityLocations[goal.targetEntity]

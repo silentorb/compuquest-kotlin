@@ -16,6 +16,7 @@ import silentorb.mythic.timing.floatToIntTime
 import kotlin.math.max
 
 enum class EffectRecipient {
+	inFront,
 	self,
 	target,
 }
@@ -37,7 +38,7 @@ data class AccessoryEffect(
 	val speed: Float = 0f,
 	val interval: Int = 0,
 	val duration: Float = 0f,
-	val recipient: EffectRecipient = EffectRecipient.target,
+	val recipient: EffectRecipient,
 ) {
 	val strengthInt: Int get() = strength.toInt()
 	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.target

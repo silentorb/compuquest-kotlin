@@ -23,7 +23,6 @@ fun updateDestination(world: World, actor: Id, targetLocation: Vector3?): Vector
 fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 	val readyActions = getReadyAccessories(world, actor)
 	return readyActions.maxByOrNull { it.value.definition.range }
-//world.dice.takeOneOrNull(readyActions.entries)
 }
 
 fun updateUseActionGoal(goal: Goal, accessory: Id): Goal {
