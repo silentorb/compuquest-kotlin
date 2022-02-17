@@ -3,6 +3,7 @@ package compuquest.simulation.happening
 import compuquest.simulation.characters.canUse
 import compuquest.simulation.combat.modifyHealth
 import compuquest.simulation.combat.startAttack
+import compuquest.simulation.combat.summonInFrontOfActor
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.EffectRecipient
 import compuquest.simulation.general.World
@@ -45,6 +46,7 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 						listOf(modifyHealth(actor, effect.strengthInt))
 					else
 						listOf()
+					AccessoryEffects.summon -> summonInFrontOfActor(world, actor, accessory)
 					else -> listOf()
 				}
 			}

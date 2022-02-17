@@ -50,7 +50,9 @@ fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 		.flatMap { effect ->
 			when (effect.type) {
 				AccessoryEffects.damage -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
-				AccessoryEffects.summonAtTarget -> summonAtTarget(world, actor, accessory, attack.targetLocation!!)
+				AccessoryEffects.summonAtTarget -> forEachSummonEffect(accessory.definition) {
+					summonAtLocation(world, it, attack.targetLocation!!)
+				}
 				else -> listOf()
 			}
 		}
@@ -62,7 +64,7 @@ fun getToolOffset(world: World, actor: Id): Vector3 =
 fun getAttackerOriginAndFacing(
 	world: World, attacker: Id, targetLocation: Vector3?, targetEntity: Id?,
 	forwardOffset: Float
-): Pair<Vector3, Vector3>? {
+): Pair<Vector3?, Vector3> {
 	val deck = world.deck
 	val body = deck.bodies[attacker]!!
 	val toolOffset = getToolOffset(world, attacker)
@@ -83,7 +85,7 @@ fun getAttackerOriginAndFacing(
 		((target + targetOffset) - baseOrigin).normalized()
 
 	return if (vector == null)
-		null
+		null to Vector3.ZERO
 	else {
 		val origin = baseOrigin + vector * forwardOffset
 		Pair(origin, vector)

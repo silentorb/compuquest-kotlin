@@ -8,7 +8,6 @@ import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import silentorb.mythic.godoting.instantiateScene
-import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
 import kotlin.math.ceil
@@ -26,14 +25,11 @@ data class Missile(
 )
 
 fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Vector3?, targetEntity: Id?): Events {
-	val originAndFacing = getAttackerOriginAndFacing(world, actor, targetLocation, targetEntity, 0.8f)
-	return if (originAndFacing == null)
-		listOf()
-	else {
-		val (origin, velocity) = originAndFacing
+	val (origin, velocity) = getAttackerOriginAndFacing(world, actor, targetLocation, targetEntity, 0.8f)
+	return if (origin != null) {
 		val definition = weapon.definition
 		val effect = definition.actionEffects.first()
-		val projectile = instantiateScene<Spatial>(effect.spawns!!)!!
+		val projectile = instantiateScene<Spatial>(effect.spawnsScene!!)!!
 		projectile.translation = origin
 		val shape = projectile.findNode("shape") as? CollisionShape
 		if (shape == null)
@@ -60,7 +56,8 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 				)
 			)
 		}
-	}
+	} else
+		listOf()
 }
 
 fun updateMissile(deck: Deck, actor: Id, missile: Missile, body: Area, offset: Vector3): Events {

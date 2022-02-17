@@ -5,15 +5,18 @@ import silentorb.mythic.ent.KeyTable
 
 object Accessories {
 	val berries = "berries"
+	val bite = "bite"
 	val burning = "burning"
 	val fireRing = "fireRing"
 	val rifle = "rifle"
+	val summonFox = "summonFox"
 	val rocketLauncher = "rocketLauncher"
 }
 
 object EquipmentFrames {
 	const val berries = 0
 	const val fireball = 1
+	const val summonFox = 2
 }
 
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
@@ -29,31 +32,42 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
+	Accessories.bite to AccessoryDefinition(
+		name = Accessories.bite,
+		cooldown = 0.6f,
+		range = 5f,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.damage,
+				strength = 6f,
+				spawnsScene = "res://entities/effect/Bite.tscn",
+				speed = 60f,
+			),
+		)
+	),
 	Accessories.fireRing to AccessoryDefinition(
 		name = Accessories.fireRing,
 		cooldown = 8f,
-		attributes = setOf(AccessoryAttributes.attack),
 		range = 15f,
 		equippedFrame = EquipmentFrames.fireball,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
 				duration = 4f,
-				spawns = "res://entities/effect/FireRing.tscn",
+				spawnsScene = "res://entities/effect/FireRing.tscn",
 			),
 		)
 	),
 	Accessories.rifle to AccessoryDefinition(
 		name = Accessories.rifle,
 		cooldown = 0.2f,
-		attributes = setOf(AccessoryAttributes.attack),
 		range = 30f,
 		equippedFrame = EquipmentFrames.fireball,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
 				strength = 10f,
-				spawns = "res://entities/effect/Fireball.tscn",
+				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 60f,
 			),
 		)
@@ -61,15 +75,27 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 	Accessories.rocketLauncher to AccessoryDefinition(
 		name = Accessories.rocketLauncher,
 		cooldown = 1f,
-		attributes = setOf(AccessoryAttributes.attack),
 		range = 15f,
 		equippedFrame = EquipmentFrames.fireball,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
 				strength = 20f,
-				spawns = "res://entities/effect/Fireball.tscn",
+				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 20f,
+			),
+		)
+	),
+	Accessories.summonFox to AccessoryDefinition(
+		name = Accessories.summonFox,
+		cooldown = 0.2f,
+		range = 1f,
+		equippedFrame = EquipmentFrames.summonFox,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.summon,
+				spawnsCharacter = Characters.fox,
+				duration = 60f
 			),
 		)
 	),

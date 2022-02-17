@@ -25,13 +25,15 @@ object AccessoryEffects {
 	val damage = "damage"
 	val heal = "heal"
 	val resurrect = "resurrect"
+	val summon = "summon"
 	val summonAtTarget = "summonAtTarget"
 }
 
 data class AccessoryEffect(
 	val type: String,
 	val strength: Float = 0f,
-	val spawns: Key? = null,
+	val spawnsCharacter: Key? = null,
+	val spawnsScene: String? = null,
 	val speed: Float = 0f,
 	val interval: Int = 0,
 	val duration: Float = 0f,
@@ -61,7 +63,7 @@ data class AccessoryDefinition(
 
 data class Accessory(
 	val owner: Id,
-	val level: Int? = null,
+	val level: Int = 1,
 	val cooldown: Float = 0f,
 	val definition: AccessoryDefinition,
 	val duration: Int = -1,
@@ -177,3 +179,9 @@ fun getOwnerAccessories(world: World, owner: Id): Table<Accessory> =
 fun canHeal(accessory: Accessory): Boolean =
 	accessory.definition.actionEffects
 		.any { it.type == AccessoryEffects.heal }
+
+fun forEachEffectOfType(type: Key): (AccessoryDefinition, (AccessoryEffect) -> Events) -> Events = { definition, map ->
+	definition.actionEffects
+		.filter { it.type == type }
+		.flatMap(map)
+}

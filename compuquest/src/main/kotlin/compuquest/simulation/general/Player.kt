@@ -12,6 +12,7 @@ import compuquest.simulation.input.Commands
 import compuquest.simulation.physics.setLocationEvent
 import compuquest.simulation.updating.simulationFps
 import scripts.entities.PlayerSpawner
+import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -125,6 +126,11 @@ fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
 		val nextId = world.nextId.source()
 		val actor = nextId()
 		val name = newPlayerName(playerIndex)
+		val debugAccessories = (getDebugString("PLAYER_ITEMS")?.split(",") ?: listOf())
+			.map { accessoryName ->
+				newAccessory(world.definitions, nextId, actor, accessoryName)
+			}
+
 		spawnCharacter(
 			world,
 			scene,
@@ -144,7 +150,7 @@ fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
 							)
 						)
 					)
-				)
+				) + debugAccessories
 	} else
 		listOf()
 }

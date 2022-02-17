@@ -218,6 +218,7 @@ fun addCharacter(
 		val character = newCharacter(definition, accessories, toolOffset, name, relationships = relationships)
 		if (sprite != null) {
 			sprite.animation = character.depiction
+			sprite.frame = character.frame.toLong()
 		}
 
 		listOf(
@@ -246,7 +247,7 @@ fun spawnCharacter(
 	origin: Vector3,
 	rotation: Vector3,
 	type: String,
-	relationships: Relationships,
+	relationships: Relationships = listOf(),
 	name: String? = null,
 	id: Id? = null,
 	additional: List<Any> = listOf()

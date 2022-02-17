@@ -6,6 +6,7 @@ import silentorb.mythic.ent.KeyTable
 
 object Characters {
 	const val child = "child"
+	const val fox = "fox"
 	const val player = "player"
 	const val skeleton = "skeleton"
 	const val viking = "viking"
@@ -18,7 +19,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		corpseDecay = 0f,
 		health = 100,
 		accessories = listOf(
-			Accessories.rifle,
+//			Accessories.rifle,
 //			Accessories.berries,
 		),
 	),
@@ -44,6 +45,15 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		frame = 2,
 		health = 30,
 		accessories = listOf(
+		),
+	),
+	Characters.fox to CharacterDefinition(
+		name = Characters.fox,
+		depiction = "sprites",
+		frame = 3,
+		health = 30,
+		accessories = listOf(
+			Accessories.bite,
 		),
 	),
 )
