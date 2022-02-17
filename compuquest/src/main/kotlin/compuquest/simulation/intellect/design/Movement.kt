@@ -80,7 +80,7 @@ fun newRoamingDestination(world: World, actor: Id, location: Vector3): Vector3? 
 	val agent = world.navigation.agents[actor]
 	return if (agent != null) {
 		val filter = navigation.crowd.getFilter(agent.params.queryFilterType)
-		// First check if the actor is a pet that should be roaming close to its master.
+		// First check if the actor is a pet that should be roaming near its master.
 		// If not, next try twice to increase the likelihood of getting a valid point.
 		// If two tries don't work then this code will just be hit again the next time the spirit updates its goals
 		getAnchoredRoaming(world, filter, actor, location)

@@ -22,7 +22,7 @@ fun updateRelationships(world: World, actor: Id): Relationships {
 	val deck = world.deck
 	val character = deck.characters[actor]
 	return if (character != null) {
-		val groupRelationships = getCharacterGroups(character)
+		val groupRelationships = getCharacterGroups(deck, character)
 			.flatMap { deck.groups[it]?.relationships ?: listOf() }
 
 		(character.relationships + groupRelationships).distinct()

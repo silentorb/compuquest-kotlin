@@ -23,6 +23,7 @@ class Spawner : Spatial() {
 	@RegisterProperty
 	var type: String = ""
 
+	// An interval of 0 is interpreted as spawning only triggered once on the first frame of the spawner
 	@Export
 	@RegisterProperty
 	var interval: Float = 0f
@@ -79,12 +80,14 @@ class Spawner : Spatial() {
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
 		if (active) {
-			accumulator += delta.toFloat()
 			if (!firstSpawn && spawn()) {
 				firstSpawn = true
 			}
-			if (accumulator >= interval && spawn()) {
-				accumulator -= interval
+			if (interval > 0f) {
+				accumulator += delta.toFloat()
+				if (accumulator >= interval && spawn()) {
+					accumulator -= interval
+				}
 			}
 		}
 	}

@@ -276,19 +276,27 @@ fun spawnCharacter(
 	)
 }
 
-fun getCharacterGroupRelationships(character: Character): Sequence<Relationship> =
+fun getCharacterGroupRelationships(deck: Deck, character: Character): Collection<Relationship> =
 	character.relationships
-		.asSequence()
-		.filter { it.isA == RelationshipType.member }
+		.filter { it.isA == RelationshipType.member } +
+			character.relationships
+				.filter { it.isA == RelationshipType.master }
+				.flatMap {
+					val master = deck.characters[it.of]
+					if (master != null)
+						getCharacterGroupRelationships(deck, master)
+					else
+						listOf()
+				}
 
-fun getCharacterGroups(character: Character): Sequence<Id> =
-	getCharacterGroupRelationships(character)
+fun getCharacterGroups(deck: Deck, character: Character): Collection<Id> =
+	getCharacterGroupRelationships(deck, character)
 		.map { it.of }
 
-fun getCharacterGroups(deck: Deck, actor: Id): List<Id> {
+fun getCharacterGroups(deck: Deck, actor: Id): Collection<Id> {
 	val character = deck.characters[actor]
 	return if (character != null)
-		getCharacterGroups(character).toList()
+		getCharacterGroups(deck, character).toList()
 	else
 		listOf()
 }

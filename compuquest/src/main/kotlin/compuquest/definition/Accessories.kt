@@ -41,7 +41,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 				type = AccessoryEffects.damage,
 				strength = 6f,
 				spawnsScene = "res://entities/effect/Bite.tscn",
-				speed = 60f,
+				speed = 15f,
 			),
 		)
 	),

@@ -9,10 +9,11 @@ fun hasRelationship(world: World, actor: Id?, other: Id?, type: RelationshipType
 	if (actor == null || other == null)
 		false
 	else {
-		val relationships = world.deck.spirits[actor]?.knowledge?.relationships ?: listOf()
-		val otherCharacter = world.deck.characters[other]
+		val deck = world.deck
+		val relationships = deck.spirits[actor]?.knowledge?.relationships ?: listOf()
+		val otherCharacter = deck.characters[other]
 		if (otherCharacter != null) {
-			val groups = getCharacterGroups(otherCharacter)
+			val groups = getCharacterGroups(deck, otherCharacter).toList()
 			relationships.any { it.isA == type && (it.of == other || groups.contains(it.of)) }
 		} else
 			false

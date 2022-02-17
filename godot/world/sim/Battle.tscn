@@ -19,7 +19,7 @@ scene = ExtResource( 6 )
 [node name="member-of-heroes" type="Node" parent="player-spawn"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Heroes")
 
 [node name="heroes-spawner" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, 1.14439 )
@@ -35,7 +35,7 @@ destination_path = NodePath("../../end-targetB")
 [node name="member-of-heroes" type="Node" parent="heroes-spawner"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Heroes")
 
 [node name="heroes-spawner2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, 34.1444 )
@@ -55,7 +55,7 @@ destination_path = NodePath("../../end-targetB")
 [node name="member-of-heroes" type="Node" parent="heroes-spawner2"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Heroes")
 
 [node name="monster-spawner" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, 1.00418 )
@@ -71,7 +71,7 @@ destination_path = NodePath("../../end-targetA")
 [node name="member-of-undead" type="Node" parent="monster-spawner"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Undead")
 
 [node name="monster-spawner2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, 39.0042 )
@@ -91,7 +91,7 @@ destination_path = NodePath("../../end-targetA")
 [node name="member-of-undead" type="Node" parent="monster-spawner2"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Undead")
 
 [node name="heroes-spawner3" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, -32.8556 )
@@ -111,7 +111,7 @@ destination_path = NodePath("../../end-targetB")
 [node name="member-of-heroes" type="Node" parent="heroes-spawner3"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Heroes")
 
 [node name="monster-spawner3" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, -27.9958 )
@@ -131,7 +131,7 @@ destination_path = NodePath("../../end-targetA")
 [node name="member-of-undead" type="Node" parent="monster-spawner3"]
 script = ExtResource( 9 )
 is_a = "member"
-of = NodePath("")
+of = NodePath("../../common-scenario/Undead")
 
 [node name="end-targetA" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -69.7266, 0, -0.135735 )
@@ -210,3 +210,5 @@ depth = 200.0
 material = ExtResource( 1 )
 
 [node name="common-scenario" parent="." instance=ExtResource( 3 )]
+
+[editable path="common-scenario"]
