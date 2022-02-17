@@ -9,6 +9,7 @@ import compuquest.simulation.input.ActionChange
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
+import compuquest.simulation.intellect.knowledge.Personality
 import godot.AnimatedSprite3D
 import godot.PackedScene
 import godot.core.Vector3
@@ -29,6 +30,7 @@ data class CharacterDefinition(
 	val health: Int,
 	val corpseDecay: Float = 10f,
 	val accessories: List<Key> = listOf(),
+	val personality: Personality? = null,
 )
 
 data class Character(

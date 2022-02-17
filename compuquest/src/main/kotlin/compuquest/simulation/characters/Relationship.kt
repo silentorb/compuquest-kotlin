@@ -6,6 +6,7 @@ enum class RelationshipType {
 	child,
 	enemy,
 	friend,
+	master,
 	member,
 	parent,
 }

@@ -12,7 +12,8 @@ data class NavigationState(
     val mesh: NavMesh,
     val query: NavMeshQuery,
     val crowd: Crowd,
-    val agents: Map<Id, CrowdAgent>
+    val agents: Map<Id, CrowdAgent>,
+    val rand: NavMeshQuery.FRand = NavMeshQuery.FRand()
 )
 
 typealias NavigationDirection = Vector3

@@ -5,6 +5,7 @@ import compuquest.simulation.intellect.design.Goal
 import compuquest.simulation.intellect.design.ReadyMode
 import compuquest.simulation.intellect.design.updateGoals
 import compuquest.simulation.intellect.knowledge.Knowledge
+import compuquest.simulation.intellect.knowledge.Personality
 import compuquest.simulation.intellect.knowledge.updateKnowledge
 import silentorb.mythic.ent.Id
 
@@ -13,6 +14,7 @@ const val spiritUpdateInterval = 20
 data class Spirit(
 	val intervalOffset: Int,
 	val visibilityRange: Float = 20f,
+	val personality: Personality,
 	val knowledge: Knowledge = Knowledge(),
 	val goal: Goal = Goal(),
 )
@@ -29,9 +31,10 @@ fun nextNewSpiritInterval(): Int {
 	return value
 }
 
-fun newSpirit(): Spirit =
+fun newSpirit(personality: Personality = Personality()): Spirit =
 	Spirit(
 		intervalOffset = nextNewSpiritInterval(),
+		personality = personality,
 	)
 
 fun getSpiritIntervalStep(step: Long): Int =

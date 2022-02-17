@@ -69,7 +69,7 @@ fun getVisibleTarget(world: World, goal: Goal, knowledge: Knowledge, actor: Id):
 	return getNextTarget(world.deck, knowledge.visibleEnemies, actor, lastTarget)
 }
 
-fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal {
+fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val deck = world.deck
 	val goal = spirit.goal
 	val visibleTarget = getVisibleTarget(world, goal, knowledge, actor)
@@ -104,15 +104,18 @@ fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowl
 		else
 			goal.targetEntity
 
-	return goal.copy(
-		focusedAction = accessory?.key,
-		targetEntity = nextTarget,
-		destination = destination,
-		readyTo = when {
-			destination != null -> ReadyMode.move
-			isInRange -> ReadyMode.action
-			else -> ReadyMode.none
-		},
-		pathDestinations = pathDestinations,
-	)
+	return if (nextTarget != null || destination != null)
+		goal.copy(
+			focusedAction = accessory?.key,
+			targetEntity = nextTarget,
+			destination = destination,
+			readyTo = when {
+				destination != null -> ReadyMode.move
+				isInRange -> ReadyMode.action
+				else -> ReadyMode.none
+			},
+			pathDestinations = pathDestinations,
+		)
+	else
+		null
 }

@@ -1,7 +1,6 @@
 package compuquest.simulation.intellect.navigation
 
 import compuquest.simulation.general.Deck
-import compuquest.simulation.general.interactionMaxDistance
 import godot.core.Vector3
 import org.recast4j.detour.crowd.debug.CrowdAgentDebugInfo
 import silentorb.mythic.ent.Table
@@ -39,7 +38,7 @@ fun mythicToDetour(deck: Deck, previous: Deck, navigation: NavigationState): Nav
 		val previousTargetPosition = previous.spirits[actor]?.goal?.destination
 		if (targetPosition != previousTargetPosition) {
 			if (targetPosition != null) {
-				val nearest = nearestPolygon(navigation, targetPosition)
+				val nearest = getNearestPolygon(navigation, targetPosition)
 				if (nearest != null) {
 					val result = crowd.requestMoveTarget(agent, nearest.result.nearestRef, nearest.result.nearestPos)
 					if (!result) {

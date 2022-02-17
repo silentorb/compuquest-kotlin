@@ -51,7 +51,7 @@ fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 			when (effect.type) {
 				AccessoryEffects.damage -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
 				AccessoryEffects.summonAtTarget -> forEachSummonEffect(accessory.definition) {
-					summonAtLocation(world, it, attack.targetLocation!!)
+					summonAtLocation(world, actor, it, attack.targetLocation!!)
 				}
 				else -> listOf()
 			}

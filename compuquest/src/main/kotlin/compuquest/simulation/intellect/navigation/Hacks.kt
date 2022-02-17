@@ -1,5 +1,6 @@
 package compuquest.simulation.intellect.navigation
 
+import org.recast4j.detour.Status
 import org.recast4j.detour.crowd.CrowdAgent
 import org.recast4j.detour.crowd.PathQueryResult
 import java.lang.reflect.Field
@@ -20,4 +21,12 @@ fun initNavigationHacks() {
 	crowdAgent_targetPathQueryResult!!.trySetAccessible()
 	pathQueryResult_status = PathQueryResult().javaClass.getDeclaredField("status")
 	pathQueryResult_status!!.trySetAccessible()
+}
+
+fun getAgentStatus(agent: CrowdAgent): Status? {
+	val queryState = crowdAgent_targetPathQueryResult?.get(agent) as? PathQueryResult?
+	return if (queryState != null)
+		pathQueryResult_status?.get(queryState) as Status?
+	else
+		null
 }
