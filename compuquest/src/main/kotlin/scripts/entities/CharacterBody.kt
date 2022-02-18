@@ -214,7 +214,8 @@ class CharacterBody : KinematicBody() {
 				val accessory = deck.accessories[activeAccessory]
 				if (accessory != null) {
 					val nextEquippedFrame = accessory.definition.equippedFrame
-					equippedFrame = nextEquippedFrame
+					val cooldownOffset = if (accessory.cooldown > 0) 1 else 0
+					equippedFrame = nextEquippedFrame + cooldownOffset
 				}
 			} else {
 				equippedFrame = -1

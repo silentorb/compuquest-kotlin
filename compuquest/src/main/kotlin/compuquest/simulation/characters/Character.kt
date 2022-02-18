@@ -243,7 +243,7 @@ fun getRandomizedSpawnOffset(dice: Dice) =
 		dice.getFloat(-0.1f, 0.1f)
 	)
 
-fun spawnCharacter(
+ fun spawnCharacter(
 	world: World,
 	scene: PackedScene,
 	origin: Vector3,
@@ -260,7 +260,13 @@ fun spawnCharacter(
 	val nextId = world.nextId.source()
 	val actor = id ?: nextId()
 
-	val body = scene.instance() as CharacterBody
+	val body: CharacterBody = try {
+		scene.instance() as CharacterBody
+	}
+	catch (e: Throwable) {
+		throw Error("Error instantiating character scene")
+	}
+
 	body.actor = actor
 	body.translation = origin + getRandomizedSpawnOffset(dice)
 

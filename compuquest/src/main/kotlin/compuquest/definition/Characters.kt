@@ -1,7 +1,6 @@
 package compuquest.definition
 
 import compuquest.simulation.characters.CharacterDefinition
-import compuquest.simulation.definition.Factions
 import compuquest.simulation.intellect.knowledge.Personality
 import silentorb.mythic.ent.KeyTable
 
@@ -30,7 +29,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		depiction = "skeleton",
 		health = 50,
 		accessories = listOf(
-			Accessories.rocketLauncher,
+			Accessories.fireStaff,
 		),
 	),
 	Characters.skeletonSage to CharacterDefinition(
@@ -46,7 +45,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		depiction = "viking",
 		health = 50,
 		accessories = listOf(
-			Accessories.rocketLauncher,
+			Accessories.fireStaff,
 		),
 	),
 	Characters.child to CharacterDefinition(

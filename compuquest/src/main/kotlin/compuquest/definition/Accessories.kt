@@ -8,15 +8,15 @@ object Accessories {
 	val bite = "bite"
 	val burning = "burning"
 	val fireRing = "fireRing"
+	val fireStaff = "fireStaff"
 	val rifle = "rifle"
 	val summonFox = "summonFox"
-	val rocketLauncher = "rocketLauncher"
 }
 
 object EquipmentFrames {
 	const val berries = 0
 	const val fireball = 1
-	const val summonFox = 2
+	const val summonFox = 3
 }
 
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
@@ -75,8 +75,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.rocketLauncher to AccessoryDefinition(
-		name = Accessories.rocketLauncher,
+	Accessories.fireStaff to AccessoryDefinition(
+		name = Accessories.fireStaff,
 		cooldown = 1f,
 		range = 15f,
 		equippedFrame = EquipmentFrames.fireball,
@@ -100,7 +100,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 				type = AccessoryEffects.summon,
 				recipient = EffectRecipient.inFront,
 				spawnsCharacter = Characters.fox,
-				duration = 20f
+				duration = 19f
 			),
 		)
 	),
