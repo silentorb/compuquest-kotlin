@@ -44,6 +44,8 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 	else
 		checkSelfHealing(deck, actor, character, spirit)
 			?: checkParenting(world, actor, character, spirit)
+			?: checkHealing(world, actor, spirit, knowledge)
 			?: checkTargetPursuit(world, actor, spirit, knowledge)
+			?: checkPathDestinations(world, actor, spirit)
 			?: checkRoaming(world, actor, spirit)
 }

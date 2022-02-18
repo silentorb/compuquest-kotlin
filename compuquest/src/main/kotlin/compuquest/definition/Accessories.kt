@@ -3,24 +3,6 @@ package compuquest.definition
 import compuquest.simulation.general.*
 import silentorb.mythic.ent.KeyTable
 
-object Accessories {
-	val berries = "berries"
-	val bite = "bite"
-	val burning = "burning"
-	val fireRing = "fireRing"
-	val fireStaff = "fireStaff"
-	val rifle = "rifle"
-	val summonFox = "summonFox"
-	val summonSquid = "summonSquid"
-}
-
-object EquipmentFrames {
-	const val berries = 0
-	const val fireStaff = 1
-	const val summonFox = 3
-	const val summonSquid = 5
-}
-
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 	Accessories.berries to AccessoryDefinition(
 		name = Accessories.berries,
@@ -41,8 +23,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
-				recipient = EffectRecipient.target,
-				strength = 6f,
+				recipient = EffectRecipient.projectile,
+				strength = 8f,
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
 			),
@@ -56,9 +38,23 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
-				recipient = EffectRecipient.target,
+				recipient = EffectRecipient.projectile,
 				duration = 4f,
 				spawnsScene = "res://entities/effect/FireRing.tscn",
+			),
+		)
+	),
+	Accessories.heal to AccessoryDefinition(
+		name = Accessories.heal,
+		cooldown = 1.5f,
+		range = 6f,
+		equippedFrame = EquipmentFrames.heal,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.heal,
+				recipient = EffectRecipient.raycast,
+				strength = 25f,
+				spawnsScene = "res://entities/effect/Heal.tscn",
 			),
 		)
 	),
@@ -70,7 +66,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
-				recipient = EffectRecipient.target,
+				recipient = EffectRecipient.projectile,
 				strength = 10f,
 				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 60f,
@@ -85,7 +81,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
-				recipient = EffectRecipient.target,
+				recipient = EffectRecipient.projectile,
 				strength = 20f,
 				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 20f,

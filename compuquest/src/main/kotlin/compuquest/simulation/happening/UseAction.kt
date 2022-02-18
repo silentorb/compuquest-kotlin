@@ -1,9 +1,7 @@
 package compuquest.simulation.happening
 
 import compuquest.simulation.characters.canUse
-import compuquest.simulation.combat.modifyHealth
-import compuquest.simulation.combat.startAttack
-import compuquest.simulation.combat.summonInFrontOfActor
+import compuquest.simulation.combat.*
 import compuquest.simulation.general.AccessoryEffects
 import compuquest.simulation.general.EffectRecipient
 import compuquest.simulation.general.World
@@ -31,21 +29,20 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 				definition.isAttack -> listOf(
 					startAttack(action, accessory, actor, event.targetLocation, targetEntity)
 				)
-
-//      else -> when (definition.effect) {
-//        Actions.dash -> dashEvents(definitions, accessory, actor)
-//        Actions.entangle -> withResolvedTarget(world, actor, targetEntity, entangleEvents(deck, definition?.level ?: 1))
 				else -> listOf()
-//      }
 			}
 
 		val effectEvents = accessory.definition.actionEffects
 			.flatMap { effect ->
 				when (effect.type) {
-					AccessoryEffects.heal -> if (effect.recipient == EffectRecipient.self)
-						listOf(modifyHealth(actor, effect.strengthInt))
-					else
-						listOf()
+					AccessoryEffects.heal -> when (effect.recipient) {
+						EffectRecipient.self -> listOf(modifyHealth(actor, effect.strengthInt))
+						EffectRecipient.raycast -> if (targetEntity != null)
+							useHealingSpell(world, targetEntity, effect)
+						else
+							raycastHeal(world, actor, accessory, effect)
+						else -> listOf()
+					}
 					AccessoryEffects.summon -> summonInFrontOfActor(world, actor, accessory)
 					else -> listOf()
 				}
@@ -62,14 +59,18 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 //  else
 //    listOf()
 
-		specificEvents + effectEvents + Event(
-			type = useActionEvent,
-			target = actor,
-			value = UseAction(
-				action = action,
-				deferredEvents = mapOf()
-			)
-		) //+ paymentEvents
+		val events = specificEvents + effectEvents
+		if (events.any())
+			events + Event(
+				type = useActionEvent,
+				target = actor,
+				value = UseAction(
+					action = action,
+					deferredEvents = mapOf()
+				)
+			) //+ paymentEvents
+		else
+			listOf() // Ability failed to perform any effects--consider it unused
 	} else
 		listOf()
 }

@@ -18,7 +18,8 @@ import kotlin.math.max
 enum class EffectRecipient {
 	inFront,
 	self,
-	target,
+	projectile,
+	raycast,
 }
 
 object AccessoryEffects {
@@ -41,7 +42,7 @@ data class AccessoryEffect(
 	val recipient: EffectRecipient,
 ) {
 	val strengthInt: Int get() = strength.toInt()
-	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.target
+	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.projectile
 }
 
 data class AccessoryDefinition(

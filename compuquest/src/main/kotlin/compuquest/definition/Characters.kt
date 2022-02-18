@@ -4,16 +4,6 @@ import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.intellect.knowledge.Personality
 import silentorb.mythic.ent.KeyTable
 
-object Characters {
-	const val child = "child"
-	const val fox = "fox"
-	const val player = "player"
-	const val skeleton = "skeleton"
-	const val skeletonSage = "skeletonSage"
-	const val squid = "squid"
-	const val viking = "viking"
-}
-
 fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 	Characters.player to CharacterDefinition(
 		name = "Player",
@@ -21,8 +11,6 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		corpseDecay = 0f,
 		health = 100,
 		accessories = listOf(
-//			Accessories.rifle,
-//			Accessories.berries,
 		),
 	),
 	Characters.skeleton to CharacterDefinition(
@@ -38,7 +26,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		depiction = "skeleton",
 		health = 50,
 		accessories = listOf(
-			Accessories.summonFox,
+			Accessories.summonSquid,
 		),
 	),
 	Characters.viking to CharacterDefinition(
@@ -47,6 +35,14 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		health = 50,
 		accessories = listOf(
 			Accessories.fireStaff,
+		),
+	),
+	Characters.cleric to CharacterDefinition(
+		name = Characters.cleric,
+		depiction = "viking",
+		health = 40,
+		accessories = listOf(
+			Accessories.heal,
 		),
 	),
 	Characters.child to CharacterDefinition(

@@ -13,6 +13,7 @@ const val relationshipInterval = 120
 
 data class Knowledge(
 	val visibleEnemies: Table<Character> = mapOf(),
+	val visibleAllies: Table<Character> = mapOf(),
 	val entityLocations: Table<Vector3> = mapOf(),
 	val relationships: Relationships = listOf(),
 	val relationshipUpdateCounter: Int = relationshipInterval,

@@ -41,32 +41,32 @@ fun filterEnemyTargets(
 
 fun getNextTarget(
 	deck: Deck,
-	visibleEnemies: Table<Character>,
+	characters: Table<Character>,
 	actor: Id,
 	target: Id?
 ): Id? {
-	return if (visibleEnemies.containsKey(target))
+	return if (characters.containsKey(target))
 		target
 	else {
-		if (visibleEnemies.entries.size < 2)
-			visibleEnemies.keys.firstOrNull()
+		if (characters.entries.size < 2)
+			characters.keys.firstOrNull()
 		else {
 			val bodies = deck.bodies
 			val body = bodies[actor]!!
-			visibleEnemies.keys
+			characters.keys
 				.map { it to getTargetRange(deck, body, it) }
 				.minByOrNull { it.second }!!.first
 		}
 	}
 }
 
-fun getVisibleTarget(world: World, goal: Goal, knowledge: Knowledge, actor: Id): Id? {
+fun getVisibleTarget(world: World, goal: Goal, characters: Table<Character>, actor: Id): Id? {
 	val lastTarget = if (goal.targetEntity != null && world.dice.getInt(100) > 5)
 		goal.targetEntity
 	else
 		null
 
-	return getNextTarget(world.deck, knowledge.visibleEnemies, actor, lastTarget)
+	return getNextTarget(world.deck, characters, actor, lastTarget)
 }
 
 fun updateSelectedAttack(world: World, actor: Id): Map.Entry<Id, Accessory>? {
@@ -80,12 +80,12 @@ fun updateSelectedAttack(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 }
 
 fun requiresTarget(accessory: Accessory): Boolean =
-	accessory.definition.actionEffects.any { it.recipient == EffectRecipient.target }
+	accessory.definition.actionEffects.any { it.recipient == EffectRecipient.projectile }
 
 fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val deck = world.deck
 	val goal = spirit.goal
-	val visibleTarget = getVisibleTarget(world, goal, knowledge, actor)
+	val visibleTarget = getVisibleTarget(world, goal, knowledge.visibleEnemies, actor)
 	val body = deck.bodies[actor]
 	val targetRange = if (body != null && visibleTarget != null)
 		getTargetRange(deck, body, visibleTarget)
@@ -101,7 +101,6 @@ fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowl
 		accessory != null &&
 				(!requiresTarget(accessory.value) || (targetRange != null && targetRange <= accessory.value.definition.range))
 
-	val pathDestinations = getPathDestinations(goal, body)
 	val lastKnownTargetLocation = knowledge.entityLocations[goal.targetEntity]
 
 	val destination = when {
@@ -109,7 +108,6 @@ fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowl
 			world.deck.bodies[visibleTarget]?.translation
 		visibleTarget == null && lastKnownTargetLocation != null -> lastKnownTargetLocation
 		isInRange -> null
-		pathDestinations.any() && visibleTarget == null -> pathDestinations.first()
 		else -> null
 	}
 
@@ -129,7 +127,6 @@ fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowl
 				isInRange -> ReadyMode.action
 				else -> ReadyMode.none
 			},
-			pathDestinations = pathDestinations,
 		)
 	else
 		null

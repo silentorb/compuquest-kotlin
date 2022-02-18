@@ -25,7 +25,7 @@ of = NodePath("../../common-scenario/Heroes")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, 1.14439 )
 script = ExtResource( 7 )
 interval = 5.0
-quantity = 3
+quantity = 2
 type = "viking"
 
 [node name="move" type="Node" parent="heroes-spawner"]
@@ -37,11 +37,26 @@ script = ExtResource( 9 )
 is_a = "member"
 of = NodePath("../../common-scenario/Heroes")
 
+[node name="heroes-spawner4" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -63.3257, 0.903915, 1.14439 )
+script = ExtResource( 7 )
+interval = 5.0
+type = "cleric"
+
+[node name="move" type="Node" parent="heroes-spawner4"]
+script = ExtResource( 2 )
+destination_path = NodePath("../../end-targetB")
+
+[node name="member-of-heroes" type="Node" parent="heroes-spawner4"]
+script = ExtResource( 9 )
+is_a = "member"
+of = NodePath("../../common-scenario/Heroes")
+
 [node name="heroes-spawner2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, 34.1444 )
 script = ExtResource( 7 )
 interval = 5.0
-quantity = 3
+quantity = 2
 type = "viking"
 
 [node name="move1" type="Node" parent="heroes-spawner2"]
@@ -61,7 +76,7 @@ of = NodePath("../../common-scenario/Heroes")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, 1.00418 )
 script = ExtResource( 7 )
 interval = 5.0
-quantity = 3
+quantity = 2
 type = "skeleton"
 
 [node name="move" type="Node" parent="monster-spawner"]
@@ -92,7 +107,7 @@ of = NodePath("../../common-scenario/Undead")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, 39.0042 )
 script = ExtResource( 7 )
 interval = 5.0
-quantity = 3
+quantity = 2
 type = "skeleton"
 
 [node name="move1" type="Node" parent="monster-spawner2"]
@@ -112,7 +127,7 @@ of = NodePath("../../common-scenario/Undead")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3257, 0.903915, -32.8556 )
 script = ExtResource( 7 )
 interval = 5.0
-quantity = 3
+quantity = 2
 type = "viking"
 
 [node name="move1" type="Node" parent="heroes-spawner3"]
@@ -132,7 +147,7 @@ of = NodePath("../../common-scenario/Heroes")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1964, 0.903915, -27.9958 )
 script = ExtResource( 7 )
 interval = 5.0
-quantity = 3
+quantity = 2
 type = "skeleton"
 
 [node name="move1" type="Node" parent="monster-spawner3"]
