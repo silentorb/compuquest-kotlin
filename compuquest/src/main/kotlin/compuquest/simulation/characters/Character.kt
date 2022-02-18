@@ -31,6 +31,7 @@ data class CharacterDefinition(
 	val corpseDecay: Float = 10f,
 	val accessories: List<Key> = listOf(),
 	val personality: Personality? = null,
+	val speed: Float = 10f,
 )
 
 data class Character(
@@ -243,7 +244,7 @@ fun getRandomizedSpawnOffset(dice: Dice) =
 		dice.getFloat(-0.1f, 0.1f)
 	)
 
- fun spawnCharacter(
+fun spawnCharacter(
 	world: World,
 	scene: PackedScene,
 	origin: Vector3,
@@ -262,15 +263,15 @@ fun getRandomizedSpawnOffset(dice: Dice) =
 
 	val body: CharacterBody = try {
 		scene.instance() as CharacterBody
-	}
-	catch (e: Throwable) {
+	} catch (e: Throwable) {
 		throw Error("Error instantiating character scene")
 	}
 
 	body.actor = actor
 	body.translation = origin + getRandomizedSpawnOffset(dice)
-
 	body.rotation = rotation
+	body.walkSpeed = definition.speed
+	body.speed = definition.speed
 
 	// The body needs to be added to the world before addCharacter because
 	// Godot does not call _ready until the node is added to the scene tree

@@ -11,12 +11,14 @@ object Accessories {
 	val fireStaff = "fireStaff"
 	val rifle = "rifle"
 	val summonFox = "summonFox"
+	val summonSquid = "summonSquid"
 }
 
 object EquipmentFrames {
 	const val berries = 0
-	const val fireball = 1
+	const val fireStaff = 1
 	const val summonFox = 3
+	const val summonSquid = 5
 }
 
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
@@ -50,7 +52,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		name = Accessories.fireRing,
 		cooldown = 8f,
 		range = 15f,
-		equippedFrame = EquipmentFrames.fireball,
+		equippedFrame = EquipmentFrames.fireStaff,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
@@ -64,7 +66,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		name = Accessories.rifle,
 		cooldown = 0.2f,
 		range = 30f,
-		equippedFrame = EquipmentFrames.fireball,
+		equippedFrame = EquipmentFrames.fireStaff,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
@@ -79,7 +81,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 		name = Accessories.fireStaff,
 		cooldown = 1f,
 		range = 15f,
-		equippedFrame = EquipmentFrames.fireball,
+		equippedFrame = EquipmentFrames.fireStaff,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
@@ -100,6 +102,20 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 				type = AccessoryEffects.summon,
 				recipient = EffectRecipient.inFront,
 				spawnsCharacter = Characters.fox,
+				duration = 19f
+			),
+		)
+	),
+	Accessories.summonSquid to AccessoryDefinition(
+		name = Accessories.summonSquid,
+		cooldown = 5f,
+		range = 1f,
+		equippedFrame = EquipmentFrames.summonSquid,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.summon,
+				recipient = EffectRecipient.inFront,
+				spawnsCharacter = Characters.squid,
 				duration = 19f
 			),
 		)

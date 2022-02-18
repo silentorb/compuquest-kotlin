@@ -10,6 +10,7 @@ object Characters {
 	const val player = "player"
 	const val skeleton = "skeleton"
 	const val skeletonSage = "skeletonSage"
+	const val squid = "squid"
 	const val viking = "viking"
 }
 
@@ -61,6 +62,19 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		depiction = "sprites",
 		frame = 3,
 		health = 30,
+		accessories = listOf(
+			Accessories.bite,
+		),
+		personality = Personality(
+			roaming = true,
+		)
+	),
+	Characters.squid to CharacterDefinition(
+		name = Characters.squid,
+		depiction = "sprites",
+		frame = 5,
+		health = 50,
+		speed = 5f,
 		accessories = listOf(
 			Accessories.bite,
 		),
