@@ -3,6 +3,7 @@ package compuquest.simulation.intellect.design
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.timing.Frames
 
 enum class ReadyMode {
@@ -30,13 +31,13 @@ data class Goal(
 	// * * * End design-only fields
 
 	// * * * The following fields are used for both design and execution
-	val targetEntity: Id? = null,
+	val targetEntity: Id = emptyId,
 
 	// * * * End design/execution fields
 
 	// * * * The following fields are used just as output of design and input for execution
 	val readyTo: ReadyMode = ReadyMode.none,
-	val focusedAction: Id? = null,
+	val focusedAction: Id = emptyId,
 	val interactionBehavior: Key = "",
 
 	// Indirect location to move toward.

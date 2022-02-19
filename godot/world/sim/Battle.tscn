@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/entities/GoalAttachment.kt" type="Script" id=2]
 [ext_resource path="res://world/sim/CommonScenario.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/effect/Heal.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/world/Slot.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/player/PlayerBody.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/main/kotlin/scripts/entities/Spawner.kt" type="Script" id=7]
@@ -240,5 +241,8 @@ depth = 200.0
 material = ExtResource( 1 )
 
 [node name="common-scenario" parent="." instance=ExtResource( 3 )]
+
+[node name="heal" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, 1 )
 
 [editable path="common-scenario"]

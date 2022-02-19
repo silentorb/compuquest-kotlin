@@ -25,7 +25,7 @@ fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 	return readyActions.maxByOrNull { it.value.definition.range }
 }
 
-fun updateUseActionGoal(goal: Goal, accessory: Id): Goal {
+fun useActionGoal(goal: Goal, accessory: Id, targetEntity: Id = 0L): Goal {
 	return goal.copy(
 		focusedAction = accessory,
 		readyTo = ReadyMode.action,

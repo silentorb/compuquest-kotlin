@@ -7,6 +7,6 @@
 script = ExtResource( 2 )
 
 [node name="sprite" parent="." instance=ExtResource( 1 )]
-pixel_size = 0.06
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0 )
 animation = "sprites"
 frame = 6

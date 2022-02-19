@@ -11,6 +11,7 @@ import compuquest.simulation.intellect.knowledge.isVisible
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
+import silentorb.mythic.ent.emptyId
 
 fun filterEnemyTargets(
 	world: World,
@@ -61,7 +62,7 @@ fun getNextTarget(
 }
 
 fun getVisibleTarget(world: World, goal: Goal, characters: Table<Character>, actor: Id): Id? {
-	val lastTarget = if (goal.targetEntity != null && world.dice.getInt(100) > 5)
+	val lastTarget = if (goal.targetEntity != emptyId && world.dice.getInt(100) > 5)
 		goal.targetEntity
 	else
 		null
@@ -82,52 +83,15 @@ fun updateSelectedAttack(world: World, actor: Id): Map.Entry<Id, Accessory>? {
 fun requiresTarget(accessory: Accessory): Boolean =
 	accessory.definition.actionEffects.any { it.recipient == EffectRecipient.projectile }
 
-fun checkTargetPursuit(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
-	val deck = world.deck
+fun checkCombat(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val goal = spirit.goal
 	val visibleTarget = getVisibleTarget(world, goal, knowledge.visibleEnemies, actor)
-	val body = deck.bodies[actor]
-	val targetRange = if (body != null && visibleTarget != null)
-		getTargetRange(deck, body, visibleTarget)
-	else
-		null
-
-	val accessory = if (targetRange != null)
-		updateSelectedAttack(world, actor)
-	else
-		null
-
-	val isInRange =
-		accessory != null &&
-				(!requiresTarget(accessory.value) || (targetRange != null && targetRange <= accessory.value.definition.range))
-
-	val lastKnownTargetLocation = knowledge.entityLocations[goal.targetEntity]
-
-	val destination = when {
-		visibleTarget != null && targetRange != null && accessory != null && !isInRange ->
-			world.deck.bodies[visibleTarget]?.translation
-		visibleTarget == null && lastKnownTargetLocation != null -> lastKnownTargetLocation
-		isInRange -> null
-		else -> null
-	}
-
-	val nextTarget = visibleTarget
-		?: if (goal.targetEntity != null && deck.characters[goal.targetEntity]?.isAlive != true)
-			null
+	return if (visibleTarget != null) {
+		val accessory = updateSelectedAttack(world, actor)
+		if (accessory != null)
+			useActionOnTarget(world, actor, knowledge, accessory, visibleTarget, goal)
 		else
-			goal.targetEntity
-
-	return if (nextTarget != null || destination != null)
-		goal.copy(
-			focusedAction = accessory?.key,
-			targetEntity = nextTarget,
-			destination = destination,
-			readyTo = when {
-				destination != null -> ReadyMode.move
-				isInRange -> ReadyMode.action
-				else -> ReadyMode.none
-			},
-		)
-	else
+			goal // Don't fallback to lower priority goals when an enemy is visible
+	} else
 		null
 }

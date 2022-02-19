@@ -39,9 +39,8 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 				.firstOrNull()
 
 			if (child != null && food != null) {
-				val body = bodies[actor]!!
 				val destination = child.second.globalTransform.origin
-				moveWithinRange(navigation, body.globalTransform.origin, destination, interactionMaxDistance, goal) {
+				moveWithinRange(world, actor, destination, interactionMaxDistance, goal) {
 					goal.copy(
 						targetEntity = child.first,
 						readyTo = ReadyMode.interact,

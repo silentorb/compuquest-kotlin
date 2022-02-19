@@ -14,7 +14,7 @@ fun tryInteraction(world: World, actor: Id, goal: Goal): Events {
 		interactive.onInteraction(world, actor)
 		listOf()
 	} else when (goal.interactionBehavior) {
-		InteractionBehaviors.give -> listOf(transferAccessory(goal.focusedAction!!, goal.targetEntity!!))
+		InteractionBehaviors.give -> listOf(transferAccessory(goal.focusedAction, goal.targetEntity))
 		else -> listOf()
 	}
 }

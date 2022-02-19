@@ -28,7 +28,7 @@ fun checkSelfHealing(deck: Deck, actor: Id, character: Character, spirit: Spirit
 	return if (character.health <= character.destructible.maxHealth * 2 / 3) {
 		val healingItem = checkSelfHealing(deck, actor, character)
 		if (healingItem != null)
-			updateUseActionGoal(spirit.goal, healingItem)
+			useActionGoal(spirit.goal, healingItem)
 		else
 			null
 	} else
@@ -45,7 +45,7 @@ fun updateGoals(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): 
 		checkSelfHealing(deck, actor, character, spirit)
 			?: checkParenting(world, actor, character, spirit)
 			?: checkHealing(world, actor, spirit, knowledge)
-			?: checkTargetPursuit(world, actor, spirit, knowledge)
+			?: checkCombat(world, actor, spirit, knowledge)
 			?: checkPathDestinations(world, actor, spirit)
 			?: checkRoaming(world, actor, spirit)
 }

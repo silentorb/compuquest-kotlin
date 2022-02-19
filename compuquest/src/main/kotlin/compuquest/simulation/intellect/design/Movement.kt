@@ -5,6 +5,7 @@ import compuquest.simulation.general.World
 import compuquest.simulation.general.interactionMaxDistance
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.knowledge.Knowledge
+import compuquest.simulation.intellect.knowledge.getTargetRange
 import compuquest.simulation.intellect.navigation.NavigationState
 import compuquest.simulation.intellect.navigation.fromRecastVector3
 import compuquest.simulation.intellect.navigation.getNavigationPath
@@ -34,6 +35,39 @@ fun moveWithinRange(
 			null
 	} else
 		onInRange()
+}
+
+fun moveWithinRange(
+	world: World,
+	actor: Id,
+	destination: Vector3,
+	range: Float,
+	goal: Goal,
+	onInRange: () -> Goal?
+): Goal? {
+	val deck = world.deck
+	val body = deck.bodies[actor]
+	val navigation = world.navigation
+	return if (body != null && navigation != null) {
+		moveWithinRange(navigation, body.globalTransform.origin, destination, range, goal, onInRange)
+	} else
+		null
+}
+
+fun moveWithinRange(
+	world: World,
+	actor: Id,
+	target: Id,
+	range: Float,
+	goal: Goal,
+	onInRange: () -> Goal?
+): Goal? {
+	val deck = world.deck
+	val otherBody = deck.bodies[target]
+	return if (otherBody != null) {
+		moveWithinRange(world, actor, otherBody.globalTransform.origin, range, goal, onInRange)
+	} else
+		null
 }
 
 fun getPointIfReachable(navigation: NavigationState, filter: QueryFilter, location: Vector3, point: Vector3): Vector3? {
