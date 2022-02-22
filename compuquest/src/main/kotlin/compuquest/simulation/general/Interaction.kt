@@ -2,6 +2,8 @@ package compuquest.simulation.general
 
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.physics.castRay
+import compuquest.simulation.physics.getLocation
+import godot.Spatial
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.emptyId
@@ -56,7 +58,7 @@ fun canGiveToCharacter(world: World, actor: Id, target: Id): Boolean {
 }
 
 fun getInteractable(world: World, actor: Id): Interactable? {
-	val collider = castRay(world, actor, interactionMaxDistance)
+	val collider = castRay(world, actor, interactionMaxDistance).first
 	return if (collider is Interactive)
 		collider.getInteractable(world)
 	else {

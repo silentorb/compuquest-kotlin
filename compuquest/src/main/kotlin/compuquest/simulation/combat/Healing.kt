@@ -1,7 +1,7 @@
 package compuquest.simulation.combat
 
 import compuquest.simulation.general.*
-import compuquest.simulation.physics.castCharacterRay
+import compuquest.simulation.physics.castRayForId
 import godot.Spatial
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene
@@ -24,9 +24,9 @@ fun useHealingSpell(world: World, recipient: Id, effect: AccessoryEffect): Event
 
 fun raycastHeal(world: World, actor: Id, accessory: Accessory, effect: AccessoryEffect): Events {
 	val definition = accessory.definition
-	val recipient = castCharacterRay(world, actor, definition.range)
-	return if (recipient != null) {
+	val recipient = castRayForId(world, actor, definition.range)
+	return if (recipient != null)
 		useHealingSpell(world, recipient, effect)
-	} else
+	else
 		listOf()
 }

@@ -1,6 +1,8 @@
 package compuquest.simulation.characters
 
+import compuquest.simulation.combat.getToolOffset
 import compuquest.simulation.general.Deck
+import compuquest.simulation.general.World
 import godot.Spatial
 import godot.core.Transform
 import godot.core.Vector3
@@ -21,5 +23,20 @@ fun getCharacterFacing(deck: Deck, actor: Id): Vector3? {
 		head != null -> getSpatialFacing(spatialBody!!, head)
 		body != null -> getSpatialFacing(spatialBody!!, spatialBody)
 		else -> null
+	}
+}
+
+fun getCharacterOriginAndFacing(world: World, actor: Id, forwardOffset: Float = 0f): Pair<Vector3?, Vector3> {
+	val deck = world.deck
+	val body = deck.bodies[actor]!!
+	val toolOffset = getToolOffset(world, actor)
+	val baseOrigin = body.translation + toolOffset
+	val vector = getCharacterFacing(deck, actor)
+
+	return if (vector == null)
+		null to Vector3.ZERO
+	else {
+		val origin = baseOrigin + vector * forwardOffset
+		Pair(origin, vector)
 	}
 }

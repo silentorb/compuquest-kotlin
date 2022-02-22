@@ -38,6 +38,20 @@ margin_bottom = 25.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
+[node name="reticle-center" type="CenterContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="reticle" type="Panel" parent="reticle-center"]
+margin_left = 509.0
+margin_top = 297.0
+margin_right = 514.0
+margin_bottom = 302.0
+rect_min_size = Vector2( 5, 5 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_styles/panel = ExtResource( 3 )
+
 [node name="vbox" type="VBoxContainer" parent="."]
 margin_right = 1024.0
 margin_bottom = 600.0
