@@ -9,7 +9,7 @@ import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 
 fun updatePlayerLook(body: CharacterBody, input: PlayerInput) {
-	body.rotateY(GD.deg2rad(-input.lookX))
+	body.facing += Vector3(0, GD.deg2rad(-input.lookX), 0)
 	body.head!!.rotateX(GD.deg2rad(-input.lookY))
 
 	val tempRotation = body.head!!.rotationDegrees

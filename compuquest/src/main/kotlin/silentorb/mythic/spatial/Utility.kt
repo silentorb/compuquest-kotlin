@@ -1,15 +1,48 @@
 package silentorb.mythic.spatial
 
+import godot.core.Vector2
+import godot.core.Vector3
+
 fun minMax(min: Int, max: Int, value: Int) =
-  when {
-    value < min -> min
-    value > max -> max
-    else -> value
-  }
+	when {
+		value < min -> min
+		value > max -> max
+		else -> value
+	}
 
 fun minMax(value: Float, min: Float, max: Float): Float =
-  when {
-    value < min -> min
-    value > max -> max
-    else -> value
-  }
+	when {
+		value < min -> min
+		value > max -> max
+		else -> value
+	}
+
+fun atan(v: Vector2) =
+	Math.atan2(v.y.toDouble(), v.x.toDouble()).toFloat()
+
+fun getAngle(a: Vector2, b: Vector2): Float {
+	val ad = atan(a)
+	val bd = atan(b)
+	return bd - ad
+}
+
+fun getYawAngle(lookAt: Vector2): Float =
+	getAngle(Vector2(1f, 0f), lookAt)
+
+fun getYawAngle(lookAt: Vector3): Float =
+	getAngle(Vector2(1f, 0f), lookAt.xy())
+
+fun getPitchAngle(lookAt: Vector3) =
+	getAngle(Vector2(1f, 0f), Vector2(lookAt.xy().length(), lookAt.z))
+
+fun getYawAndPitch(lookAt: Vector3): Vector2 =
+	Vector2(
+		getYawAngle(lookAt),
+		getPitchAngle(lookAt)
+	)
+
+fun getYawVector(lookAt: Vector2): Vector3 =
+	Vector3(0, getYawAngle(lookAt), 0)
+
+fun getYawVector(lookAt: Vector3): Vector3 =
+	Vector3(0, getYawAngle(lookAt), 0)

@@ -16,7 +16,6 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
-import kotlin.math.max
 
 @RegisterClass
 class RigidCharacterBody : RigidBody(), CharacterBody {
@@ -32,6 +31,11 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 	override var actor: Id = emptyId
 	override var sprite: AnimatedSprite3D? = null
 	override var location: Vector3 = Vector3.ZERO
+	override var facing: Vector3
+		get() = head?.rotation ?: Vector3.ZERO
+		set(value) {
+			head?.rotation = value
+		}
 
 	companion object {
 		val floorMaxAngle = GD.deg2rad(46f)
@@ -155,8 +159,11 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 		// moveAndSlideWithSnap seems to be an expensive operation so try to minimize how often it is called.
 		// Despite what many say, lowering maxSlides makes hardly any difference.
 		// Even with maxSlides set to 1 moveAndSlide is incredibly slow.
-		if (velocity != Vector3.ZERO) {
-			applyImpulse(location + Vector3(0,0.45, 0), velocity * 8 - linearVelocity)
+		if (velocity != Vector3.ZERO || linearVelocity != Vector3.ZERO) {
+			val offset = velocity * 8 - linearVelocity
+			offset.y = 0.0
+			if (offset != Vector3.ZERO)
+				applyImpulse(location + Vector3(0,0.45, 0), offset)
 		}
 	}
 

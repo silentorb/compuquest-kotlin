@@ -273,7 +273,7 @@ fun spawnCharacter(
 
 	body.actor = actor
 	body.translation = origin + getRandomizedSpawnOffset(dice)
-	body.rotation = rotation
+	body.facing = rotation
 	body.walkSpeed = definition.speed
 	body.speed = definition.speed
 

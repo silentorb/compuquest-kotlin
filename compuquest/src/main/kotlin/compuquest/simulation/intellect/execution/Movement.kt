@@ -6,19 +6,7 @@ import godot.core.Vector3
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
-
-fun moveTowardDestination(world: World, actor: Id, destination: Vector3): Events {
-	val body = world.deck.bodies[actor] as? CharacterBody
-	if (body != null) {
-		val origin = body.location
-		val velocity = (destination - origin)
-		velocity.y = 0.0
-		val direction = velocity.normalized()
-		body.moveDirection = direction
-		body.lookAt(origin + direction, Vector3.UP)
-	}
-	return listOf()
-}
+import silentorb.mythic.spatial.getYawVector
 
 fun moveTowardDestination(world: World, actor: Id): Events {
 	val body = world.deck.bodies[actor] as? CharacterBody
@@ -28,7 +16,7 @@ fun moveTowardDestination(world: World, actor: Id): Events {
 			val direction = Vector3(velocity.x, 0.0, velocity.z).normalized()
 			if (direction != Vector3.ZERO) {
 				body.moveDirection = direction
-				body.lookAt(body.location + direction, Vector3.UP)
+				body.facing = getYawVector(direction)
 			}
 		}
 	}

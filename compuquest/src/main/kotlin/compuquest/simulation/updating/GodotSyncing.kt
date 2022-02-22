@@ -28,7 +28,7 @@ import silentorb.mythic.happening.filterEventsByType
 //}
 
 fun syncBodyLocations(world: World) {
-	for (body in world.deck.bodies) {
+	for (body in world.deck.bodies.values) {
 		if (body is CharacterBody) {
 			body.location = body.globalTransform.origin
 		}

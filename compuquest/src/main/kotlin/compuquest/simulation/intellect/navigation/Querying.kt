@@ -70,11 +70,13 @@ fun getNavigationPath(
 	if (pathResult.failed())
 		return listOf()
 
-	val lastPoint = fromRecastVector3(pathResult.result.last().pos)
-	return if (lastPoint.distanceTo(targetPosition) > successRange)
-		listOf()
-	else
-		pathResult.result
+	return pathResult.result
+
+//	val lastPoint = fromRecastVector3(pathResult.result.last().pos)
+//	return if (lastPoint.distanceTo(targetPosition) > successRange)
+//		listOf()
+//	else
+//		pathResult.result
 }
 
 fun getNavigationAgentVelocity(agent: CrowdAgent): Vector3 {

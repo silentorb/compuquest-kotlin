@@ -27,7 +27,16 @@ data class World(
 	val space: PhysicsDirectSpaceState,
 	val playerSpawners: List<PlayerSpawner> = listOf(),
 	val navigation: NavigationState?,
-)
+) {
+	// This is a debug workaround not needed for production.
+	// When hitting breakpoints involving a World instance, World.toString()
+	// is automatically called by the IDE debugging inspector.
+	// This in turn causes a chain-reaction of calls that ultimately result in Godot JVM calls that
+	// sometimes throw errors.
+	// The exact cause has not yet been determined.
+	// This is a workaround to avoid that issue.
+	override fun toString(): String = "Compuquest World"
+}
 
 fun getSpace(spatial: Spatial): PhysicsDirectSpaceState? =
 	spatial.getWorld()?.directSpaceState

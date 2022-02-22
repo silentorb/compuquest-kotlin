@@ -22,13 +22,11 @@ interface CharacterBody {
 	var globalTransform: Transform
 	var sprite: AnimatedSprite3D?
 	var translation: Vector3
-	var rotation: Vector3
+	var facing: Vector3
 	var walkSpeed: Float
 	var speed: Float
 	var location: Vector3
 
 	fun update(input: PlayerInput, character: Character, delta: Float)
 	fun directionInput(moveAxis: Vector3): Vector3
-	fun rotateY(angle: Double)
-	fun lookAt(target: Vector3, up: Vector3)
 }
