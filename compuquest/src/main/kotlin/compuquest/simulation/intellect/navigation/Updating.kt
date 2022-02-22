@@ -34,8 +34,8 @@ fun mythicToDetour(deck: Deck, previous: Deck, navigation: NavigationState): Nav
 	val updated = (agents - removed.keys)
 
 	for ((actor, agent) in updated) {
-		val body = deck.bodies[actor]!!
-		val location = body.globalTransform.origin
+		val body = deck.bodies[actor] as CharacterBody
+		val location = body.location
 		agent.npos = toRecastVector3(location)
 		val targetPosition = spirits[actor]?.goal?.destination
 		val previousTargetPosition = previous.spirits[actor]?.goal?.destination

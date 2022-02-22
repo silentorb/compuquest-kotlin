@@ -11,6 +11,7 @@ import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
 import compuquest.simulation.intellect.knowledge.Personality
 import godot.AnimatedSprite3D
+import godot.Node
 import godot.PackedScene
 import godot.core.Vector3
 import scripts.entities.CharacterBody
@@ -215,7 +216,8 @@ fun addCharacter(
 	additional: List<Any> = listOf()
 ): Hands {
 	return tempCatch {
-		val sprite = characterBody.findNode("sprite") as AnimatedSprite3D?
+		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
+		characterBody.sprite
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
 		val character = newCharacter(definition, accessories, toolOffset, name, relationships = relationships)
@@ -261,12 +263,13 @@ fun spawnCharacter(
 	val nextId = world.nextId.source()
 	val actor = id ?: nextId()
 
+	println("*** ${type}")
 	val body: CharacterBody = try {
 		val node = scene.instance()
-		node as CharacterBody
+		node as? CharacterBody
 	} catch (e: Throwable) {
 		throw Error("Error instantiating character scene")
-	}
+	} ?: return listOf()
 
 	body.actor = actor
 	body.translation = origin + getRandomizedSpawnOffset(dice)
@@ -276,7 +279,7 @@ fun spawnCharacter(
 
 	// The body needs to be added to the world before addCharacter because
 	// Godot does not call _ready until the node is added to the scene tree
-	world.scene.addChild(body)
+	world.scene.addChild(body as Node)
 
 	return addCharacter(
 		definitions, definition, actor, nextId, body,

@@ -27,6 +27,14 @@ import silentorb.mythic.happening.filterEventsByType
 //	)
 //}
 
+fun syncBodyLocations(world: World) {
+	for (body in world.deck.bodies) {
+		if (body is CharacterBody) {
+			body.location = body.globalTransform.origin
+		}
+	}
+}
+
 fun syncGodot(world: World, events: Events, inputs: PlayerInputs) {
 	val deck = world.deck
 //	val player = getPlayer(world)

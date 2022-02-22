@@ -45,7 +45,7 @@ class PlayerController : Node() {
 		actor = body.actor
 		val playerIndex = client.playerMap[actor] ?: 0
 
-		val playerSprite = body.findNode("sprite") as AnimatedSprite3D
+		val playerSprite = (body as Node).findNode("sprite") as AnimatedSprite3D
 
 		playerSprite.setLayerMaskBit(0L, false)
 		for (i in 0..3) {

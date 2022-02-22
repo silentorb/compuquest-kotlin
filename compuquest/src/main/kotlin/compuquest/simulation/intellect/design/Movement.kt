@@ -13,6 +13,7 @@ import compuquest.simulation.intellect.navigation.getNearestPoint
 import godot.core.Vector3
 import org.recast4j.detour.QueryFilter
 import org.recast4j.detour.Status
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 
 fun moveWithinRange(
@@ -46,10 +47,10 @@ fun moveWithinRange(
 	onInRange: () -> Goal?
 ): Goal? {
 	val deck = world.deck
-	val body = deck.bodies[actor]
+	val body = deck.bodies[actor] as? CharacterBody
 	val navigation = world.navigation
 	return if (body != null && navigation != null) {
-		moveWithinRange(navigation, body.globalTransform.origin, destination, range, goal, onInRange)
+		moveWithinRange(navigation, body.location, destination, range, goal, onInRange)
 	} else
 		null
 }
@@ -63,9 +64,9 @@ fun moveWithinRange(
 	onInRange: () -> Goal?
 ): Goal? {
 	val deck = world.deck
-	val otherBody = deck.bodies[target]
+	val otherBody = deck.bodies[target] as? CharacterBody
 	return if (otherBody != null) {
-		moveWithinRange(world, actor, otherBody.globalTransform.origin, range, goal, onInRange)
+		moveWithinRange(world, actor, otherBody.location, range, goal, onInRange)
 	} else
 		null
 }
@@ -129,9 +130,9 @@ fun checkRoaming(world: World, actor: Id, spirit: Spirit): Goal {
 	val goal = spirit.goal
 	return if (spirit.personality.roaming) {
 		val deck = world.deck
-		val body = deck.bodies[actor]
+		val body = deck.bodies[actor] as? CharacterBody
 		if (body != null) {
-			val location = body.globalTransform.origin
+			val location = body.location
 			val previousDestination = goal.destination
 			if (previousDestination == null || location.distanceTo(previousDestination) < interactionMaxDistance * 1.5f) {
 				val dice = world.dice

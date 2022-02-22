@@ -5,8 +5,8 @@ import compuquest.simulation.general.getBodyEntityId
 import compuquest.simulation.general.newAccessory
 import compuquest.simulation.general.newHandEvent
 import godot.Area
-import godot.CapsuleShape
 import godot.CollisionShape
+import godot.Node
 import godot.Spatial
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -34,9 +34,9 @@ class FireRing : Spatial() {
 			val collisions = bounds!!.getOverlappingBodies().filterIsInstance<CharacterBody>()
 			for (collision in collisions) {
 				val bodyRadius = collision.radius
-				val distance = collision.globalTransform.origin.distanceTo(location)
+				val distance = collision.location.distanceTo(location)
 				if (distance > radius - bodyRadius) {
-					val actor = getBodyEntityId(world.deck, collision)
+					val actor = getBodyEntityId(world.deck, collision as Node)
 					if (actor != null) {
 						Global.addEvent(
 							newHandEvent(

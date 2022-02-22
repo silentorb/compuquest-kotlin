@@ -10,7 +10,7 @@ import silentorb.mythic.happening.Events
 fun moveTowardDestination(world: World, actor: Id, destination: Vector3): Events {
 	val body = world.deck.bodies[actor] as? CharacterBody
 	if (body != null) {
-		val origin = body.globalTransform.origin
+		val origin = body.location
 		val velocity = (destination - origin)
 		velocity.y = 0.0
 		val direction = velocity.normalized()
@@ -28,7 +28,7 @@ fun moveTowardDestination(world: World, actor: Id): Events {
 			val direction = Vector3(velocity.x, 0.0, velocity.z).normalized()
 			if (direction != Vector3.ZERO) {
 				body.moveDirection = direction
-				body.lookAt(body.globalTransform.origin + direction, Vector3.UP)
+				body.lookAt(body.location + direction, Vector3.UP)
 			}
 		}
 	}

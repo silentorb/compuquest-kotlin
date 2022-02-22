@@ -9,6 +9,7 @@ import compuquest.simulation.intellect.knowledge.getTargetRange
 import compuquest.simulation.intellect.knowledge.isEnemy
 import compuquest.simulation.intellect.knowledge.isVisible
 import godot.core.Vector3
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.emptyId
@@ -22,7 +23,7 @@ fun filterEnemyTargets(
 	val deck = world.deck
 	val bodies = deck.bodies
 	val body = bodies[actor] ?: return mapOf()
-	val godotBody = deck.bodies[actor] ?: return mapOf()
+	val godotBody = deck.bodies[actor] as? CharacterBody ?: return mapOf()
 	// Add a random offset as a heuristic to deal with complex terrain and a lack of sphere casting.
 	// Occasionally, a spirit will try to attack a character through a space that is wide enough
 	// for a ray but not for the spirit's projectile size.

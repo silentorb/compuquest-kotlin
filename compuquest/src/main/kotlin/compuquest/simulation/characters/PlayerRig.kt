@@ -2,11 +2,9 @@ package compuquest.simulation.characters
 
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInput
-import godot.Input
 import godot.Spatial
 import godot.core.Vector3
 import godot.global.GD
-import scripts.Global
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 

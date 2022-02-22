@@ -7,6 +7,7 @@ import godot.PhysicsDirectSpaceState
 import godot.Spatial
 import godot.core.Vector3
 import godot.core.variantArrayOf
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 
 const val spiritRangeBuffer = 0.1f
@@ -40,14 +41,14 @@ fun getTargetRange(
 
 fun isVisible(
 	world: World,
-	body: Spatial,
+	body: CharacterBody,
 	headLocation: Vector3,
 	other: Id,
 	visibilityRange: Float
 ): Boolean {
-	val otherBody = world.deck.bodies[other]
+	val otherBody = world.deck.bodies[other] as? CharacterBody
 	return otherBody != null &&
-			body.globalTransform.origin.distanceTo(otherBody.globalTransform.origin) <= visibilityRange &&
+			body.location.distanceTo(otherBody.location) <= visibilityRange &&
 			world.space.intersectRay(
 				headLocation,
 				otherBody.translation,

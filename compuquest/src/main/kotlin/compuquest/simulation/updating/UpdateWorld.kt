@@ -39,6 +39,7 @@ fun updateWorldDay(world: World): World =
 
 fun updateWorld(events: Events, playerInputs: PlayerInputs, delta: Float, worlds: List<World>): World {
 	val world = updateWorldDay(worlds.last())
+	syncBodyLocations(world)
 
 	// Update the AI state before events are generated because AI state is not directly dependent on
 	// events but AI state does generate events and it is better for the AI state and AI event generation

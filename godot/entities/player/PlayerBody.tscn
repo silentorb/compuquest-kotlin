@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://src/main/kotlin/scripts/entities/CharacterBody.kt" type="Script" id=1]
+[ext_resource path="res://src/main/kotlin/scripts/entities/KinematicCharacterBody.kt" type="Script" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/entities/PlayerController.kt" type="Script" id=2]
 [ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/images/props/equipped.pxo" type="SpriteFrames" id=4]
@@ -14,7 +14,6 @@ collision_layer = 5
 collision_mask = 11
 collision/safe_margin = 0.01
 script = ExtResource( 1 )
-jump_height = 8.0
 
 [node name="shape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.85, 0 )

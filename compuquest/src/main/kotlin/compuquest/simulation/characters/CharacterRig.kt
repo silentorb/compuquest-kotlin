@@ -1,7 +1,6 @@
 package compuquest.simulation.characters
 
 import compuquest.simulation.general.Deck
-import compuquest.simulation.general.World
 import godot.Spatial
 import godot.core.Transform
 import godot.core.Vector3
@@ -17,9 +16,10 @@ fun getSpatialFacing(body: Spatial, head: Spatial) =
 fun getCharacterFacing(deck: Deck, actor: Id): Vector3? {
 	val body = deck.bodies[actor] as? CharacterBody
 	val head = body?.head
+	val spatialBody = body as? Spatial
 	return when {
-		head != null -> getSpatialFacing(body, head)
-		body != null -> getSpatialFacing(body, body)
+		head != null -> getSpatialFacing(spatialBody!!, head)
+		body != null -> getSpatialFacing(spatialBody!!, spatialBody)
 		else -> null
 	}
 }
