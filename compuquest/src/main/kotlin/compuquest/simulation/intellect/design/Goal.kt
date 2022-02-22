@@ -46,3 +46,6 @@ data class Goal(
 
 	// * * * End execution fields
 )
+
+fun wait(goal: Goal): Goal =
+	goal.copy(readyTo = ReadyMode.none)

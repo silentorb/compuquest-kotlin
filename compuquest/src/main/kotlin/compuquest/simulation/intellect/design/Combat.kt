@@ -61,7 +61,7 @@ fun getNextTarget(
 	}
 }
 
-fun getVisibleTarget(world: World, goal: Goal, characters: Table<Character>, actor: Id): Id? {
+fun getVisibleEnemy(world: World, goal: Goal, characters: Table<Character>, actor: Id): Id? {
 	val lastTarget = if (goal.targetEntity != emptyId && world.dice.getInt(100) > 5)
 		goal.targetEntity
 	else
@@ -85,13 +85,13 @@ fun requiresTarget(accessory: Accessory): Boolean =
 
 fun checkCombat(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val goal = spirit.goal
-	val visibleTarget = getVisibleTarget(world, goal, knowledge.visibleEnemies, actor)
-	return if (visibleTarget != null) {
+	val target = getVisibleEnemy(world, goal, knowledge.visibleEnemies, actor)
+	return if (target != null) {
 		val accessory = updateSelectedAttack(world, actor)
 		if (accessory != null)
-			useActionOnTarget(world, actor, knowledge, accessory, visibleTarget, goal)
+			useActionOnTarget(world, actor, knowledge, accessory, target, goal) ?: wait(goal)
 		else
-			goal // Don't fallback to lower priority goals when an enemy is visible
+			wait(goal)
 	} else
 		null
 }

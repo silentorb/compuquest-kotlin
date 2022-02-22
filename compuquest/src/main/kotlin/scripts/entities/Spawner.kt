@@ -15,6 +15,8 @@ import godot.annotation.RegisterProperty
 import godot.global.GD
 import scripts.Global
 import silentorb.mythic.debugging.getDebugBoolean
+import silentorb.mythic.debugging.getDebugFloat
+import silentorb.mythic.debugging.getDebugInt
 
 @RegisterClass
 class Spawner : Spatial() {
@@ -52,8 +54,9 @@ class Spawner : Spatial() {
 			val goals = getChildren().filterIsInstance<GoalAttachment>()
 			val pathDestinations = goals.mapNotNull { it.destination }
 			val definition = world.definitions.characters[type]!!
+			val multiplier = getDebugInt("MONSTER_SPAWN_MULTIPLIER") ?: 1
 
-			for (i in (0 until quantity)) {
+			for (i in (0 until quantity * multiplier)) {
 				val spirit = newSpirit().copy(
 					goal = Goal(
 						pathDestinations = pathDestinations,

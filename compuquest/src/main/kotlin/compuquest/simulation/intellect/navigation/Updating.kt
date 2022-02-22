@@ -3,6 +3,9 @@ package compuquest.simulation.intellect.navigation
 import compuquest.simulation.general.Deck
 import godot.core.Vector3
 import org.recast4j.detour.crowd.debug.CrowdAgentDebugInfo
+import scripts.entities.CharacterBody
+import scripts.setdebugText
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Table
 
 fun mythicToDetour(deck: Deck, previous: Deck, navigation: NavigationState): NavigationState {
@@ -62,10 +65,19 @@ fun mythicToDetour(deck: Deck, previous: Deck, navigation: NavigationState): Nav
 
 private val debugInfo = CrowdAgentDebugInfo()
 
+fun debugMovingActorsCount(deck: Deck) {
+	val movingBodies = deck.bodies.values.count { it is CharacterBody && it.velocity != Vector3.ZERO }
+	val actorCount = deck.characters.values.count { it.isAlive }
+	setdebugText("$movingBodies / $actorCount")
+}
+
 fun updateNavigation(deck: Deck, previous: Deck, delta: Float, navigation: NavigationState): NavigationState {
 	val nextNavigation = mythicToDetour(deck, previous, navigation)
 	val crowd = nextNavigation.crowd
 	crowd.update(delta, debugInfo)
+	if (getDebugBoolean("DEBUG_MOVING_ACTORS")) {
+		debugMovingActorsCount(deck)
+	}
 	return nextNavigation
 }
 

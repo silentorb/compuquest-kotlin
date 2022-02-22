@@ -19,6 +19,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
+import kotlin.math.max
 
 @RegisterClass
 class CharacterBody : KinematicBody() {
@@ -134,13 +135,6 @@ class CharacterBody : KinematicBody() {
 		}
 	}
 
-	fun jump(input: PlayerInput) {
-		if (input.jump) {
-			velocity.y = jumpHeight.toDouble()
-			snap = Vector3.ZERO
-		}
-	}
-
 	fun updateSpeed() {
 		if (isSlowed) {
 			val targetSpeed = walkSpeed / 2.5f
@@ -155,28 +149,41 @@ class CharacterBody : KinematicBody() {
 
 	fun walk(input: PlayerInput, direction: Vector3, delta: Float) {
 		if (isOnFloor()) {
-			snap = -getFloorNormal() - getFloorVelocity() * delta
-
 			if (velocity.y < 0f)
 				velocity.y = 0.0
 
-			jump(input)
+			if (input.jump) {
+				velocity.y = jumpHeight.toDouble()
+				snap = Vector3.ZERO
+			}
+			else {
+				snap = -getFloorNormal() - getFloorVelocity() * delta
+			}
 		} else {
 			if (snap != Vector3.ZERO && velocity.y != 0.0) {
 				velocity.y = 0.0
 			}
 
 			snap = Vector3.ZERO
-			velocity.y -= (gravity * delta).toDouble()
+			velocity.y = max(-gravity, velocity.y.toFloat() - (gravity * delta)).toDouble()
 		}
 
 		updateSpeed()
 
 		accelerate(direction, delta)
 
-		// moveAndSlideWithSnap seems to be an expensive operation so try to minimize how often it is called
+		// moveAndSlideWithSnap seems to be an expensive operation so try to minimize how often it is called.
+		// Despite what many say, lowering maxSlides makes hardly any difference.
+		// Even with maxSlides set to 1 moveAndSlide is incredibly slow.
 		if (velocity != Vector3.ZERO) {
-			moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
+			if (snap != Vector3.ZERO) {
+				val k = moveAndSlideWithSnap(velocity, snap, Vector3.UP, true, 4, floorMaxAngle)
+				val j = k
+			}
+			else {
+				val k = moveAndSlide(velocity, Vector3.UP, true, 4, floorMaxAngle)
+				val j = k
+			}
 		}
 	}
 

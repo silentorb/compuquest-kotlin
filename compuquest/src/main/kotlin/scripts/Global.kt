@@ -274,3 +274,7 @@ fun debugLog(message: String) {
 	val previous = Global.instance?.debugText ?: ""
 	Global.instance?.debugText = listOf(previous, message).joinToString("\n")
 }
+
+fun setdebugText(message: String) {
+	Global.instance?.debugText = message
+}

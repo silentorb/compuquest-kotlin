@@ -262,7 +262,8 @@ fun spawnCharacter(
 	val actor = id ?: nextId()
 
 	val body: CharacterBody = try {
-		scene.instance() as CharacterBody
+		val node = scene.instance()
+		node as CharacterBody
 	} catch (e: Throwable) {
 		throw Error("Error instantiating character scene")
 	}
