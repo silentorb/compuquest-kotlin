@@ -10,5 +10,5 @@ script = ExtResource( 1 )
 scene = ExtResource( 3 )
 
 [node name="editor-arrow" parent="." instance=ExtResource( 2 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.2, 0 )
 script = ExtResource( 4 )
