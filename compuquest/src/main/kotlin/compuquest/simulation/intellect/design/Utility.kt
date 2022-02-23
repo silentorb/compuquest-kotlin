@@ -1,7 +1,5 @@
 package compuquest.simulation.intellect.design
 
-import compuquest.simulation.characters.getReadyAccessories
-import compuquest.simulation.general.Accessory
 import compuquest.simulation.general.World
 import godot.core.Vector3
 import silentorb.mythic.ent.Id

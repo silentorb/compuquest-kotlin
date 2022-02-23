@@ -2,6 +2,9 @@ package silentorb.mythic.spatial
 
 import godot.core.Vector2
 import godot.core.Vector3
+import kotlin.math.PI
+
+const val Pi = PI.toFloat()
 
 fun minMax(min: Int, max: Int, value: Int) =
 	when {
