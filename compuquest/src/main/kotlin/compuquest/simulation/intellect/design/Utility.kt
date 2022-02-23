@@ -20,10 +20,10 @@ fun updateDestination(world: World, actor: Id, targetLocation: Vector3?): Vector
 		null
 }
 
-fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
-	val readyActions = getReadyAccessories(world, actor)
-	return readyActions.maxByOrNull { it.value.definition.range }
-}
+//fun updateFocusedAction(world: World, actor: Id): Map.Entry<Id, Accessory>? {
+//	val readyActions = getReadyAccessories(world, actor)
+//	return readyActions.maxByOrNull { it.value.definition.range }
+//}
 
 fun useActionGoal(goal: Goal, accessory: Id, targetEntity: Id = 0L): Goal {
 	return goal.copy(

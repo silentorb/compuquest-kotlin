@@ -74,8 +74,8 @@ fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key
 fun getAccessoriesWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key) =
 	getOwnerAccessories(accessories, actor).filter { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
-fun getReadyAccessories(world: World, actor: Id): Table<Accessory> =
-	getOwnerAccessories(world.deck.accessories, actor)
+fun getReadyAccessories(deck: Deck, actor: Id): Table<Accessory> =
+	getOwnerAccessories(deck.accessories, actor)
 		.filter { canUse(it.value) }
 
 fun canUse(accessory: Accessory): Boolean {

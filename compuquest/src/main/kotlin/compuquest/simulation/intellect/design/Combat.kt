@@ -72,7 +72,7 @@ fun getVisibleEnemy(world: World, goal: Goal, characters: Table<Character>, acto
 }
 
 fun updateSelectedAttack(world: World, actor: Id): Map.Entry<Id, Accessory>? {
-	val readyActions = getReadyAccessories(world, actor)
+	val readyActions = getReadyAccessories(world.deck, actor)
 		.filter { (_, accessory) ->
 			accessory.definition.actionEffects.any {
 				it.isAttack || it.type == AccessoryEffects.summon
