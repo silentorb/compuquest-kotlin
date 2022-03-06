@@ -12,6 +12,7 @@ import scripts.entities.AttachRelationship
 import scripts.entities.PlayerSpawner
 import scripts.world.GroupNode
 import scripts.world.RelationshipNode
+import scripts.world.WorldGenerator
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
@@ -101,6 +102,9 @@ fun applyRelationships(world: World): World {
 fun processSceneEntities(scene: Node, world: World): World {
 	val definitions = world.definitions
 	val nextId = world.nextId.source()
+	val worldGenerators = findChildrenOfType<WorldGenerator>(scene)
+	val k = generateWorld(world, worldGenerators)
+
 	val attachments = findChildrenOfType<AttachCharacter>(scene)
 	val groups = findChildrenOfType<GroupNode>(scene)
 		.associate {

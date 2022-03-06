@@ -24,7 +24,7 @@ data class Block(
     val turns: Int = 0,
     val heightOffset: Int = 0,
     val significantCellCount: Int = traversable.size,
-    val rarity: Rarity,
+    val rarity: Rarity = Rarity.common,
     val isBiomeAdapter: Boolean = false
 ) {
   init {

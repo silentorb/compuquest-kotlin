@@ -140,3 +140,29 @@ inline fun <reified T> getChildrenOfType(node: Node): List<T> =
 
 inline fun <reified T> getChildOfType(node: Node): T? =
 	node.getChildren().filterIsInstance<T>().firstOrNull()
+
+fun getFilesInDirectory(directoryPath: String, recursive: Boolean = false): List<String> {
+	val directory = Directory()
+	directory.open(directoryPath)
+	directory.listDirBegin()
+	val files = mutableListOf<String>()
+
+	while (true) {
+		val file = directory.getNext()
+		if (file == "")
+			break
+		else {
+			if (directory.currentIsDir()) {
+				if (recursive) {
+					files.addAll(getFilesInDirectory(file))
+				}
+			}
+			else {
+				files.add(file)
+			}
+		}
+	}
+
+	directory.listDirEnd()
+	return files
+}

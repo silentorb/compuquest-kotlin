@@ -54,13 +54,13 @@ typealias VerticalAligner = (Float) -> (Float)
 val alignWithCeiling: VerticalAligner = { height -> -height / 2f }
 val alignWithFloor: VerticalAligner = { height -> height / 2f }
 
-fun align(meshInfo: MeshInfoMap, aligner: VerticalAligner) = { mesh: MeshName? ->
-  val height = meshInfo[mesh]?.shape?.height
-  if (height != null)
-    Vector3(0f, 0f, aligner(height))
-  else
-    Vector3.ZERO
-}
+//fun align(meshInfo: MeshInfoMap, aligner: VerticalAligner) = { mesh: MeshName? ->
+//  val height = meshInfo[mesh]?.shape?.height
+//  if (height != null)
+//    Vector3(0f, 0f, aligner(height))
+//  else
+//    Vector3.ZERO
+//}
 
 fun applyTurnsOld(turns: Int): Float =
     (turns.toFloat() - 1) * Pi * 0.5f
