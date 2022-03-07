@@ -7,6 +7,7 @@ import compuquest.simulation.general.World
 import godot.Node
 import godot.Spatial
 import scripts.world.BlockNode
+import scripts.world.SideNode
 import scripts.world.WorldGenerator
 import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.debugging.getDebugString
@@ -99,20 +100,7 @@ fun cellsFromSides(sides: List<Pair<CellDirection, Side?>>): Map<Vector3i, Block
 			)
 		}
 
-	val headroomCells = cells
-		.filter { (cell, blockCell) ->
-			!cells.containsKey(cell + Vector3i(0, 0, 1)) && blockCell.sides.any { it.value.height > 10 }
-		}
-		.keys
-		.associate {
-			val cell = it + Vector3i(0, 0, 1)
-			cell to BlockCell(
-				sides = mapOf(),
-				isTraversable = false,
-			)
-		}
-
-	return cells + headroomCells
+	return cells
 }
 
 //fun prepareBlockGraph(graph: Graph, sideNodes: Collection<String>, biomes: Collection<String>): Graph {
@@ -227,45 +215,43 @@ fun shouldOmit(cellDirections: List<CellDirection>, keys: Set<CellDirection>): B
 //  }
 //}
 
-fun mapSideHeightAdjustments(sides: List<Pair<CellDirection, Side?>>, height: Int): Map<CellDirection, CellDirection> =
-	sides
-		.filter { it.second != null }
-		.associate { (cellDirection, side) ->
-			val newHeight = side!!.height + height
-			val nextCellDirection = when {
-				newHeight < 0 -> cellDirection.copy(
-					cell = cellDirection.cell + Vector3i(0, 0, -1)
-				)
-				newHeight >= cellHeightResolution -> cellDirection.copy(
-					cell = cellDirection.cell + Vector3i(0, 0, 1)
-				)
-				else -> cellDirection
-			}
-			cellDirection to nextCellDirection
-		}
+//fun mapSideHeightAdjustments(sides: List<Pair<CellDirection, Side?>>, height: Int): Map<CellDirection, CellDirection> =
+//	sides
+//		.filter { it.second != null }
+//		.associate { (cellDirection, side) ->
+//			val newHeight = side!!.height + height
+//			val nextCellDirection = when {
+//				newHeight < 0 -> cellDirection.copy(
+//					cell = cellDirection.cell + Vector3i(0, 0, -1)
+//				)
+//				newHeight >= cellHeightResolution -> cellDirection.copy(
+//					cell = cellDirection.cell + Vector3i(0, 0, 1)
+//				)
+//				else -> cellDirection
+//			}
+//			cellDirection to nextCellDirection
+//		}
 
-fun adjustSideHeights(
-	sides: List<Pair<CellDirection, Side?>>, cellDirections: Map<CellDirection, CellDirection>,
-	height: Int
-): List<Pair<CellDirection, Side?>> =
-	if (height == 0)
-		sides
-	else {
-		sides
-			.map { (cellDirection, side) ->
-				if (side == null)
-					cellDirection to side
-				else {
-					val newHeight = side.height + height
-					val nextCellDirection = cellDirections[cellDirection] ?: cellDirection
-					val nextSide = side.copy(
-						height = (newHeight + cellHeightResolution) % cellHeightResolution,
-					)
-
-					nextCellDirection to nextSide
-				}
-			}
-	}
+//fun adjustSideHeights(
+//	sides: List<Pair<CellDirection, Side?>>, cellDirections: Map<CellDirection, CellDirection>,
+//	height: Int
+//): List<Pair<CellDirection, Side?>> =
+//	if (height == 0)
+//		sides
+//	else {
+//		sides
+//			.map { (cellDirection, side) ->
+//				if (side == null)
+//					cellDirection to side
+//				else {
+//					val nextCellDirection = cellDirections[cellDirection] ?: cellDirection
+//					val nextSide = side.copy(
+//					)
+//
+//					nextCellDirection to nextSide
+//				}
+//			}
+//	}
 
 //fun graphToBlockBuilder(name: String, graph: Graph): List<BlockBuilder> {
 //  val root = getGraphRoots(graph).first()
@@ -318,24 +304,43 @@ fun newGenerationConfig(
 	)
 }
 
+fun parseBlock(scene: Spatial): Block {
+	val sides = findChildrenOfType<SideNode>(scene)
+		.map { sideNode ->
+			val cell = Vector3i.fromVector3(sideNode.cell)
+			CellDirection(cell, sideNode.direction) to Side(
+				mine = sideNode.mine.toString()	,
+				other = setOf() ,// setOf(if (sideNode.other != "") sideNode.other else sideNode.mine),
+				isEssential = sideNode.isEssential,
+				isGreedy = sideNode.isGreedy,
+				isTraversable = sideNode.isTraversable,
+				canMatchEssential = sideNode.canMatchEssential,
+			)
+		}
+	val cells = cellsFromSides(sides)
+	return Block(
+		name = scene.name,
+		cells = cells,
+	)
+}
+
 fun loadBlock(filePath: String): BlockBuilder? {
 	val scene = instantiateScene<Spatial>(filePath)
 	return if (scene != null) {
-		val block = Block(
-			name = scene.name,
-		)
+		val block = parseBlock(scene)
 		val builder: Builder = { input ->
-			emptyGenerationBundle
+			GenerationBundle(
+				spatials = listOf(scene),
+			)
 		}
 		block to builder
 	} else
 		null
 }
 
-
 fun gatherBlockBuilders(directoryPath: String): Pair<Set<Block>, Map<String, Builder>> {
 	val files = getFilesInDirectory(directoryPath)
-	val baseBlockBuilders = files.mapNotNull { loadBlock(it) }
+	val baseBlockBuilders = files.mapNotNull { loadBlock("$directoryPath/$it") }
 	val blockBuilders = explodeBlockMap(baseBlockBuilders)
 	return splitBlockBuilders(blockBuilders)
 }
@@ -346,7 +351,7 @@ fun generateWorldBlocks(
 	blocks: Set<Block>,
 	builders: Map<String, Builder>
 ): Pair<BlockGrid, GenerationBundle> {
-	val home = blocks.firstOrNull { it.name == "home-set" }
+	val home = blocks.firstOrNull { it.name == "home" }
 	if (home == null)
 		throw Error("Could not find home-set block")
 

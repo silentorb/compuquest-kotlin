@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
+[ext_resource path="res://entities/world/PlayerSpawn.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=3]
+[ext_resource path="res://src/main/kotlin/scripts/world/SideNode.kt" type="Script" id=4]
+
+[node name="home" type="Spatial"]
+script = ExtResource( 3 )
+is_unique = true
+
+[node name="floor" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
+use_collision = true
+collision_layer = 18
+width = 10.0
+height = 1.0
+depth = 10.0
+material = ExtResource( 1 )
+
+[node name="player-spawn" parent="." instance=ExtResource( 2 )]
+
+[node name="sides" type="Node" parent="."]
+
+[node name="north" type="Spatial" parent="sides"]
+script = ExtResource( 4 )
+direction = 3
+
+[node name="east" type="Spatial" parent="sides"]
+script = ExtResource( 4 )
+
+[node name="west" type="Spatial" parent="sides"]
+script = ExtResource( 4 )
+direction = 4
+
+[node name="south" type="Spatial" parent="sides"]
+script = ExtResource( 4 )
+direction = 5

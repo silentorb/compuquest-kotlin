@@ -219,7 +219,7 @@ _global_script_class_icons={
 [application]
 
 config/name="test"
-run/main_scene="res://world/sim/CautiousHealer.tscn"
+run/main_scene="res://world/sim/GeneratedWorld.tscn"
 config/icon="res://icon.png"
 
 [autoload]

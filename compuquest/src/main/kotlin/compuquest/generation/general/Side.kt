@@ -14,7 +14,6 @@ object StandardHeights {
 data class Side(
   val mine: String,
   val other: Set<String>,
-  val height: Int = StandardHeights.first,
   val isTraversable: Boolean = true,
   val isEssential: Boolean = false, // This side needs to be connected to another side
   val canMatchEssential: Boolean = true,
@@ -24,9 +23,6 @@ data class Side(
     // During the greedy pass, only new blocks without greedy sides are considered in order to prevent
     // infinite loops and excess greed.
   val isGreedy: Boolean = false,
-
-    // Can match sides with different heights if the connection is nonessential
-  val looseNonEssentialHeights: Boolean = false,
 )
 
 // This is a solution for fringe cases and may end up being temporary

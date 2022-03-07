@@ -21,17 +21,13 @@ fun getOtherSide(getBlock: GetBlock, origin: Vector3i): (Direction) -> Side? = {
   block?.sides?.getOrDefault(oppositeSide, null)
 }
 
-fun sidesMatch(first: Side, second: Side, isEssential: Boolean = true): Boolean =
+fun sidesMatch(first: Side, second: Side): Boolean =
     first.other.contains(second.mine) &&
-        second.other.contains(first.mine) &&
-        (first.height == second.height ||
-            (!isEssential &&
-                first.looseNonEssentialHeights && second.looseNonEssentialHeights)
-            )
+        second.other.contains(first.mine)
 
-fun sidesMatch(surroundingSides: SideMap, direction: Direction, blockSide: Side, isEssential: Boolean = true): Boolean {
+fun sidesMatch(surroundingSides: SideMap, direction: Direction, blockSide: Side): Boolean {
   val otherSide = surroundingSides[direction]
-  return otherSide != null && sidesMatch(blockSide, otherSide, isEssential)
+  return otherSide != null && sidesMatch(blockSide, otherSide)
 }
 
 fun getSurroundingSides(getBlock: GetBlock, location: Vector3i): SideMap {
@@ -78,9 +74,8 @@ fun checkBlockMatch(surroundingSides: SideMap, getBlock: GetBlock,
                     else
                       getSurroundingSides(getBlock, appliedOffset)
 
-                    val isEssentialCell = cellOffset == baseOffset
                     surroundingSides2.all { side ->
-                      sidesMatch(cell.sides, side.key, side.value, isEssentialCell && side.key == essentialDirectionSide)
+                      sidesMatch(cell.sides, side.key, side.value)
                     }
                   }
                 }

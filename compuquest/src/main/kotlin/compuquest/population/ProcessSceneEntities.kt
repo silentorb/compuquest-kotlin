@@ -103,8 +103,11 @@ fun processSceneEntities(scene: Node, world: World): World {
 	val definitions = world.definitions
 	val nextId = world.nextId.source()
 	val worldGenerators = findChildrenOfType<WorldGenerator>(scene)
-	val k = generateWorld(world, worldGenerators)
+	val (blockGrid, generationBundle) = generateWorld(world, worldGenerators)
+	for (spatial in generationBundle.spatials) {
+		scene.addChild(spatial)
 
+	}
 	val attachments = findChildrenOfType<AttachCharacter>(scene)
 	val groups = findChildrenOfType<GroupNode>(scene)
 		.associate {
@@ -138,7 +141,7 @@ fun processSceneEntities(scene: Node, world: World): World {
 				)
 			}
 
-	val hands = characterHands + entityNodeHands
+	val hands = characterHands + entityNodeHands + generationBundle.hands
 
 	val playerSpawners = findChildrenOfType<PlayerSpawner>(scene)
 	for (playerSpawner in playerSpawners) {
