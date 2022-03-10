@@ -1,6 +1,5 @@
 package compuquest.simulation.general
 
-import compuquest.population.getDirectRelationshipAttachments
 import compuquest.simulation.characters.RelationshipType
 import compuquest.simulation.characters.getCharacterGroups
 import compuquest.simulation.characters.getRandomizedSpawnOffset
@@ -19,15 +18,11 @@ import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.happening.newEvent
 
-const val maxPartySize = 4
-const val playerFaction = "player"
 const val playerRespawnTime = 5 * simulationFps
 const val newPlayerEvent = "newPlayerEvent"
 
 val hiredNpc = "hiredNpc"
 val joinedPlayer = "joinedPlayer"
-val addMemberToParty = "addMemberToParty"
-val removeMemberFromParty = "removeMemberFromParty"
 
 data class Player(
 	val index: Int,

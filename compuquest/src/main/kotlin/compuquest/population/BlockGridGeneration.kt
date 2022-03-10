@@ -5,7 +5,9 @@ import compuquest.generation.general.*
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.World
 import godot.Node
+import godot.PackedScene
 import godot.Spatial
+import godot.global.GD
 import scripts.world.BlockNode
 import scripts.world.SideNode
 import scripts.world.WorldGenerator
@@ -309,8 +311,8 @@ fun parseBlock(scene: Spatial): Block {
 		.map { sideNode ->
 			val cell = Vector3i.fromVector3(sideNode.cell)
 			CellDirection(cell, sideNode.direction) to Side(
-				mine = sideNode.mine.toString()	,
-				other = setOf() ,// setOf(if (sideNode.other != "") sideNode.other else sideNode.mine),
+				mine = sideNode.mine.toString(),
+				other = setOf(sideNode.other.toString()),
 				isEssential = sideNode.isEssential,
 				isGreedy = sideNode.isGreedy,
 				isTraversable = sideNode.isTraversable,
@@ -320,17 +322,19 @@ fun parseBlock(scene: Spatial): Block {
 	val cells = cellsFromSides(sides)
 	return Block(
 		name = scene.name,
+		traversable = getTraversable(cells),
 		cells = cells,
 	)
 }
 
 fun loadBlock(filePath: String): BlockBuilder? {
-	val scene = instantiateScene<Spatial>(filePath)
+	val scene = GD.load<PackedScene>(filePath)
 	return if (scene != null) {
-		val block = parseBlock(scene)
+		val block = parseBlock(scene.instance() as Spatial)
 		val builder: Builder = { input ->
+			val node = scene.instance() as Spatial
 			GenerationBundle(
-				spatials = listOf(scene),
+				spatials = listOf(node),
 			)
 		}
 		block to builder

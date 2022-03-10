@@ -1,7 +1,6 @@
 package compuquest.generation.engine
 
 import compuquest.generation.general.*
-import godot.core.Vector3
 import silentorb.mythic.spatial.*
 
 fun gatherNeighbors(grid: BlockGrid, block: Block, position: Vector3i): Map<CellDirection, String> =
@@ -26,12 +25,12 @@ fun gatherNeighbors(grid: BlockGrid, block: Block, position: Vector3i): Map<Cell
         .associate { it }
 
 fun transformBlockOutput(block: Block, position: Vector3i, bundle: GenerationBundle): GenerationBundle {
-  val zRotation = (block.turns.toFloat()) * quarterAngle
-  val location = absoluteCellPosition(position) + Vector3(0f, block.heightOffset.toFloat() / cellHeightResolution * cellLength, 0f)
+  val rotation = (block.turns.toFloat()) * quarterAngle
+  val location = absoluteCellPosition(position)
   return bundle.copy(
     spatials = bundle.spatials.map {
       it.translate(location)
-      it.rotateY(zRotation.toDouble())
+      it.rotateY(rotation.toDouble())
       it
     }
   )

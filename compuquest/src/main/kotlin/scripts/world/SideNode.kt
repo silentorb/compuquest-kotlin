@@ -36,7 +36,7 @@ class SideNode : Spatial() {
 
 	@Export
 	@RegisterProperty
-	var canMatchEssential: Boolean = false
+	var canMatchEssential: Boolean = true
 
 	@Export
 	@RegisterProperty

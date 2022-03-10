@@ -106,7 +106,6 @@ fun processSceneEntities(scene: Node, world: World): World {
 	val (blockGrid, generationBundle) = generateWorld(world, worldGenerators)
 	for (spatial in generationBundle.spatials) {
 		scene.addChild(spatial)
-
 	}
 	val attachments = findChildrenOfType<AttachCharacter>(scene)
 	val groups = findChildrenOfType<GroupNode>(scene)
