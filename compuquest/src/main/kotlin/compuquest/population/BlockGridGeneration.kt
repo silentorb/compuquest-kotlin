@@ -330,7 +330,9 @@ fun parseBlock(scene: Spatial): Block {
 fun loadBlock(filePath: String): BlockBuilder? {
 	val scene = GD.load<PackedScene>(filePath)
 	return if (scene != null) {
-		val block = parseBlock(scene.instance() as Spatial)
+		val tempNode = scene.instance() as Spatial
+		val block = parseBlock(tempNode)
+		tempNode.queueFree()
 		val builder: Builder = { input ->
 			val node = scene.instance() as Spatial
 			GenerationBundle(
