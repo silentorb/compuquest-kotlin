@@ -8,27 +8,14 @@ const val cellLength = 5f
 
 val cellHalfLength = cellLength / 2f
 
-const val cellHeightResolution = 1000
-
-val floorOffset = Vector3(0f, 0f, -cellHalfLength)
-
-//data class Cell(
-//    val attributes: Set<CellAttribute>,
-//    val slots: List<Vector3> = listOf(),
-//)
+val cellScale = Vector3(cellLength, cellLength / 4, cellLength)
 
 fun absoluteCellPosition(position: Vector3i): Vector3 =
-    position.toVector3() * cellLength
+    position.toVector3() * cellScale
 
 typealias ConnectionPair = Pair<Vector3i, Vector3i>
 
-//typealias CellMap = Map<Vector3i, Cell>
 typealias ConnectionSet = Set<ConnectionPair>
-
-//data class MapGrid(
-//    val cells: CellMap = mapOf(),
-//    val connections: ConnectionSet = setOf()
-//)
 
 fun containsConnection(connections: ConnectionSet, first: Vector3i, second: Vector3i): Boolean =
     connections.contains(Pair(first, second)) || connections.contains(Pair(second, first))

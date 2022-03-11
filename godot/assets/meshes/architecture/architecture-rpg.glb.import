@@ -2,26 +2,26 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/architecture.glb-bab2bf586f47be0bb64f4cabace22ca3.scn"
+path="res://.import/architecture-rpg.glb-f2ef3ad811c068c6ecac52369cd4d70c.scn"
 
 [deps]
 
-source_file="res://assets/meshes/architecture/architecture.glb"
-dest_files=[ "res://.import/architecture.glb-bab2bf586f47be0bb64f4cabace22ca3.scn" ]
+source_file="res://assets/meshes/architecture/architecture-rpg.glb"
+dest_files=[ "res://.import/architecture-rpg.glb-f2ef3ad811c068c6ecac52369cd4d70c.scn" ]
 
 [params]
 
 nodes/root_type="Spatial"
 nodes/root_name="Scene Root"
 nodes/root_scale=1.0
-nodes/custom_script=""
+nodes/custom_script="res://assets/meshes/scripts/MeshImportMany.gd"
 nodes/storage=1
 nodes/use_legacy_names=false
 materials/location=1
 materials/storage=1
 materials/keep_on_reimport=true
 meshes/octahedral_compression=true
-meshes/compress=4286
+meshes/compress=true
 meshes/ensure_tangents=true
 meshes/storage=0
 meshes/light_baking=0
