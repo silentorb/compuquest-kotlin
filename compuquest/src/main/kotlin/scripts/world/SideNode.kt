@@ -5,12 +5,13 @@ import godot.Engine
 import godot.Spatial
 import godot.annotation.*
 import godot.core.Vector3
+import godot.global.GD
 
-@Tool
 @RegisterClass
 class SideNode : Spatial() {
 	enum class Sides {
 		closed,
+		space,
 		traversable,
 	}
 
@@ -62,6 +63,13 @@ class SideNode : Spatial() {
 	fun updateName() {
 		if (Engine.editorHint) {
 			name = "${cell.x.toInt()} ${cell.y.toInt()} ${cell.z.toInt()} $direction"
+		}
+	}
+
+	@RegisterFunction
+	override fun _process(delta: Double) {
+		if (Engine.editorHint) {
+			GD.print("Hello")
 		}
 	}
 }

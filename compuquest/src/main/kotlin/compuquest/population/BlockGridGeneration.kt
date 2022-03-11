@@ -8,19 +8,15 @@ import godot.Node
 import godot.PackedScene
 import godot.Spatial
 import godot.global.GD
-import scripts.world.BlockNode
+import scripts.world.SideCondition
 import scripts.world.SideNode
 import scripts.world.WorldGenerator
 import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.debugging.getDebugString
-import silentorb.mythic.ent.*
 import silentorb.mythic.godoting.findChildrenOfType
 import silentorb.mythic.godoting.getFilesInDirectory
-import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.randomly.Dice
-import silentorb.mythic.serialization.listFilesAndFoldersRecursive
 import silentorb.mythic.spatial.Vector3i
-import java.nio.file.Path
 
 fun getTraversable(cells: Map<Vector3i, BlockCell>) =
 	cells
@@ -308,9 +304,8 @@ fun newGenerationConfig(
 
 fun parseBlock(scene: Spatial): Block {
 	val sides = findChildrenOfType<SideNode>(scene)
-		.map { sideNode ->
-			val cell = Vector3i.fromVector3(sideNode.cell)
-			CellDirection(cell, sideNode.direction) to Side(
+		.flatMap { sideNode ->
+			val side = Side(
 				mine = sideNode.mine.toString(),
 				other = setOf(sideNode.other.toString()),
 				isEssential = sideNode.isEssential,
@@ -318,6 +313,10 @@ fun parseBlock(scene: Spatial): Block {
 				isTraversable = sideNode.isTraversable,
 				canMatchEssential = sideNode.canMatchEssential,
 			)
+			(0 until sideNode.cellHeight).map { i ->
+				val cell = Vector3i.fromVector3(sideNode.cell) + Vector3i(0, i, 0)
+				CellDirection(cell, sideNode.direction) to side
+			}
 		}
 	val cells = cellsFromSides(sides)
 	return Block(
@@ -327,18 +326,39 @@ fun parseBlock(scene: Spatial): Block {
 	)
 }
 
+fun filterConditionalNodes(node: Node, neighbors: Map<CellDirection, String>) {
+	val conditionalNodes = findChildrenOfType<SideCondition>(node)
+	for (conditionalNode in conditionalNodes) {
+		val cellDirection = CellDirection(Vector3i.fromVector3(conditionalNode.cell), conditionalNode.direction)
+		val sideIsNotEmpty = neighbors.keys.contains(cellDirection)
+		val condition = conditionalNode.condition
+		if (
+			(!sideIsNotEmpty && condition == SideCondition.Condition.sideIsNotEmpty) ||
+			(sideIsNotEmpty && condition == SideCondition.Condition.sideIsEmpty)
+		) {
+			conditionalNode.queueFree()
+		}
+	}
+}
+
+fun newBuilder(block: Block, scene: PackedScene): Builder {
+	return { input ->
+		val node = scene.instance() as Spatial
+		filterConditionalNodes(node, input.neighbors)
+		findChildrenOfType<SideNode>(node).forEach { it.queueFree() }
+		GenerationBundle(
+			spatials = listOf(node),
+		)
+	}
+}
+
 fun loadBlock(filePath: String): BlockBuilder? {
 	val scene = GD.load<PackedScene>(filePath)
 	return if (scene != null) {
 		val tempNode = scene.instance() as Spatial
 		val block = parseBlock(tempNode)
+		val builder: Builder = newBuilder(block, scene)
 		tempNode.queueFree()
-		val builder: Builder = { input ->
-			val node = scene.instance() as Spatial
-			GenerationBundle(
-				spatials = listOf(node),
-			)
-		}
 		block to builder
 	} else
 		null

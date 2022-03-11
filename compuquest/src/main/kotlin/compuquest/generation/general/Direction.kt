@@ -18,9 +18,9 @@ val verticalDirectionVectors: Map<Direction, Vector3i> = mapOf(
 
 val horizontalDirectionVectors: Map<Direction, Vector3i> = mapOf(
 	Direction.east to Vector3i(1, 0, 0),
-	Direction.north to Vector3i(0, 0, 1),
+	Direction.north to Vector3i(0, 0, -1),
 	Direction.west to Vector3i(-1, 0, 0),
-	Direction.south to Vector3i(0, 0, -1)
+	Direction.south to Vector3i(0, 0, 1)
 )
 
 val directionVectors: Map<Direction, Vector3i> = verticalDirectionVectors.plus(horizontalDirectionVectors)
