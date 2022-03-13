@@ -26,7 +26,7 @@ data class World(
 	val previousEvents: Events = listOf(),
 	val space: PhysicsDirectSpaceState,
 	val playerSpawners: List<PlayerSpawner> = listOf(),
-	val navigation: NavigationState?,
+	val navigation: NavigationState? = null,
 ) {
 	// This is a debug workaround not needed for production.
 	// When hitting breakpoints involving a World instance, World.toString()

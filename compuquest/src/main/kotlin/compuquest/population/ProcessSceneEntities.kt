@@ -1,5 +1,6 @@
 package compuquest.population
 
+import compuquest.serving.newWorldNavigation
 import compuquest.simulation.characters.*
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.newSpirit
@@ -150,6 +151,7 @@ fun processSceneEntities(scene: Node, world: World): World {
 	val world3 = newEntitiesFromHands(hands, world2)
 		.copy(
 			playerSpawners = playerSpawners,
+			navigation = newWorldNavigation(scene)
 		)
 
 	return applyRelationships(world3)

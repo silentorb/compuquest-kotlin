@@ -218,17 +218,19 @@ fun newGenerationConfig(
 	)
 }
 
+fun findSideNodes(root: Node) =
+	findChildrenOfScriptType("res://entities/world/SideNode.gd", root)
+
 fun parseBlock(scene: Spatial): Block {
-	val sides = findChildrenOfScriptType("res://entities/world/SideNode.gd", scene)
+	val sides = findSideNodes(scene)
 		.flatMap { node ->
 			val mine = getString(node, "mine")
 			val side = Side(
 				mine = mine,
 				other = setOf(getString(node, "other")),
-				isEssential = getBoolean(node, "isEssential"),
-				isGreedy = getBoolean(node, "isGreedy"),
+				frequency = MatchFrequency.valueOf(getString(node, "frequency")),
 				isTraversable = traversableSides.contains(mine),
-				canMatchEssential = getBoolean(node, "canMatchEssential"),
+//				canMatchEssential = getBoolean(node, "canMatchEssential"),
 			)
 			(0 until getInt(node, "cellHeight")).map { i ->
 				val cell = Vector3i.fromVector3(node.get("cell") as Vector3) + Vector3i(0, i, 0)
@@ -261,8 +263,8 @@ fun filterConditionalNodes(node: Node, neighbors: Map<CellDirection, String>) {
 	}
 }
 
-fun applyBiomeTextures(scene: Node) {
-	val props = findChildrenOfType<PropMesh>(scene)
+fun applyBiomeTextures(root: Node) {
+	val props = findChildrenOfType<PropMesh>(root)
 	if (props.any()) {
 		val material = GD.load<Material>("res://assets/materials/dev/prototype-grid.tres")!!
 		for (prop in props) {
@@ -271,14 +273,14 @@ fun applyBiomeTextures(scene: Node) {
 	}
 }
 
-fun newBuilder(block: Block, scene: PackedScene): Builder {
+fun newBuilder(scene: PackedScene): Builder {
 	return { input ->
-		val node = scene.instance() as Spatial
-		filterConditionalNodes(node, input.neighbors)
-		findChildrenOfType<SideNode>(node).forEach { it.queueFree() }
-		applyBiomeTextures(node)
+		val root = scene.instance() as Spatial
+		filterConditionalNodes(root, input.neighbors)
+		findSideNodes(root).forEach { it.queueFree() }
+		applyBiomeTextures(root)
 		GenerationBundle(
-			spatials = listOf(node),
+			spatials = listOf(root),
 		)
 	}
 }
@@ -288,7 +290,7 @@ fun loadBlock(filePath: String): BlockBuilder? {
 	return if (scene != null) {
 		val tempNode = scene.instance() as Spatial
 		val block = parseBlock(tempNode)
-		val builder: Builder = newBuilder(block, scene)
+		val builder: Builder = newBuilder(scene)
 		tempNode.queueFree()
 		block to builder
 	} else

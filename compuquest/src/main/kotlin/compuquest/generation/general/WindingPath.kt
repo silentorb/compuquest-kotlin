@@ -94,6 +94,23 @@ fun getAvailableBlocks(groupedBlocks: GroupedBlocks, incompleteSides: List<CellD
 		blocks
 }
 
+tailrec fun selectSide(
+	dice: Dice,
+	grid: BlockGrid,
+	options: List<CellDirection>,
+	remainingTries: Int = 0
+): CellDirection {
+	val result = dice.takeOne(options)
+	val side = grid[result.cell]!!.cell.sides[result.direction]!!
+	return if (
+		remainingTries == 0 || side.frequency != MatchFrequency.normal || side.rerollChance == 0 || options.size == 1 ||
+		dice.getInt(100) > side.rerollChance
+	)
+		result
+	else
+		selectSide(dice, grid, options, remainingTries - 1)
+}
+
 tailrec fun addPathStep(
 	maxSteps: Int,
 	dice: Dice,
@@ -124,7 +141,7 @@ tailrec fun addPathStep(
 	return if (stepCount >= maxSteps)
 		state
 	else {
-		val incompleteSide = dice.takeOne(incompleteSides)
+		val incompleteSide = selectSide(dice, grid, incompleteSides, 2)
 		val nextPosition = getNextPosition(incompleteSide)
 		assert(!grid.containsKey(nextPosition))
 		val biome = state.biomeGrid(nextPosition)
@@ -189,7 +206,7 @@ tailrec fun extendBlockSides(dice: Dice, state: BlockState): BlockState {
 	if (grid.size > 1000)
 		throw Error("Infinite loop in world generation.")
 
-	val incompleteSides = getIncompleteBlockSides(grid) { it.isGreedy } - blacklist
+	val incompleteSides = getIncompleteBlockSides(grid) { it.frequency == MatchFrequency.greedy } - blacklist
 
 	if (incompleteSides.none())
 		return state

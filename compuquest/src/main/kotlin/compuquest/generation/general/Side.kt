@@ -4,30 +4,35 @@ val verticalSides = setOf(Direction.up, Direction.down)
 
 // The standard 4 heights are incremental quarters + 10 for floor height padding
 object StandardHeights {
-  val first = 100
-  val firstB = 225
-  val second = 350
-  val third = 600
-  val fourth = 850
+	val first = 100
+	val firstB = 225
+	val second = 350
+	val third = 600
+	val fourth = 850
+}
+
+enum class MatchFrequency {
+	essential, // Not hooked up yet
+	greedy, // Matched if possible but not essential. Can exceed block count limits.
+	normal,
+	minimal, // Not hooked up yet, but will only be used as a last resort
 }
 
 data class Side(
-  val mine: String,
-  val other: Set<String>,
-  val isTraversable: Boolean = true,
-  val isEssential: Boolean = false, // This side needs to be connected to another side
-  val canMatchEssential: Boolean = true,
+	val mine: String,
+	val other: Set<String>,
+	val frequency: MatchFrequency = MatchFrequency.normal,
 
-    // Match this side if possible, ignoring block limits.
-    // Unlike `isEssential`, a match is not required.
-    // During the greedy pass, only new blocks without greedy sides are considered in order to prevent
-    // infinite loops and excess greed.
-  val isGreedy: Boolean = false,
+	// An integer between 0 and 99 that roughly indicates a reduced chance that this side will be filled.
+	// Is only considered when frequency is normal.
+	val rerollChance: Int = 0,
+	val isTraversable: Boolean = true, // Cache value
+	val canMatchEssential: Boolean = true, // Is a candidate for deprecation
 )
 
 // This is a solution for fringe cases and may end up being temporary
 const val unmatchable = "unmatchable"
 val unmatchableSide = Side(
-    mine = unmatchable,
-    other = setOf(),
+	mine = unmatchable,
+	other = setOf(),
 )

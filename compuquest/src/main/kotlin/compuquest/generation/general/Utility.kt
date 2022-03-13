@@ -33,7 +33,7 @@ fun isSimpleSideNode(node: String): Boolean =
     node.matches(Regex("\\d+[-,]\\d+[-,]\\d+.*?"))
 
 fun isGreedy(block: Block): Boolean =
-    block.cells.any { cell -> cell.value.sides.any { it.value.isGreedy } }
+    block.cells.any { cell -> cell.value.sides.any { it.value.frequency == MatchFrequency.greedy } }
 
 fun isNotGreedy(block: Block): Boolean =
     !isGreedy(block)

@@ -1,14 +1,15 @@
 tool
 extends Node
 
-export(bool) var isGreedy = false
-export(bool) var isEssential = false
-export(bool) var canMatchEssential = true
+# export(bool) var canMatchEssential = true
 export(Vector3) var cell = Vector3() setget set_cell
 export(String, "up", "down", "east", "north", "west", "south") var direction = "east" setget set_direction
 export(int) var cellHeight = 1
+
 var mine := "traversable"
 var other := "traversable"
+var frequency := "normal"
+var rerollChance := 0
 
 var sideOptions = PoolStringArray([
 	"closed",
@@ -27,7 +28,9 @@ func set_direction(value):
 	update_name()
 
 func update_name():
-	name = "%d, %d, %d - %s" % [cell.x, cell.y, cell.z, direction]
+	var new_name = "%d, %d, %d - %s" % [cell.x, cell.y, cell.z, direction]
+	if name != new_name:
+		name = new_name
 
 func _get_property_list():
 	var properties = [
@@ -37,12 +40,23 @@ func _get_property_list():
 			hint = PROPERTY_HINT_ENUM,
 			hint_string = sideOptions
 		},
-			{
+		{
 			name = "other",
 			type = TYPE_STRING,
 			hint = PROPERTY_HINT_ENUM,
 			hint_string = sideOptions
 		},
+		{
+			name = "frequency",
+			type = TYPE_STRING,
+			hint = PROPERTY_HINT_ENUM,
+			hint_string = "essential,greedy,normal,minimal"
+		},
+		{
+			name = "rerollChance",
+			type = TYPE_INT,
+			hint_string = "0,100"
+		}
 	]
 	
 	return properties
