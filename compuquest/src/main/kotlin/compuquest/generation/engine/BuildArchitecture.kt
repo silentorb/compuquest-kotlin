@@ -16,7 +16,7 @@ fun gatherNeighbors(grid: BlockGrid, block: Block, position: Vector3i): Map<Cell
                 val side = other?.cell?.sides?.getOrDefault(reverse, null)
                 val contract = side?.mine
                 if (contract != null) {
-                  val rotatedCell = rotateZ(-block.turns, cell)
+                  val rotatedCell = rotateY(-block.turns, cell)
                   CellDirection(rotatedCell, direction) to contract
                 } else
                   null
@@ -34,15 +34,6 @@ fun transformBlockOutput(block: Block, position: Vector3i, bundle: GenerationBun
       it
     }
   )
-//  val parentTransform = integrateTransform(location, rotation)
-//  val roots = getGraphRoots(graph)
-//  val rootTransforms = roots.flatMap { root ->
-//    val localTransform = getAbsoluteNodeTransform(graph, root)
-//    listOf(
-//        Entry(root, SceneProperties.transform, parentTransform * localTransform),
-//    )
-//  }
-//  return replaceValues(graph, rootTransforms)
 }
 
 fun buildBlockCell(general: ArchitectureInput, block: Block, builder: Builder, location: Vector3i): GenerationBundle {

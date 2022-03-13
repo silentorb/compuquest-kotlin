@@ -36,7 +36,7 @@ fun getPointCell(point: Vector3): Vector3i {
   return Vector3i(
       floor(offset.x.toDouble()).toInt(),
       floor(offset.y.toDouble()).toInt(),
-      floor(offset.z.toDouble()).toInt()
+      floor(offset.z.toDouble() / 4).toInt()
   )
 }
 

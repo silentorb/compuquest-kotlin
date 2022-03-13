@@ -11,22 +11,22 @@ fun getTurnDirection(turns: Int): Direction? =
       else -> null
     }
 
-fun rotateZ(turns: Int, value: Direction): Direction =
+fun rotateY(turns: Int, value: Direction): Direction =
     getTurnDirection(horizontalDirectionList.indexOf(value) + turns) ?: value
 
-fun rotateZ(turns: Int, value: Vector3i): Vector3i {
+fun rotateY(turns: Int, value: Vector3i): Vector3i {
   val (x, y, z) = value
   return when ((turns + 4) % 4) {
-    3 -> Vector3i(y, -x, z)
-    2 -> Vector3i(-x, -y, z)
-    1 -> Vector3i(-y, x, z)
+    3 -> Vector3i(z, y, x)
+    2 -> Vector3i(-x, y, -z)
+    1 -> Vector3i(-z, y, -x)
     else -> value
   }
 }
 
-fun rotateZ(turns: Int, cellDirection: CellDirection): CellDirection =
+fun rotateY(turns: Int, cellDirection: CellDirection): CellDirection =
     cellDirection.copy(
-        direction = rotateZ(turns, cellDirection.direction)
+        direction = rotateY(turns, cellDirection.direction)
     )
 
 fun isSimpleSideNode(node: String): Boolean =

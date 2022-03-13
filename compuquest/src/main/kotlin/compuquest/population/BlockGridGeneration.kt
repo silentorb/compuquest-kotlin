@@ -4,17 +4,16 @@ import compuquest.generation.engine.*
 import compuquest.generation.general.*
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.World
+import godot.Material
 import godot.Node
 import godot.PackedScene
 import godot.Spatial
+import godot.core.Vector3
 import godot.global.GD
-import scripts.world.SideCondition
-import scripts.world.SideNode
-import scripts.world.WorldGenerator
+import scripts.world.*
 import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.debugging.getDebugString
-import silentorb.mythic.godoting.findChildrenOfType
-import silentorb.mythic.godoting.getFilesInDirectory
+import silentorb.mythic.godoting.*
 import silentorb.mythic.randomly.Dice
 import silentorb.mythic.spatial.Vector3i
 
@@ -31,7 +30,7 @@ fun rotateBlockBuilder(turns: Int, blockBuilder: BlockBuilder): BlockBuilder =
 		val cells = block.cells.entries
 			.associate { (offset, cell) ->
 				val sides = rotateSides(turns)(cell.sides)
-				rotateZ(turns, offset) to cell.copy(
+				rotateY(turns, offset) to cell.copy(
 					sides = sides,
 				)
 			}
@@ -220,25 +219,29 @@ fun newGenerationConfig(
 }
 
 fun parseBlock(scene: Spatial): Block {
-	val sides = findChildrenOfType<SideNode>(scene)
-		.flatMap { sideNode ->
+	val sides = findChildrenOfScriptType("res://entities/world/SideNode.gd", scene)
+		.flatMap { node ->
+			val mine = getString(node, "mine")
 			val side = Side(
-				mine = sideNode.mine.toString(),
-				other = setOf(sideNode.other.toString()),
-				isEssential = sideNode.isEssential,
-				isGreedy = sideNode.isGreedy,
-				isTraversable = sideNode.isTraversable,
-				canMatchEssential = sideNode.canMatchEssential,
+				mine = mine,
+				other = setOf(getString(node, "other")),
+				isEssential = getBoolean(node, "isEssential"),
+				isGreedy = getBoolean(node, "isGreedy"),
+				isTraversable = traversableSides.contains(mine),
+				canMatchEssential = getBoolean(node, "canMatchEssential"),
 			)
-			(0 until sideNode.cellHeight).map { i ->
-				val cell = Vector3i.fromVector3(sideNode.cell) + Vector3i(0, i, 0)
-				CellDirection(cell, sideNode.direction) to side
+			(0 until getInt(node, "cellHeight")).map { i ->
+				val cell = Vector3i.fromVector3(node.get("cell") as Vector3) + Vector3i(0, i, 0)
+				val direction = Direction.valueOf(getString(node, "direction"))
+				CellDirection(cell, direction) to side
 			}
 		}
+	val blockNode = scene as? BlockNode
 	val cells = cellsFromSides(sides)
 	return Block(
 		name = scene.name,
 		traversable = getTraversable(cells),
+		rotations = blockNode?.rotations ?: BlockRotations.none,
 		cells = cells,
 	)
 }
@@ -258,11 +261,22 @@ fun filterConditionalNodes(node: Node, neighbors: Map<CellDirection, String>) {
 	}
 }
 
+fun applyBiomeTextures(scene: Node) {
+	val props = findChildrenOfType<PropMesh>(scene)
+	if (props.any()) {
+		val material = GD.load<Material>("res://assets/materials/dev/prototype-grid.tres")!!
+		for (prop in props) {
+			prop.setSurfaceMaterial(0L, material)
+		}
+	}
+}
+
 fun newBuilder(block: Block, scene: PackedScene): Builder {
 	return { input ->
 		val node = scene.instance() as Spatial
 		filterConditionalNodes(node, input.neighbors)
 		findChildrenOfType<SideNode>(node).forEach { it.queueFree() }
+		applyBiomeTextures(node)
 		GenerationBundle(
 			spatials = listOf(node),
 		)
@@ -310,9 +324,9 @@ fun generateWorld(world: World, worldGenerators: Collection<WorldGenerator>): Pa
 	if (worldGenerators.none())
 		mapOf<Vector3i, GridCell>() to emptyGenerationBundle
 	else {
-		val dice = world.dice
 		val (blocks, builders) = gatherBlockBuilders(blocksDirectoryPath)
 		val generator = worldGenerators.first()
 		val generationConfig = newGenerationConfig(world.definitions, newGenerationSeed())
+		val dice = Dice(generationConfig.seed)
 		generateWorldBlocks(dice, generationConfig, blocks, builders)
 	}

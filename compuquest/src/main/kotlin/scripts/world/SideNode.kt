@@ -1,6 +1,7 @@
 package scripts.world
 
 import compuquest.generation.general.Direction
+import compuquest.population.Sides
 import godot.Engine
 import godot.Spatial
 import godot.annotation.*
@@ -9,11 +10,6 @@ import godot.global.GD
 
 @RegisterClass
 class SideNode : Spatial() {
-	enum class Sides {
-		closed,
-		space,
-		traversable,
-	}
 
 	@Export
 	@RegisterProperty
@@ -30,10 +26,6 @@ class SideNode : Spatial() {
 	@Export
 	@RegisterProperty
 	var isGreedy: Boolean = false
-
-	@Export
-	@RegisterProperty
-	var isTraversable: Boolean = true
 
 	@Export
 	@RegisterProperty

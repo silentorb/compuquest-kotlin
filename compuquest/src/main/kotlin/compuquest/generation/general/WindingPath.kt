@@ -135,9 +135,7 @@ tailrec fun addPathStep(
 		val blocks = getAvailableBlocks(groupedBlocks, incompleteSides, grid[state.lastCell]?.source)
 		val essentialDirectionSideDirection = oppositeDirections[incompleteSide.direction]!!
 		val matchResult = matchConnectingBlock(dice, blocks, grid, nextPosition, essentialDirectionSideDirection)
-//        ?: matchConnectingBlock(dice, groupedBlocks.traversable - blocks, grid, nextPosition, essentialDirectionSideDirection)
 			?: matchConnectingBlock(dice, state.biomeAdapters - blocks, grid, nextPosition, essentialDirectionSideDirection)
-//        ?: fallbackBiomeMatchConnectingBlock(dice, state.biomeBlocks, grid, nextPosition, biome, essentialDirectionSideDirection)
 
 		val nextState = if (matchResult == null) {
 			worldGenerationLog {

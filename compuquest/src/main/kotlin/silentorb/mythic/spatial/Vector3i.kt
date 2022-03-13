@@ -39,6 +39,8 @@ data class Vector3i(
 			else -> throw Error("Invalid index $i")
 		}
 
+	fun minimalString(): String = "$x, $y, $z"
+
 	override fun toString(): String {
 		return "Vector3i($x, $y, $z)"
 	}

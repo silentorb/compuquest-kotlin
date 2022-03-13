@@ -13,7 +13,6 @@ data class BlockCell(
 
 data class Block(
     val name: String = "",
-    val sidesOld: SideMap = mapOf(),
     val cells: Map<Vector3i, BlockCell> = mapOf(),
     val attributes: Set<String> = setOf(),
     val rotations: BlockRotations = BlockRotations.none,

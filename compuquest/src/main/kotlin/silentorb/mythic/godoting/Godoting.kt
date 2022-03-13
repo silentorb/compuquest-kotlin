@@ -56,6 +56,9 @@ fun findChildren(node: Node, predicate: (Node) -> Boolean): List<Node> =
 inline fun <reified T> findChildrenOfType(node: Node): List<T> =
 	findChildren(node) { it is T } as List<T>
 
+fun findChildrenOfScriptType(scriptPath: String, node: Node): List<Node> =
+	findChildren(node) { (it.getScript() as? Resource)?.resourcePath == scriptPath }
+
 inline fun <reified T> findParentOfType(node: Node): T? {
 	var current = node
 	for (i in 0..100) {
@@ -156,8 +159,7 @@ fun getFilesInDirectory(directoryPath: String, recursive: Boolean = false): List
 				if (recursive) {
 					files.addAll(getFilesInDirectory(file))
 				}
-			}
-			else {
+			} else {
 				files.add(file)
 			}
 		}

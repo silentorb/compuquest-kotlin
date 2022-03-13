@@ -1,12 +1,12 @@
 package scripts.world
 
-import godot.Spatial
+import godot.MeshInstance
 import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterProperty
 
 @RegisterClass
-class PropMesh : Spatial() {
+class PropMesh : MeshInstance() {
 	enum class Attribute {
 		notUsed,
 		ceiling,
