@@ -171,7 +171,7 @@ class Global : Node() {
 					defaultPlayerFaction = scenarioNode?.defaultPlayerFaction ?: Factions.player,
 					playerRespawning = getDebugBoolean("PLAYER_RESPAWN"),
 				)
-				newGame(scene!!, scenario, definitions)
+				newGame(scene, scenario, definitions, client!!.materials)
 			} else
 				null
 		}

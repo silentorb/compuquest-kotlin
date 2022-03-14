@@ -6,6 +6,7 @@ import compuquest.clienting.gui.MenuStacks
 import compuquest.clienting.gui.updateMenuStacks
 import compuquest.clienting.input.*
 import compuquest.clienting.multiplayer.*
+import compuquest.population.MaterialMap
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
 import silentorb.mythic.ent.HashedMap
@@ -24,6 +25,7 @@ data class Client(
 	val input: InputState,
 	val playerInputs: PlayerInputs = mapOf(),
 	val viewports: SplitViewports = listOf(), // Does not include the root viewport
+	val materials: MaterialMap = mutableMapOf(),
 )
 
 fun newClient(): Client {

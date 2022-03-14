@@ -52,23 +52,23 @@ fun explodeBlockMap(blockBuilders: Collection<BlockBuilder>): List<BlockBuilder>
 		}
 }
 
-//val defaultBiomeTextures: Map<String, Map<String, String>> = mapOf(
-//    Biomes.checkers to mapOf(
-//        PlaceholderTextures.floor to Textures.checkersBlackWhite,
-//        PlaceholderTextures.wall to Textures.checkersBlackWhite,
-//        PlaceholderTextures.ceiling to Textures.checkersBlackWhite,
-//    ),
+val defaultBiomeTextures: Map<String, Map<String, String>> = mapOf(
+	Biomes.lagoon to mapOf(
+		MeshAttributes.floor to Textures.grassGreen,
+		MeshAttributes.wall to Textures.cliffWall,
+		MeshAttributes.ceiling to Textures.grassGreen,
+	),
 //    Biomes.dungeon to mapOf(
-//        PlaceholderTextures.floor to Textures.cobblestone,
-//        PlaceholderTextures.wall to Textures.bricks,
-//        PlaceholderTextures.ceiling to Textures.bricks,
+//        MeshAttribute.floor to Textures.cobblestone,
+//        MeshAttribute.wall to Textures.bricks,
+//        MeshAttribute.ceiling to Textures.bricks,
 //    ),
 //    Biomes.forest to mapOf(
-//        PlaceholderTextures.floor to Textures.grass,
-//        PlaceholderTextures.wall to Textures.grass,
-//        PlaceholderTextures.ceiling to Textures.grass,
+//        MeshAttribute.floor to Textures.grass,
+//        MeshAttribute.wall to Textures.grass,
+//        MeshAttribute.ceiling to Textures.grass,
 //    ),
-//)
+)
 
 fun cellsFromSides(sides: List<Pair<CellDirection, Side?>>): Map<Vector3i, BlockCell> {
 	val cells = sides
@@ -120,6 +120,7 @@ fun newGenerationSeed(): Long =
 
 fun newGenerationConfig(
 	definitions: Definitions,
+	materials: MaterialMap,
 	seed: Long = newGenerationSeed()
 ): GenerationConfig {
 
@@ -128,6 +129,7 @@ fun newGenerationConfig(
 		definitions = definitions,
 		includeEnemies = getDebugString("MONSTER_LIMIT") != "0",
 		cellCount = getDebugInt("BASE_ROOM_COUNT") ?: 50,
+		materials = materials,
 	)
 }
 
@@ -172,19 +174,29 @@ fun filterConditionalNodes(node: Node, neighbors: Map<CellDirection, String>) {
 			(sideIsNotEmpty && condition == SideCondition.Condition.sideIsEmpty)
 		) {
 			conditionalNode.queueFree()
-		}
-		else {
+		} else {
 			replacePlaceholderNode(conditionalNode)
 		}
 	}
 }
 
-fun applyBiomeTextures(root: Node) {
-	val props = findChildrenOfType<PropMesh>(root)
-	if (props.any()) {
-		val material = GD.load<Material>("res://assets/materials/dev/prototype-grid.tres")!!
-		for (prop in props) {
-			prop.setSurfaceMaterial(0L, material)
+fun applyBiomeTextures(root: Node, biome: String, materials: MaterialMap) {
+	val biomeTextures = defaultBiomeTextures[biome]
+	if (biomeTextures != null) {
+		val props = findChildrenOfScriptType("res://entities/world/PropMesh.gd", root)
+			.filterIsInstance<MeshInstance>()
+
+		if (props.any()) {
+			for (prop in props) {
+				val attribute = getVariantArray<String>(prop, "attributes").firstOrNull()
+				if (attribute != null) {
+					val texture = biomeTextures[attribute]
+					if (texture != null) {
+						val material = getMaterial(materials, "")
+						prop.setSurfaceMaterial(0L, material)
+					}
+				}
+			}
 		}
 	}
 }
@@ -194,7 +206,7 @@ fun newBuilder(scene: PackedScene): Builder {
 		val root = scene.instance() as Spatial
 		filterConditionalNodes(root, input.neighbors)
 		findSideNodes(root).forEach { it.queueFree() }
-		applyBiomeTextures(root)
+		applyBiomeTextures(root, input.biome, input.general.config.materials)
 		GenerationBundle(
 			spatials = listOf(root),
 		)
@@ -238,13 +250,16 @@ fun generateWorldBlocks(
 
 val blocksDirectoryPath = "res://world/blocks"
 
-fun generateWorld(world: World, worldGenerators: Collection<WorldGenerator>): Pair<BlockGrid, GenerationBundle> =
+fun generateWorld(
+	world: World, materials: MaterialMap,
+	worldGenerators: Collection<WorldGenerator>
+): Pair<BlockGrid, GenerationBundle> =
 	if (worldGenerators.none())
 		mapOf<Vector3i, GridCell>() to emptyGenerationBundle
 	else {
 		val (blocks, builders) = gatherBlockBuilders(blocksDirectoryPath)
 		val generator = worldGenerators.first()
-		val generationConfig = newGenerationConfig(world.definitions, newGenerationSeed())
+		val generationConfig = newGenerationConfig(world.definitions, materials, newGenerationSeed())
 		val dice = Dice(generationConfig.seed)
 		generateWorldBlocks(dice, generationConfig, blocks, builders)
 	}

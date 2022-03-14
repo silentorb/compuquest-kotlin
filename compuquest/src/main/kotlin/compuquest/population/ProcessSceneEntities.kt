@@ -100,11 +100,11 @@ fun applyRelationships(world: World): World {
 		)
 }
 
-fun processSceneEntities(scene: Node, world: World): World {
+fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): World {
 	val definitions = world.definitions
 	val nextId = world.nextId.source()
 	val worldGenerators = findChildrenOfType<WorldGenerator>(scene)
-	val (blockGrid, generationBundle) = generateWorld(world, worldGenerators)
+	val (blockGrid, generationBundle) = generateWorld(world, materials, worldGenerators)
 	for (spatial in generationBundle.spatials) {
 		scene.addChild(spatial)
 	}

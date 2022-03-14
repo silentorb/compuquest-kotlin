@@ -4,6 +4,7 @@ import compuquest.generation.general.Block
 import compuquest.generation.general.BlockGrid
 import compuquest.generation.general.CellAttribute
 import compuquest.generation.general.CellDirection
+import compuquest.population.MaterialMap
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Hands
@@ -61,18 +62,16 @@ data class GenerationConfig(
 //	val propGroups: Map<String, Set<String>>,
 //    val propGraphs: Map<String, Graph>,
 	val level: Int = 1,
+	val materials: MaterialMap,
 )
 
 data class ArchitectureInput(
 	val config: GenerationConfig,
 	val blockGrid: BlockGrid,
-	val dice: Dice
+	val dice: Dice,
 )
 
-fun newArchitectureInput(
-	generationConfig: GenerationConfig, dice: Dice,
-	blockGrid: BlockGrid
-) =
+fun newArchitectureInput(generationConfig: GenerationConfig, dice: Dice, blockGrid: BlockGrid) =
 	ArchitectureInput(
 		config = generationConfig,
 		blockGrid = blockGrid,
@@ -84,6 +83,7 @@ data class BuilderInput(
 	val neighbors: Map<CellDirection, String>,
 	val turns: Int,
 	val height: Int,
+	val biome: String,
 )
 
 typealias Builder = (BuilderInput) -> GenerationBundle
