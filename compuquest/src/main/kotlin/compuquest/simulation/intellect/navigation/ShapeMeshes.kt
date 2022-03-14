@@ -1,9 +1,6 @@
 package compuquest.simulation.intellect.navigation
 
-import godot.BoxShape
-import godot.CollisionShape
-import godot.ConvexPolygonShape
-import godot.Shape
+import godot.*
 import godot.core.Vector3
 
 data class IntermediateMesh(
@@ -109,20 +106,23 @@ private fun box(halfExtents: Vector3) =
 //  )
 //}
 
-private fun meshShapeVertices(shape: ConvexPolygonShape): IntermediateMesh {
-	val points = shape.points.toList() //.reversed()
+fun meshShapeVertices(shape: ConcavePolygonShape, scale: Vector3): IntermediateMesh {
+	val points = shape.data.toList()
+		.map { it * scale }
+		.reversed()
+
 	return IntermediateMesh(
 		vertices = points,
 		triangles = points.indices.toList()
 	)
 }
 
-fun getShapeMesh(shape: Shape): IntermediateMesh? =
+fun getShapeMesh(shape: Shape?): IntermediateMesh? =
 	when (shape) {
 
 		is BoxShape -> box(shape.extents)
 
-		is ConvexPolygonShape -> meshShapeVertices(shape)
+//		is ConcavePolygonShape -> meshShapeVertices(shape)
 //      is Cylinder -> cylinder(shape)
 //
 //      is ShapeTransform -> transformShapeVertices(shape)
