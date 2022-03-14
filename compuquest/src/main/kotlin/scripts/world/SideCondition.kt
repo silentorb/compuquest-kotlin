@@ -2,13 +2,14 @@ package scripts.world
 
 import compuquest.generation.general.Direction
 import godot.Engine
+import godot.InstancePlaceholder
 import godot.Spatial
 import godot.annotation.*
 import godot.core.Vector3
 import godot.global.GD
 
 @RegisterClass
-class SideCondition : Spatial() {
+class SideCondition : InstancePlaceholder() {
 	enum class Condition {
 		sideIsEmpty,
 		sideIsNotEmpty,

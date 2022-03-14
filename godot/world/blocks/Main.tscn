@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=2]
 [ext_resource path="res://src/main/kotlin/scripts/world/SideCondition.kt" type="Script" id=4]
-[ext_resource path="res://world/props/wall-beveled.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/world/SideNode.gd" type="Script" id=6]
 
 [node name="main" type="Spatial"]
@@ -18,21 +17,21 @@ height = 1.0
 depth = 5.0
 material = ExtResource( 1 )
 
-[node name="wall" parent="." instance=ExtResource( 5 )]
+[node name="wall" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -2.37534 )
 script = ExtResource( 4 )
 direction = 3
 
-[node name="wall2" parent="." instance=ExtResource( 5 )]
+[node name="wall2" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.375, 2.5, 0 )
 script = ExtResource( 4 )
 
-[node name="wall4" parent="." instance=ExtResource( 5 )]
+[node name="wall4" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.375, 2.5, 0 )
 script = ExtResource( 4 )
 direction = 4
 
-[node name="wall3" parent="." instance=ExtResource( 5 )]
+[node name="wall3" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5, 2.375 )
 script = ExtResource( 4 )
 direction = 5
@@ -43,6 +42,8 @@ direction = 5
 script = ExtResource( 6 )
 mine = "traversable"
 other = "traversable"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 1, 0 - east" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
@@ -50,12 +51,16 @@ cell = Vector3( 0, 1, 0 )
 cellHeight = 3
 mine = "space"
 other = "space"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 0, 0 - north" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
 direction = "north"
 mine = "traversable"
 other = "traversable"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 1, 0 - north" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
@@ -64,12 +69,16 @@ direction = "north"
 cellHeight = 3
 mine = "space"
 other = "space"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 0, 0 - south" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
 direction = "south"
 mine = "traversable"
 other = "traversable"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 1, 0 - south" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
@@ -78,12 +87,16 @@ direction = "south"
 cellHeight = 3
 mine = "space"
 other = "space"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 0, 0 - west" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
 direction = "west"
 mine = "traversable"
 other = "traversable"
+frequency = "normal"
+rerollChance = 0
 
 [node name="0, 1, 0 - west" type="Spatial" parent="sides"]
 script = ExtResource( 6 )
@@ -92,3 +105,5 @@ direction = "west"
 cellHeight = 3
 mine = "space"
 other = "space"
+frequency = "normal"
+rerollChance = 0

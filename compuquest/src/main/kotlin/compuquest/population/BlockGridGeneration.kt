@@ -4,10 +4,7 @@ import compuquest.generation.engine.*
 import compuquest.generation.general.*
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.World
-import godot.Material
-import godot.Node
-import godot.PackedScene
-import godot.Spatial
+import godot.*
 import godot.core.Vector3
 import godot.global.GD
 import scripts.world.*
@@ -100,26 +97,6 @@ fun cellsFromSides(sides: List<Pair<CellDirection, Side?>>): Map<Vector3i, Block
 	return cells
 }
 
-//fun prepareBlockGraph(graph: Graph, sideNodes: Collection<String>, biomes: Collection<String>): Graph {
-//  val truncatedGraph = graph.filter { !sideNodes.contains(it.source) || !isSimpleSideNode(it.source) }
-//  val defaultTexture = biomes
-//      .mapNotNull { defaultBiomeTextures[it] }
-//      .firstOrNull()
-//
-//  return if (defaultTexture == null)
-//    truncatedGraph
-//  else {
-//    val placeholderEntries = graph.filter { entry ->
-//      entry.property == SceneProperties.texture && defaultTexture.containsKey(entry.target)
-//    }
-//
-//    val replacements = placeholderEntries
-//        .map { entry -> entry.copy(target = defaultTexture[entry.target]!!) }
-//
-//    truncatedGraph - placeholderEntries + replacements
-//  }
-//}
-
 fun interpolateCellCount(cells: Set<Vector3i>, axis: Int): Int =
 	if (cells.none())
 		0
@@ -137,70 +114,6 @@ fun interpolateTraversibleCellCount(cells: Set<Vector3i>): Int {
 				interpolateCellCount(cells, 2)
 	return minimum * 3 / 2
 }
-
-//fun blockFromGraph(graph: Graph, cells: Map<Vector3i, BlockCell>, root: String, name: String,
-//                   biomes: Collection<String>,
-//                   heightOffset: Int): Block {
-//  val rotation = getNodeValue<BlockRotations>(graph, root, GameProperties.blockRotations)
-//  val rarity = getNodeValue<Int>(graph, root, GameProperties.rarity)
-//  val traversable = getTraversable(cells)
-//  val blockAttributes = getNodesWithAttribute(graph, root).toSet()
-//  return Block(
-//      name = name + if (heightOffset != 0) heightOffset else "",
-//      cells = cells,
-//      traversable = traversable,
-//      rotations = rotation ?: BlockRotations.none,
-//      biomes = biomes.toSet(),
-//      heightOffset = heightOffset,
-//      significantCellCount = traversable.size + interpolateTraversibleCellCount(traversable),
-//      attributes = blockAttributes,
-//      rarity = if (rarity != null)
-//        Rarity.values()[rarity - 1]
-//      else
-//        Rarity.uncommon,
-//      isBiomeAdapter = nodeHasAttribute(graph, root, GameAttributes.biomeAdapter)
-//  )
-//}
-
-fun shouldOmit(cellDirections: List<CellDirection>, keys: Set<CellDirection>): Boolean =
-	cellDirections.any { cellDirection ->
-		keys.contains(cellDirection)
-	}
-
-//fun graphToBlockBuilder(name: String, graph: Graph): List<BlockBuilder> {
-//  val root = getGraphRoots(graph).first()
-//  val biomes = getNodeValues<String>(graph, root, GameProperties.biome)
-//  return if (biomes.none() || biomes.contains(Biomes.hedgeMaze))
-//    listOf()
-//  else {
-//    val heights = listOf(0) + getNodeValues(graph, root, GameProperties.heightVariant)
-//    val sideNodes = getSideNodes(graph)
-//
-//    val sides = gatherSides(sideGroups, graph, sideNodes, nonTraversableBlockSides)
-//    return heights.map { height ->
-//      val cellDirectionsMap = mapSideHeightAdjustments(sides, height)
-//      val adjustedSides = adjustSideHeights(sides, cellDirectionsMap, height)
-//      val cells = cellsFromSides(adjustedSides)
-//      assert(cells.keys.contains(Vector3i.zero))
-//      val block = blockFromGraph(graph, cells, root, name, biomes, height)
-//      val finalGraph = prepareBlockGraph(graph, sideNodes, biomes)
-//      block to builderFromGraph(finalGraph, cellDirectionsMap, height)
-//    }
-//  }
-//}
-
-//fun graphsToBlockBuilders(graphLibrary: GraphLibrary): List<BlockBuilder> {
-//  val library = newExpansionLibrary(graphLibrary, mapOf())
-//  return graphLibrary
-//      .filterValues { graph ->
-//        graph.any(::isBlockSide)
-//      }
-//      .keys
-//      .flatMap { key ->
-//        val expanded = applyCellDirectionOffsets(expandGameInstances(library, key))
-//        graphToBlockBuilder(key, expanded)
-//      }
-//}
 
 fun newGenerationSeed(): Long =
 	getDebugString("GENERATION_SEED")?.toLong() ?: System.currentTimeMillis()
@@ -259,6 +172,9 @@ fun filterConditionalNodes(node: Node, neighbors: Map<CellDirection, String>) {
 			(sideIsNotEmpty && condition == SideCondition.Condition.sideIsEmpty)
 		) {
 			conditionalNode.queueFree()
+		}
+		else {
+			replacePlaceholderNode(conditionalNode)
 		}
 	}
 }

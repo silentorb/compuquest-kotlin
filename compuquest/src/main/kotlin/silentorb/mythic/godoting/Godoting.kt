@@ -168,3 +168,28 @@ fun getFilesInDirectory(directoryPath: String, recursive: Boolean = false): List
 	directory.listDirEnd()
 	return files
 }
+
+// An alternative to InstancePlaceholder::create_instance
+// because that function has the nonsensical requirement of the placeholder being in the scene tree.
+// The code works just fine outside the tree.  There's nothing exotic about these operations
+// and Godot has similar functions that don't require the content to be in the scene tree.
+fun replacePlaceholderNode(placeholder: InstancePlaceholder): Node? {
+	val parent = placeholder.getParent() ?: return null
+
+	val scene = instantiateScene<Node>(placeholder.getInstancePath()) ?: return null
+	scene.name = placeholder.name
+	val position = placeholder.getPositionInParent()
+	for (value in placeholder.getStoredValues()) {
+		val key = value.key
+		if (key != null) {
+			scene.set(key.toString(), value.value)
+		}
+	}
+
+	placeholder.queueFree()
+	parent.removeChild(placeholder)
+
+	parent.addChild(scene)
+	parent.moveChild(scene, position)
+	return scene
+}
