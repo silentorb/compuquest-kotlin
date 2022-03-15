@@ -2,14 +2,16 @@ package compuquest.population
 
 import compuquest.generation.engine.*
 import compuquest.generation.general.*
+import compuquest.simulation.characters.Group
 import compuquest.simulation.definition.Definitions
-import compuquest.simulation.general.World
+import compuquest.simulation.general.PreWorld
 import godot.*
 import godot.core.Vector3
 import godot.global.GD
 import scripts.world.*
 import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.debugging.getDebugString
+import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.*
 import silentorb.mythic.randomly.Dice
 import silentorb.mythic.spatial.Vector3i
@@ -102,6 +104,7 @@ fun newGenerationSeed(): Long =
 
 fun newGenerationConfig(
 	definitions: Definitions,
+	groups: Table<Group>,
 	materials: MaterialMap,
 	seed: Long = newGenerationSeed()
 ): GenerationConfig {
@@ -112,6 +115,7 @@ fun newGenerationConfig(
 		includeEnemies = getDebugString("MONSTER_LIMIT") != "0",
 		cellCount = getDebugInt("BASE_ROOM_COUNT") ?: 50,
 		materials = materials,
+		groups = groups,
 	)
 }
 
@@ -234,7 +238,9 @@ fun generateWorldBlocks(
 val blocksDirectoryPath = "res://world/blocks"
 
 fun generateWorld(
-	world: World, materials: MaterialMap,
+	world: PreWorld,
+	groups: Table<Group>,
+	materials: MaterialMap,
 	worldGenerators: Collection<WorldGenerator>
 ): Pair<BlockGrid, GenerationBundle> =
 	if (worldGenerators.none())
@@ -242,7 +248,16 @@ fun generateWorld(
 	else {
 		val (blocks, builders) = gatherBlockBuilders(blocksDirectoryPath)
 		val generator = worldGenerators.first()
-		val generationConfig = newGenerationConfig(world.definitions, materials, newGenerationSeed())
+		val generationConfig = newGenerationConfig(world.definitions, groups, materials, newGenerationSeed())
 		val dice = Dice(generationConfig.seed)
-		generateWorldBlocks(dice, generationConfig, blocks, builders)
+		val (grid, generationBundle) = generateWorldBlocks(dice, generationConfig, blocks, builders)
+		val scene = world.scene
+		for (spatial in generationBundle.spatials) {
+			scene.addChild(spatial)
+		}
+		val population = populateWorld(world, generationConfig, dice)
+		val newGenerationBundle = generationBundle.copy(
+			hands = generationBundle.hands + population
+		)
+		grid to newGenerationBundle
 	}

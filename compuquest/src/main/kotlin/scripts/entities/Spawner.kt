@@ -2,20 +2,18 @@ package scripts.entities
 
 import compuquest.population.getDirectRelationshipAttachments
 import compuquest.simulation.characters.Relationships
-import compuquest.simulation.characters.spawnCharacter
+import compuquest.simulation.characters.getRandomizedSpawnOffset
+import compuquest.simulation.characters.spawnAiCharacter
 import compuquest.simulation.intellect.design.Goal
 import compuquest.simulation.intellect.knowledge.Personality
 import compuquest.simulation.intellect.newSpirit
-import godot.PackedScene
 import godot.Spatial
 import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
-import godot.global.GD
 import scripts.Global
 import silentorb.mythic.debugging.getDebugBoolean
-import silentorb.mythic.debugging.getDebugFloat
 import silentorb.mythic.debugging.getDebugInt
 
 @RegisterClass
@@ -50,7 +48,6 @@ class Spawner : Spatial() {
 		return if (world != null) {
 			val relationships = relationshipCache ?: getDirectRelationshipAttachments(world.deck, this)
 			relationshipCache = relationships
-			val scene = GD.load<PackedScene>("res://entities/actor/ActorBodyCapsuleRigid.tscn")!!
 			val goals = getChildren().filterIsInstance<GoalAttachment>()
 			val pathDestinations = goals.mapNotNull { it.destination }
 			val definition = world.definitions.characters[type]!!
@@ -64,11 +61,9 @@ class Spawner : Spatial() {
 					personality = definition.personality ?: Personality()
 				)
 
-				val hands = spawnCharacter(
+				val hands = spawnAiCharacter(
 					world,
-					scene,
-					globalTransform.origin,
-					rotation,
+					globalTransform.translated(getRandomizedSpawnOffset(world.dice)),
 					type,
 					relationships = relationships,
 					additional = listOf(spirit)

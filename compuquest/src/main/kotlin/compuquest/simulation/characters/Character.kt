@@ -13,7 +13,9 @@ import compuquest.simulation.intellect.knowledge.Personality
 import godot.AnimatedSprite3D
 import godot.Node
 import godot.PackedScene
+import godot.core.Transform
 import godot.core.Vector3
+import godot.global.GD
 import scripts.entities.CharacterBody
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.*
@@ -221,10 +223,8 @@ fun addCharacter(
 		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
 		val toolOffset = characterBody.toolOffset
 		val character = newCharacter(definition, accessories, toolOffset, name, relationships = relationships)
-		if (sprite != null) {
-			sprite.animation = character.depiction
-			sprite.frame = character.frame.toLong()
-		}
+		sprite.animation = character.depiction
+		sprite.frame = character.frame.toLong()
 
 		listOf(
 			Hand(
@@ -247,17 +247,15 @@ fun getRandomizedSpawnOffset(dice: Dice) =
 	)
 
 fun spawnCharacter(
-	world: World,
+	world: PreWorld,
 	scene: PackedScene,
-	origin: Vector3,
-	rotation: Vector3,
+	transform: Transform,
 	type: String,
 	relationships: Relationships = listOf(),
 	name: String? = null,
 	id: Id? = null,
 	additional: List<Any> = listOf()
 ): Hands {
-	val dice = world.dice
 	val definitions = world.definitions
 	val definition = definitions.characters[type] ?: return listOf()
 	val nextId = world.nextId.source()
@@ -272,8 +270,7 @@ fun spawnCharacter(
 	} ?: return listOf()
 
 	body.actor = actor
-	body.translation = origin + getRandomizedSpawnOffset(dice)
-	body.facing = rotation
+	body.globalTransform = transform
 	body.walkSpeed = definition.speed
 	body.speed = definition.speed
 
@@ -286,6 +283,20 @@ fun spawnCharacter(
 		name ?: definition.name, relationships, additional
 	)
 }
+
+fun getAiBodyScene() =
+	GD.load<PackedScene>("res://entities/actor/ActorBodyCapsuleRigid.tscn")!!
+
+fun spawnAiCharacter(
+	world: PreWorld,
+	transform: Transform,
+	type: String,
+	relationships: Relationships = listOf(),
+	name: String? = null,
+	id: Id? = null,
+	additional: List<Any> = listOf()
+): Hands =
+	spawnCharacter(world, getAiBodyScene(), transform, type, relationships, name, id, additional)
 
 fun getCharacterGroupRelationships(deck: Deck, character: Character): Collection<Relationship> =
 	character.relationships

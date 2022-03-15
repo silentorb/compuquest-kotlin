@@ -25,7 +25,6 @@ fun newTileMaterial(materials: MaterialMap, texture: String): Material {
 	val material = base.duplicate() as SpatialMaterial
 	val imageTexture = GD.load<Texture>("res://assets/images/tiles/$texture.png")
 	material.albedoTexture = imageTexture
-	val k = material.albedoTexture
 	materials[texture] = material
 	return material
 }

@@ -24,7 +24,7 @@ data class GeometryProvider(
 
 fun getCollisionShape(spatial: Spatial): IntermediateMesh? =
 	when (spatial) {
-		is CollisionObject -> {
+		is StaticBody -> {
 			val shape = spatial.getChildren()
 				.filterIsInstance<CollisionShape>()
 				.firstOrNull()

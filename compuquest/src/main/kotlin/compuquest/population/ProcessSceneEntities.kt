@@ -103,12 +103,6 @@ fun applyRelationships(world: World): World {
 fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): World {
 	val definitions = world.definitions
 	val nextId = world.nextId.source()
-	val worldGenerators = findChildrenOfType<WorldGenerator>(scene)
-	val (blockGrid, generationBundle) = generateWorld(world, materials, worldGenerators)
-	for (spatial in generationBundle.spatials) {
-		scene.addChild(spatial)
-	}
-	val attachments = findChildrenOfType<AttachCharacter>(scene)
 	val groups = findChildrenOfType<GroupNode>(scene)
 		.associate {
 			nextId() to Group(
@@ -116,6 +110,10 @@ fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): Wor
 				key = it.key,
 			)
 		}
+
+	val worldGenerators = findChildrenOfType<WorldGenerator>(scene)
+	val (blockGrid, generationBundle) = generateWorld(world, groups, materials, worldGenerators)
+	val attachments = findChildrenOfType<AttachCharacter>(scene)
 
 	val world2 = world.copy(
 		deck = world.deck.copy(

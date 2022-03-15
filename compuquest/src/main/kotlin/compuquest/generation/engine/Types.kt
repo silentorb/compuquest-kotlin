@@ -2,6 +2,7 @@ package compuquest.generation.engine
 
 import compuquest.generation.general.*
 import compuquest.population.MaterialMap
+import compuquest.simulation.characters.Group
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Hands
@@ -60,6 +61,7 @@ data class GenerationConfig(
 //    val propGraphs: Map<String, Graph>,
 	val level: Int = 1,
 	val materials: MaterialMap,
+	val groups: Table<Group>,
 )
 
 data class ArchitectureInput(

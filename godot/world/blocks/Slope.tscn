@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
+[ext_resource path="res://entities/world/GroundSlot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=2]
 [ext_resource path="res://entities/world/PropMesh.gd" type="Script" id=3]
 [ext_resource path="res://src/main/kotlin/scripts/world/SideCondition.kt" type="Script" id=4]
@@ -117,3 +118,6 @@ mine = "space"
 other = "space"
 frequency = "normal"
 rerollChance = 0
+
+[node name="slot" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0 )

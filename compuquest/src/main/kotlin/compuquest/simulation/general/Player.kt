@@ -1,9 +1,6 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.characters.RelationshipType
-import compuquest.simulation.characters.getCharacterGroups
-import compuquest.simulation.characters.getRandomizedSpawnOffset
-import compuquest.simulation.characters.spawnCharacter
+import compuquest.simulation.characters.*
 import compuquest.simulation.combat.Attack
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.combat.restoreFullHealthEvent
@@ -126,13 +123,17 @@ fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
 				newAccessory(world.definitions, nextId, actor, accessoryName)
 			}
 
+		val relationships = if (spawner.relationships.any())
+			spawner.relationships
+		else
+			listOf(Relationship(RelationshipType.member, faction))
+
 		spawnCharacter(
 			world,
 			scene,
-			spawner.globalTransform.origin,
-			spawner.rotation,
+			spawner.globalTransform,
 			spawner.type,
-			spawner.relationships,
+			relationships,
 			name,
 			actor
 		) +

@@ -12,22 +12,28 @@ import silentorb.mythic.ent.Table
 import silentorb.mythic.happening.Events
 import silentorb.mythic.randomly.Dice
 
+interface PreWorld {
+	val definitions: Definitions
+	val nextId: SharedNextId
+	val scene: Spatial
+}
+
 data class World(
-	val definitions: Definitions,
+	override val definitions: Definitions,
 	val scenario: Scenario,
-	val nextId: SharedNextId,
+	override val nextId: SharedNextId,
 	val sprites: Table<AnimatedSprite3D> = mapOf(),
 	val zones: Map<Key, Zone> = mapOf(),
 	val deck: Deck = Deck(),
 	val dice: Dice,
-	val scene: Spatial,
+	override val scene: Spatial,
 	val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
 	val day: DayState,
 	val previousEvents: Events = listOf(),
 	val space: PhysicsDirectSpaceState,
 	val playerSpawners: List<PlayerSpawner> = listOf(),
 	val navigation: NavigationState? = null,
-) {
+) : PreWorld {
 	// This is a debug workaround not needed for production.
 	// When hitting breakpoints involving a World instance, World.toString()
 	// is automatically called by the IDE debugging inspector.
