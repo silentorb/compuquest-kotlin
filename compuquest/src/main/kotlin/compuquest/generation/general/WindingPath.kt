@@ -52,7 +52,6 @@ data class BlockState(
 	val biomeBlocks: Map<String, GroupedBlocks>,
 	val biomeGrid: BiomeGrid,
 	val branchingMode: BranchingMode,
-	val biomeAdapters: Set<Block>,
 	val blacklistSides: List<CellDirection> = listOf(),
 	val blacklistBlockLocations: Map<Vector3i, List<Block>> = mapOf(),
 	val lastCell: Vector3i? = null,
@@ -61,13 +60,14 @@ data class BlockState(
 const val debugWorldGenerationKey = "DEBUG_WORLD_GENERATION"
 val worldGenerationLog = conditionalDebugLog(debugWorldGenerationKey)
 
-fun extractCells(block: Block, position: Vector3i) =
+fun extractCells(block: Block, position: Vector3i, biome: String) =
 	block.cells.entries
 		.associate { (cellOffset, cell) ->
 			position + cellOffset to GridCell(
 				cell = cell,
 				offset = cellOffset,
 				source = block,
+				biome = biome,
 			)
 		}
 
@@ -152,7 +152,6 @@ tailrec fun addPathStep(
 		val blocks = getAvailableBlocks(groupedBlocks, incompleteSides, grid[state.lastCell]?.source)
 		val essentialDirectionSideDirection = oppositeDirections[incompleteSide.direction]!!
 		val matchResult = matchConnectingBlock(dice, blocks, grid, nextPosition, essentialDirectionSideDirection)
-			?: matchConnectingBlock(dice, state.biomeAdapters - blocks, grid, nextPosition, essentialDirectionSideDirection)
 
 		val nextState = if (matchResult == null) {
 			worldGenerationLog {
@@ -166,7 +165,7 @@ tailrec fun addPathStep(
 			worldGenerationLog {
 				"Winding Step: $biome ${incompleteSide.cell} ${nextPosition} ${incompleteSide.direction} ${block.name} "
 			}
-			val cellAdditions = extractCells(block, nextPosition - blockOffset)
+			val cellAdditions = extractCells(block, nextPosition - blockOffset, biome)
 //      if (!cellAdditions.containsKey(nextPosition))
 //        matchConnectingBlock(dice, groupedBlocks.all - blocks, grid, nextPosition, incompleteSide)
 
@@ -194,7 +193,6 @@ fun newExtensionBlockState(state: BlockState): BlockState {
 		grid = state.grid,
 		biomeGrid = state.biomeGrid,
 		biomeBlocks = biomeBlocks,
-		biomeAdapters = state.biomeAdapters,
 		branchingMode = state.branchingMode,
 	)
 }
@@ -239,7 +237,7 @@ tailrec fun extendBlockSides(dice: Dice, state: BlockState): BlockState {
 		worldGenerationLog {
 			"Winding Step: ${incompleteSide.cell} ${incompleteSide.direction} ${block.name} "
 		}
-		val cellAdditions = extractCells(block, nextPosition - blockOffset)
+		val cellAdditions = extractCells(block, nextPosition - blockOffset, biome)
 
 		assert(cellAdditions.containsKey(nextPosition))
 		assert(cellAdditions.any { it.value.offset == Vector3i.zero })
@@ -254,17 +252,10 @@ tailrec fun extendBlockSides(dice: Dice, state: BlockState): BlockState {
 }
 
 fun windingPath(seed: Long, dice: Dice, config: BlockConfig, length: Int, grid: BlockGrid): BlockGrid {
-	val blocks = filterUsedUniqueBlocks(grid, config.blocks)
-	val groupedBlocks = config.biomes
-		.associateWith { biome ->
-			newGroupedBlocks(blocks.filter { it.biomes.contains(biome) && !it.isBiomeAdapter })
-		}
-		.plus("" to newGroupedBlocks(blocks.filter { it.biomes.none() }))
-		.filterValues { it.flexible.any() }
-
-	val biomeGrid = if (groupedBlocks.any()) {
+	val biomeBlocks = config.biomeBlocks
+	val biomeGrid = if (biomeBlocks.any()) {
 		val biomeAnchors = newBiomeAnchors(
-			groupedBlocks.keys, dice,
+			biomeBlocks.keys, dice,
 			worldRadius = length / 3 * cellLength,
 			biomeSize = 15f,
 			minGap = 2f
@@ -275,10 +266,9 @@ fun windingPath(seed: Long, dice: Dice, config: BlockConfig, length: Int, grid: 
 
 	val state = BlockState(
 		grid = grid,
-		biomeBlocks = groupedBlocks,
+		biomeBlocks = biomeBlocks,
 		biomeGrid = biomeGrid,
 		branchingMode = BranchingMode.linear,
-		biomeAdapters = blocks.filter { it.isBiomeAdapter }.toSet()
 	)
 
 	val (firstLength, secondLength) =

@@ -1,6 +1,6 @@
 plugins {
-  kotlin("jvm") version "1.6.0"
-  id("com.utopia-rise.godot-kotlin-jvm") version "0.3.0-3.4.0"
+  kotlin("jvm") version "1.6.0" // Currently the highest Kotlin version supported by Godot-Kotlin is 1.6.0
+  id("com.utopia-rise.godot-kotlin-jvm") version "0.3.3-3.4.2"
 }
 
 repositories {
@@ -21,7 +21,6 @@ dependencies {
   api(group = "org.recast4j", name = "detour", version = "1.5.2")
   api(group = "org.recast4j", name = "detour-crowd", version = "1.5.2")
 }
-
 //kotlin.sourceSets.main {
 ////    kotlin.srcDirs("../godot/scripts")
 //    kotlin.srcDirs("../godot/src/main/kotlin")

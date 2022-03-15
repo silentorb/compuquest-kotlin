@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://assets/materials/dev/prototype-grid.tres" type="Material" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=2]
+[ext_resource path="res://entities/world/PropMesh.gd" type="Script" id=3]
 [ext_resource path="res://src/main/kotlin/scripts/world/SideCondition.kt" type="Script" id=4]
 [ext_resource path="res://assets/meshes/architecture/slope.scn" type="PackedScene" id=6]
 [ext_resource path="res://entities/world/SideNode.gd" type="Script" id=7]
@@ -38,8 +38,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 5, 2.5, 0, 0 )
 
 [node name="slope" parent="slope" instance=ExtResource( 6 )]
 transform = Transform( 5, 0, 0, 0, 1.25, 0, 0, 0, 1, 0, 0, 0 )
-material_override = ExtResource( 1 )
-skeleton = NodePath("../..")
+script = ExtResource( 3 )
+attributes = [ "floor" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="slope"]
 transform = Transform( 5, 0, 0, 0, 1.25, 0, 0, 0, 1, 0, 0, 0 )

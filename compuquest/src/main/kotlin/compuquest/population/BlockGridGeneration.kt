@@ -52,24 +52,6 @@ fun explodeBlockMap(blockBuilders: Collection<BlockBuilder>): List<BlockBuilder>
 		}
 }
 
-val defaultBiomeTextures: Map<String, Map<String, String>> = mapOf(
-	Biomes.lagoon to mapOf(
-		MeshAttributes.floor to Textures.grassGreen,
-		MeshAttributes.wall to Textures.cliffWall,
-		MeshAttributes.ceiling to Textures.grassGreen,
-	),
-//    Biomes.dungeon to mapOf(
-//        MeshAttribute.floor to Textures.cobblestone,
-//        MeshAttribute.wall to Textures.bricks,
-//        MeshAttribute.ceiling to Textures.bricks,
-//    ),
-//    Biomes.forest to mapOf(
-//        MeshAttribute.floor to Textures.grass,
-//        MeshAttribute.wall to Textures.grass,
-//        MeshAttribute.ceiling to Textures.grass,
-//    ),
-)
-
 fun cellsFromSides(sides: List<Pair<CellDirection, Side?>>): Map<Vector3i, BlockCell> {
 	val cells = sides
 		.groupBy { it.first.cell }
@@ -192,7 +174,7 @@ fun applyBiomeTextures(root: Node, biome: String, materials: MaterialMap) {
 				if (attribute != null) {
 					val texture = biomeTextures[attribute]
 					if (texture != null) {
-						val material = getMaterial(materials, "")
+						val material = getMaterial(materials, texture)
 						prop.setSurfaceMaterial(0L, material)
 					}
 				}
@@ -206,7 +188,8 @@ fun newBuilder(scene: PackedScene): Builder {
 		val root = scene.instance() as Spatial
 		filterConditionalNodes(root, input.neighbors)
 		findSideNodes(root).forEach { it.queueFree() }
-		applyBiomeTextures(root, input.biome, input.general.config.materials)
+		val biome = input.cell.biome
+		applyBiomeTextures(root, biome, input.general.config.materials)
 		GenerationBundle(
 			spatials = listOf(root),
 		)

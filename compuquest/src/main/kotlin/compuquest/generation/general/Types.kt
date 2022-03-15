@@ -1,5 +1,6 @@
 package compuquest.generation.general
 
+import compuquest.population.BiomeBlocks
 import godot.core.Vector2
 import godot.core.Vector3
 import silentorb.mythic.spatial.Vector3i
@@ -8,6 +9,7 @@ data class GridCell(
     val cell: BlockCell,
     val offset: Vector3i,
     val source: Block,
+    val biome: String,
 )
 
 typealias BlockGrid = Map<Vector3i, GridCell>
@@ -27,8 +29,7 @@ data class CellDirection(
 )
 
 data class BlockConfig(
-    val blocks: Set<Block>,
-    val biomes: Set<String>,
+    val biomeBlocks: BiomeBlocks,
 )
 
 data class VoronoiAnchor2d<T>(

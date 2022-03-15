@@ -1,8 +1,6 @@
 package compuquest.population
 
-import godot.ImageTexture
-import godot.Material
-import godot.SpatialMaterial
+import godot.*
 import godot.global.GD
 
 object Textures {
@@ -25,9 +23,9 @@ fun getBaseTextureMaterial(materials: MaterialMap): Material =
 fun newTileMaterial(materials: MaterialMap, texture: String): Material {
 	val base = getBaseTextureMaterial(materials)
 	val material = base.duplicate() as SpatialMaterial
-	val imageTexture = ImageTexture()
-	imageTexture.load("res://assets/images/tiles/$texture.png")
+	val imageTexture = GD.load<Texture>("res://assets/images/tiles/$texture.png")
 	material.albedoTexture = imageTexture
+	val k = material.albedoTexture
 	materials[texture] = material
 	return material
 }

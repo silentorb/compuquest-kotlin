@@ -1,9 +1,6 @@
 package compuquest.generation.engine
 
-import compuquest.generation.general.Block
-import compuquest.generation.general.BlockGrid
-import compuquest.generation.general.CellAttribute
-import compuquest.generation.general.CellDirection
+import compuquest.generation.general.*
 import compuquest.population.MaterialMap
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Hand
@@ -82,8 +79,8 @@ data class BuilderInput(
 	val general: ArchitectureInput,
 	val neighbors: Map<CellDirection, String>,
 	val turns: Int,
-	val height: Int,
-	val biome: String,
+	val location: Vector3i,
+	val cell: GridCell,
 )
 
 typealias Builder = (BuilderInput) -> GenerationBundle

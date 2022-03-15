@@ -140,7 +140,7 @@ fun filterBlockSides(blockGrid: BlockGrid, position: Vector3i, condition: (Side)
 fun getIncompleteBlockSides(blockGrid: BlockGrid, condition: (Side) -> Boolean = { it.isTraversable }): List<CellDirection> =
   blockGrid.keys.flatMap { filterBlockSides(blockGrid, it, condition) }
 
-fun filterUsedUniqueBlocks(grid: BlockGrid, blocks: Set<Block>): Set<Block> {
+fun filterUsedUniqueBlocks(grid: BlockGrid, blocks: Collection<Block>): Set<Block> {
   val uniqueNames = grid
     .filter { it.value.source.attributes.contains(BlockAttributes.unique) }
     .values

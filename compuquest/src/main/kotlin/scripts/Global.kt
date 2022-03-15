@@ -265,8 +265,9 @@ class Global : Node() {
 	}
 
 	override fun _onDestroy() {
-		// Need to release any references to Godot objects or there will be a memory leak
+		// Need to release any references to Godot objects or there will be memory leaks
 		worlds = listOf()
+		client?.materials?.clear()
 	}
 }
 
