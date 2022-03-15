@@ -13,6 +13,7 @@ script = ExtResource( 2 )
 attributes = [ "floor" ]
 
 [node name="StaticBody" type="StaticBody" parent="."]
+collision_layer = 18
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
 shape = SubResource( 1 )

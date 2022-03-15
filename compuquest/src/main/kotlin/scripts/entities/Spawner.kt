@@ -4,10 +4,12 @@ import compuquest.population.getDirectRelationshipAttachments
 import compuquest.simulation.characters.Relationships
 import compuquest.simulation.characters.getRandomizedSpawnOffset
 import compuquest.simulation.characters.spawnAiCharacter
+import compuquest.simulation.general.Deck
 import compuquest.simulation.intellect.design.Goal
 import compuquest.simulation.intellect.knowledge.Personality
 import compuquest.simulation.intellect.newSpirit
 import godot.Spatial
+import godot.World
 import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -15,6 +17,7 @@ import godot.annotation.RegisterProperty
 import scripts.Global
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.debugging.getDebugInt
+import silentorb.mythic.ent.Id
 
 @RegisterClass
 class Spawner : Spatial() {
@@ -36,9 +39,20 @@ class Spawner : Spatial() {
 	@RegisterProperty
 	var quantity: Int = 1
 
+	@Export
+	@RegisterProperty
+	var maxActiveEntities: Int = 0
+
 	var accumulator: Float = 0f
 	var firstSpawn = false
 	var relationshipCache: Relationships? = null
+
+	var activeEntities = mutableListOf<Id>()
+
+	fun updateActiveEntities(deck: Deck) {
+		val missing = activeEntities.filter { !deck.characters.containsKey(it) }
+		activeEntities.removeAll(missing)
+	}
 
 	fun spawn(): Boolean {
 		if (getDebugBoolean("NO_MONSTERS"))
@@ -46,6 +60,10 @@ class Spawner : Spatial() {
 
 		val world = Global.world
 		return if (world != null) {
+			updateActiveEntities(world.deck)
+			if (maxActiveEntities > 0 && activeEntities.size >= maxActiveEntities)
+				return false
+
 			val relationships = relationshipCache ?: getDirectRelationshipAttachments(world.deck, this)
 			relationshipCache = relationships
 			val goals = getChildren().filterIsInstance<GoalAttachment>()
@@ -61,10 +79,14 @@ class Spawner : Spatial() {
 					personality = definition.personality ?: Personality()
 				)
 
+				val id = world.nextId.source()()
+				activeEntities.add(id)
+
 				val hands = spawnAiCharacter(
 					world,
 					globalTransform.translated(getRandomizedSpawnOffset(world.dice)),
 					type,
+					id = id,
 					relationships = relationships,
 					additional = listOf(spirit)
 				)

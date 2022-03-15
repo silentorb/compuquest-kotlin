@@ -36,6 +36,7 @@ direction = 5
 
 [node name="slope" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 5, 2.5, 0, 0 )
+collision_layer = 18
 
 [node name="slope" parent="slope" instance=ExtResource( 6 )]
 transform = Transform( 5, 0, 0, 0, 1.25, 0, 0, 0, 1, 0, 0, 0 )
