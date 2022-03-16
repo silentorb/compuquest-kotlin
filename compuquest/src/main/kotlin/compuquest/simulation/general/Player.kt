@@ -64,7 +64,7 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 		!isAlive &&
 		character != null &&
 		world.scenario.playerRespawning &&
-		getPlayerRespawnPoint(world, actor) != null
+		getPlayerRespawnPoint(world.playerSpawners, world.deck, actor) != null
 	)
 		player.respawnTimer + 1
 	else
@@ -78,18 +78,18 @@ fun updatePlayer(world: World, events: Events, delta: Float): (Id, Player) -> Pl
 	)
 }
 
-fun getPlayerRespawnPoint(world: World, groups: Collection<Id>): PlayerSpawner? =
-	world.playerSpawners
+fun getPlayerRespawnPoint(playerSpawners: List<PlayerSpawner>, groups: Collection<Id>): PlayerSpawner? =
+	playerSpawners
 		.firstOrNull { spawner ->
 			spawner.relationships
 				.any { it.isA == RelationshipType.member && groups.contains(it.of) }
-		} ?: world.playerSpawners.firstOrNull()
+		} ?: playerSpawners.firstOrNull()
 
-fun getPlayerRespawnPoint(world: World, actor: Id): PlayerSpawner? =
-	getPlayerRespawnPoint(world, getCharacterGroups(world.deck, actor) + actor)
+fun getPlayerRespawnPoint(playerSpawners: List<PlayerSpawner>, deck: Deck, actor: Id): PlayerSpawner? =
+	getPlayerRespawnPoint(playerSpawners, getCharacterGroups(deck, actor) + actor)
 
 fun respawnPlayer(world: World, actor: Id): Events {
-	val respawner = getPlayerRespawnPoint(world, actor)
+	val respawner = getPlayerRespawnPoint(world.playerSpawners, world.deck, actor)
 	return if (respawner != null) {
 		val dice = world.dice
 		val location = respawner.globalTransform.origin + getRandomizedSpawnOffset(dice)
@@ -112,7 +112,7 @@ fun newPlayerName(index: Int): String =
 	"Player ${index + 1}"
 
 fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
-	val spawner = getPlayerRespawnPoint(world, faction)
+	val spawner = getPlayerRespawnPoint(world.playerSpawners, world.deck, faction)
 	val scene = spawner?.scene
 	return if (scene != null && world.deck.players.none { it.value.index == playerIndex }) {
 		val nextId = world.nextId.source()

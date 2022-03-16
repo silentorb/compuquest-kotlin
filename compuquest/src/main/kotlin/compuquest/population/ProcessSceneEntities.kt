@@ -100,6 +100,14 @@ fun applyRelationships(world: World): World {
 		)
 }
 
+fun getPlayerSpawners(scene: Node, deck: Deck): List<PlayerSpawner> {
+	val playerSpawners = findChildrenOfType<PlayerSpawner>(scene)
+	for (playerSpawner in playerSpawners) {
+		playerSpawner.relationships = getDirectRelationshipAttachments(deck, playerSpawner)
+	}
+	return playerSpawners
+}
+
 fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): World {
 	val definitions = world.definitions
 	val nextId = world.nextId.source()
@@ -112,7 +120,13 @@ fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): Wor
 		}
 
 	val worldGenerators = findChildrenOfType<WorldGenerator>(scene)
-	val (blockGrid, generationBundle) = generateWorld(world, groups, materials, worldGenerators)
+	val generationHands = if (worldGenerators.none())
+		listOf()
+	else {
+		val generationConfig = newGenerationConfig(world.definitions, groups, materials, 1)
+		generateWorld(world, generationConfig)
+	}
+
 	val attachments = findChildrenOfType<AttachCharacter>(scene)
 
 	val world2 = world.copy(
@@ -139,13 +153,8 @@ fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): Wor
 				)
 			}
 
-	val hands = characterHands + entityNodeHands + generationBundle.hands
-
-	val playerSpawners = findChildrenOfType<PlayerSpawner>(scene)
-	for (playerSpawner in playerSpawners) {
-		playerSpawner.relationships = getDirectRelationshipAttachments(world2.deck, playerSpawner)
-	}
-
+	val hands = characterHands + entityNodeHands + generationHands
+	val playerSpawners = getPlayerSpawners(scene, world2.deck)
 	val world3 = newEntitiesFromHands(hands, world2)
 		.copy(
 			playerSpawners = playerSpawners,

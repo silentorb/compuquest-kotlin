@@ -4,6 +4,7 @@ import compuquest.generation.engine.*
 import compuquest.generation.general.*
 import compuquest.simulation.characters.Group
 import compuquest.simulation.definition.Definitions
+import compuquest.simulation.general.Hands
 import compuquest.simulation.general.PreWorld
 import godot.*
 import godot.core.Vector3
@@ -99,14 +100,15 @@ fun interpolateTraversibleCellCount(cells: Set<Vector3i>): Int {
 	return minimum * 3 / 2
 }
 
-fun newGenerationSeed(): Long =
-	getDebugString("GENERATION_SEED")?.toLong() ?: System.currentTimeMillis()
+fun newGenerationSeed(level: Int): Long =
+	getDebugString("GENERATION_SEED")?.toLong()?.plus(level - 1) ?: System.currentTimeMillis()
 
 fun newGenerationConfig(
 	definitions: Definitions,
 	groups: Table<Group>,
 	materials: MaterialMap,
-	seed: Long = newGenerationSeed()
+	level: Int,
+	seed: Long = newGenerationSeed(level)
 ): GenerationConfig {
 
 	return GenerationConfig(
@@ -116,6 +118,7 @@ fun newGenerationConfig(
 		cellCount = getDebugInt("BASE_ROOM_COUNT") ?: 50,
 		materials = materials,
 		groups = groups,
+		level = level,
 	)
 }
 
@@ -239,25 +242,18 @@ val blocksDirectoryPath = "res://world/blocks"
 
 fun generateWorld(
 	world: PreWorld,
-	groups: Table<Group>,
-	materials: MaterialMap,
-	worldGenerators: Collection<WorldGenerator>
-): Pair<BlockGrid, GenerationBundle> =
-	if (worldGenerators.none())
-		mapOf<Vector3i, GridCell>() to emptyGenerationBundle
-	else {
-		val (blocks, builders) = gatherBlockBuilders(blocksDirectoryPath)
-		val generator = worldGenerators.first()
-		val generationConfig = newGenerationConfig(world.definitions, groups, materials, newGenerationSeed())
-		val dice = Dice(generationConfig.seed)
-		val (grid, generationBundle) = generateWorldBlocks(dice, generationConfig, blocks, builders)
-		val scene = world.scene
-		for (spatial in generationBundle.spatials) {
-			scene.addChild(spatial)
-		}
-		val population = populateWorld(world, generationConfig, dice)
-		val newGenerationBundle = generationBundle.copy(
-			hands = generationBundle.hands + population
-		)
-		grid to newGenerationBundle
+	generationConfig: GenerationConfig
+): Hands {
+	val (blocks, builders) = gatherBlockBuilders(blocksDirectoryPath)
+	val dice = Dice(generationConfig.seed)
+	val (grid, generationBundle) = generateWorldBlocks(dice, generationConfig, blocks, builders)
+	val scene = world.scene
+	for (spatial in generationBundle.spatials) {
+		scene.addChild(spatial)
 	}
+	val population = populateWorld(world, generationConfig, dice)
+	val newGenerationBundle = generationBundle.copy(
+		hands = generationBundle.hands + population
+	)
+	return newGenerationBundle.hands
+}

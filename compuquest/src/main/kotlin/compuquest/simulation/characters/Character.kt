@@ -322,3 +322,21 @@ fun getCharacterGroups(deck: Deck, actor: Id): Collection<Id> {
 	else
 		listOf()
 }
+
+fun copyEntity(deck: Deck, entity: Id): Hands {
+	val components = deckReflection.deckProperties.mapNotNull { property ->
+		val table = property.get(deck) as Table<Any>
+		table[entity]
+	}
+
+	val accessories = getOwnerAccessories(deck.accessories, entity)
+		.keys
+		.flatMap { copyEntity(deck, it) }
+
+	return listOf(
+		Hand(
+			id = entity,
+			components = components,
+		)
+	) + accessories
+}

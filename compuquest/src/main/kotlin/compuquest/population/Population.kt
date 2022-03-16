@@ -11,8 +11,10 @@ import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Hands
 import compuquest.simulation.general.PreWorld
 import compuquest.simulation.intellect.newSpirit
+import godot.Spatial
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.debugging.getDebugInt
+import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.randomly.Dice
 import kotlin.math.max
 import kotlin.math.min
@@ -62,6 +64,24 @@ fun populateMonsters(config: DistributionConfig, slots: Slots): Slots {
 	return result
 }
 
+fun distributeNextLevelPortals(config: DistributionConfig, slots: Slots): Slots {
+	val furthest = slots
+		.filter { it.orientation == SlotOrientation.ground }
+		.maxByOrNull { it.transform.origin.length() }
+
+	return listOfNotNull(furthest)
+}
+
+fun newNextLevelPortals(world: PreWorld, config: GenerationConfig, dice: Dice, transforms: Transforms): Hands {
+	return transforms.map { transform ->
+		val spatial = instantiateScene<Spatial>("res://entities/actor/NextLevelPortal.tscn")!!
+		spatial.transform = transform
+		Hand(
+			components = listOf(spatial)
+		)
+	}
+}
+
 //fun distributeItemHands(config: GenerationConfig, nextId: NextId, dice: Dice, slots: Slots): List<Hand> {
 //	val itemDefinitions = filterPropGraphs(config, setOf(DistAttributes.floor, DistAttributes.food))
 //	return slots.flatMap { (_, slot) ->
@@ -85,6 +105,7 @@ val groundSlots = setOf(SlotOrientation.ground)
 
 val distributors: List<Distributor> = listOf(
 //    Distributor(::distributeLightSlots, ::distributeLightHands),
+	Distributor(::distributeNextLevelPortals, ::newNextLevelPortals),
 	Distributor(::populateMonsters, ::populateNewMonsters),
 //    Distributor(selectSlots(groundSlots) { it / 10 }, ::distributeItemHands),
 //    Distributor(selectSlots(groundSlots) { it * 2 / 3 }, ::distributeBasicProps),

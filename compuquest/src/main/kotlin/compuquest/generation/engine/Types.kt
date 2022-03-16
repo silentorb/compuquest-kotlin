@@ -1,39 +1,20 @@
 package compuquest.generation.engine
 
-import compuquest.generation.general.*
+import compuquest.generation.general.Block
+import compuquest.generation.general.BlockGrid
+import compuquest.generation.general.CellDirection
+import compuquest.generation.general.GridCell
 import compuquest.population.MaterialMap
 import compuquest.simulation.characters.Group
 import compuquest.simulation.definition.Definitions
-import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Hands
 import godot.Spatial
-import godot.core.Vector3
 import silentorb.mythic.ent.Table
 import silentorb.mythic.randomly.Dice
 import silentorb.mythic.spatial.Pi
 import silentorb.mythic.spatial.Vector3i
 
 const val quarterAngle = Pi * 0.5f
-
-data class BlockElement(
-	val target: String,
-	val location: Vector3,
-	val orientation: Vector3,
-	val scale: Vector3
-)
-
-data class ImportedAttributes(
-	val cell: Vector3i,
-	val attributes: List<CellAttribute>
-)
-
-data class Polyomino(
-	val attributes: List<ImportedAttributes>,
-	val cells: List<Vector3i>,
-	val elements: List<BlockElement>
-)
-
-typealias PolyominoMap = Map<String, Polyomino>
 
 data class GenerationBundle(
 	val spatials: List<Spatial> = listOf(),
@@ -46,8 +27,6 @@ data class GenerationBundle(
 		)
 }
 
-val emptyGenerationBundle = GenerationBundle()
-
 data class GenerationConfig(
 	val seed: Long,
 	val definitions: Definitions,
@@ -55,10 +34,8 @@ data class GenerationConfig(
 //    val resourceInfo: ResourceInfo,
 	val includeEnemies: Boolean,
 	val cellCount: Int,
-//    val expansionLibrary: ExpansionLibrary,
 //    val hands: Table<NewHand> = mapOf(),
 //	val propGroups: Map<String, Set<String>>,
-//    val propGraphs: Map<String, Graph>,
 	val level: Int = 1,
 	val materials: MaterialMap,
 	val groups: Table<Group>,

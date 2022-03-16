@@ -5,6 +5,8 @@ import compuquest.clienting.*
 import compuquest.clienting.display.applyDisplayOptions
 import compuquest.clienting.input.updateMouseMode
 import compuquest.definition.newDefinitions
+import compuquest.population.nextLevel
+import compuquest.population.nextLevelEvent
 import compuquest.simulation.definition.Factions
 import silentorb.mythic.godoting.tempCatch
 import compuquest.simulation.input.Commands
@@ -138,7 +140,12 @@ class Global : Node() {
 			restartGame()
 		} else {
 			val nextWorld = updateWorld(events, input, delta, worlds)
-			this.worlds = worlds.plus(nextWorld).takeLast(2)
+
+			// Wait to apply the next level until after the world is updated to ensure any critical events are incorporated
+			this.worlds = if (events.any { it.type == nextLevelEvent })
+				listOf(nextLevel(nextWorld, client!!.materials))
+			else
+				worlds.plus(nextWorld).takeLast(2)
 		}
 	}
 

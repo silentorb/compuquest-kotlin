@@ -33,6 +33,7 @@ data class World(
 	val space: PhysicsDirectSpaceState,
 	val playerSpawners: List<PlayerSpawner> = listOf(),
 	val navigation: NavigationState? = null,
+	val global: GlobalState = GlobalState(),
 ) : PreWorld {
 	// This is a debug workaround not needed for production.
 	// When hitting breakpoints involving a World instance, World.toString()

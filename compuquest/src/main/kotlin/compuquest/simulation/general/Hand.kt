@@ -1,7 +1,7 @@
 package compuquest.simulation.general
 
-import silentorb.mythic.happening.Event
 import silentorb.mythic.ent.Id
+import silentorb.mythic.happening.Event
 
 data class Hand(
 	val id: Id? = null,
