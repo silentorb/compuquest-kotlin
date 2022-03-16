@@ -1,5 +1,6 @@
 package compuquest.population
 
+import compuquest.definition.distributedItems
 import compuquest.definition.monsterDistributions
 import compuquest.definition.monsterLimit
 import compuquest.generation.engine.GenerationConfig
@@ -24,6 +25,9 @@ fun populateNewMonsters(world: PreWorld, config: GenerationConfig, dice: Dice, l
 	return if (locations.none())
 		listOf()
 	else {
+		if (getDebugBoolean("DEBUG_MONSTER_COUNT")) {
+			println("Monster Count: ${locations.size}")
+		}
 		val group = config.groups.entries.firstOrNull { it.value.key == "undead" }?.key
 		val relationships = if (group != null)
 			listOf(
@@ -54,14 +58,19 @@ fun selectSlots(attributes: Collection<String>, limit: (Int) -> Int): SlotSelect
 	selectSlots(config.dice, filteredSlots, limit(config.cellCount))
 }
 
-fun populateMonsters(config: DistributionConfig, slots: Slots): Slots {
+fun distributeGroundEntities(getMax: (DistributionConfig, Int) -> Int): SlotSelector = { config, slots ->
 	val groundSlots = slots.filter { it.orientation == SlotOrientation.ground }
-	val maxMonsters = min(monsterLimit(), groundSlots.size / max(2, 16 - config.level))
-	val result = selectSlots(config.dice, groundSlots, maxMonsters)
-	if (getDebugBoolean("DEBUG_MONSTER_COUNT")) {
-		println("Monster Count: ${result.size}")
-	}
-	return result
+	val maxEntities = getMax(config, groundSlots.size)
+	val result = selectSlots(config.dice, groundSlots, maxEntities)
+	result
+}
+
+val distributeMonsters = distributeGroundEntities { config, slotCount ->
+	min(monsterLimit(), slotCount / max(2, 16 - config.level))
+}
+
+val distributeItems = distributeGroundEntities { _, slotCount ->
+	slotCount / 30
 }
 
 fun distributeNextLevelPortals(config: DistributionConfig, slots: Slots): Slots {
@@ -82,31 +91,21 @@ fun newNextLevelPortals(world: PreWorld, config: GenerationConfig, dice: Dice, t
 	}
 }
 
-//fun distributeItemHands(config: GenerationConfig, nextId: NextId, dice: Dice, slots: Slots): List<Hand> {
-//	val itemDefinitions = filterPropGraphs(config, setOf(DistAttributes.floor, DistAttributes.food))
-//	return slots.flatMap { (_, slot) ->
-//		val itemDefinition = dice.takeOne(itemDefinitions)
-//		graphToHands(config.resourceInfo, nextId, itemDefinition, slot.transform)
-//	}
-//}
-//
-//fun distributeBasicProps(config: GenerationConfig, nextId: NextId, dice: Dice, slots: Slots): List<Hand> {
-//	return slots.flatMap { (_, slot) ->
-//		slotToHands(config, nextId, dice, slot) {
-//			it
-//				.minus(listOf(DistAttributes.floor, DistAttributes.wall))
-//				.minus(biomeIds)
-//				.none()
-//		}
-//	}
-//}
-
-val groundSlots = setOf(SlotOrientation.ground)
+fun newItems(world: PreWorld, config: GenerationConfig, dice: Dice, transforms: Transforms): Hands {
+	return transforms.map { transform ->
+		val spatial = instantiateScene<Spatial>(distributedItems.entries.first().key)!!
+		spatial.transform = transform
+		Hand(
+			components = listOf(spatial)
+		)
+	}
+}
 
 val distributors: List<Distributor> = listOf(
 //    Distributor(::distributeLightSlots, ::distributeLightHands),
 	Distributor(::distributeNextLevelPortals, ::newNextLevelPortals),
-	Distributor(::populateMonsters, ::populateNewMonsters),
+	Distributor(distributeMonsters, ::populateNewMonsters),
+	Distributor(distributeItems, ::newItems)
 //    Distributor(selectSlots(groundSlots) { it / 10 }, ::distributeItemHands),
 //    Distributor(selectSlots(groundSlots) { it * 2 / 3 }, ::distributeBasicProps),
 )

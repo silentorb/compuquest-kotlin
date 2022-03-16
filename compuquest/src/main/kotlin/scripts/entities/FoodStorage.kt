@@ -26,8 +26,11 @@ class FoodStorage : Spatial(), DamageTarget, Interactive, EntityNode {
 
 	@Export
 	@RegisterProperty
-	var frameOffset: Int = 9 // Defaults to bush for now so at least something works until Godot-Kotlin @Tool works
+	var frameOffset: Int = 0
 
+	@Export
+	@RegisterProperty
+	var accessoryType = ""
 
 	@Export
 	@RegisterProperty
@@ -103,7 +106,7 @@ class FoodStorage : Spatial(), DamageTarget, Interactive, EntityNode {
 
 	override fun onInteraction(world: World, actor: Id) {
 		if (mode == Mode.hasFood) {
-			Global.addHand(newAccessory(world, actor, Accessories.berries))
+			Global.addHand(newAccessory(world, actor, accessoryType))
 			if (restockDuration != 0) {
 				mode = Mode.normal
 			}

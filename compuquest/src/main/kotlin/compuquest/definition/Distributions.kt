@@ -32,3 +32,7 @@ fun scalingDistributions(): DistributionMap = mapOf(
 )
 
 fun monsterLimit() = getDebugInt("MONSTER_LIMIT") ?: 1000
+
+val distributedItems = mapOf(
+  "res://entities/actor/BurgerBot.tscn" to Rarity.common,
+)

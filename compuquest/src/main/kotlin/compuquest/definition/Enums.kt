@@ -3,6 +3,7 @@ package compuquest.definition
 object Accessories {
 	val berries = "berries"
 	val bite = "bite"
+	val burger = "burger"
 	val burning = "burning"
 	val fireRing = "fireRing"
 	val fireStaff = "fireStaff"
@@ -14,6 +15,7 @@ object Accessories {
 
 object EquipmentFrames {
 	const val berries = 0
+	const val burger = 9
 	const val fireStaff = 1
 	const val summonFox = 3
 	const val summonSquid = 5

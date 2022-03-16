@@ -30,6 +30,18 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
+	Accessories.burger to AccessoryDefinition(
+		name = Accessories.burger,
+		consumable = true,
+		equippedFrame = EquipmentFrames.burger,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.heal,
+				recipient = EffectRecipient.self,
+				strength = 30f,
+			),
+		)
+	),
 	Accessories.fireRing to AccessoryDefinition(
 		name = Accessories.fireRing,
 		cooldown = 8f,

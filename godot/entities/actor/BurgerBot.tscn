@@ -7,10 +7,11 @@
 radius = 1.77471
 height = 4.4
 
-[node name="pine-tree" type="StaticBody"]
+[node name="burger-bot" type="StaticBody"]
 script = ExtResource( 1 )
-accessory_type = "berries"
-frame_offset = 9
+accessory_type = "burger"
+restock_duration = -1
+frame_offset = 17
 
 [node name="collisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.17968, 0 )
@@ -19,4 +20,4 @@ shape = SubResource( 1 )
 [node name="sprite" parent="." instance=ExtResource( 2 )]
 transform = Transform( 3.12049, 0, 0, 0, 3.12049, 0, 0, 0, 3.12049, 0, 2.5, 0 )
 animation = "props"
-frame = 9
+frame = 18
