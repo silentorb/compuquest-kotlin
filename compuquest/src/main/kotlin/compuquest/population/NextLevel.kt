@@ -36,13 +36,15 @@ fun persistDeck(deck: Deck): Deck =
 
 fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck) {
 	for (actor in deck.players.keys) {
-		val character = deck.characters[actor]
-		val force = character?.relationships?.firstOrNull { it.isA == RelationshipType.member }?.of
-		if (force != null) {
-			val spawner = getPlayerRespawnPoint(playerSpawners, deck, force)
-			val body = deck.bodies[actor]
-			if (spawner != null && body != null) {
-				body.translation = spawner.globalTransform.origin
+		val body = deck.bodies[actor]
+		if (body != null) {
+			val character = deck.characters[actor]
+			val force = character?.relationships?.firstOrNull { it.isA == RelationshipType.member }?.of
+			if (force != null) {
+				val spawner = getPlayerRespawnPoint(playerSpawners, deck, force)
+				if (spawner != null) {
+					body.translation = spawner.globalTransform.origin
+				}
 			}
 		}
 	}
@@ -52,20 +54,23 @@ fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck) {
 fun nextLevel(world: World, materials: MaterialMap): World {
 	val global = world.global
 	val definitions = world.definitions
+	val scene = world.scene
 	val level = global.level + 1
 	val playerHands = extractPlayers(world.deck)
 	val deck = allHandsToDeck(playerHands, persistDeck(world.deck))
-	for (body in deck.bodies.values) {
-		body.getParent()?.removeChild(body)
+//	for (body in deck.bodies.values) {
+//		body.getParent()?.removeChild(body)
+//	}
+
+	for (child in scene.getChildren().filterIsInstance<Node>()) {
+		if (!deck.bodies.containsValue(child)) {
+			scene.removeChild(child)
+		}
 	}
 
-	for (child in world.scene.getChildren().filterIsInstance<Node>()) {
-		world.scene.removeChild(child)
-	}
-
-	val generationConfig = newGenerationConfig(definitions, world.deck.groups, materials, level)
+	val generationConfig = newGenerationConfig(definitions, deck.groups, materials, level)
 	val generationHands = generateWorld(world, generationConfig)
-	val playerSpawners = getPlayerSpawners(world.scene, deck)
+	val playerSpawners = getPlayerSpawners(scene, deck)
 	spawnExistingPlayers(playerSpawners, deck)
 
 	return world.copy(
