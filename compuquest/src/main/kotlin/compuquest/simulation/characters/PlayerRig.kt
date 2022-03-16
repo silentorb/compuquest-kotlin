@@ -6,6 +6,8 @@ import godot.Spatial
 import godot.core.Vector3
 import godot.global.GD
 import scripts.entities.CharacterBody
+import silentorb.mythic.debugging.getDebugBoolean
+import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.ent.Id
 
 fun updatePlayerLook(body: CharacterBody, input: PlayerInput) {
@@ -45,6 +47,8 @@ fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerI
 			// TODO: Remove the below line of code once this engine / module bug is fixed
 			body.head!!.rotation
 		}
+
+		body.isFlying = getDebugBoolean("PLAYER_FLIGHT")
 	} else {
 		if (!isCharacterAlive(world.deck, actor)) {
 			playerDeathCollapse(body.head!!)

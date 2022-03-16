@@ -22,7 +22,6 @@ data class World(
 	override val definitions: Definitions,
 	val scenario: Scenario,
 	override val nextId: SharedNextId,
-	val sprites: Table<AnimatedSprite3D> = mapOf(),
 	val zones: Map<Key, Zone> = mapOf(),
 	val deck: Deck = Deck(),
 	val dice: Dice,

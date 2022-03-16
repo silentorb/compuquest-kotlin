@@ -13,6 +13,6 @@ import godot.Spatial
 fun newGame(scene: Spatial, scenario: Scenario, definitions: Definitions, materials: MaterialMap): World {
   val world = newWorld(definitions, scenario, scene)
   val world2 = processSceneEntities(scene, world, materials)
-  updateDepictions(null, world2)
+  updateDepictions(null, world2.deck)
   return world2
 }

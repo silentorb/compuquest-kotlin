@@ -31,6 +31,8 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 	override var actor: Id = emptyId
 	override var sprite: AnimatedSprite3D? = null
 	override var location: Vector3 = Vector3.ZERO
+	override var isFlying: Boolean = false
+
 	override var facing: Vector3
 		get() = head?.rotation ?: Vector3.ZERO
 		set(value) {

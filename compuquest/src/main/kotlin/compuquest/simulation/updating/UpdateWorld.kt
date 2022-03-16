@@ -1,11 +1,13 @@
 package compuquest.simulation.updating
 
+import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.happening.gatherEvents
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.intellect.getSpiritIntervalStep
 import compuquest.simulation.intellect.navigation.updateNavigation
 import compuquest.simulation.intellect.updateSpirit
+import scripts.entities.AnimatedSprite3DOwner
 import silentorb.mythic.ent.mapTable
 import silentorb.mythic.godoting.tempCatchStatement
 import silentorb.mythic.happening.Events
@@ -13,18 +15,18 @@ import silentorb.mythic.happening.Events
 const val simulationFps: Int = 60
 const val simulationDelta: Float = 1f / simulationFps.toFloat()
 
-fun updateDepictions(previous: World?, next: World) {
-	val characters = previous?.deck?.characters
-	for (after in next.deck.characters) {
+fun updateDepictions(previous: Deck?, next: Deck) {
+	val characters = previous?.characters
+	for (after in next.characters) {
 		val before = if (characters != null) characters[after.key] else null
 		val animation = after.value.depiction
 		val frame = after.value.frame
 		if (before == null || before.depiction != animation || before.frame != frame) {
-			val node = next.sprites[after.key]
-			if (node != null) {
+			val sprite = (next.bodies[after.key] as? AnimatedSprite3DOwner)?.sprite
+			if (sprite != null) {
 				tempCatchStatement {
-					node.animation = animation
-					node.frame = frame.toLong()
+					sprite.animation = animation
+					sprite.frame = frame.toLong()
 				}
 			}
 		}
@@ -63,7 +65,7 @@ fun updateWorld(events: Events, playerInputs: PlayerInputs, delta: Float, worlds
 		deck = deck,
 		navigation = navigation,
 	)
-	updateDepictions(world, world3)
+	updateDepictions(world.deck, world3.deck)
 	val world4 = deleteEntities(events2, world3)
 	val world5 = newEntities(events2, world4)
 	syncGodot(world5, events2, playerInputs)

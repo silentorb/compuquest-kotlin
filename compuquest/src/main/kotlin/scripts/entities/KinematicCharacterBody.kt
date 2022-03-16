@@ -35,6 +35,7 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 	override var actor: Id = emptyId
 	override var sprite: AnimatedSprite3D? = null
 	override var location: Vector3 = Vector3.ZERO
+	override var isFlying: Boolean = false
 
 	override var facing: Vector3
 		get() = rotation
@@ -166,12 +167,21 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 				snap = -getFloorNormal() - getFloorVelocity() * delta
 			}
 		} else {
-			if (snap != Vector3.ZERO && velocity.y != 0.0) {
-				velocity.y = 0.0
-			}
+			if (isFlying) {
+				snap = Vector3.ZERO
+				if (input.fly != 0) {
+					velocity.y = (jumpHeight * input.fly.toFloat()).toDouble()
+				} else {
+					velocity.y = 0.0
+				}
+			} else {
+				if (snap != Vector3.ZERO && velocity.y != 0.0) {
+					velocity.y = 0.0
+				}
 
-			snap = Vector3.ZERO
-			velocity.y = max(-gravity, velocity.y.toFloat() - (gravity * delta)).toDouble()
+				snap = Vector3.ZERO
+				velocity.y = max(-gravity, velocity.y.toFloat() - (gravity * delta)).toDouble()
+			}
 		}
 
 		updateSpeed()

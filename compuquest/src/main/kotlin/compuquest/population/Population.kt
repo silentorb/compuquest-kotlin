@@ -56,7 +56,7 @@ fun selectSlots(attributes: Collection<String>, limit: (Int) -> Int): SlotSelect
 
 fun populateMonsters(config: DistributionConfig, slots: Slots): Slots {
 	val groundSlots = slots.filter { it.orientation == SlotOrientation.ground }
-	val maxMonsters = min(monsterLimit(), groundSlots.size / max(2, 10 - config.level))
+	val maxMonsters = min(monsterLimit(), groundSlots.size / max(2, 16 - config.level))
 	val result = selectSlots(config.dice, groundSlots, maxMonsters)
 	if (getDebugBoolean("DEBUG_MONSTER_COUNT")) {
 		println("Monster Count: ${result.size}")

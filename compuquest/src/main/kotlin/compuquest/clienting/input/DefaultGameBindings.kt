@@ -26,6 +26,8 @@ object DefaultBindings {
 		mapOf(
 			GlobalConstants.KEY_F5 to Commands.newGame,
 			GlobalConstants.KEY_F11 to Commands.addPlayer,
+			GlobalConstants.KEY_CONTROL to Commands.crouch,
+			GlobalConstants.KEY_KP_ADD to Commands.nextLevel,
 		)
 	else
 		mapOf()

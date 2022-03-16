@@ -1,11 +1,9 @@
 package compuquest.simulation.updating
 
 import compuquest.simulation.general.*
-import compuquest.simulation.input.Commands
-import godot.AnimatedSprite3D
+import godot.Node
 import godot.Spatial
 import silentorb.mythic.ent.Id
-import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.happening.Events
@@ -26,6 +24,15 @@ inline fun <reified T> extractComponents(hands: List<Hand>): Table<T> =
 	extractComponentsRaw<T>(hands)
 		.associate { it }
 
+fun attachBodiesToScene(scene: Node, bodies: Table<Spatial>) {
+	tempCatch {
+		for (body in bodies.values) {
+			if (body.getParent() == null)
+				scene.addChild(body)
+		}
+	}
+}
+
 fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
 	val nextId = world.nextId.source()
 	val deck = world.deck
@@ -36,20 +43,10 @@ fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
 			hand
 	}
 
-	val nodes = extractComponentsRaw<Spatial>(idHands)
-	val (spritesList, bodiesList) = nodes.partition { it.second is AnimatedSprite3D }
-	val sprites = spritesList.associate { it } as Table<AnimatedSprite3D>
-	val bodies = bodiesList.associate { it }
-
-	tempCatch {
-		for (body in bodies.values) {
-			if (body.getParent() == null)
-				world.scene.addChild(body)
-		}
-	}
+	val spatials = extractComponentsRaw<Spatial>(idHands)
+	attachBodiesToScene(world.scene, spatials.associate { it })
 
 	return world.copy(
-		sprites = world.sprites + sprites,
 		deck = allHandsToDeck(idHands, deck),
 	)
 }

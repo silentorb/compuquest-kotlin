@@ -2,13 +2,9 @@ package compuquest.clienting.input
 
 import compuquest.clienting.Client
 import compuquest.clienting.gui.MenuStacks
-import compuquest.simulation.general.Deck
-import compuquest.simulation.happening.TryActionEvent
-import compuquest.simulation.happening.tryActionEvent
 import compuquest.simulation.input.*
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
-import silentorb.mythic.ent.emptyId
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
@@ -25,10 +21,11 @@ val uiCommands = listOf(
 	Commands.addPlayer,
 )
 
-val gameUiCommands = listOf(
+val gameCommands = listOf(
 	Commands.navigate,
 	Commands.newGame,
 	Commands.addPlayer,
+	Commands.nextLevel,
 )
 
 fun getUiCommandEvents(commands: List<String>, bindings: Bindings, gamepad: Int, player: Id): Events =
@@ -53,7 +50,7 @@ fun getUiCommands(playerInputContexts: Map<Id, Key>, player: Id): List<String> {
 		if (context == InputContexts.ui)
 			uiCommands
 		else
-			gameUiCommands
+			gameCommands
 	} else
 		listOf()
 }
@@ -114,6 +111,13 @@ object StandardAxisCommands {
 	val moveLateral = AxisCommands(Commands.moveLateral, Commands.moveLeft, Commands.moveRight)
 }
 
+fun getFlyingInput(bindings: Bindings, gamepad: Int): Int =
+	when {
+		isButtonPressed(bindings, gamepad, Commands.jump) -> 1
+		isButtonPressed(bindings, gamepad, Commands.crouch) -> -1
+		else -> 0
+	}
+
 fun newPlayerInput(bindings: Bindings, gamepad: Int): PlayerInput {
 	return PlayerInput(
 		jump = isButtonJustPressed(bindings, gamepad, Commands.jump),
@@ -123,6 +127,7 @@ fun newPlayerInput(bindings: Bindings, gamepad: Int): PlayerInput {
 		moveLengthwise = getAxisState(bindings, gamepad, StandardAxisCommands.moveLengthwise),
 		moveLateral = getAxisState(bindings, gamepad, StandardAxisCommands.moveLateral),
 		interact = isButtonJustPressed(bindings, gamepad, Commands.interact),
+		fly = getFlyingInput(bindings, gamepad),
 		actionChange = when {
 			isButtonJustPressed(bindings, gamepad, Commands.nextAction) -> ActionChange.next
 			isButtonJustPressed(bindings, gamepad, Commands.previousAction) -> ActionChange.previous

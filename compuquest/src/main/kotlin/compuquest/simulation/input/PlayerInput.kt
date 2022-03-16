@@ -23,6 +23,7 @@ data class PlayerInput(
 	val primaryAction: Boolean,
 	val interact: Boolean,
 	val actionChange: ActionChange,
+	val fly: Int, // 1 for up, -1 for down, 0 for no change
 )
 
 typealias PlayerInputs = Map<Id, PlayerInput>
@@ -36,6 +37,7 @@ val emptyPlayerInput = PlayerInput(
 	primaryAction = false,
 	interact = false,
 	actionChange = ActionChange.noChange,
+	fly = 0,
 )
 
 fun getPlayerPrimaryActionEvents(deck: Deck, actor: Id): Events {

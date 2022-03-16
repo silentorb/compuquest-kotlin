@@ -1,9 +1,9 @@
 package compuquest.population
 
 import compuquest.simulation.characters.Character
-import compuquest.simulation.characters.RelationshipType
 import compuquest.simulation.characters.copyEntity
 import compuquest.simulation.general.*
+import compuquest.simulation.updating.attachBodiesToScene
 import godot.Node
 import scripts.entities.PlayerSpawner
 
@@ -37,20 +37,13 @@ fun persistDeck(deck: Deck): Deck =
 fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck) {
 	for (actor in deck.players.keys) {
 		val body = deck.bodies[actor]
-		if (body != null) {
-			val character = deck.characters[actor]
-			val force = character?.relationships?.firstOrNull { it.isA == RelationshipType.member }?.of
-			if (force != null) {
-				val spawner = getPlayerRespawnPoint(playerSpawners, deck, force)
-				if (spawner != null) {
-					body.translation = spawner.globalTransform.origin
-				}
-			}
+		val spawner = getPlayerRespawnPoint(playerSpawners, deck, actor)
+		if (body != null && spawner != null) {
+			body.transform = spawner.globalTransform
 		}
 	}
 }
 
-// nextLevel ignores runtime editor changes
 fun nextLevel(world: World, materials: MaterialMap): World {
 	val global = world.global
 	val definitions = world.definitions
@@ -58,10 +51,7 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	val level = global.level + 1
 	val playerHands = extractPlayers(world.deck)
 	val deck = allHandsToDeck(playerHands, persistDeck(world.deck))
-//	for (body in deck.bodies.values) {
-//		body.getParent()?.removeChild(body)
-//	}
-
+	
 	for (child in scene.getChildren().filterIsInstance<Node>()) {
 		if (!deck.bodies.containsValue(child)) {
 			scene.removeChild(child)
@@ -72,9 +62,11 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	val generationHands = generateWorld(world, generationConfig)
 	val playerSpawners = getPlayerSpawners(scene, deck)
 	spawnExistingPlayers(playerSpawners, deck)
+	val deck2 = allHandsToDeck(generationHands, deck)
+	attachBodiesToScene(world.scene, deck2.bodies)
 
 	return world.copy(
-		deck = allHandsToDeck(generationHands, deck),
+		deck = deck2,
 		playerSpawners = playerSpawners,
 		global = global.copy(
 			level = level

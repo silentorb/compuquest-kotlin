@@ -86,7 +86,7 @@ fun getPlayerRespawnPoint(playerSpawners: List<PlayerSpawner>, groups: Collectio
 		} ?: playerSpawners.firstOrNull()
 
 fun getPlayerRespawnPoint(playerSpawners: List<PlayerSpawner>, deck: Deck, actor: Id): PlayerSpawner? =
-	getPlayerRespawnPoint(playerSpawners, getCharacterGroups(deck, actor) + actor)
+	getPlayerRespawnPoint(playerSpawners, getCharacterGroups(deck, actor))
 
 fun respawnPlayer(world: World, actor: Id): Events {
 	val respawner = getPlayerRespawnPoint(world.playerSpawners, world.deck, actor)
@@ -112,7 +112,7 @@ fun newPlayerName(index: Int): String =
 	"Player ${index + 1}"
 
 fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
-	val spawner = getPlayerRespawnPoint(world.playerSpawners, world.deck, faction)
+	val spawner = getPlayerRespawnPoint(world.playerSpawners, listOf(faction))
 	val scene = spawner?.scene
 	return if (scene != null && world.deck.players.none { it.value.index == playerIndex }) {
 		val nextId = world.nextId.source()

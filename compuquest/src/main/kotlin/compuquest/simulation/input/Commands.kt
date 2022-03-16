@@ -1,5 +1,7 @@
 package compuquest.simulation.input
 
+import compuquest.population.nextLevelEvent
+
 object Commands {
   val interact = "interact"
   val finishInteraction = "finishInteraction"
@@ -35,5 +37,12 @@ object Commands {
   const val lookX = "lookHorizontal"
   const val lookY = "lookVertical"
 
-  // Additional UI
+  // Debug Commands
+
+  // Only used for flying down.
+  // Using the name "crouch" just in case crouching is ever added to the game (maybe even as a third-party mod).
+  // Crouching is not a planned feature for this game.
+  val crouch = "crouch"
+
+  val nextLevel = nextLevelEvent
 }

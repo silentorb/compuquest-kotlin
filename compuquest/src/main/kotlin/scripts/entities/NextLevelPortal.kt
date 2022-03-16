@@ -11,6 +11,8 @@ import silentorb.mythic.happening.newEvent
 class NextLevelPortal : Spatial() {
 	var step = 0
 
+	val triggerDistance = 3f
+
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
 		if (step++ > 20) {
@@ -21,7 +23,7 @@ class NextLevelPortal : Spatial() {
 				val origin = globalTransform.origin
 				val isNearby = deck.players.keys.any { actor ->
 					val distance = deck.bodies[actor]?.globalTransform?.origin?.distanceTo(origin)
-					distance != null && distance < 5f
+					distance != null && distance < triggerDistance
 				}
 				if (isNearby) {
 					Global.addEvent(newEvent(nextLevelEvent))
