@@ -12,10 +12,11 @@ class NextLevelPortal : Spatial() {
 	var step = 0
 
 	val triggerDistance = 3f
+	val updateInterval = 10
 
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
-		if (step++ > 20) {
+		if (step++ > updateInterval) {
 			step = 0
 			val world = Global.world
 			if (world != null) {

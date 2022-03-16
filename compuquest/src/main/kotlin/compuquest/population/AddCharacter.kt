@@ -53,7 +53,6 @@ fun addCharacter(
 ): Hands {
   return tempCatch {
     val parent = node.getParent()
-    val sprite = parent?.findNode("sprite")
     val type = node.type
     val definition = definitions.characters[type] ?: throw Error("Unknown character type: $type")
 
@@ -67,7 +66,6 @@ fun addCharacter(
         components =
         listOfNotNull(
           newCharacter(definition, accessories, toolOffset),
-          sprite,
           node.getParent() as Spatial,
         ) + additional
       )

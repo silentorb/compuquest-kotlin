@@ -46,12 +46,13 @@ fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck) {
 
 fun nextLevel(world: World, materials: MaterialMap): World {
 	val global = world.global
+	val nextId = world.nextId.source()
 	val definitions = world.definitions
 	val scene = world.scene
 	val level = global.level + 1
 	val playerHands = extractPlayers(world.deck)
-	val deck = allHandsToDeck(playerHands, persistDeck(world.deck))
-	
+	val deck = allHandsToDeck(nextId, playerHands, persistDeck(world.deck))
+
 	for (child in scene.getChildren().filterIsInstance<Node>()) {
 		if (!deck.bodies.containsValue(child)) {
 			scene.removeChild(child)
@@ -62,8 +63,8 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	val generationHands = generateWorld(world, generationConfig)
 	val playerSpawners = getPlayerSpawners(scene, deck)
 	spawnExistingPlayers(playerSpawners, deck)
-	val deck2 = allHandsToDeck(generationHands, deck)
-	attachBodiesToScene(world.scene, deck2.bodies)
+	val deck2 = allHandsToDeck(nextId, generationHands, deck)
+	attachBodiesToScene(world.scene, deck2.bodies.values)
 
 	return world.copy(
 		deck = deck2,

@@ -9,9 +9,8 @@ import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.knowledge.getFood
 import compuquest.simulation.intellect.knowledge.hasFood
 import compuquest.simulation.intellect.knowledge.isAParent
-import compuquest.simulation.physics.getLocation
 import compuquest.simulation.physics.getNearest
-import scripts.entities.Bush
+import scripts.entities.FoodStorage
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 
@@ -53,13 +52,13 @@ fun checkParenting(world: World, actor: Id, character: Character, spirit: Spirit
 			} else
 				null
 		} else {
-			val previousBush = bodies[goal.targetEntity] as? Bush
+			val previousBush = bodies[goal.targetEntity] as? FoodStorage
 			val body = bodies[actor] as CharacterBody
-			val (targetEntity, bush) = if (previousBush == null || previousBush.mode != Bush.BushMode.berries) {
-				val options = bodies.entries.filter { (_, value) -> value is Bush && value.mode == Bush.BushMode.berries }
+			val (targetEntity, bush) = if (previousBush == null || previousBush.mode != FoodStorage.Mode.hasFood) {
+				val options = bodies.entries.filter { (_, value) -> value is FoodStorage && value.mode == FoodStorage.Mode.hasFood }
 				val value = getNearest(options, body.location)
 				if (value != null)
-					value.key to (value.value as Bush)
+					value.key to (value.value as FoodStorage)
 				else
 					null to null
 			} else

@@ -1,6 +1,9 @@
 package compuquest.simulation.updating
 
-import compuquest.simulation.general.*
+import compuquest.simulation.general.Hand
+import compuquest.simulation.general.World
+import compuquest.simulation.general.allHandsToDeck
+import compuquest.simulation.general.newHandCommand
 import godot.Node
 import godot.Spatial
 import silentorb.mythic.ent.Id
@@ -24,9 +27,9 @@ inline fun <reified T> extractComponents(hands: List<Hand>): Table<T> =
 	extractComponentsRaw<T>(hands)
 		.associate { it }
 
-fun attachBodiesToScene(scene: Node, bodies: Table<Spatial>) {
+fun attachBodiesToScene(scene: Node, bodies: Collection<Spatial>) {
 	tempCatch {
-		for (body in bodies.values) {
+		for (body in bodies) {
 			if (body.getParent() == null)
 				scene.addChild(body)
 		}
@@ -35,19 +38,11 @@ fun attachBodiesToScene(scene: Node, bodies: Table<Spatial>) {
 
 fun newEntitiesFromHands(hands: List<Hand>, world: World): World {
 	val nextId = world.nextId.source()
-	val deck = world.deck
-	val idHands = hands.map { hand ->
-		if (hand.id == null)
-			hand.copy(id = nextId())
-		else
-			hand
-	}
-
-	val spatials = extractComponentsRaw<Spatial>(idHands)
-	attachBodiesToScene(world.scene, spatials.associate { it })
+	val deck = allHandsToDeck(nextId, hands, world.deck)
+	attachBodiesToScene(world.scene, deck.bodies.values)
 
 	return world.copy(
-		deck = allHandsToDeck(idHands, deck),
+		deck = deck,
 	)
 }
 

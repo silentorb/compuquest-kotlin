@@ -8,6 +8,7 @@ import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.navigation.NavigationDirection
 import compuquest.simulation.updating.extractComponents
 import godot.Spatial
+import silentorb.mythic.ent.NextId
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.genericRemoveEntities
 import silentorb.mythic.ent.newDeckReflection
@@ -35,7 +36,7 @@ val deckReflection = newDeckReflection(Deck::class, Hand::class)
 val removeEntities = genericRemoveEntities(deckReflection)
 
 // bodies aren't added through this method because they are specially synced each frame
-fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
+fun allIdHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 	val accessories = integrateNewAccessories(deck.accessories, extractComponents(idHands))
 
 //	val k = accessories.filter { it.value.definition.name == Accessories.burning }
@@ -62,3 +63,6 @@ fun allHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 		wares = deck.wares + extractComponents(idHands),
 	)
 }
+
+fun allHandsToDeck(nextId: NextId, hands: List<Hand>, deck: Deck): Deck =
+	allIdHandsToDeck(fillHandIds(nextId, hands), deck)

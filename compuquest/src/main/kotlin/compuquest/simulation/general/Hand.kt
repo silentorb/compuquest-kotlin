@@ -1,6 +1,7 @@
 package compuquest.simulation.general
 
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.NextId
 import silentorb.mythic.happening.Event
 
 data class Hand(
@@ -22,3 +23,11 @@ inline fun <reified T> getHandComponent(hand: Hand): T? =
 	hand.components
 		.filterIsInstance<T>()
 		.firstOrNull()
+
+fun fillHandIds(nextId: NextId, hands: Hands): Hands =
+	hands.map { hand ->
+		if (hand.id == null)
+			hand.copy(id = nextId())
+		else
+			hand
+	}
