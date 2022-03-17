@@ -47,3 +47,11 @@ data class InputState(
 )
 
 typealias PlayerMap = Map<Id, Int>
+
+enum class RelativeButtonState {
+	justPressed,
+	justReleased,
+	continuallyPressed,
+	continuallyReleased,
+	unknown,
+}

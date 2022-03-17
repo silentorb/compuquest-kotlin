@@ -56,3 +56,24 @@ fun updateButtonUp(device: Int, scancode: Int, isPressed: Boolean): Boolean {
 	setButtonDown(device, scancode, isPressed)
 	return wasButtonDefinitelyDown(device, scancode) && !isPressed
 }
+
+fun updateButtonState(device: Int, scancode: Int, isPressed: Boolean): RelativeButtonState {
+	setButtonDown(device, scancode, isPressed)
+	val previous = ButtonPresses.previous[device to scancode]
+
+	return when (previous) {
+		null, ButtonPressStates.unknown -> RelativeButtonState.unknown
+		ButtonPressStates.pressed -> {
+			if (isPressed)
+				RelativeButtonState.continuallyPressed
+			else
+				RelativeButtonState.justReleased
+		}
+		else -> {
+			if (isPressed)
+				RelativeButtonState.justPressed
+			else
+				RelativeButtonState.continuallyReleased
+		}
+	}
+}

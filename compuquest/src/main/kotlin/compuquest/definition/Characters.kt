@@ -8,7 +8,13 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 	Characters.player to CharacterDefinition(
 		name = "Player",
 		depiction = "deevee",
-		corpseDecay = 0f,
+		health = 100,
+		accessories = listOf(
+		),
+	),
+	Characters.ninja to CharacterDefinition(
+		name = "Ninja",
+		depiction = "deevee",
 		health = 100,
 		accessories = listOf(
 		),

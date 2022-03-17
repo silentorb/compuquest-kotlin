@@ -4,6 +4,7 @@ import compuquest.simulation.general.Player
 import compuquest.simulation.general.World
 import compuquest.simulation.input.Commands
 import godot.Node
+import scripts.Global
 import scripts.gui.Management
 import scripts.gui.MenuScreen
 import silentorb.mythic.ent.Id
@@ -28,6 +29,7 @@ fun mountScreen(slot: Node, scenePath: String): Node? {
 		null
 }
 
+@Deprecated("Use newPopupMenu instead")
 fun newMenuScreen(content: GameMenuContent): MenuScreen {
 	return tempCatch {
 		val screen = instantiateScene<MenuScreen>("res://gui/menus/MenuScreen.tscn")!!
@@ -102,10 +104,20 @@ fun syncGuiToState(slot: Node, actor: Id, world: World, lastMenu: Any?, menuStac
 					)
 					val content = screen.content(context, address.argument)
 					mountScreen(slot, content)
+					val playerMenus = Global.instance!!.playerMenus
+					if (content is MenuScreen) {
+						playerMenus[actor] = content
+					}
+					else {
+						playerMenus.remove(actor)
+					}
 				}
 			}
 			listOf(address)
-		} else if (slotHasMenu)
+		} else if (slotHasMenu) {
 			slot.getChild(0)?.queueFree()
+			val playerMenus = Global.instance!!.playerMenus
+			playerMenus.remove(actor)
+		}
 	}
 }

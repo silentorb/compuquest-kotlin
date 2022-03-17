@@ -148,7 +148,7 @@ fun parseSides(root: Node): List<Pair<CellDirection, Side?>> {
 			if (template != null) {
 				val offset = getNodeCell(reference)
 				val direction = getNodeDirection(reference)
-				parseSides(template)
+				val sides = parseSides(template)
 					.map { (cellDirection, side) ->
 						val newCellDirection = CellDirection(
 							cell = offset + cellDirection.cell,
@@ -156,6 +156,8 @@ fun parseSides(root: Node): List<Pair<CellDirection, Side?>> {
 						)
 						newCellDirection to side
 					}
+				template.queueFree()
+				sides
 			}
 			else
 				listOf()

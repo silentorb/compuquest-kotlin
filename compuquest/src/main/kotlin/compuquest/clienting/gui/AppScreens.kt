@@ -12,6 +12,7 @@ fun mainMenu() =
 		content = { context, _ ->
 			val actor = context.actor
 			val deck = context.world.deck
+			val isPrimaryPlayer = deck.players[actor]?.index == 0
 			newPopupMenu(
 				"Main Menu",
 				actor,
@@ -19,10 +20,11 @@ fun mainMenu() =
 					GameMenuItem(
 						title = "Continue",
 					),
-					GameMenuItem(
-						address = MenuAddress(Screens.options),
-					),
-					if (deck.players[actor]?.index != 0)
+					if (isPrimaryPlayer)
+						GameMenuItem(
+							address = MenuAddress(Screens.options),
+						)
+					else
 						GameMenuItem(
 							title = "Leave",
 							events = { context2 ->
@@ -32,9 +34,7 @@ fun mainMenu() =
 									newEvent(deleteEntityCommand, actor),
 								)
 							}
-						)
-					else
-						null,
+						),
 				)
 			)
 		}

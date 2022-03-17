@@ -19,7 +19,7 @@ fun updateMenuStacks(players: PlayerMap, deck: Deck, events: Events, menuStacks:
 	return players
 		.mapValues { (actor, _) ->
 			val player = deck.players[actor]
-			if (player != null && (currentMenu == null || currentMenu == actor))
+			if (player != null) //  && (currentMenu == null || currentMenu == actor)
 				updateMenuStack(player)(filterEventsByTarget(actor, events), menuStacks[actor] ?: listOf())
 			else
 				listOf()

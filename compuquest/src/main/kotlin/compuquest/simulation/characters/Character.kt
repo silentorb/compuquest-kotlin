@@ -31,7 +31,6 @@ data class CharacterDefinition(
 	val depiction: String,
 	val frame: Int = 0,
 	val health: Int,
-	val corpseDecay: Float = 10f,
 	val accessories: List<Key> = listOf(),
 	val personality: Personality? = null,
 	val speed: Float = 10f,
@@ -51,7 +50,6 @@ data class Character(
 	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState, Relational {
 	val isAlive: Boolean = isCharacterAlive(health)
-	val corpseDecay: Float get() = definition.corpseDecay
 	val health: Int get() = destructible.health
 }
 
@@ -88,9 +86,10 @@ fun canUse(world: World, accessory: Id): Boolean =
 	canUse(world.deck.accessories[accessory]!!)
 
 fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
-	val a = previous.deck.characters[actor]
-	if (a?.isAlive == true && !character.isAlive && character.corpseDecay > 0f)
-		listOf(newHandEvent(Hand(id = actor, components = listOf(newTimer(character.corpseDecay)))))
+	val deck = previous.deck
+	val a = deck.characters[actor]
+	if (a?.isAlive == true && !character.isAlive && !deck.players.containsKey(actor))
+		listOf(newHandEvent(Hand(id = actor, components = listOf(newTimer(10f)))))
 	else
 		listOf()
 }

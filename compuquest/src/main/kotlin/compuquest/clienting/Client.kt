@@ -1,9 +1,7 @@
 package compuquest.clienting
 
 import compuquest.clienting.dev.updateDev
-import compuquest.clienting.gui.MenuStack
-import compuquest.clienting.gui.MenuStacks
-import compuquest.clienting.gui.updateMenuStacks
+import compuquest.clienting.gui.*
 import compuquest.clienting.input.*
 import compuquest.clienting.multiplayer.*
 import compuquest.population.MaterialMap
@@ -28,6 +26,7 @@ data class Client(
 	val viewports: SplitViewports = listOf(), // Does not include the root viewport
 	val materials: MaterialMap = mutableMapOf(),
 	val engagedAccessories: Map<Id, Id> = mapOf(), // Contains the ids of each player who has used their active accessory since last selected
+	val focusMap: FocusMap = mapOf(),
 )
 
 fun newClient(): Client {
@@ -88,6 +87,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 			playerInputs = playerInputs,
 			viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
 			engagedAccessories = populatedEngagedAccessories,
+			focusMap = updateCustomFocus(playerMap, menuStacks, input, client.focusMap),
 		)
 	} else
 		client
@@ -99,3 +99,6 @@ fun serverEventsFromClient(client: Client, world: World?): Events =
 				newPlayerEvents(client, world)
 			else
 				listOf()
+
+fun isPrimaryPlayer(playerMap: PlayerMap, player: Id): Boolean =
+	playerMap[player] == 0

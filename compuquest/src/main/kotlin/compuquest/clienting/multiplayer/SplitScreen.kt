@@ -3,6 +3,7 @@ package compuquest.clienting.multiplayer
 import compuquest.clienting.gui.addHud
 import compuquest.simulation.general.World
 import godot.*
+import scripts.gui.ChildViewport
 import scripts.gui.Hud
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.findChildrenOfType
@@ -40,7 +41,7 @@ fun initializeSingleViewportMode(root: Viewport, player: Id): SplitViewport {
 }
 
 fun newSplitScreenViewport(godotWorld: godot.World, player: Id, rigCamera: Camera): SplitViewport {
-	val viewport = Viewport()
+	val viewport = ChildViewport()
 	viewport.name = "player-viewport-$player"
 	viewport.renderDirectToScreen = true // This is up to implementation details but should be more performant
 	viewport.world = godotWorld
@@ -111,6 +112,22 @@ fun arrangeViewports(root: Viewport, viewports: List<ViewportContainer>) {
 	}
 }
 
+// Even though Godot stores GUI focus per Viewport,
+// when focus is changed Godot sends a message to all viewports to clear their focus.
+// In order to support local multiplayer GUI, a workaround is to remove the child viewports
+// from the "_viewports" group so they don't recieve the message to clear their focus.
+// It looks like that group is mostly used for functionality only needed by the root
+// viewport, and if a need ever does arise for the child viewports, code could be attached to
+// either the root viewport or some other intermediate node that could forward the needed messages
+// to the child viewports through some other group.
+// The line sending the message is:
+// * https://github.com/godotengine/godot/blob/3.4.2-stable/scene/main/viewport.cpp#L2674
+// This function needs to be called after the viewport is added to the scene tree
+// because it is not until then that it is added to the "_viewports" group.
+fun finalizeChildViewport(viewport: Viewport) {
+	viewport.removeFromGroup("_viewports")
+}
+
 fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: SplitViewports): SplitViewports {
 	val root = getRootViewport(world.scene)!!
 
@@ -143,6 +160,9 @@ fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: Spl
 		}
 		val mounted = nextViewports.map { mountViewport(it.viewport) }
 		arrangeViewports(root, mounted)
+		for (viewport in nextViewports) {
+			finalizeChildViewport(viewport.viewport)
+		}
 		nextViewports
 	}
 }

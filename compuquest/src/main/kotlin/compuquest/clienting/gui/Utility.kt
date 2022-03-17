@@ -1,7 +1,11 @@
 package compuquest.clienting.gui
 
+import compuquest.clienting.Client
+import compuquest.clienting.isPrimaryPlayer
 import scripts.Global
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
+import silentorb.mythic.haft.PlayerMap
 
 fun getMenuItemTitle(context: GameContext, item: GameMenuItem): String {
 	val address = item.address
@@ -25,3 +29,9 @@ fun getGameContext(actor: Id): GameContext? {
 	} else
 		null
 }
+
+fun getFocusMode(playerCount: Int): FocusMode =
+	if (getDebugBoolean("NO_NATIVE_FOCUS") || playerCount > 1)
+		FocusMode.custom
+	else
+		FocusMode.native

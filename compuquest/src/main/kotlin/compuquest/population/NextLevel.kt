@@ -57,6 +57,7 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	for (child in scene.getChildren().filterIsInstance<Node>()) {
 		if (!deck.bodies.containsValue(child)) {
 			scene.removeChild(child)
+			child.queueFree()
 		}
 	}
 

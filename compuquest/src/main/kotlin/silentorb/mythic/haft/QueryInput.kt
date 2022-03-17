@@ -89,6 +89,16 @@ fun isButtonJustPressed(bindings: Bindings, device: Int, scancode: Int, gamepad:
 	return updateButtonDown(adjustedDevice, scancode, isPressed)
 }
 
+fun getButtonState(bindings: Bindings, device: Int, scancode: Int, gamepad: Int = -1): RelativeButtonState {
+	val isPressed = isButtonPressed(bindings, device, scancode, gamepad)
+	val adjustedDevice = if (gamepad > -1)
+		device + gamepad
+	else
+		device
+
+	return updateButtonState(adjustedDevice, scancode, isPressed)
+}
+
 fun isButtonJustReleased(bindings: Bindings, device: Int, scancode: Int, gamepad: Int = -1): Boolean {
 	val isPressed = isButtonPressed(bindings, device, scancode, gamepad)
 	val adjustedDevice = if (gamepad > -1)
@@ -103,6 +113,14 @@ fun isGamepadButtonJustPressed(bindings: Bindings, gamepad: Int, scancode: Int):
 	val isPressed = isGamepadButtonPressed(bindings, gamepad, scancode)
 	val adjustedDevice = InputDevices.gamepad + gamepad
 	return updateButtonDown(adjustedDevice, scancode, isPressed)
+}
+
+fun getButtonState(bindings: Bindings, gamepad: Int, command: String): RelativeButtonState {
+	for (binding in bindings) {
+		if (binding.command == command)
+			return getButtonState(bindings, binding.device, binding.scancode, gamepad)
+	}
+	return RelativeButtonState.unknown
 }
 
 fun isButtonJustPressed(bindings: Bindings, gamepad: Int, command: String): Boolean =

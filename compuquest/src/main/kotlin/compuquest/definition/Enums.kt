@@ -26,6 +26,7 @@ object Characters {
 	const val child = "child"
 	const val cleric = "cleric"
 	const val fox = "fox"
+	const val ninja = "ninja"
 	const val player = "player"
 	const val skeleton = "skeleton"
 	const val skeletonSage = "skeletonSage"

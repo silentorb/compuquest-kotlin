@@ -20,6 +20,7 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector2
+import scripts.gui.MenuScreen
 import scripts.world.ScenarioNode
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
@@ -42,6 +43,7 @@ class Global : Node() {
 	var worlds: List<World> = listOf()
 	val definitions = newDefinitions()
 	var client: Client? = null
+	var playerMenus: MutableMap<Id, MenuScreen> = mutableMapOf()
 
 	//	var sceneNode: Spatial? = null
 	val partyUi: Boolean = false

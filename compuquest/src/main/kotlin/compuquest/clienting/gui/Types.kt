@@ -51,3 +51,8 @@ data class GameContext(
 )
 
 typealias GameScreen = Screen<GameContext>
+
+enum class FocusMode {
+	custom,
+	native,
+}
