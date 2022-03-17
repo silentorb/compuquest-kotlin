@@ -118,10 +118,13 @@ fun getFlyingInput(bindings: Bindings, gamepad: Int): Int =
 		else -> 0
 	}
 
-fun newPlayerInput(bindings: Bindings, gamepad: Int): PlayerInput {
+fun newPlayerInput(bindings: Bindings, gamepad: Int, accessoryIsEngaged: Boolean): PlayerInput {
 	return PlayerInput(
 		jump = isButtonJustPressed(bindings, gamepad, Commands.jump),
-		primaryAction = isButtonPressed(bindings, gamepad, Commands.primaryAction),
+		primaryAction = if (accessoryIsEngaged)
+			isButtonPressed(bindings, gamepad, Commands.primaryAction)
+		else
+			isButtonJustPressed(bindings, gamepad, Commands.primaryAction),
 		lookX = getAxisState(bindings, gamepad, StandardAxisCommands.lookX),
 		lookY = getAxisState(bindings, gamepad, StandardAxisCommands.lookY),
 		moveLengthwise = getAxisState(bindings, gamepad, StandardAxisCommands.moveLengthwise),
@@ -136,19 +139,24 @@ fun newPlayerInput(bindings: Bindings, gamepad: Int): PlayerInput {
 	)
 }
 
-fun newPlayerInput(state: InputState, player: Id, playerIndex: Int): PlayerInput {
+fun newPlayerInput(state: InputState, player: Id, playerIndex: Int, accessoryIsEngaged: Boolean): PlayerInput {
 	val bindings = getPlayerBindings(state, player, playerIndex)
 	return if (bindings != null) {
 		val gamepad = getPlayerGamepad(state, playerIndex)
-		newPlayerInput(bindings, gamepad)
+		newPlayerInput(bindings, gamepad, accessoryIsEngaged)
 	} else
 		emptyPlayerInput
 }
 
-fun newPlayerInputs(menuStacks: MenuStacks, state: InputState, players: PlayerMap): PlayerInputs =
+fun newPlayerInputs(
+	menuStacks: MenuStacks,
+	state: InputState,
+	players: PlayerMap,
+	engagedAccessories: Map<Id, Id>
+): PlayerInputs =
 	players.mapValues { (player, index) ->
 		if (getPlayerInputContext(menuStacks, player) == InputContexts.game)
-			newPlayerInput(state, player, index)
+			newPlayerInput(state, player, index, engagedAccessories.containsKey(player))
 		else
 			emptyPlayerInput
 	}

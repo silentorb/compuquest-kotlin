@@ -10,6 +10,7 @@ import compuquest.population.MaterialMap
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
 import silentorb.mythic.ent.HashedMap
+import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
 
@@ -26,6 +27,7 @@ data class Client(
 	val playerInputs: PlayerInputs = mapOf(),
 	val viewports: SplitViewports = listOf(), // Does not include the root viewport
 	val materials: MaterialMap = mutableMapOf(),
+	val engagedAccessories: Map<Id, Id> = mapOf(), // Contains the ids of each player who has used their active accessory since last selected
 )
 
 fun newClient(): Client {
@@ -57,10 +59,24 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		val deck = world.deck
 		val players = updateClientPlayers(events, client.players)
 		val playerMap = updatePlayerMap(deck, players)
+		val activeAccessories = playerMap
+			.mapValues { (player, _) ->
+				world.deck.characters[player]?.activeAccessory ?: 0L
+			}
+
+		val prunedEngagedAccessories = client.engagedAccessories
+			.filter { (player, accessory) ->
+				activeAccessories[player] == accessory
+			}
+
 		val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
 		val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
 		val input = updateInput(delta, players, playerInputContexts, events, client.input)
-		val playerInputs = newPlayerInputs(menuStacks, client.input, playerMap)
+		val playerInputs = newPlayerInputs(menuStacks, client.input, playerMap, prunedEngagedAccessories)
+		val populatedEngagedAccessories = activeAccessories.filter { (player, _) ->
+			playerInputs[player]?.primaryAction == true || prunedEngagedAccessories.contains(player)
+		}
+
 		syncGodotUiEvents(playerMap, menuStacks, input)
 		updateDev()
 
@@ -71,6 +87,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 			input = input,
 			playerInputs = playerInputs,
 			viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
+			engagedAccessories = populatedEngagedAccessories,
 		)
 	} else
 		client
