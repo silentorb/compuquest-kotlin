@@ -26,7 +26,6 @@ data class Client(
 	val viewports: SplitViewports = listOf(), // Does not include the root viewport
 	val materials: MaterialMap = mutableMapOf(),
 	val engagedAccessories: Map<Id, Id> = mapOf(), // Contains the ids of each player who has used their active accessory since last selected
-	val focusMap: FocusMap = mapOf(),
 )
 
 fun newClient(): Client {
@@ -77,6 +76,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		}
 
 		syncGodotUiEvents(playerMap, menuStacks, input)
+		updateCustomFocus(playerMap, menuStacks, input)
 		updateDev()
 
 		client.copy(
@@ -87,7 +87,6 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 			playerInputs = playerInputs,
 			viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
 			engagedAccessories = populatedEngagedAccessories,
-			focusMap = updateCustomFocus(playerMap, menuStacks, input, client.focusMap),
 		)
 	} else
 		client

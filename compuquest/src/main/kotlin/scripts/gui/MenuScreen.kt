@@ -19,6 +19,7 @@ class MenuScreen : Node() {
 	var items: List<MenuItem<GameContext>> = listOf()
 	var itemsContainer: Node? = null
 	var actor: Id = 0L
+	var focusIndex = 0
 
 	@RegisterFunction
 	fun on_pressed(index: Int) {
@@ -27,11 +28,6 @@ class MenuScreen : Node() {
 			val item = items[index]
 			activateMenuItem(context, actor, item)
 		}
-	}
-
-	@RegisterFunction
-	fun focus_entered(index: Int) {
-		val k = 0
 	}
 
 	@RegisterFunction
@@ -57,7 +53,6 @@ class MenuScreen : Node() {
 			button.name = "button"
 			button.disabled = !(enabled == null || enabled(context, null))
 			button.connect("pressed", this, "on_pressed", variantArrayOf(index))
-			button.connect("focus_entered", this, "focus_entered", variantArrayOf(index))
 //			if (focusMode == FocusMode.custom) {
 //				button.focusMode = Control.FocusMode.FOCUS_NONE.id
 //			}
