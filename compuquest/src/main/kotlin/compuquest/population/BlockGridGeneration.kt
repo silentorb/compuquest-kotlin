@@ -1,5 +1,8 @@
 package compuquest.population
 
+import compuquest.definition.defaultBiomeTextures
+import compuquest.definition.sideGroups
+import compuquest.definition.traversableSides
 import compuquest.generation.engine.*
 import compuquest.generation.general.*
 import compuquest.simulation.characters.Group
@@ -39,7 +42,8 @@ fun rotateBlockBuilder(turns: Int, blockBuilder: BlockBuilder): BlockBuilder =
 			name = block.name + "${-turns}turns",
 			cells = cells,
 			traversable = getTraversable(cells),
-			turns = turns
+			turns = turns,
+			parent = block.name,
 		) to builder
 	}
 
@@ -125,23 +129,57 @@ fun newGenerationConfig(
 fun findSideNodes(root: Node) =
 	findChildrenOfScriptType("res://entities/world/SideNode.gd", root)
 
-fun parseBlock(scene: Spatial): Block {
-	val sides = findSideNodes(scene)
+fun findReferenceSideNodes(root: Node) =
+	findChildrenOfScriptType("res://entities/world/SidesReference.gd", root)
+
+fun getNodeCell(node: Node) =
+	Vector3i.fromVector3(node.get("cell") as Vector3)
+
+fun getNodeDirection(node: Node) =
+	Direction.valueOf(getString(node, "direction"))
+
+fun expandSideTypeToSet(type: String): Set<String> =
+	sideGroups[type] ?: setOf(type)
+
+fun parseSides(root: Node): List<Pair<CellDirection, Side?>> {
+	val referenceSides = findReferenceSideNodes(root)
+		.flatMap { reference ->
+			val template = (reference.get("template") as? PackedScene)?.instance()
+			if (template != null) {
+				val offset = getNodeCell(reference)
+				val direction = getNodeDirection(reference)
+				parseSides(template)
+					.map { (cellDirection, side) ->
+						val newCellDirection = CellDirection(
+							cell = offset + cellDirection.cell,
+							direction = direction
+						)
+						newCellDirection to side
+					}
+			}
+			else
+				listOf()
+		}
+
+	return referenceSides + findSideNodes(root)
 		.flatMap { node ->
 			val mine = getString(node, "mine")
 			val side = Side(
 				mine = mine,
-				other = setOf(getString(node, "other")),
+				other = expandSideTypeToSet(getString(node, "other")),
 				frequency = MatchFrequency.valueOf(getString(node, "frequency")),
 				isTraversable = traversableSides.contains(mine),
-//				canMatchEssential = getBoolean(node, "canMatchEssential"),
 			)
 			(0 until getInt(node, "cellHeight")).map { i ->
-				val cell = Vector3i.fromVector3(node.get("cell") as Vector3) + Vector3i(0, i, 0)
-				val direction = Direction.valueOf(getString(node, "direction"))
+				val cell = getNodeCell(node) + Vector3i(0, i, 0)
+				val direction = getNodeDirection(node)
 				CellDirection(cell, direction) to side
 			}
 		}
+}
+
+fun parseBlock(scene: Spatial): Block {
+	val sides = parseSides(scene)
 	val blockNode = scene as? BlockNode
 	val cells = cellsFromSides(sides)
 	return Block(

@@ -69,8 +69,8 @@ rerollChance = 0
 [node name="0, 0, 0 - north" type="Spatial" parent="sides"]
 script = ExtResource( 7 )
 direction = "north"
-mine = "slopeLeft"
-other = "slopeRight"
+mine = "closed"
+other = "any"
 frequency = "normal"
 rerollChance = 50
 
@@ -78,17 +78,26 @@ rerollChance = 50
 script = ExtResource( 7 )
 cell = Vector3( 0, 1, 0 )
 direction = "north"
-cellHeight = 3
+mine = "slopeLeft"
+other = "slopeRightFlexible"
+frequency = "normal"
+rerollChance = 50
+
+[node name="0, 2, 0 - north" type="Spatial" parent="sides"]
+script = ExtResource( 7 )
+cell = Vector3( 0, 2, 0 )
+direction = "north"
+cellHeight = 2
 mine = "space"
-other = "space"
+other = "any"
 frequency = "normal"
 rerollChance = 0
 
 [node name="0, 0, 0 - south" type="Spatial" parent="sides"]
 script = ExtResource( 7 )
 direction = "south"
-mine = "slopeRight"
-other = "slopeLeft"
+mine = "closed"
+other = "any"
 frequency = "normal"
 rerollChance = 50
 
@@ -96,9 +105,18 @@ rerollChance = 50
 script = ExtResource( 7 )
 cell = Vector3( 0, 1, 0 )
 direction = "south"
-cellHeight = 3
+mine = "slopeRight"
+other = "slopeLeftFlexible"
+frequency = "normal"
+rerollChance = 50
+
+[node name="0, 2, 0 - south" type="Spatial" parent="sides"]
+script = ExtResource( 7 )
+cell = Vector3( 0, 2, 0 )
+direction = "south"
+cellHeight = 2
 mine = "space"
-other = "space"
+other = "any"
 frequency = "normal"
 rerollChance = 0
 
@@ -118,6 +136,14 @@ cellHeight = 3
 mine = "space"
 other = "space"
 frequency = "normal"
+rerollChance = 0
+
+[node name="0, 0, 0 - down" type="Spatial" parent="sides"]
+script = ExtResource( 7 )
+direction = "down"
+mine = "closed"
+other = "closed"
+frequency = "greedy"
 rerollChance = 0
 
 [node name="slot" parent="." instance=ExtResource( 1 )]

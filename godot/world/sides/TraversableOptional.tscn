@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://entities/world/SideNode.gd" type="Script" id=1]
+
+[node name="taversable-optional" type="Node"]
+
+[node name="0, 0, 0 - east" type="Spatial" parent="."]
+script = ExtResource( 1 )
+mine = "traversable"
+other = "any"
+frequency = "normal"
+rerollChance = 0
+
+[node name="0, 1, 0 - east" type="Spatial" parent="."]
+script = ExtResource( 1 )
+cell = Vector3( 0, 1, 0 )
+cellHeight = 3
+mine = "space"
+other = "any"
+frequency = "normal"
+rerollChance = 0

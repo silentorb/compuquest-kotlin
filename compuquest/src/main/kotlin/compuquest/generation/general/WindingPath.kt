@@ -224,9 +224,7 @@ tailrec fun extendBlockSides(dice: Dice, state: BlockState): BlockState {
 	else
 		groupedBlocks.nonTraversable
 
-	val essentialDirectionSideDirection = oppositeDirections[incompleteSide.direction]!!
-
-	val matchResult = matchConnectingBlock(dice, blocks, grid, nextPosition, essentialDirectionSideDirection)
+	val matchResult = matchConnectingBlock(dice, blocks, grid, nextPosition, null)
 
 	val nextState = if (matchResult == null) {
 		state.copy(
@@ -278,7 +276,11 @@ fun windingPath(seed: Long, dice: Dice, config: BlockConfig, length: Int, grid: 
 			0 to length
 
 	for (i in 0..10) {
-		val intermediateState = addPathStep(firstLength, dice, state)
+		val intermediateState = if (firstLength > 0)
+			addPathStep(firstLength, dice, state)
+		else
+			state
+
 		val nextState = addPathStep(secondLength, dice, intermediateState.copy(branchingMode = BranchingMode.open))
 		if (nextState.grid.size >= length)
 			return extendBlockSides(dice, newExtensionBlockState(nextState)).grid

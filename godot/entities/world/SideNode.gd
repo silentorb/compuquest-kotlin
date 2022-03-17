@@ -1,9 +1,6 @@
 tool
-extends Node
+extends "res://entities/world/CellDirectionNode.gd"
 
-# export(bool) var canMatchEssential = true
-export(Vector3) var cell = Vector3() setget set_cell
-export(String, "up", "down", "east", "north", "west", "south") var direction = "east" setget set_direction
 export(int) var cellHeight = 1
 
 var mine := "traversable"
@@ -11,40 +8,20 @@ var other := "traversable"
 var frequency := "normal"
 var rerollChance := 0
 
-var sideOptions = PoolStringArray([
-	"closed",
-	"slopeLeft",
-	"slopeRight",
-	"space",
-	"traversable",
-]).join(",")
-
-func set_cell(value):
-	cell = value
-	update_name()
-
-func set_direction(value):
-	direction = value
-	update_name()
-
-func update_name():
-	var new_name = "%d, %d, %d - %s" % [cell.x, cell.y, cell.z, direction]
-	if name != new_name:
-		name = new_name
-
 func _get_property_list():
+
 	var properties = [
 		{
 			name = "mine",
 			type = TYPE_STRING,
 			hint = PROPERTY_HINT_ENUM,
-			hint_string = sideOptions
+			hint_string = Sides.base
 		},
 		{
 			name = "other",
 			type = TYPE_STRING,
 			hint = PROPERTY_HINT_ENUM,
-			hint_string = sideOptions
+			hint_string = Sides.all
 		},
 		{
 			name = "frequency",

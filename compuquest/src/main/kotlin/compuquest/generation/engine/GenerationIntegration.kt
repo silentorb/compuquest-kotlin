@@ -9,5 +9,5 @@ fun newBlockGrid(seed: Long, dice: Dice, firstBlock: Block, blocks: Set<Block>, 
   val blockConfig = BlockConfig(
     biomeBlocks = applyBiomeBlocks(blocks),
   )
-  return windingPath(seed, dice, blockConfig, roomCount, extractCells(firstBlock, Vector3i.zero, ""))
+  return windingPath(seed, dice, blockConfig, roomCount * 4, extractCells(firstBlock, Vector3i.zero, ""))
 }

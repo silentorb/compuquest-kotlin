@@ -27,7 +27,6 @@ data class Side(
 	// Is only considered when frequency is normal.
 	val rerollChance: Int = 0,
 	val isTraversable: Boolean = true, // Cache value
-	val canMatchEssential: Boolean = true, // Is a candidate for deprecation
 )
 
 // This is a solution for fringe cases and may end up being temporary

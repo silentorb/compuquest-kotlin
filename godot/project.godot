@@ -225,6 +225,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://src/main/kotlin/scripts/Global.kt"
+Sides="*res://entities/world/Sides.gd"
 
 [editor_plugins]
 

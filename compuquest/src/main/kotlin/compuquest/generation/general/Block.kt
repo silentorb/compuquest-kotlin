@@ -23,6 +23,7 @@ data class Block(
     val heightOffset: Int = 0,
     val significantCellCount: Int = traversable.size,
     val rarity: Rarity = Rarity.common,
+    val parent: String = "",
 ) {
   init {
     assert(slots.none { it.x > 5f || it.y > 5f || it.x < -5f || it.y < -5f })
