@@ -1,5 +1,6 @@
 package compuquest.population
 
+import compuquest.serving.newWorldNavigation
 import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.copyEntity
 import compuquest.simulation.general.*
@@ -69,6 +70,7 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	return world.copy(
 		deck = deck2,
 		playerSpawners = playerSpawners,
+		navigation = newWorldNavigation(scene),
 		global = global.copy(
 			level = level
 		)
