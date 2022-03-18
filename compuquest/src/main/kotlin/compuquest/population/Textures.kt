@@ -9,9 +9,9 @@ object Textures {
 	const val cliffWall = "cliff-wall"
 	const val cold = "cold"
 	const val dirt = "dirt"
-	const val grassGreen = "grass-green"
+	const val greenGrass = "green-grass"
 	const val grayBricks = "gray-bricks"
-	const val lightBlueBricks = "light-blue-bricks"
+	const val mausoleumWall = "mausoleum-wall"
 }
 
 typealias MaterialMap = MutableMap<String, Material>
