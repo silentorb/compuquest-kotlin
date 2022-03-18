@@ -254,9 +254,9 @@ fun windingPath(seed: Long, dice: Dice, config: BlockConfig, length: Int, grid: 
 	val biomeGrid = if (biomeBlocks.any()) {
 		val biomeAnchors = newBiomeAnchors(
 			biomeBlocks.keys, dice,
-			worldRadius = length / 3 * cellLength,
-			biomeSize = 15f,
-			minGap = 2f
+			worldRadius = length / 2 * cellLength,
+			biomeSize = 30f,
+			minGap = 10f
 		)
 		biomeGridFromAnchors(biomeAnchors)
 	} else

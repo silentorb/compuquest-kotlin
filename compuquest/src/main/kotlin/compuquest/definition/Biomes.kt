@@ -16,16 +16,16 @@ object Biomes {
 }
 
 val defaultBiomeTextures: Map<String, Map<String, String>> = mapOf(
+	Biomes.dungeon to mapOf(
+		MeshAttributes.floor to Textures.dirt,
+		MeshAttributes.wall to Textures.grayBricks,
+		MeshAttributes.ceiling to Textures.dirt,
+	),
 	Biomes.lagoon to mapOf(
 		MeshAttributes.floor to Textures.grassGreen,
 		MeshAttributes.wall to Textures.cliffWall,
 		MeshAttributes.ceiling to Textures.grassGreen,
 	),
-//    Biomes.dungeon to mapOf(
-//        MeshAttribute.floor to Textures.cobblestone,
-//        MeshAttribute.wall to Textures.bricks,
-//        MeshAttribute.ceiling to Textures.bricks,
-//    ),
 //    Biomes.forest to mapOf(
 //        MeshAttribute.floor to Textures.grass,
 //        MeshAttribute.wall to Textures.grass,
@@ -49,5 +49,6 @@ val commonBiomeBlocks = setOf(
 )
 
 val defaultBiomeBlocks: BiomeBlockNames = mapOf(
+	Biomes.dungeon to commonBiomeBlocks,
 	Biomes.lagoon to commonBiomeBlocks,
 )

@@ -3,22 +3,27 @@ package compuquest.population
 import godot.*
 import godot.global.GD
 
+const val baseTexture = "_base_"
+
 object Textures {
-	const val _base_ = "_base_"
 	const val cliffWall = "cliff-wall"
+	const val cold = "cold"
+	const val dirt = "dirt"
 	const val grassGreen = "grass-green"
+	const val grayBricks = "gray-bricks"
+	const val lightBlueBricks = "light-blue-bricks"
 }
 
 typealias MaterialMap = MutableMap<String, Material>
 
 fun newBaseMaterial(materials: MaterialMap): Material {
 	val newBase = GD.load<Material>("res://assets/materials/texture.tres")!!
-	materials[Textures._base_] = newBase
+	materials[baseTexture] = newBase
 	return newBase
 }
 
 fun getBaseTextureMaterial(materials: MaterialMap): Material =
-	materials[Textures._base_] ?: newBaseMaterial(materials)
+	materials[baseTexture] ?: newBaseMaterial(materials)
 
 fun newTileMaterial(materials: MaterialMap, texture: String): Material {
 	val base = getBaseTextureMaterial(materials)

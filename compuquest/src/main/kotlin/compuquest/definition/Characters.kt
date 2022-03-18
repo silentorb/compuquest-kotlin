@@ -11,7 +11,9 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		depiction = "deevee",
 		health = 100,
 		accessories = listOf(
-		),
+			Accessories.heal,
+			Accessories.rifle,
+	),
 	),
 	CharacterDefinition(
 		key = Characters.playerNinja,
@@ -20,6 +22,8 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		frame = 8,
 		health = 100,
 		accessories = listOf(
+			Accessories.rifle,
+			Accessories.summonFox,
 		),
 	),
 	CharacterDefinition(
@@ -28,6 +32,8 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		depiction = "viking",
 		health = 100,
 		accessories = listOf(
+			Accessories.rifle,
+			Accessories.summonFox,
 		),
 	),
 	CharacterDefinition(
@@ -37,6 +43,8 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		frame = 7,
 		health = 100,
 		accessories = listOf(
+			Accessories.rifle,
+			Accessories.summonSquid,
 		),
 	),
 ).associateBy { it.key }
