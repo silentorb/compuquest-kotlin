@@ -4,23 +4,53 @@ import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.intellect.knowledge.Personality
 import silentorb.mythic.ent.KeyTable
 
-fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
-	Characters.player to CharacterDefinition(
-		name = "Player",
+val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
+	CharacterDefinition(
+		key = Characters.playerCleric,
+		name = "Cleric",
 		depiction = "deevee",
 		health = 100,
 		accessories = listOf(
 		),
 	),
-	Characters.ninja to CharacterDefinition(
+	CharacterDefinition(
+		key = Characters.playerNinja,
 		name = "Ninja",
+		depiction = "sprites",
+		frame = 8,
+		health = 100,
+		accessories = listOf(
+		),
+	),
+	CharacterDefinition(
+		key = Characters.playerViking,
+		name = "Viking",
+		depiction = "viking",
+		health = 100,
+		accessories = listOf(
+		),
+	),
+	CharacterDefinition(
+		key = Characters.playerWizard,
+		name = "Wizard",
+		depiction = "sprites",
+		frame = 7,
+		health = 100,
+		accessories = listOf(
+		),
+	),
+).associateBy { it.key }
+
+fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
+	Characters.player to CharacterDefinition(
+		key = Characters.player,
 		depiction = "deevee",
 		health = 100,
 		accessories = listOf(
 		),
 	),
 	Characters.skeleton to CharacterDefinition(
-		name = Characters.skeleton,
+		key = Characters.skeleton,
 		depiction = "skeleton",
 		health = 50,
 		accessories = listOf(
@@ -28,7 +58,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		),
 	),
 	Characters.skeletonSage to CharacterDefinition(
-		name = Characters.skeletonSage,
+		key = Characters.skeletonSage,
 		depiction = "skeleton",
 		health = 50,
 		accessories = listOf(
@@ -36,7 +66,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		),
 	),
 	Characters.viking to CharacterDefinition(
-		name = Characters.viking,
+		key = Characters.viking,
 		depiction = "viking",
 		health = 50,
 		accessories = listOf(
@@ -44,7 +74,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		),
 	),
 	Characters.cleric to CharacterDefinition(
-		name = Characters.cleric,
+		key = Characters.cleric,
 		depiction = "viking",
 		health = 40,
 		accessories = listOf(
@@ -52,7 +82,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		),
 	),
 	Characters.child to CharacterDefinition(
-		name = Characters.child,
+		key = Characters.child,
 		depiction = "sprites",
 		frame = 2,
 		health = 30,
@@ -60,7 +90,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		),
 	),
 	Characters.fox to CharacterDefinition(
-		name = Characters.fox,
+		key = Characters.fox,
 		depiction = "sprites",
 		frame = 3,
 		health = 30,
@@ -72,7 +102,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		)
 	),
 	Characters.squid to CharacterDefinition(
-		name = Characters.squid,
+		key = Characters.squid,
 		depiction = "sprites",
 		frame = 5,
 		health = 50,
@@ -86,4 +116,4 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 	),
 )
 
-val staticCharacterDefinitions = characterDefinitions()
+val staticCharacterDefinitions = playerProfessionDefinitions + characterDefinitions()

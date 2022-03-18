@@ -8,7 +8,6 @@ import silentorb.mythic.ent.Key
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Event
 
-
 fun newManagementMenu(screen: Key): Management {
 	val control = instantiateScene<Management>("res://gui/menus/Management.tscn")!!
 	control.setActiveTab(screen)

@@ -26,7 +26,8 @@ import silentorb.mythic.randomly.Dice
 import silentorb.mythic.timing.newTimer
 
 data class CharacterDefinition(
-	val name: String,
+	val key: Key,
+	val name: String = key,
 	val attributes: Set<Key> = setOf(),
 	val depiction: String,
 	val frame: Int = 0,

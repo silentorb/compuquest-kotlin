@@ -59,6 +59,34 @@ fun isGamepadButtonPressed(bindings: Bindings, gamepad: Int, scancode: Int): Boo
 					GamepadChannels.JOY_LEFT_STICK_DOWN.toInt()
 				) > 0f
 
+			GamepadChannels.JOY_RIGHT_STICK_LEFT.toInt() ->
+				getGamepadAxisState(
+					bindings,
+					gamepad,
+					GlobalConstants.JOY_AXIS_2.toInt(),
+					GamepadChannels.JOY_RIGHT_STICK_LEFT.toInt()
+				) < 0f
+			GamepadChannels.JOY_RIGHT_STICK_UP.toInt() ->
+				getGamepadAxisState(
+					bindings,
+					gamepad,
+					GlobalConstants.JOY_AXIS_3.toInt(),
+					GamepadChannels.JOY_RIGHT_STICK_UP.toInt()
+				) < 0f
+			GamepadChannels.JOY_RIGHT_STICK_RIGHT.toInt() ->
+				getGamepadAxisState(
+					bindings,
+					gamepad,
+					GlobalConstants.JOY_AXIS_2.toInt(),
+					GamepadChannels.JOY_RIGHT_STICK_RIGHT.toInt()
+				) > 0f
+			GamepadChannels.JOY_RIGHT_STICK_DOWN.toInt() ->
+				getGamepadAxisState(
+					bindings,
+					gamepad,
+					GlobalConstants.JOY_AXIS_3.toInt(),
+					GamepadChannels.JOY_RIGHT_STICK_DOWN.toInt()
+				) > 0f
 			else -> false
 		}
 }
@@ -116,11 +144,15 @@ fun isGamepadButtonJustPressed(bindings: Bindings, gamepad: Int, scancode: Int):
 }
 
 fun getButtonState(bindings: Bindings, gamepad: Int, command: String): RelativeButtonState {
+	var state = RelativeButtonState.unknown
 	for (binding in bindings) {
-		if (binding.command == command)
-			return getButtonState(bindings, binding.device, binding.scancode, gamepad)
+		if (binding.command == command) {
+			state = getButtonState(bindings, binding.device, binding.scancode, gamepad)
+			if (state == RelativeButtonState.justReleased || state == RelativeButtonState.justPressed)
+				return state
+		}
 	}
-	return RelativeButtonState.unknown
+	return state
 }
 
 fun isButtonJustPressed(bindings: Bindings, gamepad: Int, command: String): Boolean =

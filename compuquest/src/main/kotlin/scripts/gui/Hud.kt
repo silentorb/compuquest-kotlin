@@ -55,7 +55,9 @@ class Hud : Control() {
 
 	fun updateOverlay(world: World, overlay: Panel) {
 		val deck = world.deck
-		val isPainOverlayVisible = !isCharacterAlive(deck, actor)
+
+		// Don't show the pain overlay if the character is alive or the player doesn't have an associated character
+		val isPainOverlayVisible = deck.characters[actor]?.isAlive == false
 		overlay.visible = isPainOverlayVisible
 		if (isPainOverlayVisible) {
 			val style = overlay.getStylebox("panel") as StyleBoxFlat

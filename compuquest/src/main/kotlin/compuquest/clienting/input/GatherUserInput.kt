@@ -103,7 +103,6 @@ fun getUiCommandEvents(client: Client): Events =
 		} +
 			newPlayerGamepadEvents(client.input)
 
-
 object StandardAxisCommands {
 	val lookX = AxisCommands(Commands.lookX, Commands.lookDown, Commands.lookUp)
 	val lookY = AxisCommands(Commands.lookY, Commands.lookLeft, Commands.lookRight)

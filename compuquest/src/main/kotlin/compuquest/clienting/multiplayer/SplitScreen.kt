@@ -1,6 +1,7 @@
 package compuquest.clienting.multiplayer
 
 import compuquest.clienting.gui.addHud
+import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import godot.*
 import scripts.gui.ChildViewport
@@ -12,7 +13,7 @@ import silentorb.mythic.haft.PlayerMap
 data class SplitViewport(
 	val player: Id,
 	val viewport: Viewport,
-	val rigCamera: Camera,
+	val rigCamera: Camera?,
 	val viewportCamera: Camera,
 )
 
@@ -40,7 +41,7 @@ fun initializeSingleViewportMode(root: Viewport, player: Id): SplitViewport {
 	)
 }
 
-fun newSplitScreenViewport(godotWorld: godot.World, player: Id, rigCamera: Camera): SplitViewport {
+fun newSplitScreenViewport(godotWorld: godot.World, player: Id, rigCamera: Camera?): SplitViewport {
 	val viewport = ChildViewport()
 	viewport.name = "player-viewport-$player"
 	viewport.renderDirectToScreen = true // This is up to implementation details but should be more performant
@@ -128,6 +129,14 @@ fun finalizeChildViewport(viewport: Viewport) {
 	viewport.removeFromGroup("_viewports")
 }
 
+fun getRigCamera(deck: Deck, actor: Id): Camera? {
+	val body = deck.bodies[actor]
+	return if (body != null)
+		findChildrenOfType<Camera>(body).first()
+	else
+		null
+}
+
 fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: SplitViewports): SplitViewports {
 	val root = getRootViewport(world.scene)!!
 
@@ -153,11 +162,14 @@ fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: Spl
 	} else {
 		root.usage = Viewport.Usage.USAGE_2D.id
 		val godotWorld = root.world!!
-		val nextViewports = players.entries.sortedBy { it.value }.map { (actor, _) ->
-			val body = world.deck.bodies[actor]!!
-			val rigCamera = findChildrenOfType<Camera>(body).first()
-			newSplitScreenViewport(godotWorld, actor, rigCamera)
-		}
+		val deck = world.deck
+		val nextViewports = players.entries
+			.sortedBy { it.value }
+			.map { (actor, _) ->
+				val rigCamera = getRigCamera(deck, actor)
+				newSplitScreenViewport(godotWorld, actor, rigCamera)
+			}
+
 		val mounted = nextViewports.map { mountViewport(it.viewport) }
 		arrangeViewports(root, mounted)
 		for (viewport in nextViewports) {
@@ -173,13 +185,26 @@ fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: Spl
 // The viewport camera is synced with the character rig camera.
 fun syncViewportCameras(viewports: SplitViewports) {
 	for (viewport in viewports) {
-		viewport.viewportCamera.transform = viewport.rigCamera.globalTransform
+		val rigTransform = viewport.rigCamera?.globalTransform
+		if (rigTransform != null) {
+			viewport.viewportCamera.transform = viewport.rigCamera.globalTransform
+		}
 	}
 }
 
 fun updateSplitScreenViewports(world: World, playerMap: PlayerMap, viewports: SplitViewports): SplitViewports {
 	val nextViewports = if (playerMap.size == viewports.size)
-		viewports
+		if (viewports.any { it.rigCamera == null }) {
+			viewports.map { viewport ->
+				if (viewport.rigCamera == null) {
+					viewport.copy(
+						rigCamera = getRigCamera(world.deck, viewport.player)
+					)
+				} else
+					viewport
+			}
+		} else
+			viewports
 	else
 		rebuildSplitScreenViewports(world, playerMap, viewports)
 

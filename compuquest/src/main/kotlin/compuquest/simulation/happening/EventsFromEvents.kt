@@ -7,6 +7,7 @@ import compuquest.simulation.general.*
 import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.*
 
 inline fun <reified T> mapEvents(type: Key, crossinline transform: (Id, T) -> Events): (Events) -> Events {
@@ -38,10 +39,26 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 				.groupBy { it.value.index }
 				.flatMap { (_, it) ->
 					val request = it.first().value
-					val faction = request.faction ?: getGroupByKey(world.deck.groups, world.scenario.defaultPlayerFaction)?.key
-					if (faction != null)
-						newHandEvents(spawnNewPlayer(world, request.index, faction))
-					else
+					val (actor, newPlayerHands) = spawnNewPlayer(world, request.index)
+					if (actor != emptyId) {
+						val characterRequest = request.character
+						val characterEvents = if (characterRequest != null) {
+							spawnNewPlayerCharacter(world, actor, request.index, characterRequest)
+						} else
+							listOf()
+
+						newHandEvents(newPlayerHands) + characterEvents
+					} else
+						listOf()
+				} +
+			filterEventsByType<NewPlayerCharacter>(newPlayerCharacterEvent, events)
+				.flatMap { event ->
+					val actor = event.target as? Id
+					val playerIndex = world.deck.players[actor]?.index
+					if (actor != null && playerIndex != null) {
+						val characterRequest = event.value
+						spawnNewPlayerCharacter(world, actor, playerIndex, characterRequest)
+					} else
 						listOf()
 				}
 }

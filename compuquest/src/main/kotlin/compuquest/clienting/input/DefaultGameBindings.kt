@@ -115,6 +115,18 @@ object DefaultBindings {
 		GamepadChannels.JOY_LEFT_STICK_DOWN to AdvancedCommand(
 			Commands.moveDown, processors = listOf(gamepadDeadZone)
 		),
+		GamepadChannels.JOY_RIGHT_STICK_LEFT to AdvancedCommand(
+			Commands.moveLeft, processors = listOf(gamepadDeadZone)
+		),
+		GamepadChannels.JOY_RIGHT_STICK_RIGHT to AdvancedCommand(
+			Commands.moveRight, processors = listOf(gamepadDeadZone)
+		),
+		GamepadChannels.JOY_RIGHT_STICK_UP to AdvancedCommand(
+			Commands.moveUp, processors = listOf(gamepadDeadZone)
+		),
+		GamepadChannels.JOY_RIGHT_STICK_DOWN to AdvancedCommand(
+			Commands.moveDown, processors = listOf(gamepadDeadZone)
+		),
 	)
 }
 

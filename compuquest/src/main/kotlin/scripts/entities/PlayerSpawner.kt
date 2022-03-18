@@ -18,7 +18,7 @@ class PlayerSpawner : Spatial() {
 
 	@Export
 	@RegisterProperty
-	var type: String = "player" // Should be Characters.player but references like that aren't supported by Godot Kotlin yet
+	var type: String = ""
 
 	var relationships: Relationships = listOf()
 }

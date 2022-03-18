@@ -18,6 +18,8 @@ object Screens {
 	const val optionsInputProfiles = "optionsInputProfiles"
 	const val optionsInputPlayerProfiles = "optionsInputPlayerProfiles"
 	const val optionsDisplay = "optionsDisplay"
+
+	const val chooseProfession = "chooseProfession"
 }
 
 val managementScreens = listOf(
@@ -32,6 +34,7 @@ val gameScreens: Map<Key, GameScreen> = mapOf(
 	Screens.optionsInput to optionsInputMenu(),
 	Screens.optionsInputProfiles to optionsInputProfilesMenu(),
 	Screens.optionsInputPlayerProfiles to optionsInputPlayerProfilesMenu(),
+	Screens.chooseProfession to chooseProfessionMenu(),
 
 	// Game
 //	Screens.completeQuest to completeQuestConversation(),

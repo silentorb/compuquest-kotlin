@@ -10,13 +10,16 @@ import compuquest.simulation.updating.simulationFps
 import scripts.entities.PlayerSpawner
 import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.happening.newEvent
 
 const val playerRespawnTime = 5 * simulationFps
-const val newPlayerEvent = "newPlayerEvent"
+const val newPlayerEvent = "newPlayer"
+const val newPlayerCharacterEvent = "newPlayerCharacter"
 
 val hiredNpc = "hiredNpc"
 val joinedPlayer = "joinedPlayer"
@@ -29,9 +32,14 @@ data class Player(
 	val respawnTimer: Int = 0,
 )
 
+data class NewPlayerCharacter(
+	val type: Key,
+	val faction: Id? = null,
+)
+
 data class NewPlayer(
 	val index: Int,
-	val faction: Id? = null,
+	val character: NewPlayerCharacter? = null,
 )
 
 fun updateInteractingWith(player: Player) = handleEvents<Id?> { event, value ->
@@ -111,12 +119,12 @@ fun eventsFromPlayer(world: World): (Id, Player) -> Events = { actor, player ->
 fun newPlayerName(index: Int): String =
 	"Player ${index + 1}"
 
-fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
+fun spawnNewPlayerCharacter(world: World, actor: Id, playerIndex: Int, faction: Id, type: String): Hands {
 	val spawner = getPlayerRespawnPoint(world.playerSpawners, listOf(faction))
 	val scene = spawner?.scene
-	return if (scene != null && world.deck.players.none { it.value.index == playerIndex }) {
+	val deck = world.deck
+	return if (scene != null && !deck.characters.containsKey(actor)) {
 		val nextId = world.nextId.source()
-		val actor = nextId()
 		val name = newPlayerName(playerIndex)
 		val debugAccessories = (getDebugString("PLAYER_ITEMS")?.split(",") ?: listOf())
 			.map { accessoryName ->
@@ -132,21 +140,39 @@ fun spawnNewPlayer(world: World, playerIndex: Int, faction: Id): Hands {
 			world,
 			scene,
 			spawner.globalTransform,
-			spawner.type,
+			type,
 			relationships,
 			name,
 			actor
-		) +
-				listOf(
-					Hand(
-						id = actor,
-						components = listOf(
-							Player(
-								index = playerIndex,
-							)
-						)
-					)
-				) + debugAccessories
+		) + debugAccessories
 	} else
 		listOf()
+}
+
+fun spawnNewPlayerCharacter(world: World, actor: Id, playerIndex: Int, request: NewPlayerCharacter): Events {
+	val faction = request.faction
+		?: getGroupByKey(world.deck.groups, world.scenario.defaultPlayerFaction)?.key
+
+	return if (faction != null)
+		newHandEvents(spawnNewPlayerCharacter(world, actor, playerIndex, faction, request.type))
+	else
+		listOf()
+}
+
+fun spawnNewPlayer(world: World, playerIndex: Int): Pair<Id, Hands> {
+	return if (world.deck.players.none { it.value.index == playerIndex }) {
+		val nextId = world.nextId.source()
+		val actor = nextId()
+		actor to listOf(
+			Hand(
+				id = actor,
+				components = listOf(
+					Player(
+						index = playerIndex,
+					)
+				)
+			)
+		)
+	} else
+		emptyId to listOf()
 }

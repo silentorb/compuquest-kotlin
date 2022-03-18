@@ -1,6 +1,9 @@
 package compuquest.clienting.gui
 
+import compuquest.definition.playerProfessionDefinitions
+import compuquest.simulation.general.NewPlayerCharacter
 import compuquest.simulation.general.deleteEntityCommand
+import compuquest.simulation.general.newPlayerCharacterEvent
 import compuquest.simulation.input.Commands
 import scripts.gui.PlayerInputProfiles
 import silentorb.mythic.godoting.instantiateScene
@@ -105,5 +108,33 @@ fun optionsInputPlayerProfilesMenu() =
 			val control = instantiateScene<PlayerInputProfiles>("res://gui/menus/PlayerInputProfiles.tscn")!!
 			control.actor = context.actor
 			control
+		}
+	)
+
+fun chooseProfessionMenu() =
+	GameScreen(
+		title = staticTitle("Choose Profession"),
+		content = { context, _ ->
+			val world = context.world
+			val deck = world.deck
+			val takenProfessions = deck.players.keys.mapNotNull { deck.characters[it]?.definition?.key }
+			val availableProfessions = playerProfessionDefinitions - takenProfessions
+			newPopupMenu(
+				"Choose Profession",
+				context.actor,
+				availableProfessions.values.map { definition ->
+					GameMenuItem(
+						title = definition.name,
+						events = { context2 ->
+							val request = NewPlayerCharacter(
+								type = definition.key,
+							)
+							listOf(
+								newEvent(newPlayerCharacterEvent, context2.actor, request),
+							)
+						},
+					)
+				}
+			)
 		}
 	)

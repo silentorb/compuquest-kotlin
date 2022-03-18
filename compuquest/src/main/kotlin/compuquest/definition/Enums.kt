@@ -26,10 +26,14 @@ object Characters {
 	const val child = "child"
 	const val cleric = "cleric"
 	const val fox = "fox"
-	const val ninja = "ninja"
 	const val player = "player"
 	const val skeleton = "skeleton"
 	const val skeletonSage = "skeletonSage"
 	const val squid = "squid"
 	const val viking = "viking"
+
+	const val playerCleric = "playerCleric"
+	const val playerNinja = "playerNinja"
+	const val playerViking = "playerViking"
+	const val playerWizard = "playerWizard"
 }
