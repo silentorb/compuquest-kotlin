@@ -1,7 +1,7 @@
 package compuquest.simulation.intellect.design
 
-import compuquest.simulation.characters.Character
-import compuquest.simulation.characters.getReadyAccessories
+import compuquest.simulation.characters.*
+import compuquest.simulation.combat.isInvisible
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.knowledge.Knowledge
@@ -33,11 +33,12 @@ fun filterEnemyTargets(
 	val randomPadding = Vector3(world.dice.getFloat(-r, r), world.dice.getFloat(-r, r), world.dice.getFloat(-r, r))
 	val headLocation = body.translation + character.toolOffset + randomPadding
 	return deck.characters
-		.filter { (id, other) ->
-			id != actor
-					&& other.isAlive
-					&& isEnemy(world, actor, id)
-					&& isVisible(world, godotBody, headLocation, id, visibilityRange)
+		.filter { (other, otherCharacter) ->
+			other != actor
+					&& otherCharacter.isAlive
+					&& isEnemy(world, actor, other)
+					&& !isInvisible(deck, other)
+					&& isVisible(world, godotBody, headLocation, other, visibilityRange)
 		}
 }
 

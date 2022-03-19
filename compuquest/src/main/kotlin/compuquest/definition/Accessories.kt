@@ -1,6 +1,6 @@
 package compuquest.definition
 
-import compuquest.simulation.general.*
+import compuquest.simulation.characters.*
 import silentorb.mythic.ent.KeyTable
 
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
@@ -74,6 +74,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 		key = Accessories.invisibility,
 		cooldown = 3f,
 		equippedFrame = EquipmentFrames.invisibility,
+		cooldownDelayEffect = Accessories.invisible,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.buff,
@@ -120,7 +121,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 	AccessoryDefinition(
 		key = Accessories.sai,
 		cooldown = 1f,
-		range = 3f,
+		range = 2f,
 		equippedFrame = EquipmentFrames.sai,
 		actionEffects = listOf(
 			AccessoryEffect(

@@ -1,5 +1,6 @@
 package compuquest.simulation.combat
 
+import compuquest.simulation.characters.Accessory
 import compuquest.simulation.general.*
 import compuquest.simulation.general.World
 import godot.*

@@ -1,6 +1,7 @@
 package scripts.entities
 
 import compuquest.simulation.characters.Character
+import compuquest.simulation.characters.getOwnerAccessory
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.physics.CollisionMasks
 import godot.*
@@ -166,7 +167,7 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 			val offset = velocity * 8 - linearVelocity
 			offset.y = 0.0
 			if (offset != Vector3.ZERO)
-				applyImpulse(location + Vector3(0,0.45, 0), offset)
+				applyImpulse(location + Vector3(0, 0.45, 0), offset)
 		}
 	}
 
@@ -201,7 +202,7 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 				emptyId
 
 			if (activeAccessory != emptyId) {
-				val accessory = deck.accessories[activeAccessory]
+				val accessory = getOwnerAccessory(deck, actor, activeAccessory)
 				if (accessory != null) {
 					val nextEquippedFrame = accessory.definition.equippedFrame
 					val cooldownOffset = if (accessory.cooldown > 0) 1 else 0

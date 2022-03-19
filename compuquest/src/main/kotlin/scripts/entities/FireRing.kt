@@ -2,7 +2,8 @@ package scripts.entities
 
 import compuquest.definition.Accessories
 import compuquest.simulation.general.getBodyEntityId
-import compuquest.simulation.general.newAccessory
+import compuquest.simulation.characters.newAccessory
+import compuquest.simulation.characters.newAccessoryForContainer
 import compuquest.simulation.general.newHandEvent
 import godot.Area
 import godot.CollisionShape
@@ -39,8 +40,9 @@ class FireRing : Spatial() {
 					val actor = getBodyEntityId(world.deck, collision as Node)
 					if (actor != null) {
 						Global.addEvent(
-							newHandEvent(
-								newAccessory(world.definitions, world.nextId.source(), actor, Accessories.burning)
+							newAccessoryForContainer(
+								actor,
+								newAccessory(world.definitions, Accessories.burning)
 							)
 						)
 					}

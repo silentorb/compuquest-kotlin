@@ -126,10 +126,10 @@ fun spawnNewPlayerCharacter(world: World, actor: Id, playerIndex: Int, faction: 
 	return if (scene != null && !deck.characters.containsKey(actor)) {
 		val nextId = world.nextId.source()
 		val name = newPlayerName(playerIndex)
-		val debugAccessories = (getDebugString("PLAYER_ITEMS")?.split(",") ?: listOf())
-			.map { accessoryName ->
-				newAccessory(world.definitions, nextId, actor, accessoryName)
-			}
+		val debugAccessories = newCharacterAccessories(
+			world.definitions, nextId,
+			getDebugString("PLAYER_ITEMS")?.split(",") ?: listOf()
+		)
 
 		val relationships = if (spawner.relationships.any())
 			spawner.relationships
@@ -143,8 +143,9 @@ fun spawnNewPlayerCharacter(world: World, actor: Id, playerIndex: Int, faction: 
 			type,
 			relationships,
 			name,
-			actor
-		) + debugAccessories
+			actor,
+			accessories = debugAccessories
+		)
 	} else
 		listOf()
 }

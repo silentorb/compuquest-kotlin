@@ -1,7 +1,7 @@
 package scripts.entities
 
 import compuquest.simulation.general.getBodyEntityId
-import compuquest.simulation.general.getOwnerAccessories
+import compuquest.simulation.characters.getOwnerAccessories
 import godot.Node
 import godot.Spatial
 import godot.annotation.Export
@@ -52,7 +52,7 @@ class CharacterFloatingTextController : Node() {
 					else
 						""
 				} else
-					getOwnerAccessories(world, localActor)
+					getOwnerAccessories(deck, localActor)
 						.filter { it.value.definition.passiveEffects.any() }
 						.map { it.value.definition.key }
 						.joinToString("\n")

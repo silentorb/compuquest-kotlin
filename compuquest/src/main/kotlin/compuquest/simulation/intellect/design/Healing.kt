@@ -1,7 +1,6 @@
 package compuquest.simulation.intellect.design
 
-import compuquest.simulation.characters.Character
-import compuquest.simulation.characters.getReadyAccessories
+import compuquest.simulation.characters.*
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.knowledge.Knowledge

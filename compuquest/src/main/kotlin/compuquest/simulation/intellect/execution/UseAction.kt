@@ -1,10 +1,11 @@
 package compuquest.simulation.intellect.execution
 
-import compuquest.simulation.general.AccessoryEffects
+import compuquest.simulation.characters.AccessoryEffects
+import compuquest.simulation.characters.getOwnerAccessories
+import compuquest.simulation.characters.getOwnerAccessory
 import compuquest.simulation.general.World
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
-import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.design.Goal
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
@@ -13,7 +14,7 @@ import silentorb.mythic.happening.newEvent
 
 fun tryUseAction(world: World, actor: Id, goal: Goal): Events {
 	val action = goal.focusedAction
-	val accessory = world.deck.accessories[action]
+	val accessory = getOwnerAccessory(world.deck, actor, action)
 	val effects = accessory?.definition?.actionEffects ?: listOf()
 	lookAtTarget(world, actor, goal)
 

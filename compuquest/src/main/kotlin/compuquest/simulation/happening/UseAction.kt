@@ -1,9 +1,9 @@
 package compuquest.simulation.happening
 
-import compuquest.simulation.characters.canUse
-import compuquest.simulation.characters.equipPrevious
+import compuquest.simulation.characters.*
 import compuquest.simulation.combat.*
-import compuquest.simulation.general.*
+import compuquest.simulation.general.World
+import compuquest.simulation.general.deleteEntityCommand
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -34,7 +34,17 @@ fun applyAccessoryEffect(
 			else -> listOf()
 		}
 		AccessoryEffects.summon -> summonInFrontOfActor(world, actor, accessory)
-		AccessoryEffects.buff -> newHandEvents(newAccessory(world, actor, effect.buff, duration = effect.durationInt))
+		AccessoryEffects.buff ->
+			listOf(
+				newAccessoryForContainer(
+					actor, newAccessory(
+						world.definitions,
+						effect.buff,
+						duration = effect.durationInt
+					)
+				)
+			)
+
 		AccessoryEffects.equipPrevious -> listOf(newEvent(equipPrevious, actor))
 		else -> listOf()
 	}
@@ -43,7 +53,7 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 	val deck = world.deck
 	val action = event.action
 	val targetEntity = event.targetEntity
-	val accessory = deck.accessories[action]
+	val accessory = getOwnerAccessory(deck, actor, action)
 	if (accessory != null && canUse(accessory)) {
 		val definition = accessory.definition
 		val specificEvents =
@@ -70,7 +80,17 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 //  else
 //    listOf()
 
-		val events = specificEvents + effectEvents
+		// Remove any effects that are configured to be removed when the actor uses an accessory
+		val container = deck.containers[actor]!!
+		val removeEffectEvents = container.accessories
+			.mapNotNull { (id, accessory) ->
+				if (accessory.definition.passiveEffects.any { it.type == AccessoryEffects.removeOnUseAny })
+					newEvent(deleteEntityCommand, id)
+				else
+					null
+			}
+
+		val events = specificEvents + effectEvents + removeEffectEvents
 		if (events.any())
 			events + Event(
 				type = useActionEvent,
@@ -85,11 +105,3 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 	} else
 		listOf()
 }
-
-//fun eventsFromTryAction(world: World, freedomTable: FreedomTable): (TryActionEvent) -> Events = { event ->
-//  val action = event.action
-//  if (hasFreedom(freedomTable, event.actor, Freedom.acting) && canUse(world, action))
-//    eventsFromTryAction(world, event)
-//  else
-//    listOf()
-//}

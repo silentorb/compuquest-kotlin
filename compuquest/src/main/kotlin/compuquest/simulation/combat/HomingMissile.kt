@@ -1,5 +1,6 @@
 package compuquest.simulation.combat
 
+import compuquest.simulation.characters.detrimentalEffectCommand
 import compuquest.simulation.general.*
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events

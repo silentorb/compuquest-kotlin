@@ -1,13 +1,13 @@
 package compuquest.simulation.combat
 
+import compuquest.simulation.characters.AccessoryEffect
+import compuquest.simulation.characters.AccessoryEffects
+import compuquest.simulation.characters.ContainerEffectsMode
+import compuquest.simulation.characters.EffectRecipient
 import compuquest.simulation.general.*
-import compuquest.simulation.happening.useActionEvent
-import compuquest.simulation.intellect.execution.tryUseAction
 import compuquest.simulation.updating.simulationFps
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.hasEvent
-import silentorb.mythic.happening.newEvent
 
 fun isIntervalStep(step: Long, interval: Int): Boolean {
 	val a = step / interval
@@ -15,7 +15,7 @@ fun isIntervalStep(step: Long, interval: Int): Boolean {
 	return step - b == 0L
 }
 
-fun eventsFromPassiveBuffEffect(events: Events, accessory: Id, owner: Id, effect: AccessoryEffect): Events =
+fun eventsFromPassiveBuffEffect(owner: Id, effect: AccessoryEffect): Events =
 	when (effect.type) {
 		AccessoryEffects.damage ->
 			if (effect.recipient == EffectRecipient.self)
@@ -23,26 +23,24 @@ fun eventsFromPassiveBuffEffect(events: Events, accessory: Id, owner: Id, effect
 			else
 				listOf()
 
-		AccessoryEffects.removeOnUseAny -> if (hasEvent(events, useActionEvent, owner))
-			listOf(newEvent(deleteEntityCommand, accessory))
-		else
-			listOf()
-
 		else -> listOf()
 	}
 
-fun eventsFromBuffs(deck: Deck, events: Events, filter: (AccessoryEffect) -> Boolean): Events =
-	deck.accessories.flatMap { (id, accessory) ->
-		accessory.definition.passiveEffects
-			.filter(filter)
-			.flatMap { effect ->
-				eventsFromPassiveBuffEffect(events, id, accessory.owner, effect)
+fun eventsFromBuffs(deck: Deck, filter: (AccessoryEffect) -> Boolean): Events =
+	deck.containers
+		.filterValues { it.effectsMode == ContainerEffectsMode.usesEffects }
+		.flatMap { (actor, container) ->
+			container.accessories.flatMap { (_, accessory) ->
+				accessory.definition.passiveEffects
+					.filter(filter)
+					.flatMap { effect ->
+						eventsFromPassiveBuffEffect(actor, effect)
+					}
 			}
-	}
+		}
 
-fun eventsFromBuffs(world: World): (Events) -> Events = { events ->
+fun eventsFromBuffs(world: World): Events =
 	if (isIntervalStep(world.step, simulationFps)) {
-		eventsFromBuffs(world.deck, events) { it.interval > 0 }
+		eventsFromBuffs(world.deck) { it.interval != 0 }
 	} else
-		eventsFromBuffs(world.deck, events) { it.interval == 1 }
-}
+		eventsFromBuffs(world.deck) { it.interval == 1 }

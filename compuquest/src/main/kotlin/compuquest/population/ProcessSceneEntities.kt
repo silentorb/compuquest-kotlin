@@ -144,7 +144,7 @@ fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): Wor
 	else
 		attachments
 			.flatMap { attachment ->
-				addCharacter(
+				addExistingCharacter(
 					definitions,
 					nextId(),
 					nextId,

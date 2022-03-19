@@ -1,6 +1,6 @@
 package compuquest.simulation.intellect.design
 
-import compuquest.simulation.general.Accessory
+import compuquest.simulation.characters.Accessory
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.knowledge.Knowledge
 import silentorb.mythic.ent.Id

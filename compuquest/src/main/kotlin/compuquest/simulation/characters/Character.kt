@@ -61,37 +61,29 @@ fun isCharacterAlive(health: Int): Boolean =
 fun isCharacterAlive(deck: Deck, actor: Id): Boolean =
 	deck.characters[actor]?.isAlive == true
 
-fun getAccessoriesSequence(accessories: Table<Accessory>, actor: Id) =
-	accessories
-		.asSequence()
-		.filter { it.value.owner == actor }
-
-fun getActionsSequence(accessories: Table<Accessory>, actor: Id) =
-	getAccessoriesSequence(accessories, actor)
+fun getActionsSequence(deck: Deck, actor: Id) =
+	getOwnerAccessories(deck, actor).asSequence()
 		.filter { it.value.canBeActivated }
 
-fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
-	getOwnerAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
+fun hasAccessoryWithActionEffect(deck: Deck, actor: Id, effect: Key): Boolean =
+	getOwnerAccessories(deck, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
 fun hasPassiveEffect(accessories: Table<Accessory>, effect: Key): Boolean =
 	accessories.any { it.value.definition.passiveEffects.any { a -> a.type == effect } }
 
-fun hasAccessoryOfType(accessories: Table<Accessory>, actor: Id, type: Key): Boolean =
-	getOwnerAccessories(accessories, actor).any { it.value.definition.key == type }
+fun hasAccessoryOfType(deck: Deck, actor: Id, type: Key): Boolean =
+	getOwnerAccessories(deck, actor).any { it.value.definition.key == type }
 
-fun getAccessoriesWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key) =
-	getOwnerAccessories(accessories, actor).filter { it.value.definition.actionEffects.any { a -> a.type == effect } }
+fun getAccessoriesWithActionEffect(deck: Deck, actor: Id, effect: Key) =
+	getOwnerAccessories(deck, actor).filter { it.value.definition.actionEffects.any { a -> a.type == effect } }
 
 fun getReadyAccessories(deck: Deck, actor: Id): Table<Accessory> =
-	getOwnerAccessories(deck.accessories, actor)
+	getOwnerAccessories(deck, actor)
 		.filter { canUse(it.value) }
 
 fun canUse(accessory: Accessory): Boolean {
 	return accessory.definition.actionEffects.any() && accessory.cooldown == 0f
 }
-
-fun canUse(world: World, accessory: Id): Boolean =
-	canUse(world.deck.accessories[accessory]!!)
 
 fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
 	val deck = previous.deck
@@ -119,48 +111,43 @@ val updateCharacterFaction = handleEvents<Key> { event, value ->
 
 fun newCharacterAccessories(
 	definitions: Definitions,
-	definition: CharacterDefinition,
-	id: Id,
-	nextId: NextId
-): List<Hand> =
-	definition.accessories
-		.map { accessory ->
-			newAccessory(definitions, nextId, id, accessory)
+	nextId: NextId,
+	accessories: List<Key>
+): Table<Accessory> =
+	accessories
+		.associate { accessory ->
+			nextId() to newAccessory(definitions, accessory)
 		}
 
-fun selectActiveAccessoryFromHands(accessories: Hands): Id =
-	accessories.mapNotNull { hand ->
-		val accessory = getHandComponent<Accessory>(hand)
-		if (accessory?.canBeActivated == true)
-			hand.id
-		else
-			null
-	}.firstOrNull() ?: emptyId
+fun selectActiveAccessoryFromTable(accessories: Table<Accessory>): Id =
+	accessories.entries
+		.firstOrNull { (_, accessory) ->
+			accessory.canBeActivated
+		}?.key ?: emptyId
 
 fun newCharacter(
 	definition: CharacterDefinition,
-	accessories: Hands,
+	accessories: Table<Accessory>,
 	toolOffset: Vector3,
 	name: String = definition.name,
 	relationships: Relationships = listOf(),
-) =
-	Character(
-		definition = definition,
-		name = name,
-		destructible = Destructible(
-			health = if (getDebugBoolean("HALF_HEALTH")) definition.health / 2 else definition.health,
-			maxHealth = definition.health,
-			drainDuration = healthTimeDrainDuration,
-		),
-		depiction = definition.depiction,
-		frame = definition.frame,
-		activeAccessory = selectActiveAccessoryFromHands(accessories),
-		relationships = relationships,
-		toolOffset = toolOffset,
-	)
+) = Character(
+	definition = definition,
+	name = name,
+	destructible = Destructible(
+		health = if (getDebugBoolean("HALF_HEALTH")) definition.health / 2 else definition.health,
+		maxHealth = definition.health,
+		drainDuration = healthTimeDrainDuration,
+	),
+	depiction = definition.depiction,
+	frame = definition.frame,
+	activeAccessory = selectActiveAccessoryFromTable(accessories),
+	relationships = relationships,
+	toolOffset = toolOffset,
+)
 
-fun shiftActiveAction(accessories: Table<Accessory>, actor: Id, accessory: Id, offset: Int): Id {
-	val actions = getActionsSequence(accessories, actor).toList()
+fun shiftActiveAction(accessories: Table<Accessory>, accessory: Id, offset: Int): Id {
+	val actions = accessories.filter { it.value.canBeActivated }.entries.toList()
 	val index = actions.indexOfFirst { it.key == accessory }
 	val rawIndex = index - offset
 	val nextIndex = (rawIndex + actions.size) % actions.size
@@ -173,7 +160,6 @@ fun updateActiveAccessory(
 	accessories: Table<Accessory>,
 	characterEvents: Events,
 	input: PlayerInput,
-	actor: Id,
 	active: Id,
 	previous: Id
 ): Id =
@@ -184,14 +170,13 @@ fun updateActiveAccessory(
 					previous
 				else
 					active
-			ActionChange.previous -> shiftActiveAction(accessories, actor, active, -1)
-			ActionChange.next -> shiftActiveAction(accessories, actor, active, 1)
+			ActionChange.previous -> shiftActiveAction(accessories, active, -1)
+			ActionChange.next -> shiftActiveAction(accessories, active, 1)
 		}
 	else if (accessories.containsKey(previous))
 		previous
 	else
-		getActionsSequence(accessories, actor)
-			.firstOrNull()
+		accessories.entries.firstOrNull { it.value.canBeActivated }
 			?.key ?: emptyId
 
 fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Character) -> Character =
@@ -219,12 +204,11 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 		else
 			character.definition.frame
 
-		val accessories = deck.accessories.filter { it.value.owner == actor }
+		val accessories = getOwnerAccessories(deck, actor)
 		val activeAccessory = updateActiveAccessory(
 			accessories,
 			characterEvents,
 			input,
-			actor,
 			character.activeAccessory,
 			character.previousActiveAccessory
 		)
@@ -250,13 +234,14 @@ fun addCharacter(
 	nextId: NextId,
 	characterBody: CharacterBody,
 	name: String = definition.name,
-	relationships: Relationships,
+	relationships: Relationships = listOf(),
+	accessories: Table<Accessory> = mapOf(),
 	additional: List<Any> = listOf()
 ): Hands {
 	return tempCatch {
 		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
 		characterBody.sprite
-		val accessories = newCharacterAccessories(definitions, definition, id, nextId)
+		val allAccessories = accessories + newCharacterAccessories(definitions, nextId, definition.accessories)
 		val toolOffset = characterBody.toolOffset
 		val character = newCharacter(definition, accessories, toolOffset, name, relationships = relationships)
 		sprite.animation = character.depiction
@@ -269,9 +254,10 @@ fun addCharacter(
 					character,
 					sprite,
 					characterBody,
+					AccessoryContainer(accessories = allAccessories),
 				) + additional
 			)
-		) + accessories
+		)
 	}
 }
 
@@ -290,6 +276,7 @@ fun spawnCharacter(
 	relationships: Relationships = listOf(),
 	name: String? = null,
 	id: Id? = null,
+	accessories: Table<Accessory> = mapOf(),
 	additional: List<Any> = listOf()
 ): Hands {
 	val definitions = world.definitions
@@ -316,7 +303,7 @@ fun spawnCharacter(
 
 	return addCharacter(
 		definitions, definition, actor, nextId, body,
-		name ?: definition.name, relationships, additional
+		name ?: definition.name, relationships, accessories, additional
 	)
 }
 
@@ -332,7 +319,7 @@ fun spawnAiCharacter(
 	id: Id? = null,
 	additional: List<Any> = listOf()
 ): Hands =
-	spawnCharacter(world, getAiBodyScene(), transform, type, relationships, name, id, additional)
+	spawnCharacter(world, getAiBodyScene(), transform, type, relationships, name, id, additional = additional)
 
 fun getCharacterGroupRelationships(deck: Deck, character: Character): Collection<Relationship> =
 	character.relationships
@@ -365,14 +352,10 @@ fun copyEntity(deck: Deck, entity: Id): Hands {
 		table[entity]
 	}
 
-	val accessories = getOwnerAccessories(deck.accessories, entity)
-		.keys
-		.flatMap { copyEntity(deck, it) }
-
 	return listOf(
 		Hand(
 			id = entity,
 			components = components,
 		)
-	) + accessories
+	)
 }

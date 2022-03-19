@@ -1,14 +1,11 @@
 package compuquest.simulation.combat
 
-import compuquest.simulation.characters.Relationship
-import compuquest.simulation.characters.RelationshipType
-import compuquest.simulation.characters.spawnCharacter
+import compuquest.simulation.characters.*
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.knowledge.Personality
 import compuquest.simulation.intellect.newSpirit
 import godot.Spatial
 import godot.core.Transform
-import godot.core.Vector3
 import godot.global.GD
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene

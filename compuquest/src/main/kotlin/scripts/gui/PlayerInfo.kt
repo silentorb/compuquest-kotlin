@@ -2,7 +2,7 @@ package scripts.gui
 
 import compuquest.simulation.characters.Character
 import compuquest.simulation.general.Deck
-import compuquest.simulation.general.getOwnerAccessories
+import compuquest.simulation.characters.getOwnerAccessories
 import godot.Control
 import godot.GridContainer
 import godot.Label
@@ -50,7 +50,7 @@ class PlayerInfo : Control() {
 	fun updateBuffs(deck: Deck, actor: Id) {
 		val grid = buffsGrid!!
 		clearChildren(grid)
-		val buffs = getOwnerAccessories(deck.accessories, actor)
+		val buffs = getOwnerAccessories(deck, actor)
 			.filter { it.value.definition.duration > 0f }
 
 		for (buff in buffs) {

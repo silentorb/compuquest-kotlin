@@ -1,7 +1,6 @@
 package compuquest.simulation.general
 
-import compuquest.simulation.characters.Character
-import compuquest.simulation.characters.Group
+import compuquest.simulation.characters.*
 import compuquest.simulation.combat.HomingMissile
 import compuquest.simulation.combat.Missile
 import compuquest.simulation.intellect.Spirit
@@ -18,6 +17,7 @@ data class Deck(
 	val accessories: Table<Accessory> = mapOf(),
 	val bodies: Table<Spatial> = mapOf(),
 	val characters: Table<Character> = mapOf(),
+	val containers: Table<AccessoryContainer> = mapOf(),
 	val groups: Table<Group> = mapOf(),
 	val interactables: Table<Interactable> = mapOf(),
 //	val factions: KeyTable<Faction> = mapOf(),
@@ -35,24 +35,15 @@ val deckReflection = newDeckReflection(Deck::class, Hand::class)
 
 val removeEntities = genericRemoveEntities(deckReflection)
 
-// bodies aren't added through this method because they are specially synced each frame
 fun allIdHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
-	val accessories = integrateNewAccessories(deck.accessories, extractComponents(idHands))
-
-//	val k = accessories.filter { it.value.definition.name == Accessories.burning }
-//		.entries.groupBy { it.value.owner }
-//
-//	if (k.any { it.value.size > 1 }) {
-//		integrateNewAccessories(deck.accessories, extractComponents(idHands))
-//	}
 
 	return deck.copy(
-		accessories = accessories,
+		accessories = deck.accessories + extractComponents(idHands),
 		characters = deck.characters + extractComponents(idHands),
+		containers = deck.containers + extractComponents(idHands),
 		bodies = deck.bodies + extractComponents(idHands),
 		groups = deck.groups + extractComponents(idHands),
 		interactables = deck.interactables + extractComponents(idHands),
-//		factions = deck.factions + extractFactions(idHands),
 		homingMissiles = deck.homingMissiles + extractComponents(idHands),
 		missiles = deck.missiles + extractComponents(idHands),
 		navigationDirections = deck.navigationDirections + extractComponents(idHands),

@@ -3,7 +3,7 @@ package compuquest.simulation.intellect.execution
 import compuquest.simulation.general.InteractionBehaviors
 import compuquest.simulation.general.Interactive
 import compuquest.simulation.general.World
-import compuquest.simulation.general.transferAccessory
+import compuquest.simulation.characters.transferAccessory
 import compuquest.simulation.intellect.design.Goal
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Events

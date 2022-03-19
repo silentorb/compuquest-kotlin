@@ -1,6 +1,7 @@
 package scripts.entities
 
-import compuquest.definition.Accessories
+import compuquest.simulation.characters.newAccessory
+import compuquest.simulation.characters.newAccessoryForContainer
 import compuquest.simulation.combat.DamageTarget
 import compuquest.simulation.general.*
 import godot.AnimatedSprite3D
@@ -106,7 +107,9 @@ class FoodStorage : Spatial(), DamageTarget, Interactive, EntityNode {
 
 	override fun onInteraction(world: World, actor: Id) {
 		if (mode == Mode.hasFood) {
-			Global.addHand(newAccessory(world, actor, accessoryType))
+			Global.addEvent(
+				newAccessoryForContainer(actor, newAccessory(world.definitions, accessoryType))
+			)
 			if (restockDuration != 0) {
 				mode = Mode.normal
 			}

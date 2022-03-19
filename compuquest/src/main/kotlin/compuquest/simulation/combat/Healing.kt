@@ -1,5 +1,7 @@
 package compuquest.simulation.combat
 
+import compuquest.simulation.characters.Accessory
+import compuquest.simulation.characters.AccessoryEffect
 import compuquest.simulation.general.*
 import compuquest.simulation.physics.castRayForId
 import godot.Spatial

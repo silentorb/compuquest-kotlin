@@ -1,17 +1,13 @@
-package compuquest.simulation.general
+package compuquest.simulation.characters
 
 import compuquest.simulation.definition.Definitions
+import compuquest.simulation.general.Deck
+import compuquest.simulation.general.ResourceMap
 import compuquest.simulation.happening.UseAction
 import compuquest.simulation.happening.useActionEvent
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
-import silentorb.mythic.ent.NextId
-import silentorb.mythic.ent.Table
-import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventValues
-import silentorb.mythic.happening.filterEventsByType
-import silentorb.mythic.happening.newEvent
-import silentorb.mythic.timing.IntTimer
+import silentorb.mythic.happening.*
 import silentorb.mythic.timing.floatToIntTime
 import kotlin.math.max
 
@@ -70,17 +66,19 @@ data class AccessoryDefinition(
 	val stackable: Boolean = false,
 	val consumable: Boolean = false,
 	val equippedFrame: Int = -1,
-	val effectDelaysCooldown: Key? = null, // Cooldown does not decrease while the actor is under this effect
+	val cooldownDelayEffect: Key? = null, // Cooldown does not decrease while the actor is under this effect
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
 	val isAttack: Boolean = actionEffects.any { it.isAttack }
 }
 
+const val noDuration = -1
+
 data class Accessory(
-	val owner: Id,
 	val level: Int = 1,
 	val cooldown: Float = 0f,
 	val definition: AccessoryDefinition,
+	val duration: Int = noDuration,
 ) {
 	val canBeActivated: Boolean = definition.actionEffects.any()
 }
@@ -102,110 +100,110 @@ object AccessoryIntervals {
 
 const val detrimentalEffectCommand = "detrementalEffect"
 
-fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key, duration: Int = -1): Hand {
+fun newAccessory(definitions: Definitions, type: Key, duration: Int = noDuration): Accessory {
 	val definition = definitions.accessories[type] ?: throw Error("Invalid accessory type $type")
-	val duration2 = when {
-		duration != -1 -> duration
-		definition.duration != 0f -> floatToIntTime(definition.duration)
-		else -> -1
-	}
-	val timer = if (duration2 > 0)
-		IntTimer(duration2)
-	else
-		null
 
-	return Hand(
-		id = nextId(),
-		components = listOfNotNull(
-			Accessory(
-				owner = owner,
-				definition = definition,
-			),
-			timer,
-		)
+	return Accessory(
+		definition = definition,
+		duration = when {
+			duration != noDuration -> duration
+			definition.duration != 0f -> floatToIntTime(definition.duration)
+			else -> noDuration
+		}
 	)
 }
 
-fun newAccessory(world: World, owner: Id, type: Key, duration: Int = -1): Hand =
-	newAccessory(world.definitions, world.nextId.source(), owner, type, duration)
-
-fun getUsedAccessories(events: Events): Collection<Id> =
-	filterEventValues<UseAction>(useActionEvent, events)
-		.map { it.action }
+fun getUsedAccessories(events: Events): Collection<GenericEvent<UseAction>> =
+	filterEventsByType(useActionEvent, events)
 
 const val transferAccessoryEvent = "transferAccessory"
 
 fun transferAccessory(accessory: Id, to: Id) =
 	newEvent(transferAccessoryEvent, accessory, to)
 
-fun isDelayedByEffect(accessory: Accessory): Boolean {
-//	val effectType = accessory.definition.effectDelaysCooldown
-//	effectType != null && )
-	return false
+fun isDelayedByEffect(container: AccessoryContainer, accessory: Accessory): Boolean {
+	val effectType = accessory.definition.cooldownDelayEffect
+	return effectType != null && hasPassiveEffect(container.accessories, effectType)
 }
 
-fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
-	val uses = getUsedAccessories(events)
-	val transfers = filterEventsByType<Id>(transferAccessoryEvent, events)
-
+fun updateOwnedAccessory(container: AccessoryContainer, events: Events, delta: Float): (Id, Accessory) -> Accessory {
 	return { id, accessory ->
-		val used = uses.contains(id)
-		val cooldown = if (used || accessory.cooldown == 0f || isDelayedByEffect(accessory))
+		val used = events.any { it.type == useActionEvent && (it.value as? UseAction)?.action == id }
+		val cooldown = if (used)
 			accessory.definition.cooldown
+		else if (accessory.cooldown == 0f || isDelayedByEffect(container, accessory))
+			accessory.cooldown
 		else
 			max(0f, accessory.cooldown - delta)
 
-		val owner = transfers.firstOrNull { it.target == id }?.value ?: accessory.owner
+		val duration = if (accessory.duration > 0)
+			accessory.duration - 1
+		else
+			accessory.duration
 
 		accessory.copy(
 			cooldown = cooldown,
-			owner = owner,
+			duration = duration,
 		)
 	}
 }
 
-fun getConsumedAccessories(accessories: Table<Accessory>, events: Events): Collection<Id> =
+fun getAccessory(deck: Deck, accessory: Id): Accessory? {
+	val unOwned = deck.accessories[accessory]
+	if (unOwned != null)
+		return unOwned
+
+	for (container in deck.containers.values) {
+		val owned = container.accessories[accessory]
+		if (owned != null)
+			return owned
+	}
+
+	return null
+}
+
+fun getConsumedAccessories(deck: Deck, events: Events): Collection<Id> =
 	getUsedAccessories(events)
-		.filter { accessories[it]?.definition?.consumable == true }
+		.filter {
+			deck.containers[it.target]
+				?.accessories
+				?.getOrDefault(it.value.action, null)
+				?.definition?.consumable == true
+		}
+		.map { it.value.action }
 
 // This function exists to handle redundant non-stackable accessories
-fun integrateNewAccessories(
-	accessories: Table<Accessory>,
-	newAccessories: Table<Accessory>
-): Table<Accessory> {
-	val duplicates = newAccessories.mapNotNull { a ->
-		val existing = accessories.entries.firstOrNull {
-			!it.value.definition.stackable && it.value.owner == a.value.owner && it.value.definition == a.value.definition
-		}
+//fun integrateNewAccessories(
+//	accessories: Table<Accessory>,
+//	newAccessories: Table<Accessory>
+//): Table<Accessory> {
+//	val duplicates = newAccessories.mapNotNull { a ->
+//		val existing = accessories.entries.firstOrNull {
+//			!it.value.definition.stackable && it.value.owner == a.value.owner && it.value.definition == a.value.definition
+//		}
+//
+//		if (existing != null)
+//			existing to a
+//		else
+//			null
+//	}
+//
+//	val uniqueAdditions = newAccessories - duplicates.map { it.second.key }
+//	val refreshed = duplicates
+//		.filter { it.first.value.definition.duration > 0 }
+//		.map { it.first.key }
+//		.distinct()
+//
+//	return accessories + uniqueAdditions
+//}
 
-		if (existing != null)
-			existing to a
-		else
-			null
-	}
-
-	val uniqueAdditions = newAccessories - duplicates.map { it.second.key }
-	val refreshed = duplicates
-		.filter { it.first.value.definition.duration > 0 }
-		.map { it.first.key }
-		.distinct()
-
-	return accessories + uniqueAdditions
-}
-
-fun refreshTimers(timers: Table<IntTimer>, refreshed: Collection<Id>) =
-	refreshed.associateWith { id ->
-		val timer = timers[id]!!
-		timer.copy(
-			remaining = timer.duration
-		)
-	}
-
-fun getOwnerAccessories(accessories: Table<Accessory>, owner: Id): Table<Accessory> =
-	accessories.filter { it.value.owner == owner }
-
-fun getOwnerAccessories(world: World, owner: Id): Table<Accessory> =
-	getOwnerAccessories(world.deck.accessories, owner)
+//fun refreshTimers(timers: Table<IntTimer>, refreshed: Collection<Id>) =
+//	refreshed.associateWith { id ->
+//		val timer = timers[id]!!
+//		timer.copy(
+//			remaining = timer.duration
+//		)
+//	}
 
 fun canHeal(accessory: Accessory): Boolean =
 	accessory.definition.actionEffects

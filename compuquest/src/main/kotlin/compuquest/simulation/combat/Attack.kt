@@ -1,14 +1,16 @@
 package compuquest.simulation.combat
 
-import compuquest.simulation.general.*
+import compuquest.simulation.characters.Accessory
+import compuquest.simulation.characters.AccessoryEffects
+import compuquest.simulation.characters.getCharacterFacing
+import compuquest.simulation.characters.getOwnerAccessory
+import compuquest.simulation.general.World
 import compuquest.simulation.happening.UseAction
+import godot.core.Transform
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
-import compuquest.simulation.characters.getCharacterFacing
-import compuquest.simulation.characters.hasAccessoryWithEffect
-import godot.core.Transform
 
 const val attackEvent = "attackEvent"
 
@@ -47,7 +49,8 @@ fun startAttack(
 }
 
 fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
-	val accessory = world.deck.accessories[attack.accessory]!!
+	val deck = world.deck
+	val accessory = getOwnerAccessory(deck, actor, attack.accessory)!!
 	accessory.definition.actionEffects
 		.flatMap { effect ->
 			when (effect.type) {
