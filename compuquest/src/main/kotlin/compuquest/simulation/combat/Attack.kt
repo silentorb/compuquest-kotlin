@@ -7,6 +7,7 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import compuquest.simulation.characters.getCharacterFacing
+import compuquest.simulation.characters.hasAccessoryWithEffect
 import godot.core.Transform
 
 const val attackEvent = "attackEvent"

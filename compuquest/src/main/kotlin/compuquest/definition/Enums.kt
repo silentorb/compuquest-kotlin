@@ -1,25 +1,35 @@
 package compuquest.definition
 
 object Accessories {
+
+	// Usable Items
 	val berries = "berries"
 	val bite = "bite"
 	val burger = "burger"
-	val burning = "burning"
 	val fireRing = "fireRing"
 	val fireStaff = "fireStaff"
 	val heal = "heal"
+	val invisibility = "invisibility"
 	val rifle = "rifle"
+	val sai = "sai"
 	val summonFox = "summonFox"
 	val summonSquid = "summonSquid"
+
+	// Buffs and Passive Abilities
+	val backstab = "backstab"
+	val burning = "burning"
+	val invisible = "invisible"
 }
 
 object EquipmentFrames {
 	const val berries = 0
-	const val burger = 9
 	const val fireStaff = 1
 	const val summonFox = 3
 	const val summonSquid = 5
 	const val heal = 7
+	const val burger = 9
+	const val invisibility = 10
+	const val sai = 12
 }
 
 object Characters {
@@ -33,7 +43,7 @@ object Characters {
 	const val viking = "viking"
 
 	const val playerCleric = "playerCleric"
-	const val playerNinja = "playerNinja"
+	const val ninja = "ninja"
 	const val playerViking = "playerViking"
-	const val playerWizard = "playerWizard"
+	const val wizard = "wizard"
 }

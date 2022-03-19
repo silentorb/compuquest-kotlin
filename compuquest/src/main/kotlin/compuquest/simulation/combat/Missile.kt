@@ -27,6 +27,7 @@ data class Missile(
 fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Vector3?, targetEntity: Id?): Events {
 	val (origin, velocity) = getAttackerOriginAndFacing(world, actor, targetLocation, targetEntity, 0.8f)
 	return if (origin != null) {
+		val deck = world.deck
 		val definition = weapon.definition
 		val effect = definition.actionEffects.first()
 		val projectile = instantiateScene<Spatial>(effect.spawnsScene!!)!!
@@ -36,8 +37,8 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 			listOf()
 		else {
 			val radius = getCollisionShapeRadius(shape)
-			val characterBody = world.deck.bodies[actor]!!.getInstanceId()
-
+			val characterBody = deck.bodies[actor]!!.getInstanceId()
+			val damage = calculateDamage(deck, actor, weapon, effect)
 			listOf(
 				newHandEvent(
 					Hand(
@@ -45,7 +46,7 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 							projectile,
 							Missile(
 								velocity = velocity * effect.speed,
-								damage = effect.strengthInt,
+								damage = damage,
 								origin = origin,
 								range = definition.range,
 								diameter = radius * 2f,

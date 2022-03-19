@@ -48,6 +48,7 @@ data class Character(
 	override val depiction: String,
 	override val frame: Int = 0,
 	val activeAccessory: Id = emptyId,
+	val previousActiveAccessory: Id = emptyId,
 	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState, Relational {
 	val isAlive: Boolean = isCharacterAlive(health)
@@ -71,6 +72,12 @@ fun getActionsSequence(accessories: Table<Accessory>, actor: Id) =
 
 fun hasAccessoryWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key): Boolean =
 	getOwnerAccessories(accessories, actor).any { it.value.definition.actionEffects.any { a -> a.type == effect } }
+
+fun hasPassiveEffect(accessories: Table<Accessory>, effect: Key): Boolean =
+	accessories.any { it.value.definition.passiveEffects.any { a -> a.type == effect } }
+
+fun hasAccessoryOfType(accessories: Table<Accessory>, actor: Id, type: Key): Boolean =
+	getOwnerAccessories(accessories, actor).any { it.value.definition.key == type }
 
 fun getAccessoriesWithEffect(accessories: Table<Accessory>, actor: Id, effect: Key) =
 	getOwnerAccessories(accessories, actor).filter { it.value.definition.actionEffects.any { a -> a.type == effect } }
@@ -160,13 +167,28 @@ fun shiftActiveAction(accessories: Table<Accessory>, actor: Id, accessory: Id, o
 	return actions[nextIndex].key
 }
 
-fun updateActiveAccessory(accessories: Table<Accessory>, input: PlayerInput, actor: Id, activeAccessory: Id): Id =
-	if (activeAccessory != emptyId && accessories.containsKey(activeAccessory))
+const val equipPrevious = "equipPrevious"
+
+fun updateActiveAccessory(
+	accessories: Table<Accessory>,
+	characterEvents: Events,
+	input: PlayerInput,
+	actor: Id,
+	active: Id,
+	previous: Id
+): Id =
+	if (active != emptyId && accessories.containsKey(active))
 		when (input.actionChange) {
-			ActionChange.noChange -> activeAccessory
-			ActionChange.previous -> shiftActiveAction(accessories, actor, activeAccessory, -1)
-			ActionChange.next -> shiftActiveAction(accessories, actor, activeAccessory, 1)
+			ActionChange.noChange ->
+				if (characterEvents.any { it.type == equipPrevious } && accessories.containsKey(previous))
+					previous
+				else
+					active
+			ActionChange.previous -> shiftActiveAction(accessories, actor, active, -1)
+			ActionChange.next -> shiftActiveAction(accessories, actor, active, 1)
 		}
+	else if (accessories.containsKey(previous))
+		previous
 	else
 		getActionsSequence(accessories, actor)
 			.firstOrNull()
@@ -198,12 +220,26 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 			character.definition.frame
 
 		val accessories = deck.accessories.filter { it.value.owner == actor }
+		val activeAccessory = updateActiveAccessory(
+			accessories,
+			characterEvents,
+			input,
+			actor,
+			character.activeAccessory,
+			character.previousActiveAccessory
+		)
+
+		val previousActiveAccessory = if (activeAccessory != character.activeAccessory && activeAccessory != 0L)
+			activeAccessory
+		else
+			character.previousActiveAccessory
 
 		character.copy(
 			destructible = destructible,
 			depiction = depiction,
 			frame = frame,
-			activeAccessory = updateActiveAccessory(accessories, input, actor, character.activeAccessory),
+			activeAccessory = activeAccessory,
+			previousActiveAccessory = previousActiveAccessory,
 		)
 	}
 

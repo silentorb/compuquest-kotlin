@@ -23,12 +23,21 @@ enum class EffectRecipient {
 }
 
 object AccessoryEffects {
+
+	// Active (Some can also be passive)
 	val armor = "armor"
 	val damage = "damage"
 	val heal = "heal"
 	val resurrect = "resurrect"
 	val summon = "summon"
 	val summonAtTarget = "summonAtTarget"
+	val buff = "buff"
+	val equipPrevious = "equipPreviousAccessory"
+
+	// Passive
+	val backstab = "backstab"
+	val invisible = "invisible"
+	val removeOnUseAny = "removeOnUseAny"
 }
 
 data class AccessoryEffect(
@@ -36,18 +45,21 @@ data class AccessoryEffect(
 	val strength: Float = 0f,
 	val spawnsCharacter: Key? = null,
 	val spawnsScene: String? = null,
+	val buff: Key = "",
 	val speed: Float = 0f,
 	val interval: Int = 0,
 	val duration: Float = 0f,
 	val recipient: EffectRecipient,
 ) {
 	val strengthInt: Int get() = strength.toInt()
+	val durationInt: Int get() = floatToIntTime(duration)
 	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.projectile
 }
 
 data class AccessoryDefinition(
 	val cooldown: Float = 0f,
-	val name: String,
+	val key: String,
+	val name: String = key,
 	val range: Float = 0f,
 	val cost: ResourceMap = mapOf(),
 	val attributes: Set<Key> = setOf(),
@@ -58,6 +70,7 @@ data class AccessoryDefinition(
 	val stackable: Boolean = false,
 	val consumable: Boolean = false,
 	val equippedFrame: Int = -1,
+	val effectDelaysCooldown: Key? = null, // Cooldown does not decrease while the actor is under this effect
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
 	val isAttack: Boolean = actionEffects.any { it.isAttack }
@@ -68,43 +81,53 @@ data class Accessory(
 	val level: Int = 1,
 	val cooldown: Float = 0f,
 	val definition: AccessoryDefinition,
-	val duration: Int = -1,
 ) {
 	val canBeActivated: Boolean = definition.actionEffects.any()
 }
 
-object AccessoryAttributes {
-	const val attack = "attack"
-}
+fun newPassiveEffect(type: Key) =
+	AccessoryEffect(
+		type = type,
+		recipient = EffectRecipient.self,
+	)
+
+fun newPassiveEffects(vararg types: Key) =
+	types.map(::newPassiveEffect)
 
 object AccessoryIntervals {
+	const val continuous = 1
 	const val oneSecond = 60
 	const val default = 60
 }
 
 const val detrimentalEffectCommand = "detrementalEffect"
 
-fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key): Hand {
+fun newAccessory(definitions: Definitions, nextId: NextId, owner: Id, type: Key, duration: Int = -1): Hand {
 	val definition = definitions.accessories[type] ?: throw Error("Invalid accessory type $type")
-	val duration = if (definition.duration == 0f)
-		-1
+	val duration2 = when {
+		duration != -1 -> duration
+		definition.duration != 0f -> floatToIntTime(definition.duration)
+		else -> -1
+	}
+	val timer = if (duration2 > 0)
+		IntTimer(duration2)
 	else
-		floatToIntTime(definition.duration)
+		null
 
 	return Hand(
 		id = nextId(),
-		components = listOf(
+		components = listOfNotNull(
 			Accessory(
 				owner = owner,
 				definition = definition,
-				duration = duration
 			),
+			timer,
 		)
 	)
 }
 
-fun newAccessory(world: World, owner: Id, type: Key): Hand =
-	newAccessory(world.definitions, world.nextId.source(), owner, type)
+fun newAccessory(world: World, owner: Id, type: Key, duration: Int = -1): Hand =
+	newAccessory(world.definitions, world.nextId.source(), owner, type, duration)
 
 fun getUsedAccessories(events: Events): Collection<Id> =
 	filterEventValues<UseAction>(useActionEvent, events)
@@ -115,13 +138,19 @@ const val transferAccessoryEvent = "transferAccessory"
 fun transferAccessory(accessory: Id, to: Id) =
 	newEvent(transferAccessoryEvent, accessory, to)
 
+fun isDelayedByEffect(accessory: Accessory): Boolean {
+//	val effectType = accessory.definition.effectDelaysCooldown
+//	effectType != null && )
+	return false
+}
+
 fun updateAccessory(events: Events, delta: Float): (Id, Accessory) -> Accessory {
 	val uses = getUsedAccessories(events)
 	val transfers = filterEventsByType<Id>(transferAccessoryEvent, events)
 
 	return { id, accessory ->
 		val used = uses.contains(id)
-		val cooldown = if (used)
+		val cooldown = if (used || accessory.cooldown == 0f || isDelayedByEffect(accessory))
 			accessory.definition.cooldown
 		else
 			max(0f, accessory.cooldown - delta)

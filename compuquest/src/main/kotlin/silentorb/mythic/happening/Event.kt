@@ -40,3 +40,7 @@ fun filterEventsByTarget(target: Any, events: Events) =
 fun <T> handleEvents(handler: (Event, T) -> T): (Events, T) -> T = { events, initial ->
 	events.fold(initial) { a, b -> handler(b, a) }
 }
+
+fun hasEvent(events: Events, type: Key, target: Any): Boolean =
+	events
+		.any { it.type == type && it.target == target }

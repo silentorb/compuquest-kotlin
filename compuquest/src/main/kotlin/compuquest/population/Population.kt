@@ -17,6 +17,7 @@ import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.randomly.Dice
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -59,7 +60,9 @@ fun selectSlots(attributes: Collection<String>, limit: (Int) -> Int): SlotSelect
 }
 
 fun distributeGroundEntities(getMax: (DistributionConfig, Int) -> Int): SlotSelector = { config, slots ->
-	val groundSlots = slots.filter { it.orientation == SlotOrientation.ground }
+	val groundSlots = slots.filter {
+		it.orientation == SlotOrientation.ground && (abs(it.transform.origin.x) > 4 || abs(it.transform.origin.z) > 4)
+	}
 	val maxEntities = getMax(config, groundSlots.size)
 	val result = selectSlots(config.dice, groundSlots, maxEntities)
 	result

@@ -36,6 +36,7 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 	override var sprite: AnimatedSprite3D? = null
 	override var location: Vector3 = Vector3.ZERO
 	override var isFlying: Boolean = false
+	override var playerController: PlayerController? = null
 
 	override var facing: Vector3
 		get() = rotation

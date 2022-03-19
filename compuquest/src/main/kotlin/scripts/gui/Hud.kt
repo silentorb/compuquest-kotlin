@@ -66,11 +66,15 @@ class Hud : Control() {
 			if (world.previousEvents.any { event -> event.target == actor && event.type == damageEvent }) {
 				damageWeight = 0.4f
 			}
-			if (damageWeight > 0f) {
-				overlay.visible = true
-				val style = overlay.getStylebox("panel") as StyleBoxFlat
-				damageWeight = GD.lerp(damageWeight, 0f, 0.1f)
-				style.bgColor = Color(1f, 0f, 0f, damageWeight)
+			if (damageWeight > 0) {
+				if (damageWeight > 0.001f) {
+					overlay.visible = true
+					val style = overlay.getStylebox("panel") as StyleBoxFlat
+					damageWeight = GD.lerp(damageWeight, 0f, 0.1f)
+					style.bgColor = Color(1f, 0f, 0f, damageWeight)
+				} else {
+					damageWeight = 0f
+				}
 			}
 		}
 	}

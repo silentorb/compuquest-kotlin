@@ -28,6 +28,14 @@ tailrec fun getViewportRoot(node: Node): Node? =
 		else -> getViewportRoot(parent)
 	}
 
+fun getRigCamera(deck: Deck, actor: Id): Camera? {
+	val body = deck.bodies[actor]
+	return if (body != null)
+		findChildrenOfType<Camera>(body).first()
+	else
+		null
+}
+
 fun initializeSingleViewportMode(root: Viewport, player: Id): SplitViewport {
 	addHud(root, player)
 	// This is a bit of a hack because the camera fields aren't used for single viewport mode
@@ -127,14 +135,6 @@ fun arrangeViewports(root: Viewport, viewports: List<ViewportContainer>) {
 // because it is not until then that it is added to the "_viewports" group.
 fun finalizeChildViewport(viewport: Viewport) {
 	viewport.removeFromGroup("_viewports")
-}
-
-fun getRigCamera(deck: Deck, actor: Id): Camera? {
-	val body = deck.bodies[actor]
-	return if (body != null)
-		findChildrenOfType<Camera>(body).first()
-	else
-		null
 }
 
 fun rebuildSplitScreenViewports(world: World, players: PlayerMap, viewports: SplitViewports): SplitViewports {

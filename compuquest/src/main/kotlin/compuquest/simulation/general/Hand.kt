@@ -19,6 +19,9 @@ fun newHandEvent(hand: Hand) =
 fun newHandEvents(hands: Hands) =
 	hands.map(::newHandEvent)
 
+fun newHandEvents(hand: Hand) =
+	listOf(newHandEvent(hand))
+
 inline fun <reified T> getHandComponent(hand: Hand): T? =
 	hand.components
 		.filterIsInstance<T>()

@@ -55,7 +55,7 @@ class PlayerInfo : Control() {
 
 		for (buff in buffs) {
 			val label = Label()
-			label.text = buff.value.definition.name
+			label.text = buff.value.definition.key
 			label.name = label.text
 			grid.addChild(label)
 		}

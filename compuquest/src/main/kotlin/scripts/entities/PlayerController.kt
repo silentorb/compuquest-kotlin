@@ -1,9 +1,6 @@
 package scripts.entities
 
-import godot.AnimatedSprite3D
-import godot.Camera
-import godot.Node
-import godot.Spatial
+import godot.*
 import godot.annotation.Export
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -33,6 +30,14 @@ class PlayerController : Node() {
 
 	var actor: Id = emptyId
 
+	var environment: Environment? = null
+		set(value) {
+			if (field != value) {
+				field = value
+				camera?.environment = value
+			}
+		}
+
 	@RegisterFunction
 	override fun _ready() {
 		val body = getParent() as CharacterBody
@@ -53,5 +58,6 @@ class PlayerController : Node() {
 		}
 
 		camera?.setCullMaskBit((playerIndex + 1).toLong(), false)
+		body.playerController = this
 	}
 }

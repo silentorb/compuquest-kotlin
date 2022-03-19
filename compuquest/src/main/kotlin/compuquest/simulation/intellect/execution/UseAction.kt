@@ -7,6 +7,7 @@ import compuquest.simulation.happening.tryActionEvent
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.design.Goal
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
 
@@ -16,12 +17,12 @@ fun tryUseAction(world: World, actor: Id, goal: Goal): Events {
 	val effects = accessory?.definition?.actionEffects ?: listOf()
 	lookAtTarget(world, actor, goal)
 
-	return if (action != null)
+	return if (action != emptyId)
 		effects.flatMap { effect ->
 			when (effect.type) {
 				AccessoryEffects.summonAtTarget -> {
 					val target = goal.targetEntity
-					if (target != null) {
+					if (target != emptyId) {
 						val body = world.deck.bodies[target]!!
 						val targetLocation = body.translation //+ offset
 						val value = TryActionEvent(

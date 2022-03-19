@@ -1,13 +1,13 @@
 package compuquest.simulation.happening
 
 import compuquest.simulation.characters.canUse
+import compuquest.simulation.characters.equipPrevious
 import compuquest.simulation.combat.*
-import compuquest.simulation.general.AccessoryEffects
-import compuquest.simulation.general.EffectRecipient
-import compuquest.simulation.general.World
+import compuquest.simulation.general.*
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
+import silentorb.mythic.happening.newEvent
 
 data class UseAction(
 	val action: Id,
@@ -16,6 +16,28 @@ data class UseAction(
 
 const val tryActionEvent = "tryAction"
 const val useActionEvent = "useAction"
+
+fun applyAccessoryEffect(
+	world: World,
+	actor: Id,
+	targetEntity: Id,
+	accessory: Accessory,
+	effect: AccessoryEffect
+): Events =
+	when (effect.type) {
+		AccessoryEffects.heal -> when (effect.recipient) {
+			EffectRecipient.self -> listOf(modifyHealth(actor, effect.strengthInt))
+			EffectRecipient.raycast -> if (targetEntity != 0L)
+				useHealingSpell(world, targetEntity, effect)
+			else
+				raycastHeal(world, actor, accessory, effect)
+			else -> listOf()
+		}
+		AccessoryEffects.summon -> summonInFrontOfActor(world, actor, accessory)
+		AccessoryEffects.buff -> newHandEvents(newAccessory(world, actor, effect.buff, duration = effect.durationInt))
+		AccessoryEffects.equipPrevious -> listOf(newEvent(equipPrevious, actor))
+		else -> listOf()
+	}
 
 fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor, event ->
 	val deck = world.deck
@@ -34,18 +56,7 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 
 		val effectEvents = accessory.definition.actionEffects
 			.flatMap { effect ->
-				when (effect.type) {
-					AccessoryEffects.heal -> when (effect.recipient) {
-						EffectRecipient.self -> listOf(modifyHealth(actor, effect.strengthInt))
-						EffectRecipient.raycast -> if (targetEntity != null)
-							useHealingSpell(world, targetEntity, effect)
-						else
-							raycastHeal(world, actor, accessory, effect)
-						else -> listOf()
-					}
-					AccessoryEffects.summon -> summonInFrontOfActor(world, actor, accessory)
-					else -> listOf()
-				}
+				applyAccessoryEffect(world, actor, targetEntity, accessory, effect)
 			}
 		val cost = definition.cost
 //  val paymentEvents = if (cost.isNotEmpty())

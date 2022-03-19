@@ -2,6 +2,7 @@ package scripts.entities
 
 import compuquest.simulation.characters.Character
 import compuquest.simulation.input.PlayerInput
+import godot.Camera
 import godot.Spatial
 import godot.core.Transform
 import godot.core.Vector3
@@ -25,6 +26,7 @@ interface CharacterBody : AnimatedSprite3DOwner {
 	var speed: Float
 	var location: Vector3
 	var isFlying: Boolean
+	var playerController: PlayerController?
 
 	fun update(input: PlayerInput, character: Character, delta: Float)
 	fun directionInput(moveAxis: Vector3): Vector3

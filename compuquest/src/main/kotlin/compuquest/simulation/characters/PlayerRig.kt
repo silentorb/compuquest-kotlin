@@ -1,10 +1,13 @@
 package compuquest.simulation.characters
 
+import compuquest.definition.Accessories
 import compuquest.simulation.general.World
+import compuquest.simulation.general.getOwnerAccessories
 import compuquest.simulation.input.PlayerInput
 import godot.Spatial
 import godot.core.Vector3
 import godot.global.GD
+import scripts.Global
 import scripts.entities.CharacterBody
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.debugging.getDebugString
@@ -35,6 +38,7 @@ fun playerDeathCollapse(head: Spatial) {
 }
 
 fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerInput) {
+	val deck = world.deck
 	if (body.isActive) {
 		updatePlayerLook(body, input)
 		updatePlayerMovement(body, input)
@@ -49,6 +53,11 @@ fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerI
 		}
 
 		body.isFlying = getDebugBoolean("PLAYER_FLIGHT")
+		body.playerController?.environment = if (hasAccessoryOfType(deck.accessories, actor, Accessories.invisible))
+			 Global.instance!!.environments["desaturated"]!!
+		else
+			null
+
 	} else {
 		if (!isCharacterAlive(world.deck, actor)) {
 			playerDeathCollapse(body.head!!)

@@ -13,17 +13,18 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		accessories = listOf(
 			Accessories.heal,
 			Accessories.rifle,
-	),
+		),
 	),
 	CharacterDefinition(
-		key = Characters.playerNinja,
+		key = Characters.ninja,
 		name = "Ninja",
 		depiction = "sprites",
 		frame = 8,
 		health = 100,
 		accessories = listOf(
-			Accessories.rifle,
-			Accessories.summonFox,
+			Accessories.backstab,
+			Accessories.sai,
+			Accessories.invisibility,
 		),
 	),
 	CharacterDefinition(
@@ -37,7 +38,7 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		),
 	),
 	CharacterDefinition(
-		key = Characters.playerWizard,
+		key = Characters.wizard,
 		name = "Wizard",
 		depiction = "sprites",
 		frame = 7,
@@ -67,7 +68,8 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 	),
 	Characters.skeletonSage to CharacterDefinition(
 		key = Characters.skeletonSage,
-		depiction = "skeleton",
+		depiction = "sprites",
+		frame = 9,
 		health = 50,
 		accessories = listOf(
 			Accessories.summonSquid,

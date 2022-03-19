@@ -1,8 +1,8 @@
 package compuquest.simulation.combat
 
 import compuquest.simulation.characters.getAccessoriesSequence
-import compuquest.simulation.general.AccessoryEffects
-import compuquest.simulation.general.Deck
+import compuquest.simulation.characters.hasPassiveEffect
+import compuquest.simulation.general.*
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.Event
@@ -23,6 +23,20 @@ const val damageEvent = "damage"
 
 fun newDamage(actor: Id, amount: Int) =
 	Event(damageEvent, actor, Damage(amount = amount))
+
+fun calculateDamage(deck: Deck, actor: Id, weapon: Accessory, effect: AccessoryEffect): Int {
+	val baseDamage = effect.strengthInt
+	val accessories = getOwnerAccessories(deck.accessories, actor)
+	val backStabModifier = if (
+		hasPassiveEffect(accessories, AccessoryEffects.invisible) &&
+		hasPassiveEffect(accessories, AccessoryEffects.backstab)
+	)
+		2
+	else
+		1
+
+	return baseDamage * backStabModifier
+}
 
 fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
 	val damages = filterEventValues<Int>(damageEvent, characterEvents)

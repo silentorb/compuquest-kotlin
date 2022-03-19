@@ -3,6 +3,7 @@ package compuquest.simulation.happening
 import compuquest.simulation.characters.getGroupByKey
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.combat.eventsFromAttacks
+import compuquest.simulation.combat.eventsFromBuffs
 import compuquest.simulation.general.*
 import compuquest.simulation.input.Commands
 import silentorb.mythic.ent.Id
@@ -33,6 +34,7 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 			listOf(
 				mapEvents(tryActionEvent, eventsFromTryAction(world)),
 				mapEvents(attackEvent, eventsFromAttacks(world)),
+				eventsFromBuffs(world),
 			)
 				.fold(events) { a, b -> a + b(a) } +
 			filterEventsByType<NewPlayer>(newPlayerEvent, events)

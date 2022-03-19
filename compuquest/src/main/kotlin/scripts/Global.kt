@@ -20,6 +20,7 @@ import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector2
+import godot.global.GD
 import scripts.gui.MenuScreen
 import scripts.world.ScenarioNode
 import silentorb.mythic.debugging.checkDotEnvChanged
@@ -44,6 +45,7 @@ class Global : Node() {
 	val definitions = newDefinitions()
 	var client: Client? = null
 	var playerMenus: MutableMap<Id, MenuScreen> = mutableMapOf()
+	val environments: MutableMap<String, Environment> = mutableMapOf()
 
 	//	var sceneNode: Spatial? = null
 	val partyUi: Boolean = false
@@ -200,6 +202,13 @@ class Global : Node() {
 		}
 	}
 
+	fun prepareEnvironments() {
+		val desaturated = GD.load<Environment>("res://assets/materials/environment.tres")!!.duplicate() as Environment
+		desaturated.adjustmentEnabled = true
+		desaturated.adjustmentSaturation = 0.0
+		environments["desaturated"] = desaturated
+	}
+
 	@RegisterFunction
 	override fun _process(delta: Double) {
 		updateClient(delta.toFloat())
@@ -208,6 +217,9 @@ class Global : Node() {
 	@RegisterFunction
 	override fun _physicsProcess(delta: Double) {
 		if (!Engine.editorHint) {
+			if (environments.none()) {
+				prepareEnvironments()
+			}
 			if (getDebugBoolean("WATCH_DOT_ENV"))
 				checkDotEnvChanged()
 

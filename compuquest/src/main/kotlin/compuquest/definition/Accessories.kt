@@ -3,9 +3,9 @@ package compuquest.definition
 import compuquest.simulation.general.*
 import silentorb.mythic.ent.KeyTable
 
-fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
-	Accessories.berries to AccessoryDefinition(
-		name = Accessories.berries,
+fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
+	AccessoryDefinition(
+		key = Accessories.berries,
 		consumable = true,
 		equippedFrame = EquipmentFrames.berries,
 		actionEffects = listOf(
@@ -16,8 +16,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.bite to AccessoryDefinition(
-		name = Accessories.bite,
+	AccessoryDefinition(
+		key = Accessories.bite,
 		cooldown = 0.6f,
 		range = 5f,
 		actionEffects = listOf(
@@ -30,8 +30,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.burger to AccessoryDefinition(
-		name = Accessories.burger,
+	AccessoryDefinition(
+		key = Accessories.burger,
 		consumable = true,
 		equippedFrame = EquipmentFrames.burger,
 		actionEffects = listOf(
@@ -42,8 +42,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.fireRing to AccessoryDefinition(
-		name = Accessories.fireRing,
+	AccessoryDefinition(
+		key = Accessories.fireRing,
 		cooldown = 8f,
 		range = 15f,
 		equippedFrame = EquipmentFrames.fireStaff,
@@ -56,8 +56,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.heal to AccessoryDefinition(
-		name = Accessories.heal,
+	AccessoryDefinition(
+		key = Accessories.heal,
 		cooldown = 1.5f,
 		range = 6f,
 		equippedFrame = EquipmentFrames.heal,
@@ -70,8 +70,25 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.rifle to AccessoryDefinition(
-		name = Accessories.rifle,
+	AccessoryDefinition(
+		key = Accessories.invisibility,
+		cooldown = 3f,
+		equippedFrame = EquipmentFrames.invisibility,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.buff,
+				recipient = EffectRecipient.self,
+				buff = Accessories.invisible,
+				duration = 5f,
+			),
+			AccessoryEffect(
+				type = AccessoryEffects.equipPrevious,
+				recipient = EffectRecipient.self,
+			),
+		)
+	),
+	AccessoryDefinition(
+		key = Accessories.rifle,
 		cooldown = 0.2f,
 		range = 30f,
 		equippedFrame = EquipmentFrames.fireStaff,
@@ -85,8 +102,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.fireStaff to AccessoryDefinition(
-		name = Accessories.fireStaff,
+	AccessoryDefinition(
+		key = Accessories.fireStaff,
 		cooldown = 1f,
 		range = 15f,
 		equippedFrame = EquipmentFrames.fireStaff,
@@ -100,8 +117,23 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.summonFox to AccessoryDefinition(
-		name = Accessories.summonFox,
+	AccessoryDefinition(
+		key = Accessories.sai,
+		cooldown = 1f,
+		range = 3f,
+		equippedFrame = EquipmentFrames.sai,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.projectile,
+				strength = 30f,
+				spawnsScene = "res://entities/effect/Bite.tscn",
+				speed = 15f,
+			),
+		)
+	),
+	AccessoryDefinition(
+		key = Accessories.summonFox,
 		cooldown = 5f,
 		range = 1f,
 		equippedFrame = EquipmentFrames.summonFox,
@@ -114,8 +146,8 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
-	Accessories.summonSquid to AccessoryDefinition(
-		name = Accessories.summonSquid,
+	AccessoryDefinition(
+		key = Accessories.summonSquid,
 		cooldown = 5f,
 		range = 1f,
 		equippedFrame = EquipmentFrames.summonSquid,
@@ -128,11 +160,23 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 			),
 		)
 	),
+).associateBy { it.key }
+
+val removeOnUseAny = AccessoryEffect(
+	type = AccessoryEffects.removeOnUseAny,
+	interval = AccessoryIntervals.continuous,
+	recipient = EffectRecipient.self,
 )
 
-fun buffDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
-	Accessories.burning to AccessoryDefinition(
-		name = Accessories.burning,
+fun buffDefinitions(): KeyTable<AccessoryDefinition> = listOf(
+	AccessoryDefinition(
+		key = Accessories.backstab,
+		passiveEffects = newPassiveEffects(
+			AccessoryEffects.backstab,
+		),
+	),
+	AccessoryDefinition(
+		key = Accessories.burning,
 		duration = 4f,
 		passiveEffects = listOf(
 			AccessoryEffect(
@@ -141,9 +185,16 @@ fun buffDefinitions(): KeyTable<AccessoryDefinition> = mapOf(
 				strength = 4f,
 				interval = AccessoryIntervals.default,
 			),
-		)
+		),
 	),
-)
+	AccessoryDefinition(
+		key = Accessories.invisible,
+		passiveEffects = listOf(
+			newPassiveEffect(AccessoryEffects.invisible),
+			removeOnUseAny,
+		),
+	),
+).associateBy { it.key }
 
 fun accessoryDefinitions(): KeyTable<AccessoryDefinition> =
 	actionDefinitions() + buffDefinitions()
