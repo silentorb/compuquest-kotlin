@@ -289,7 +289,7 @@ class Global : Node() {
 		// Need to release any references to Godot objects or there will be memory leaks
 		worlds = listOf()
 		client?.materials?.clear()
-		client?.viewports?.forEach { it.rigCamera?.queueFree() }
+//		client?.viewports?.forEach { it.rigCamera?.queueFree() }
 		client = null
 		environments.clear()
 	}
