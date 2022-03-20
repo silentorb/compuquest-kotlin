@@ -121,7 +121,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 	AccessoryDefinition(
 		key = Accessories.sai,
 		cooldown = 1f,
-		range = 2f,
+		range = 3f,
 		equippedFrame = EquipmentFrames.sai,
 		actionEffects = listOf(
 			AccessoryEffect(

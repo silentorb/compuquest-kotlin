@@ -88,7 +88,7 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 			}
 		}
 
-	var equippedSprite: AnimatedSprite3D? = null
+	override var equippedSprite: AnimatedSprite3D? = null
 
 	@RegisterFunction
 	override fun _ready() {

@@ -4,6 +4,8 @@ import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.general.deleteEntityCommand
 import compuquest.simulation.updating.simulationDelta
+import compuquest.simulation.updating.updateCharacterBodyAccessoryInfluences
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.mapEntry
@@ -39,20 +41,27 @@ fun updateContainers(world: World, events: Events): (Id, AccessoryContainer) -> 
 		val newAccessories = filterEventValues<Accessory>(addNewAccessoryToContainerEvent, actorEvents)
 			.associateBy { world.nextId.source()() }
 
+		val updated = if (container.effectsMode == ContainerEffectsMode.usesEffects)
+			container.accessories.mapValues(mapEntry(updateOwnedAccessory(container, events, simulationDelta)))
+		else
+			container.accessories
+
 		val deleted = events
 			.filter { it.type == deleteEntityCommand && container.accessories.containsKey(it.target) }
-			.map { it.target as Id }
+			.map { it.target as Id } +
+				updated.filter { it.value.duration == 0 }.keys
 
-		val remaining = (container.accessories - deleted)
+		val remaining = (updated - deleted)
 
-		val updated = if (container.effectsMode == ContainerEffectsMode.usesEffects)
-			remaining
-				.mapValues(mapEntry(updateOwnedAccessory(container, events, simulationDelta)))
-				.filter { it.value.duration != 0 }
-		else
-			remaining
+		val accessories = remaining + newAccessories
+		if (newAccessories.any() || deleted.any()) {
+			val body = world.deck.bodies[actor] as? CharacterBody
+			if (body != null) {
+				updateCharacterBodyAccessoryInfluences(body, accessories)
+			}
+		}
 
 		container.copy(
-			accessories = updated + newAccessories
+			accessories = accessories,
 		)
 	}
