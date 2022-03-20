@@ -3,6 +3,8 @@ package compuquest.simulation.characters
 import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.general.deleteEntityCommand
+import compuquest.simulation.happening.UseAction
+import compuquest.simulation.happening.useActionEvent
 import compuquest.simulation.updating.simulationDelta
 import compuquest.simulation.updating.updateCharacterBodyAccessoryInfluences
 import scripts.entities.CharacterBody
@@ -47,8 +49,18 @@ fun updateContainers(world: World, events: Events): (Id, AccessoryContainer) -> 
 			container.accessories
 
 		val deleted = events
-			.filter { it.type == deleteEntityCommand && container.accessories.containsKey(it.target) }
-			.map { it.target as Id } +
+			.filter {
+				(
+						it.type == deleteEntityCommand
+								&& container.accessories.containsKey(it.target)
+						)
+						|| (
+						it.type == useActionEvent
+								&& it.value is UseAction
+								&& container.accessories[it.value.action]?.definition?.consumable == true
+						)
+			}
+			.map { (it.value as? UseAction)?.action ?: it.target as Id } +
 				updated.filter { it.value.duration == 0 }.keys
 
 		val remaining = (updated - deleted)

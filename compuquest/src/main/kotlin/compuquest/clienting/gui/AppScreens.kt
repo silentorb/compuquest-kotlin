@@ -6,6 +6,7 @@ import compuquest.simulation.general.deleteEntityCommand
 import compuquest.simulation.general.newPlayerCharacterEvent
 import compuquest.simulation.input.Commands
 import scripts.gui.PlayerInputProfiles
+import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.newEvent
 
@@ -117,8 +118,11 @@ fun chooseProfessionMenu() =
 		content = { context, _ ->
 			val world = context.world
 			val deck = world.deck
-			val takenProfessions = deck.players.keys.mapNotNull { deck.characters[it]?.definition?.key }
-			val availableProfessions = playerProfessionDefinitions - takenProfessions
+			val availableProfessions = if (getDebugBoolean("ALLOW_SAME_PLAYER_PROFESSIONS"))
+				playerProfessionDefinitions
+			else
+				playerProfessionDefinitions - deck.players.keys.mapNotNull { deck.characters[it]?.definition?.key }
+
 			newPopupMenu(
 				"Choose Profession",
 				context.actor,

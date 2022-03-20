@@ -11,8 +11,7 @@ import silentorb.mythic.timing.expiredTimers
 fun deleteEntities(events: Events, world: World): World {
 	val deck = world.deck
 	val deletions = filterEventTargets<Id>(deleteEntityCommand, events) +
-			expiredTimers(deck.timers) +
-			getConsumedAccessories(deck, events)
+			expiredTimers(deck.timers)
 
 	val bodyDeletions = filterEventTargets<Id>(deleteBodyCommand, events)
 

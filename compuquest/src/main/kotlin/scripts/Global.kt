@@ -291,6 +291,7 @@ class Global : Node() {
 		client?.materials?.clear()
 		client?.viewports?.forEach { it.rigCamera?.queueFree() }
 		client = null
+		environments.clear()
 	}
 }
 

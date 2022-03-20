@@ -1,6 +1,7 @@
 package compuquest.simulation.characters
 
 import compuquest.definition.Accessories
+import compuquest.simulation.combat.isInvisible
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInput
 import godot.Spatial
@@ -51,7 +52,7 @@ fun updatePlayerRig(world: World, actor: Id, body: CharacterBody, input: PlayerI
 		}
 
 		body.isFlying = getDebugBoolean("PLAYER_FLIGHT")
-		body.playerController?.environment = if (hasAccessoryOfType(deck, actor, Accessories.invisible))
+		body.playerController?.environment = if (isInvisible(deck, actor))
 			 Global.instance!!.environments["desaturated"]!!
 		else
 			null

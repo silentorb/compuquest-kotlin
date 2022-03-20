@@ -34,7 +34,14 @@ class PlayerController : Node() {
 		set(value) {
 			if (field != value) {
 				field = value
-				camera?.environment = value
+				val client = Global.instance!!.client!!
+				val playerIndex = client.playerMap[actor]!!
+				val localCamera = if (client.viewports.size > 1)
+					client.viewports[playerIndex].viewportCamera
+				else
+					camera
+
+				localCamera?.environment = value
 			}
 		}
 

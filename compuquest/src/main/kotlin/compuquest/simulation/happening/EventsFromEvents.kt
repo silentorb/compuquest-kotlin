@@ -28,8 +28,7 @@ fun joinedPlayerEvents(world: World, previous: World?, events: Events): Events {
 }
 
 fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
-	return events +
-			joinedPlayerEvents(world, previous, events) +
+	return joinedPlayerEvents(world, previous, events) +
 			listOf(
 				mapEvents(tryActionEvent, eventsFromTryAction(world)),
 				mapEvents(attackEvent, eventsFromAttacks(world)),
