@@ -50,40 +50,8 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 	),
 ).associateBy { it.key }
 
-fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
-	Characters.player to CharacterDefinition(
-		key = Characters.player,
-		depiction = "deevee",
-		health = 100,
-		accessories = listOf(
-		),
-	),
-	Characters.skeleton to CharacterDefinition(
-		key = Characters.skeleton,
-		depiction = "skeleton",
-		health = 50,
-		accessories = listOf(
-			Accessories.fireStaff,
-		),
-	),
-	Characters.skeletonSage to CharacterDefinition(
-		key = Characters.skeletonSage,
-		depiction = "sprites",
-		frame = 9,
-		health = 50,
-		accessories = listOf(
-			Accessories.summonSquid,
-		),
-	),
-	Characters.viking to CharacterDefinition(
-		key = Characters.viking,
-		depiction = "viking",
-		health = 50,
-		accessories = listOf(
-			Accessories.fireStaff,
-		),
-	),
-	Characters.cleric to CharacterDefinition(
+fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
+	CharacterDefinition(
 		key = Characters.cleric,
 		depiction = "viking",
 		health = 40,
@@ -91,7 +59,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 			Accessories.heal,
 		),
 	),
-	Characters.child to CharacterDefinition(
+	CharacterDefinition(
 		key = Characters.child,
 		depiction = "sprites",
 		frame = 2,
@@ -99,7 +67,7 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 		accessories = listOf(
 		),
 	),
-	Characters.fox to CharacterDefinition(
+	CharacterDefinition(
 		key = Characters.fox,
 		depiction = "sprites",
 		frame = 3,
@@ -111,7 +79,50 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 			roaming = true,
 		)
 	),
-	Characters.squid to CharacterDefinition(
+	CharacterDefinition(
+		key = Characters.player,
+		depiction = "deevee",
+		health = 100,
+		accessories = listOf(
+		),
+	),
+	CharacterDefinition(
+		key = Characters.skeleton,
+		depiction = "skeleton",
+		health = 50,
+		accessories = listOf(
+			Accessories.fireStaff,
+		),
+	),
+	CharacterDefinition(
+		key = Characters.skeletonAssassin,
+		depiction = "sprites",
+		frame = 10,
+		health = 40,
+		accessories = listOf(
+			Accessories.backstab,
+			Accessories.sai,
+			Accessories.invisibility,
+		),
+	),
+	CharacterDefinition(
+		key = Characters.skeletonSage,
+		depiction = "sprites",
+		frame = 9,
+		health = 50,
+		accessories = listOf(
+			Accessories.summonSquid,
+		),
+	),
+	CharacterDefinition(
+		key = Characters.viking,
+		depiction = "viking",
+		health = 50,
+		accessories = listOf(
+			Accessories.fireStaff,
+		),
+	),
+	CharacterDefinition(
 		key = Characters.squid,
 		depiction = "sprites",
 		frame = 5,
@@ -124,6 +135,6 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = mapOf(
 			roaming = true,
 		)
 	),
-)
+).associateBy { it.key }
 
 val staticCharacterDefinitions = playerProfessionDefinitions + characterDefinitions()

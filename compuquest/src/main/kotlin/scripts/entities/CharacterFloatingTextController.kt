@@ -51,11 +51,13 @@ class CharacterFloatingTextController : Node() {
 						"${character.destructible.health} / ${character.destructible.maxHealth}"
 					else
 						""
-				} else
+				} else if (getDebugBoolean("DISPLAY_CHARACTER_PASSIVE_EFFECTS"))
 					getOwnerAccessories(deck, localActor)
 						.filter { it.value.definition.passiveEffects.any() }
 						.map { it.value.definition.key }
 						.joinToString("\n")
+				else
+					""
 
 				setText(text)
 			}

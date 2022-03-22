@@ -1,7 +1,5 @@
 package compuquest.simulation.intellect.design
 
-import compuquest.simulation.characters.Character
-import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.knowledge.Knowledge

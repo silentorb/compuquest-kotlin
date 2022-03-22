@@ -43,7 +43,10 @@ fun populateNewMonsters(world: PreWorld, config: GenerationConfig, dice: Dice, l
 		val distributions = distributeToRaritySlots(dice, locations.size, monsterDistributions())
 		locations
 			.zip(distributions) { transform, type ->
+//				val groupSize = dice.getInt(1, 3)
+//				(0 until groupSize).map {
 				spawnAiCharacter(world, transform, type, relationships = relationships, additional = listOf(newSpirit()))
+//				}
 			}
 			.flatten()
 	}

@@ -38,6 +38,7 @@ object Characters {
 	const val fox = "fox"
 	const val player = "player"
 	const val skeleton = "skeleton"
+	const val skeletonAssassin = "skeletonAssassin"
 	const val skeletonSage = "skeletonSage"
 	const val squid = "squid"
 	const val viking = "viking"

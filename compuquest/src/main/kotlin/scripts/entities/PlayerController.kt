@@ -59,12 +59,11 @@ class PlayerController : Node() {
 
 		val playerSprite = (body as Node).findNode("sprite") as AnimatedSprite3D
 
-		playerSprite.setLayerMaskBit(0L, false)
 		for (i in 0..3) {
-			playerSprite.setLayerMaskBit((i + 1).toLong(), i != playerIndex)
+			playerSprite.setLayerMaskBit((i).toLong(), i == playerIndex)
+			camera?.setCullMaskBit((i).toLong(), i == playerIndex)
 		}
 
-		camera?.setCullMaskBit((playerIndex + 1).toLong(), false)
 		body.playerController = this
 	}
 }

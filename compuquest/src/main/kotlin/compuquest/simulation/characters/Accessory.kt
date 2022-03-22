@@ -69,6 +69,8 @@ data class AccessoryDefinition(
 	val cooldownDelayEffect: Key? = null, // Cooldown does not decrease while the actor is under this effect
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
+	fun hasActiveEffect(effect: Key): Boolean = actionEffects.any { it.type == effect }
+
 	val isAttack: Boolean = actionEffects.any { it.isAttack }
 }
 
@@ -81,6 +83,7 @@ data class Accessory(
 	val duration: Int = noDuration,
 ) {
 	val canBeActivated: Boolean = definition.actionEffects.any()
+	fun hasActiveEffect(effect: Key): Boolean = definition.hasActiveEffect(effect)
 }
 
 fun newPassiveEffect(type: Key) =

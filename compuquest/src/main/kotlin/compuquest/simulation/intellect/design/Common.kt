@@ -6,6 +6,12 @@ import compuquest.simulation.intellect.knowledge.Knowledge
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.TableEntry
 
+fun useAction(accessory: Id, goal: Goal): Goal =
+	goal.copy(
+		focusedAction = accessory,
+		readyTo = ReadyMode.action,
+	)
+
 fun useActionOnTarget(world: World, actor: Id, accessory: TableEntry<Accessory>, target: Id, goal: Goal): Goal? =
 	if (requiresTarget(accessory.value)) {
 		val range = accessory.value.definition.range

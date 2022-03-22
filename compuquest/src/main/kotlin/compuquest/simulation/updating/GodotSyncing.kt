@@ -10,6 +10,8 @@ import compuquest.simulation.general.World
 import compuquest.simulation.general.applyNodeInteractions
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
+import compuquest.simulation.intellect.knowledge.isEnemy
+import compuquest.simulation.intellect.knowledge.isFriendly
 import compuquest.simulation.physics.setLocationEvent
 import godot.core.Color
 import godot.core.Vector3
@@ -21,14 +23,32 @@ import silentorb.mythic.happening.filterEventsByType
 
 val partialInvisibleColor = Color(1, 1, 1, 0.5)
 
-fun updateCharacterBodyAccessoryInfluences(body: CharacterBody, accessories: Table<Accessory>) {
-	val color = if (hasPassiveEffect(accessories, Accessories.invisible))
+fun updateCharacterBodyAccessoryInfluences(deck: Deck, actor: Id, body: CharacterBody, accessories: Table<Accessory>) {
+	val isInvisible = hasPassiveEffect(accessories, Accessories.invisible)
+	val color = if (isInvisible)
 		partialInvisibleColor
 	else
 		Color.white
 
-	body.sprite?.modulate = color
-	body.equippedSprite?.modulate = color
+	val equippedSprite = body.equippedSprite
+	equippedSprite?.modulate = color
+	val sprite = body.sprite
+	if (sprite != null) {
+		sprite.modulate = color
+		if (isInvisible) {
+			for (player in deck.players) {
+				val visible = isFriendly(deck, actor, player.key)
+				sprite.setLayerMaskBit((player.value.index).toLong(), visible)
+				equippedSprite?.setLayerMaskBit((player.value.index).toLong(), visible)
+			}
+		}
+		else {
+			for (i in 0..3) {
+				sprite.setLayerMaskBit((i).toLong(), true)
+				equippedSprite?.setLayerMaskBit((i).toLong(), true)
+			}
+		}
+	}
 }
 
 fun syncBodyLocations(world: World) {

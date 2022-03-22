@@ -1,5 +1,6 @@
 package compuquest.simulation.intellect.design
 
+import compuquest.definition.Accessories
 import compuquest.simulation.characters.*
 import compuquest.simulation.combat.isInvisible
 import compuquest.simulation.general.*
@@ -36,7 +37,7 @@ fun filterEnemyTargets(
 		.filter { (other, otherCharacter) ->
 			other != actor
 					&& otherCharacter.isAlive
-					&& isEnemy(world, actor, other)
+					&& isEnemy(deck, actor, other)
 					&& !isInvisible(deck, other)
 					&& isVisible(world, godotBody, headLocation, other, visibilityRange)
 		}
@@ -72,28 +73,35 @@ fun getVisibleEnemy(world: World, goal: Goal, characters: Table<Character>, acto
 	return getNextTarget(world.deck, characters, actor, lastTarget)
 }
 
-fun updateSelectedAttack(world: World, actor: Id): Map.Entry<Id, Accessory>? {
-	val readyActions = getReadyAccessories(world.deck, actor)
+fun updateSelectedAttack(readyActions: Table<Accessory>): Map.Entry<Id, Accessory>? {
+	val actions = readyActions
 		.filter { (_, accessory) ->
 			accessory.definition.actionEffects.any {
 				it.isAttack || it.type == AccessoryEffects.summon
 			}
 		}
-	return readyActions.maxByOrNull { it.value.definition.range }
+	return actions.maxByOrNull { it.value.definition.range }
 }
 
 fun requiresTarget(accessory: Accessory): Boolean =
 	accessory.definition.actionEffects.any { it.recipient == EffectRecipient.projectile }
 
 fun checkCombat(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
+	val deck = world.deck
 	val goal = spirit.goal
 	val target = getVisibleEnemy(world, goal, knowledge.visibleEnemies, actor)
 	return if (target != null) {
-		val accessory = updateSelectedAttack(world, actor)
-		if (accessory != null)
-			useActionOnTarget(world, actor, knowledge, accessory, target, goal) ?: wait(goal)
-		else
-			wait(goal)
+		val readyActions = getReadyAccessories(deck, actor)
+		val invisibility = readyActions.entries.firstOrNull { it.value.definition.key == Accessories.invisibility }
+		if (invisibility != null) {
+			useAction(invisibility.key, goal)
+		} else {
+			val accessory = updateSelectedAttack(readyActions)
+			if (accessory != null)
+				useActionOnTarget(world, actor, knowledge, accessory, target, goal) ?: wait(goal)
+			else
+				wait(goal)
+		}
 	} else
 		null
 }

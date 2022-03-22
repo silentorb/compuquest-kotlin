@@ -39,6 +39,7 @@ fun getOwnerAccessory(deck: Deck, owner: Id, accessory: Id): Accessory? =
 
 fun updateContainers(world: World, events: Events): (Id, AccessoryContainer) -> AccessoryContainer =
 	{ actor, container ->
+		val deck = world.deck
 		val actorEvents = filterEventsByTarget(actor, events)
 		val newAccessories = filterEventValues<Accessory>(addNewAccessoryToContainerEvent, actorEvents)
 			.associateBy { world.nextId.source()() }
@@ -67,9 +68,9 @@ fun updateContainers(world: World, events: Events): (Id, AccessoryContainer) -> 
 
 		val accessories = remaining + newAccessories
 		if (newAccessories.any() || deleted.any()) {
-			val body = world.deck.bodies[actor] as? CharacterBody
+			val body = deck.bodies[actor] as? CharacterBody
 			if (body != null) {
-				updateCharacterBodyAccessoryInfluences(body, accessories)
+				updateCharacterBodyAccessoryInfluences(deck, actor, body, accessories)
 			}
 		}
 

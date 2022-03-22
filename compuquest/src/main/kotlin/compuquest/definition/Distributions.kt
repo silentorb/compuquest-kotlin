@@ -23,6 +23,7 @@ fun monsterDistributions(): Map<String, Rarity> =
     else
       mapOf(
         Characters.skeleton to Rarity.common,
+        Characters.skeletonAssassin to Rarity.uncommon,
         Characters.skeletonSage to Rarity.uncommon,
       )
 
