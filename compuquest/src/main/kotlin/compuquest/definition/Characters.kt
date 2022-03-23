@@ -100,7 +100,6 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
 		frame = 10,
 		health = 40,
 		accessories = listOf(
-			Accessories.backstab,
 			Accessories.sai,
 			Accessories.invisibility,
 		),

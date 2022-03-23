@@ -47,11 +47,12 @@ fun isVisible(
 	visibilityRange: Float
 ): Boolean {
 	val otherBody = world.deck.bodies[other] as? CharacterBody
-	return otherBody != null &&
-			body.location.distanceTo(otherBody.location) <= visibilityRange &&
+	val otherLocation = otherBody?.head?.globalTransform?.origin
+	return otherLocation != null &&
+			body.location.distanceTo(otherLocation) <= visibilityRange &&
 			world.space.intersectRay(
 				headLocation,
-				otherBody.translation,
+				otherLocation,
 				variantArrayOf(body, otherBody),
 				CollisionMasks.visibility.toLong()
 			)

@@ -183,14 +183,17 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 	{ actor, character ->
 		val deck = world.deck
 		val input = inputs[actor] ?: emptyPlayerInput
-		val characterEvents = events.filter { it.target == actor }
+		val actorEvents = events.filter { it.target == actor }
 		val body = deck.bodies[actor]
+
+		// Check for falling off the edge of the world
 		val destructible = if (body != null && body.translation.y < -50f)
 			character.destructible.copy(
 				health = 0,
 			)
-		else
-			updateDestructible(events)(actor, character.destructible)
+		else {
+			updateDestructible(actorEvents, character.isAlive, character.destructible)
+		}
 
 		val health = destructible.health
 
@@ -207,7 +210,7 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 		val accessories = getOwnerAccessories(deck, actor)
 		val activeAccessory = updateActiveAccessory(
 			accessories,
-			characterEvents,
+			actorEvents,
 			input,
 			character.activeAccessory,
 			character.previousActiveAccessory

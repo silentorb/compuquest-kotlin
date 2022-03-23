@@ -34,19 +34,19 @@ fun getAngle(a: Float, b: Vector2): Float {
 	return bd - a
 }
 
-private val baseYawAngle = atan(Vector2(1f, 0f))
+private val baseYawAngle = atan(Vector2(0f, -1f))
 
 fun getYawAngle(lookAt: Vector2): Float =
-	getAngle(baseYawAngle, lookAt)
+	-getAngle(baseYawAngle, lookAt)
 
 fun getYawAngle(lookAt: Vector3): Float =
-	getAngle(baseYawAngle, lookAt.xz())
+	getYawAngle(lookAt.xz())
 
 fun getPitchAngle(lookAt: Vector3) =
-	getAngle(Vector2(1f, 0f), Vector2(lookAt.xz().length(), lookAt.z))
+	-getAngle(Vector2(1f, 0f), Vector2(lookAt.xz().length(), lookAt.z))
 
-fun getYawAndPitch(lookAt: Vector3): Vector2 =
-	Vector2(
+fun getYawAndPitch(lookAt: Vector3): Pair<Float, Float> =
+	Pair(
 		getYawAngle(lookAt),
 		getPitchAngle(lookAt)
 	)

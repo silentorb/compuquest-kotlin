@@ -80,7 +80,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 				type = AccessoryEffects.buff,
 				recipient = EffectRecipient.self,
 				buff = Accessories.invisible,
-				duration = 5f,
+				duration = 4f,
 			),
 			AccessoryEffect(
 				type = AccessoryEffects.equipPrevious,

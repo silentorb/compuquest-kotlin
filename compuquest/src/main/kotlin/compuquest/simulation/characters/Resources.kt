@@ -1,7 +1,6 @@
 package compuquest.simulation.characters
 
 import compuquest.simulation.general.clampResource
-import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.GenericEvent
 
 typealias ResourceTypeName = String
@@ -36,19 +35,18 @@ data class ResourceBundle(
 )
 
 fun modifyResourceWithEvents(
-	events: ModifyResourceEvents,
-	actor: Id,
+	mods: List<ModifyResource>,
 	resource: String,
 	previous: Int,
 	max: Int,
 	mod: Int = 0
 ): Int {
-	val (replacements, additions) = events
-		.filter { it.target == actor && it.value.resource == resource }
-		.partition { it.value.operation == ResourceOperation.set }
+	val (replacements, additions) = mods
+		.filter { it.resource == resource }
+		.partition { it.operation == ResourceOperation.set }
 
-	val replacement = replacements.maxOfOrNull { it.value.amount }
-	val raw = replacement ?: previous + additions.sumOf { it.value.amount } + mod
+	val replacement = replacements.maxOfOrNull { it.amount }
+	val raw = replacement ?: previous + additions.sumOf { it.amount } + mod
 
 	return clampResource(raw, max)
 }

@@ -19,7 +19,7 @@ fun eventsFromPassiveBuffEffect(owner: Id, effect: AccessoryEffect): Events =
 	when (effect.type) {
 		AccessoryEffects.damage ->
 			if (effect.recipient == EffectRecipient.self)
-				listOf(newDamage(owner, effect.strengthInt))
+				listOf(newDamage(owner, Damage(effect.strengthInt)))
 			else
 				listOf()
 

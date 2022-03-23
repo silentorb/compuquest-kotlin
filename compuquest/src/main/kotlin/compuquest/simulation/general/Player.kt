@@ -7,6 +7,7 @@ import compuquest.simulation.combat.restoreFullHealthEvent
 import compuquest.simulation.input.Commands
 import compuquest.simulation.physics.setLocationEvent
 import compuquest.simulation.updating.simulationFps
+import godot.core.Vector3
 import scripts.entities.PlayerSpawner
 import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.ent.Id

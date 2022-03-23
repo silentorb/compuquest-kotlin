@@ -4,6 +4,7 @@ import compuquest.simulation.characters.*
 import compuquest.simulation.definition.ResourceTypes
 import compuquest.simulation.general.highIntScale
 import compuquest.simulation.general.modifyResource
+import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.*
@@ -14,7 +15,8 @@ data class Destructible(
 	val healthAccumulator: Int = 0,
 	val drainDuration: Int = 0,
 	val damageMultipliers: DamageMultipliers = mapOf(),
-	val lastDamageSource: Id = 0
+	val lastDamageSource: Id = emptyId,
+	val lastDamageLocation: Vector3? = null,
 )
 
 // This is intended to be used outside of combat.
@@ -40,42 +42,64 @@ val restoreFullHealth: (Destructible) -> Destructible = { destructible ->
 	)
 }
 
-fun modifyDestructible(events: ModifyResourceEvents, actor: Id, destructible: Destructible, mod: Int = 0) =
-	modifyResourceWithEvents(events, actor, ResourceTypes.health, destructible.health, destructible.maxHealth, mod)
+fun modifyDestructible(events: List<ModifyResource>, destructible: Destructible, mod: Int = 0) =
+	modifyResourceWithEvents(events, ResourceTypes.health, destructible.health, destructible.maxHealth, mod)
 
 fun modifyHealth(actor: Id, amount: Int) =
 	newEvent(modifyResourceEvent, actor, ModifyResource(ResourceTypes.health, amount))
 
-fun updateDestructible(events: Events): (Id, Destructible) -> Destructible {
-	val damageEvents = filterEventsByType<Damage>(damageEvent, events)
-	val restoreEvents = filterEventTargets<Long>(restoreFullHealthEvent, events)
-	val modifyEvents = filterEventsByType<ModifyResource>(modifyResourceEvent, events)
+fun prioritizeDamageSourceAttribution(damages: List<Damage>): Damage? =
+	if (damages.size < 2)
+		damages.firstOrNull()
+	else
+		damages.filter { it.source != emptyId && it.sourceLocation != null }.maxByOrNull { it.amount }
+			?: damages.filter { it.source != emptyId || it.sourceLocation != null }.maxByOrNull { it.amount }
+			?: damages.maxByOrNull { it.amount }
 
-	return { actor, destructible ->
-		val result = if (restoreEvents.contains(actor))
-			restoreFullHealth(destructible)
-		else {
-			val damages =
-				damageEvents
-					.filter { it.target == actor }
-					.map { it.value }
+fun updateDestructible(actorEvents: Events, isAlive: Boolean, destructible: Destructible): Destructible {
+	val damages = if (isAlive)
+		filterEventValues<Damage>(damageEvent, actorEvents)
+	else
+		listOf()
 
-			if (damages.any()) {
-				val k = 0
-			}
-			damageDestructible(damages)(destructible)
-		}
-		val nourishmentAdjustment = 0 // getNourishmentEventsAdjustment(definitions, deck, actor, events)
-		val healthAccumulator = if (destructible.drainDuration != 0)
-			result.healthAccumulator - getResourceTimeCost(healthTimeDrainDuration, 1)
-		else
-			result.healthAccumulator
+	val mods = if (isAlive)
+		filterEventValues<ModifyResource>(modifyResourceEvent, actorEvents)
+	else
+		listOf()
 
-		val healthAccumulation = getRoundedAccumulation(healthAccumulator)
-		val mod = healthAccumulation + nourishmentAdjustment
-		result.copy(
-			health = modifyDestructible(modifyEvents, actor, result, mod),
-			healthAccumulator = healthAccumulator - healthAccumulation * highIntScale,
-		)
-	}
+	val result = if (actorEvents.any { it.type == restoreFullHealthEvent })
+		restoreFullHealth(destructible)
+	else
+		damageDestructible(damages)(destructible)
+
+	val nourishmentAdjustment = 0 // getNourishmentEventsAdjustment(definitions, deck, actor, events)
+	val healthAccumulator = if (destructible.drainDuration != 0)
+		result.healthAccumulator - getResourceTimeCost(healthTimeDrainDuration, 1)
+	else
+		result.healthAccumulator
+
+	val healthAccumulation = getRoundedAccumulation(healthAccumulator)
+	val mod = healthAccumulation + nourishmentAdjustment
+
+	val lastDamage = prioritizeDamageSourceAttribution(damages)
+
+	// IntelliJ is trying to convert these two blocks to use elvis but that isn't the same logic.
+	// If the user takes damage from an unspecified source that should nullify the last non-null damage source,
+	// not fall back to the last non-null damage source
+	val lastDamageSource = if (lastDamage != null)
+		lastDamage.source
+	else
+		destructible.lastDamageSource
+
+	val lastDamageLocation = if (lastDamage != null)
+		lastDamage.sourceLocation
+	else
+		destructible.lastDamageLocation
+
+	return result.copy(
+		health = modifyDestructible(mods, result, mod),
+		healthAccumulator = healthAccumulator - healthAccumulation * highIntScale,
+		lastDamageSource = lastDamageSource,
+		lastDamageLocation = lastDamageLocation,
+	)
 }

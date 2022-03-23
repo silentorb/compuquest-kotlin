@@ -2,26 +2,27 @@ package compuquest.simulation.combat
 
 import compuquest.simulation.characters.*
 import compuquest.simulation.general.*
+import godot.Node
+import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
-import silentorb.mythic.happening.filterEventValues
-import kotlin.math.max
 
 const val defaultDamageMultiplier = 100
 typealias DamageMultipliers = Map<DamageType, Percentage>
 
 data class Damage(
-	val type: DamageType = "",
 	val amount: Int,
+	val type: DamageType = "",
 	val source: Id = emptyId,
+	val sourceLocation: Vector3? = null
 )
 
 const val damageEvent = "damage"
 
-fun newDamage(actor: Id, amount: Int) =
-	Event(damageEvent, actor, Damage(amount = amount))
+fun newDamage(actor: Id, damage: Damage) =
+	Event(damageEvent, actor, damage)
 
 fun calculateDamage(deck: Deck, actor: Id, weapon: Accessory, effect: AccessoryEffect): Int {
 	val baseDamage = effect.strengthInt
@@ -37,21 +38,21 @@ fun calculateDamage(deck: Deck, actor: Id, weapon: Accessory, effect: AccessoryE
 	return baseDamage * backStabModifier
 }
 
-fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
-	val damages = filterEventValues<Int>(damageEvent, characterEvents)
-	return if (damages.any()) {
-		val damageReduction = getOwnerAccessories(deck, actor)
-			.values
-			.sumOf { accessory ->
-				accessory.definition.actionEffects
-					.filter { it.type == AccessoryEffects.armor }
-					.sumOf { it.strengthInt }
-			}
-
-		damages.sumOf { -max(0, it - damageReduction) }
-	} else
-		0
-}
+//fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
+//	val damages = filterEventValues<Int>(damageEvent, characterEvents)
+//	return if (damages.any()) {
+//		val damageReduction = getOwnerAccessories(deck, actor)
+//			.values
+//			.sumOf { accessory ->
+//				accessory.definition.actionEffects
+//					.filter { it.type == AccessoryEffects.armor }
+//					.sumOf { it.strengthInt }
+//			}
+//
+//		damages.sumOf { -max(0, it - damageReduction) }
+//	} else
+//		0
+//}
 
 fun applyDamageMods(multipliers: DamageMultipliers): (Damage) -> Int = { damage ->
 	val mod = multipliers[damage.type]
@@ -85,4 +86,12 @@ fun calculateDamageMultipliers(
 		val value = baseMultiplier + aggregate
 		Pair(damageType, value)
 	}.associate { it }
+}
+
+fun applyDamage(deck: Deck, source: Id, sourceLocation: Vector3?, target: Id, node: Node, amount: Int): Events {
+	val damageNodeEvents = getDamageNodeEvents(node, amount)
+	return if (deck.characters.containsKey(target))
+		damageNodeEvents + newDamage(target, Damage(amount = amount, source = source, sourceLocation = sourceLocation))
+	else
+		damageNodeEvents
 }

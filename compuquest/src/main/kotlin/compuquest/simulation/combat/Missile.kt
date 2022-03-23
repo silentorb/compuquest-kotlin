@@ -76,14 +76,17 @@ fun updateMissile(deck: Deck, actor: Id, missile: Missile, body: Area, offset: V
 	} else
 		listOf()
 
-	val damages = collisions.flatMap { collision ->
-		val collisionId = getBodyEntityId(deck, collision)
-		val damageNodeEvents = getDamageNodeEvents(collision, missile.damage)
-		if (deck.characters.containsKey(collisionId))
-			damageNodeEvents + newDamage(collisionId!!, missile.damage)
-		else
-			damageNodeEvents
-	}.take(1)
+	val attackerLocation = deck.bodies[actor]?.globalTransform?.origin
+
+	val damages = collisions
+		.flatMap { collision ->
+			val collisionId = getBodyEntityId(deck, collision)
+			if (collisionId != null)
+				applyDamage(deck, actor, attackerLocation, collisionId, collision, missile.damage)
+			else
+				listOf()
+		}.take(1)
+
 	return deletions + damages
 }
 

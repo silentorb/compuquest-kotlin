@@ -13,7 +13,7 @@ const val spiritUpdateInterval = 20
 
 data class Spirit(
 	val intervalOffset: Int,
-	val visibilityRange: Float = 20f,
+	val visibilityRange: Float = 30f,
 	val personality: Personality,
 	val knowledge: Knowledge = Knowledge(),
 	val goal: Goal = Goal(),
