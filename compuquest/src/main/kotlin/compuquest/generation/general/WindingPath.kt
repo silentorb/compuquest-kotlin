@@ -201,7 +201,7 @@ tailrec fun extendBlockSides(dice: Dice, state: BlockState): BlockState {
 	val grid = state.grid
 	val blacklist = state.blacklistSides
 
-	if (grid.size > 1000)
+	if (grid.size > 2000)
 		throw Error("Infinite loop in world generation.")
 
 	val incompleteSides = getIncompleteBlockSides(grid) { it.frequency == MatchFrequency.greedy } - blacklist

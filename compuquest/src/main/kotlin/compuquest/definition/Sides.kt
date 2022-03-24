@@ -8,6 +8,7 @@ object Sides {
 	val slopeRight = "slopeRight"
 	val space = "space"
 	val traversable = "traversable"
+	val verticalDiagonalSpace = "verticalDiagonalSpace"
 }
 
 val traversableSides = setOf(

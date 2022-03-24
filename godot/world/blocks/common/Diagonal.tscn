@@ -1,15 +1,18 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://world/props/square-floor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=2]
 [ext_resource path="res://entities/world/GroundSlot.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/main/kotlin/scripts/world/SideCondition.kt" type="Script" id=4]
-[ext_resource path="res://entities/world/SidesReference.gd" type="Script" id=5]
-[ext_resource path="res://entities/world/SideNode.gd" type="Script" id=6]
-[ext_resource path="res://world/sides/TraversableOptional.tscn" type="PackedScene" id=7]
+[ext_resource path="res://world/props/wall-beveled.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/world/SidesReference.gd" type="Script" id=6]
+[ext_resource path="res://world/partials/TraversableOptional.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/world/SideNode.gd" type="Script" id=8]
 
-[node name="main" type="Spatial"]
+[node name="diagonal" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.031939, 0.00811672, -0.0063529 )
 script = ExtResource( 2 )
+rotations = 0
 
 [node name="floor" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0 )
@@ -20,42 +23,27 @@ script = ExtResource( 4 )
 direction = 3
 
 [node name="wall2" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.375, 2.5, 0 )
-script = ExtResource( 4 )
-
-[node name="wall4" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.375, 2.5, 0 )
 script = ExtResource( 4 )
 direction = 4
 
-[node name="wall3" parent="." instance_placeholder="res://world/props/wall-beveled.tscn"]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5, 2.375 )
-script = ExtResource( 4 )
-direction = 5
+[node name="long-wall" parent="." instance=ExtResource( 5 )]
+transform = Transform( 0.997021, 0, 0.707107, 0, 1, 0, -0.997021, 0, 0.707107, 0.08, 2.5, 0.08 )
 
 [node name="sides" type="Node" parent="."]
 
-[node name="0, 0, 0 - east" type="Spatial" parent="sides"]
-script = ExtResource( 5 )
-template = ExtResource( 7 )
-
 [node name="0, 0, 0 - north" type="Spatial" parent="sides"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 direction = "north"
 template = ExtResource( 7 )
 
 [node name="0, 0, 0 - west" type="Spatial" parent="sides"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 direction = "west"
 template = ExtResource( 7 )
 
-[node name="0, 0, 0 - south" type="Spatial" parent="sides"]
-script = ExtResource( 5 )
-direction = "south"
-template = ExtResource( 7 )
-
 [node name="0, 0, 0 - down" type="Spatial" parent="sides"]
-script = ExtResource( 6 )
+script = ExtResource( 8 )
 direction = "down"
 mine = "closed"
 other = "closed"
@@ -63,3 +51,4 @@ frequency = "greedy"
 rerollChance = 0
 
 [node name="slot" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0, -1.05 )

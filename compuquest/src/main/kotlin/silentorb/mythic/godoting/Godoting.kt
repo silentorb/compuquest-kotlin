@@ -154,13 +154,15 @@ fun getFilesInDirectory(directoryPath: String, recursive: Boolean = false): List
 		val file = directory.getNext()
 		if (file == "")
 			break
+		else if (file == "." || file == "..")
+			continue
 		else {
 			if (directory.currentIsDir()) {
 				if (recursive) {
-					files.addAll(getFilesInDirectory(file))
+					files.addAll(getFilesInDirectory("$directoryPath/$file"))
 				}
 			} else {
-				files.add(file)
+				files.add("$directoryPath/$file")
 			}
 		}
 	}

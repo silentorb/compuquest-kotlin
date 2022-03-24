@@ -256,8 +256,8 @@ fun loadBlock(filePath: String): BlockBuilder? {
 }
 
 fun gatherBlockBuilders(directoryPath: String): Pair<Set<Block>, Map<String, Builder>> {
-	val files = getFilesInDirectory(directoryPath)
-	val baseBlockBuilders = files.mapNotNull { loadBlock("$directoryPath/$it") }
+	val files = getFilesInDirectory(directoryPath, true)
+	val baseBlockBuilders = files.mapNotNull { loadBlock(it) }
 	val blockBuilders = explodeBlockMap(baseBlockBuilders)
 	return splitBlockBuilders(blockBuilders)
 }

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://entities/world/SideNode.gd" type="Script" id=1]
+[ext_resource path="res://world/blocks/common/Diagonal.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=3]
+
+[node name="diagonalIndoors" type="Spatial"]
+script = ExtResource( 3 )
+rotations = 0
+
+[node name="diagonal" parent="." instance=ExtResource( 2 )]
+
+[node name="0, 3, 0 - up" type="Spatial" parent="."]
+script = ExtResource( 1 )
+cell = Vector3( 0, 3, 0 )
+direction = "up"
+mine = "verticalDiagonalSpace"
+other = "verticalDiagonalSpace"
+frequency = "greedy"
+rerollChance = 0

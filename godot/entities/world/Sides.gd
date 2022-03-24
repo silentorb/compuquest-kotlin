@@ -2,11 +2,12 @@ tool
 extends Node
 
 var base = PoolStringArray([
-	"closed",
+	"closed",	
 	"slopeLeft",
 	"slopeRight",
 	"space",
 	"traversable",
+	"verticalDiagonalSpace"
 ]).join(",")
 
 var all = base + "," + PoolStringArray([

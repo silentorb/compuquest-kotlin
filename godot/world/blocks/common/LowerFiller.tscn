@@ -23,9 +23,16 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.375,
 [node name="wall3" parent="." instance=ExtResource( 6 )]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.04029, 2.375 )
 
-[node name="sides" type="Node" parent="."]
+[node name="0, 3, 0 - up" type="Spatial" parent="."]
+script = ExtResource( 5 )
+cell = Vector3( 0, 3, 0 )
+direction = "up"
+mine = "closed"
+other = "closed"
+frequency = "normal"
+rerollChance = 0
 
-[node name="0, 0, 0 - east" type="Spatial" parent="sides"]
+[node name="0, 0, 0 - east" type="Spatial" parent="."]
 script = ExtResource( 5 )
 cellHeight = 4
 mine = "closed"
@@ -33,7 +40,7 @@ other = "any"
 frequency = "normal"
 rerollChance = 0
 
-[node name="0, 0, 0 - north" type="Spatial" parent="sides"]
+[node name="0, 0, 0 - north" type="Spatial" parent="."]
 script = ExtResource( 5 )
 direction = "north"
 cellHeight = 4
@@ -42,7 +49,7 @@ other = "any"
 frequency = "normal"
 rerollChance = 0
 
-[node name="0, 0, 0 - west" type="Spatial" parent="sides"]
+[node name="0, 0, 0 - west" type="Spatial" parent="."]
 script = ExtResource( 5 )
 direction = "west"
 cellHeight = 4
@@ -51,20 +58,11 @@ other = "any"
 frequency = "normal"
 rerollChance = 0
 
-[node name="0, 0, 0 - south" type="Spatial" parent="sides"]
+[node name="0, 0, 0 - south" type="Spatial" parent="."]
 script = ExtResource( 5 )
 direction = "south"
 cellHeight = 4
 mine = "closed"
 other = "any"
-frequency = "normal"
-rerollChance = 0
-
-[node name="0, 3, 0 - up" type="Spatial" parent="sides"]
-script = ExtResource( 5 )
-cell = Vector3( 0, 3, 0 )
-direction = "up"
-mine = "closed"
-other = "closed"
 frequency = "normal"
 rerollChance = 0

@@ -19,7 +19,7 @@ val defaultBiomeTextures: Map<String, Map<String, String>> = mapOf(
 	Biomes.dungeon to mapOf(
 		MeshAttributes.floor to Textures.dirt,
 		MeshAttributes.wall to Textures.grayBricks,
-		MeshAttributes.ceiling to Textures.dirt,
+		MeshAttributes.ceiling to Textures.grayBricks,
 	),
 	Biomes.graveyard to mapOf(
 		MeshAttributes.floor to Textures.cold,
@@ -42,8 +42,14 @@ object Blocks {
 	const val diagonal = "diagonal"
 	const val home = "home"
 	const val lowerFiller = "lowerFiller"
+	const val upperFiller = "upperFiller"
+	const val diagonalUpperFiller = "diagonalUpperFiller"
 	const val main = "main"
 	const val slope = "slope"
+
+	const val diagonalIndoors = "diagonalIndoors"
+	const val mainIndoors = "mainIndoors"
+	const val slopeIndoors = "slopeIndoors"
 }
 
 val commonBiomeBlocks = setOf(
@@ -53,8 +59,17 @@ val commonBiomeBlocks = setOf(
 	Blocks.slope,
 )
 
+val commonIndoorBiomeBlocks = setOf(
+	Blocks.diagonalIndoors,
+	Blocks.diagonalUpperFiller,
+	Blocks.lowerFiller,
+	Blocks.upperFiller,
+	Blocks.mainIndoors,
+	Blocks.slopeIndoors,
+)
+
 val defaultBiomeBlocks: BiomeBlockNames = mapOf(
-	Biomes.dungeon to commonBiomeBlocks,
+	Biomes.dungeon to commonIndoorBiomeBlocks,
 	Biomes.graveyard to commonBiomeBlocks,
 	Biomes.lagoon to commonBiomeBlocks,
 )
