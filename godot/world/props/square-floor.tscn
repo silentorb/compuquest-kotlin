@@ -7,10 +7,10 @@
 extents = Vector3( 2.5, 0.25, 2.5 )
 
 [node name="floor" type="Spatial"]
-
-[node name="floor-square" parent="." instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 attributes = [ "floor" ]
+
+[node name="floor-square" parent="." instance=ExtResource( 1 )]
 
 [node name="StaticBody" type="StaticBody" parent="."]
 collision_layer = 18

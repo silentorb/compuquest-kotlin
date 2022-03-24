@@ -2,7 +2,7 @@
 
 [ext_resource path="res://entities/world/SideNode.gd" type="Script" id=1]
 [ext_resource path="res://world/partials/MainWalls.tscn" type="PackedScene" id=2]
-[ext_resource path="res://world/props/square-ceiling.tscn" type="PackedScene" id=3]
+[ext_resource path="res://world/props/square-floor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/main/kotlin/scripts/world/BlockNode.kt" type="Script" id=4]
 
 [node name="upperFiller" type="Spatial"]
@@ -10,6 +10,7 @@ script = ExtResource( 4 )
 
 [node name="ceiling" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.75, 0 )
+attributes = [ "ceiling" ]
 
 [node name="main-walls" parent="." instance=ExtResource( 2 )]
 

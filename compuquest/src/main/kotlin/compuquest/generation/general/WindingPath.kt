@@ -226,6 +226,10 @@ tailrec fun extendBlockSides(dice: Dice, state: BlockState): BlockState {
 
 	val matchResult = matchConnectingBlock(dice, blocks, grid, nextPosition, null)
 
+	if (side.mine == "verticalDiagonalSpace" && matchResult == null) {
+		val j = matchConnectingBlock(dice, blocks, grid, nextPosition, null)
+		val k = 0
+	}
 	val nextState = if (matchResult == null) {
 		state.copy(
 			blacklistSides = state.blacklistSides + incompleteSide

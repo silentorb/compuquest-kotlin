@@ -50,6 +50,10 @@ fun getSurroundingSides(blockGrid: BlockGrid, location: Vector3i): SideMap {
 	return getSurroundingSides(getBlock, location)
 }
 
+fun verticalTurnsMatch(side: Map.Entry<Direction, Side>, otherSide: Side) =
+	(side.key != Direction.down && side.key != Direction.up) ||
+			side.value.turns == otherSide.turns
+
 // essentialDirectionSide is from the perspective of the potential block
 fun checkBlockMatch(
 	surroundingSides: SideMap, getBlock: GetBlock,
@@ -79,7 +83,10 @@ fun checkBlockMatch(
 
 								val isEssentialCell = cellOffset == baseOffset
 								val result = surroundingSides2.all { side ->
-									sidesMatch(cell.sides, side.key, side.value, isEssentialCell && side.key == essentialDirectionSide)
+									val otherSide = cell.sides[side.key]
+									val isEssential = isEssentialCell && side.key == essentialDirectionSide
+									otherSide != null && sidesMatch(side.value, otherSide, isEssential) &&
+											verticalTurnsMatch(side, otherSide)
 								}
 								result
 							}

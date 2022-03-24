@@ -25,14 +25,32 @@ fun getTraversable(cells: Map<Vector3i, BlockCell>) =
 		.filterValues { it.isTraversable }
 		.keys
 
+fun setSideTurns(turns: Int, sides: Map<Direction, Side>) =
+	sides.mapValues { (direction, side) ->
+		if (direction == Direction.up || direction == Direction.down)
+			side.copy(
+				turns = turns,
+			)
+		else
+			side
+	}
+
 fun rotateBlockBuilder(turns: Int, blockBuilder: BlockBuilder): BlockBuilder =
 	if (turns == 0)
-		blockBuilder
+		blockBuilder.first.copy(
+			cells = blockBuilder.first.cells.mapValues { (_, cell) ->
+				cell.copy(
+					sides = setSideTurns(turns, cell.sides)
+				)
+			}
+		) to blockBuilder.second
 	else {
 		val (block, builder) = blockBuilder
 		val cells = block.cells.entries
 			.associate { (offset, cell) ->
-				val sides = rotateSides(turns)(cell.sides)
+				val rotatedSides = rotateSides(turns)(cell.sides)
+				val sides = setSideTurns(turns, rotatedSides)
+
 				rotateY(turns, offset) to cell.copy(
 					sides = sides,
 				)
@@ -158,8 +176,7 @@ fun parseSides(root: Node): List<Pair<CellDirection, Side?>> {
 					}
 				template.queueFree()
 				sides
-			}
-			else
+			} else
 				listOf()
 		}
 
@@ -213,16 +230,23 @@ fun applyBiomeTextures(root: Node, biome: String, materials: MaterialMap) {
 	val biomeTextures = defaultBiomeTextures[biome]
 	if (biomeTextures != null) {
 		val props = findChildrenOfScriptType("res://entities/world/PropMesh.gd", root)
-			.filterIsInstance<MeshInstance>()
 
 		if (props.any()) {
 			for (prop in props) {
 				val attribute = getVariantArray<String>(prop, "attributes").firstOrNull()
 				if (attribute != null) {
 					val texture = biomeTextures[attribute]
-					if (texture != null) {
+					val meshes = findChildrenOfType<MeshInstance>(prop) +
+							if (prop is MeshInstance)
+								listOf(prop)
+							else
+								listOf()
+
+					if (texture != null && meshes.any()) {
 						val material = getMaterial(materials, texture)
-						prop.setSurfaceMaterial(0L, material)
+						for (mesh in meshes) {
+							mesh.setSurfaceMaterial(0L, material)
+						}
 					}
 				}
 			}

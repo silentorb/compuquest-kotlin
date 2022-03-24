@@ -18,6 +18,8 @@ enum class MatchFrequency {
 	minimal, // Not hooked up yet, but will only be used as a last resort
 }
 
+const val noTurns = -10
+
 data class Side(
 	val mine: String,
 	val other: Set<String>,
@@ -27,6 +29,7 @@ data class Side(
 	// Is only considered when frequency is normal.
 	val rerollChance: Int = 0,
 	val isTraversable: Boolean = true, // Cache value
+	val turns: Int = noTurns
 )
 
 // This is a solution for fringe cases and may end up being temporary
