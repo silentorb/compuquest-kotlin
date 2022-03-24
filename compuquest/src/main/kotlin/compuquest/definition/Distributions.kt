@@ -5,35 +5,35 @@ import silentorb.mythic.debugging.getDebugInt
 import silentorb.mythic.debugging.getDebugString
 
 enum class DistributionGroup {
-  cloud,
-  victoryKey,
-  merchant,
-  monster,
-  none,
-  treasureChest
+	cloud,
+	victoryKey,
+	merchant,
+	monster,
+	none,
+	treasureChest
 }
 
 typealias DistributionMap = Map<DistributionGroup, Int>
 
-fun monsterDistributions(): Map<String, Rarity> =
-    if (getDebugString("MONSTER_TYPE") != null)
-      mapOf(
-          getDebugString("MONSTER_TYPE")!! to Rarity.common
-      )
-    else
-      mapOf(
-        Characters.skeleton to Rarity.common,
-        Characters.skeletonAssassin to Rarity.uncommon,
-        Characters.skeletonSage to Rarity.uncommon,
-      )
+val monsterDistributions: Map<Int, Map<String, Rarity>> = mapOf(
+	1 to mapOf(
+		Characters.skeleton to Rarity.common,
+		Characters.skeletonSage to Rarity.uncommon,
+	),
+	2 to mapOf(
+		Characters.skeleton to Rarity.common,
+		Characters.skeletonAssassin to Rarity.rare,
+		Characters.skeletonSage to Rarity.uncommon,
+	),
+)
 
 fun scalingDistributions(): DistributionMap = mapOf(
-    DistributionGroup.none to 25,
-    DistributionGroup.monster to 2
+	DistributionGroup.none to 25,
+	DistributionGroup.monster to 2
 )
 
 fun monsterLimit() = getDebugInt("MONSTER_LIMIT") ?: 1000
 
 val distributedItems = mapOf(
-  "res://entities/actor/BurgerBot.tscn" to Rarity.common,
+	"res://entities/actor/BurgerBot.tscn" to Rarity.common,
 )

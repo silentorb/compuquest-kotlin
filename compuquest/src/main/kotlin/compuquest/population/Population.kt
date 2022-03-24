@@ -4,6 +4,7 @@ import compuquest.definition.distributedItems
 import compuquest.definition.monsterDistributions
 import compuquest.definition.monsterLimit
 import compuquest.generation.engine.GenerationConfig
+import compuquest.generation.general.Rarity
 import compuquest.generation.general.distributeToRaritySlots
 import compuquest.simulation.characters.Relationship
 import compuquest.simulation.characters.RelationshipType
@@ -15,11 +16,23 @@ import compuquest.simulation.intellect.newSpirit
 import godot.Spatial
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.debugging.getDebugInt
+import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.randomly.Dice
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+
+fun selectMonsterDistribution(level: Int): Map<String, Rarity> =
+	if (getDebugString("MONSTER_TYPE") != null)
+		mapOf(
+			getDebugString("MONSTER_TYPE")!! to Rarity.common
+		)
+	else
+		monsterDistributions
+			.filter { it.key <= level }
+			.maxByOrNull { it.key }
+			?.value ?: mapOf()
 
 fun populateNewMonsters(world: PreWorld, config: GenerationConfig, dice: Dice, locations: Transforms): Hands {
 //  println("Monster count: ${locations.size}")
@@ -40,7 +53,8 @@ fun populateNewMonsters(world: PreWorld, config: GenerationConfig, dice: Dice, l
 		else
 			listOf()
 
-		val distributions = distributeToRaritySlots(dice, locations.size, monsterDistributions())
+		val monsters = selectMonsterDistribution(config.level)
+		val distributions = distributeToRaritySlots(dice, locations.size, monsters)
 		locations
 			.zip(distributions) { transform, type ->
 //				val groupSize = dice.getInt(1, 3)
