@@ -12,7 +12,7 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		health = 100,
 		accessories = listOf(
 			Accessories.heal,
-			Accessories.rifle,
+			Accessories.summonSquid,
 		),
 	),
 	CharacterDefinition(
@@ -45,7 +45,7 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		health = 100,
 		accessories = listOf(
 			Accessories.rifle,
-			Accessories.summonSquid,
+			Accessories.summonIceWall,
 		),
 	),
 ).associateBy { it.key }

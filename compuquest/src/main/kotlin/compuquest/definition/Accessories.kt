@@ -148,6 +148,20 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 		)
 	),
 	AccessoryDefinition(
+		key = Accessories.summonIceWall,
+		cooldown = 1f,
+		range = 1f,
+		equippedFrame = EquipmentFrames.summonSquid,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.summon,
+				recipient = EffectRecipient.inFront,
+				spawnsScene = "res://entities/actor/IceWall.tscn",
+				duration = 5f
+			),
+		)
+	),
+	AccessoryDefinition(
 		key = Accessories.summonSquid,
 		cooldown = 5f,
 		range = 1f,

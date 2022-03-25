@@ -6,6 +6,7 @@
 points = PoolVector3Array( 2.54863, 4.99487e-05, 2.45089, 2.54863, -0.0999501, 2.45089, 2.54863, 4.99487e-05, -2.54862, -2.45137, 4.99487e-05, -2.54862, -2.45137, -0.0999501, -2.54862, 2.54863, -0.0999501, -2.54862 )
 
 [node name="floor" type="StaticBody"]
+collision_layer = 18
 
 [node name="floor-diagonal" parent="." instance=ExtResource( 1 )]
 

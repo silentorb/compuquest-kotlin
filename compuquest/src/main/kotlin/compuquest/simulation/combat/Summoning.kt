@@ -4,8 +4,10 @@ import compuquest.simulation.characters.*
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.knowledge.Personality
 import compuquest.simulation.intellect.newSpirit
+import compuquest.simulation.physics.castRay
 import godot.Spatial
 import godot.core.Transform
+import godot.core.Vector3
 import godot.global.GD
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene
@@ -41,7 +43,20 @@ fun summonAtLocation(world: World, actor: Id, effect: AccessoryEffect, transform
 		)
 	} else {
 		val summoned = instantiateScene<Spatial>(effect.spawnsScene!!)!!
-		summoned.translation = transform.origin
+		val (_, groundLocation) = castRay(world, transform.origin + Vector3.UP, transform.origin + Vector3(0, -10, 0))
+
+		summoned.translation = if (groundLocation != null)
+			groundLocation
+		else
+			transform.origin
+
+		val summonerRotation = world.deck.bodies[actor]?.rotation
+		if (summonerRotation != null) {
+			summoned.rotation {
+				y = summonerRotation.y
+			}
+		}
+
 		listOf(
 			newHandEvent(
 				Hand(

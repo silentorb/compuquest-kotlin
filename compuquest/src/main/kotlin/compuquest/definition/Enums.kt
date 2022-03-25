@@ -13,6 +13,7 @@ object Accessories {
 	val rifle = "rifle"
 	val sai = "sai"
 	val summonFox = "summonFox"
+	val summonIceWall = "summonIceWall"
 	val summonSquid = "summonSquid"
 
 	// Buffs and Passive Abilities

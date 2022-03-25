@@ -8,9 +8,21 @@ import godot.core.Vector3
 import godot.core.variantArrayOf
 import silentorb.mythic.ent.Id
 
+fun castRay(
+	world: World,
+	origin: Vector3,
+	target: Vector3,
+	vararg ignore: Spatial
+): Pair<Spatial?, Vector3?> {
+	val space = world.space
+	val result = space.intersectRay(origin, target, variantArrayOf(*ignore)).toMap()
+	val collider = result["collider"] as? Spatial
+	val location = result["position"] as? Vector3
+	return collider to location
+}
+
 // Eventually may need to return more information such as hit location but just the id is enough for now
 fun castRay(world: World, actor: Id, maxDistance: Float): Pair<Spatial?, Vector3?> {
-	val space = world.space
 	val (origin, facing) = getCharacterOriginAndFacing(world, actor)
 	val body = world.deck.bodies[actor]
 	return if (origin != null && body != null) {
@@ -18,9 +30,7 @@ fun castRay(world: World, actor: Id, maxDistance: Float): Pair<Spatial?, Vector3
 		// rotating slightly won't miss against rounded targets that are barely in range.
 		// In other words, aiming should follow the camera rotation arc and not the target body's arc
 		val target = origin + facing * (maxDistance * 1.5)
-		val result = space.intersectRay(origin, target, variantArrayOf(body)).toMap()
-		val collider = result["collider"] as? Spatial
-		val location = result["position"] as? Vector3
+		val (collider, location) = castRay(world, origin, target, body)
 		return if (collider != null && location != null && getLocation(collider).distanceTo(origin) <= maxDistance)
 			collider to location
 		else
