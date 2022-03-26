@@ -37,10 +37,10 @@ billboard = 0
 frames = ExtResource( 4 )
 animation = "default"
 
+[node name="toolOrigin" type="Spatial" parent="Head"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, -0.861358 )
+
 [node name="controller" type="Node" parent="."]
 script = ExtResource( 2 )
 camera_path = NodePath("../Head/Camera")
 head_path = NodePath("../Head")
-
-[node name="toolOrigin" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0 )

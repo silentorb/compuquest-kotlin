@@ -1,7 +1,11 @@
 package compuquest.definition
 
 import compuquest.simulation.characters.*
+import godot.core.Transform
+import godot.core.Vector3
+import godot.global.PI
 import silentorb.mythic.ent.KeyTable
+import silentorb.mythic.spatial.Pi
 
 fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 	AccessoryDefinition(
@@ -53,6 +57,23 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 				recipient = EffectRecipient.projectile,
 				duration = 4f,
 				spawnsScene = "res://entities/effect/FireRing.tscn",
+			),
+		)
+	),
+	AccessoryDefinition(
+		key = Accessories.banana,
+		cooldown = 0.5f,
+		range = 10f, // Only used for AI
+		equippedFrame = EquipmentFrames.banana,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.projectile,
+				strength = 30f,
+				spawnsScene = "res://entities/effect/Grenade.tscn",
+				duration = 2.5f,
+				speed = 30f,
+				transform = Transform().rotated(Vector3.RIGHT, PI / 5),
 			),
 		)
 	),
@@ -149,9 +170,9 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 	),
 	AccessoryDefinition(
 		key = Accessories.summonIceWall,
-		cooldown = 1f,
+		cooldown = 7f,
 		range = 1f,
-		equippedFrame = EquipmentFrames.summonSquid,
+		equippedFrame = EquipmentFrames.summonIceWall,
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summon,
@@ -171,7 +192,7 @@ fun actionDefinitions(): KeyTable<AccessoryDefinition> = listOf(
 				type = AccessoryEffects.summon,
 				recipient = EffectRecipient.inFront,
 				spawnsCharacter = Characters.squid,
-				duration = 19f
+				duration = 14f
 			),
 		)
 	),

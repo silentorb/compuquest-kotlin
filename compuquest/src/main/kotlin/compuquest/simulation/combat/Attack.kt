@@ -1,13 +1,12 @@
 package compuquest.simulation.combat
 
-import compuquest.simulation.characters.Accessory
-import compuquest.simulation.characters.AccessoryEffects
-import compuquest.simulation.characters.getCharacterFacing
-import compuquest.simulation.characters.getOwnerAccessory
+import compuquest.simulation.characters.*
+import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.happening.UseAction
 import godot.core.Transform
 import godot.core.Vector3
+import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -17,7 +16,7 @@ const val attackEvent = "attackEvent"
 data class Attack(
 	val accessory: Id,
 	val targetLocation: Vector3? = null,
-	val targetEntity: Id? = null,
+	val targetEntity: Id? = null, // Only used for attacks that are not spatial, which is rare
 )
 
 fun startAttack(
@@ -54,7 +53,7 @@ fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 	accessory.definition.actionEffects
 		.flatMap { effect ->
 			when (effect.type) {
-				AccessoryEffects.damage -> missileAttack(world, actor, accessory, attack.targetLocation, attack.targetEntity)
+				AccessoryEffects.damage -> missileAttack(world, actor, accessory, attack.targetLocation)
 				AccessoryEffects.summonAtTarget -> forEachSummonEffect(accessory.definition) {
 					summonAtLocation(world, actor, it, Transform().translated(attack.targetLocation!!))
 				}
@@ -63,36 +62,26 @@ fun eventsFromAttacks(world: World): (Id, Attack) -> Events = { actor, attack ->
 		}
 }
 
-fun getToolOffset(world: World, actor: Id): Vector3 =
-	world.deck.characters[actor]?.toolOffset ?: Vector3.ZERO
+fun getToolTransform(deck: Deck, actor: Id): Transform? =
+	(deck.bodies[actor] as? CharacterBody)?.getToolTransform()
 
-fun getAttackerOriginAndFacing(
-	world: World, attacker: Id, targetLocation: Vector3?, targetEntity: Id?,
-	forwardOffset: Float
-): Pair<Vector3?, Vector3> {
-	val deck = world.deck
-	val body = deck.bodies[attacker]!!
-	val toolOffset = getToolOffset(world, attacker)
-	val targetOffset = if (targetEntity != null)
-		getToolOffset(world, targetEntity)
+fun getTargetLocation(deck: Deck, attack: Attack): Vector3? =
+	attack.targetLocation ?: if (attack.targetEntity != null)
+		(deck.bodies[attack.targetEntity] as? CharacterBody)?.getToolTransform()?.origin
 	else
-		Vector3.ZERO
+		null
 
-	val target = deck.bodies[targetEntity]?.translation
-		?: targetLocation
-//		?: null // deck.bodies[deck.targets[attacker]]?.translation
-
-	val baseOrigin = body.translation + toolOffset
-
-	val vector = if (target == null)
-		getCharacterFacing(deck, attacker)
+fun applyEffectTransform(effect: AccessoryEffect, transform: Transform): Transform =
+	if (effect.transform != null)
+		transform * effect.transform
 	else
-		((target + targetOffset) - baseOrigin).normalized()
+		transform
 
-	return if (vector == null)
-		null to Vector3.ZERO
-	else {
-		val origin = baseOrigin + vector * forwardOffset
-		Pair(origin, vector)
-	}
+fun getAttackerOriginAndFacing(deck: Deck, actor: Id, targetLocation: Vector3?): Transform {
+	val toolTransform = getToolTransform(deck, actor)!!
+
+	return if (targetLocation == null)
+		toolTransform
+	else
+		toolTransform.lookingAt(targetLocation, Vector3.UP)
 }

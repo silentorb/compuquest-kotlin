@@ -5,6 +5,8 @@ import compuquest.simulation.general.Deck
 import compuquest.simulation.general.ResourceMap
 import compuquest.simulation.happening.UseAction
 import compuquest.simulation.happening.useActionEvent
+import godot.core.Transform
+import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.*
@@ -46,6 +48,7 @@ data class AccessoryEffect(
 	val interval: Int = 0,
 	val duration: Float = 0f,
 	val recipient: EffectRecipient,
+	val transform: Transform? = null,
 ) {
 	val strengthInt: Int get() = strength.toInt()
 	val durationInt: Int get() = floatToIntTime(duration)

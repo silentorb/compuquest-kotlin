@@ -13,19 +13,22 @@ import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.newEvent
 
 fun tryUseAction(world: World, actor: Id, goal: Goal): Events {
+	val deck = world.deck
 	val action = goal.focusedAction
-	val accessory = getOwnerAccessory(world.deck, actor, action)
-	val effects = accessory?.definition?.actionEffects ?: listOf()
-	lookAtTarget(world, actor, goal)
+	val character = deck.characters[actor]
 
-	return if (action != emptyId)
+	return if (action != emptyId && character?.isAlive == true) {
+		lookAtTarget(world, actor, goal)
+		val accessory = getOwnerAccessory(world.deck, actor, action)
+		val effects = accessory?.definition?.actionEffects ?: listOf()
+
 		effects.flatMap { effect ->
 			when (effect.type) {
 				AccessoryEffects.summonAtTarget -> {
 					val target = goal.targetEntity
 					if (target != emptyId) {
-						val body = world.deck.bodies[target]!!
-						val targetLocation = body.translation //+ offset
+						val body = deck.bodies[target]!!
+						val targetLocation = body.globalTransform.origin //+ offset
 						val value = TryActionEvent(
 							action = action,
 							targetLocation = targetLocation,
@@ -39,6 +42,7 @@ fun tryUseAction(world: World, actor: Id, goal: Goal): Events {
 					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetEntity = goal.targetEntity)))
 				}
 			}
-		} else
+		}
+	} else
 		listOf()
 }

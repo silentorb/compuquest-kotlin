@@ -24,7 +24,6 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 	override var head: Spatial? = null
 	var snap: Vector3 = Vector3.ZERO
 	override var velocity = Vector3.ZERO
-	override var toolOffset: Vector3 = Vector3.ZERO
 	override var radius: Float = 0f
 	override var isSlowed: Boolean = false
 	override var isAlive: Boolean = true
@@ -34,6 +33,11 @@ class RigidCharacterBody : RigidBody(), CharacterBody {
 	override var location: Vector3 = Vector3.ZERO
 	override var isFlying: Boolean = false
 	override var playerController: PlayerController? = null
+
+	var toolNode: Spatial? = null
+
+	override fun getToolTransform(): Transform =
+		toolNode!!.globalTransform
 
 	override var facing: Vector3
 		get() = head?.rotation ?: Vector3.ZERO
@@ -89,7 +93,7 @@ override 	var equippedSprite: AnimatedSprite3D? = null
 	@RegisterFunction
 	override fun _ready() {
 		speed = walkSpeed
-		toolOffset = (findNode("toolOrigin") as? Spatial)?.translation ?: Vector3.ZERO
+		toolNode = findNode("toolOrigin") as? Spatial
 		val collisionShape = findNode("shape") as CollisionShape
 		radius = getCollisionShapeRadius(collisionShape)
 		equippedSprite = findNode("equipped") as? AnimatedSprite3D

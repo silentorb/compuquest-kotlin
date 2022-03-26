@@ -44,7 +44,7 @@ val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
 		frame = 7,
 		health = 100,
 		accessories = listOf(
-			Accessories.rifle,
+			Accessories.banana,
 			Accessories.summonIceWall,
 		),
 	),

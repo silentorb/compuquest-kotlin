@@ -1,6 +1,6 @@
 package compuquest.simulation.physics
 
-import compuquest.simulation.characters.getCharacterOriginAndFacing
+import compuquest.simulation.combat.getToolTransform
 import compuquest.simulation.general.World
 import compuquest.simulation.general.getBodyEntityId
 import godot.Spatial
@@ -23,13 +23,14 @@ fun castRay(
 
 // Eventually may need to return more information such as hit location but just the id is enough for now
 fun castRay(world: World, actor: Id, maxDistance: Float): Pair<Spatial?, Vector3?> {
-	val (origin, facing) = getCharacterOriginAndFacing(world, actor)
+	val transform = getToolTransform(world.deck, actor)
 	val body = world.deck.bodies[actor]
-	return if (origin != null && body != null) {
+	return if (transform != null && body != null) {
 		// Overshoot the ray and then later check against the distance to the object so that
 		// rotating slightly won't miss against rounded targets that are barely in range.
 		// In other words, aiming should follow the camera rotation arc and not the target body's arc
-		val target = origin + facing * (maxDistance * 1.5)
+		val origin = transform.origin
+		val target = origin + transform.basis.z * (maxDistance * 1.5)
 		val (collider, location) = castRay(world, origin, target, body)
 		return if (collider != null && location != null && getLocation(collider).distanceTo(origin) <= maxDistance)
 			collider to location

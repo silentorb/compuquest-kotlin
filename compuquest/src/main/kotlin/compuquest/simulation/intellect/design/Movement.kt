@@ -4,8 +4,6 @@ import compuquest.simulation.characters.RelationshipType
 import compuquest.simulation.general.World
 import compuquest.simulation.general.interactionMaxDistance
 import compuquest.simulation.intellect.Spirit
-import compuquest.simulation.intellect.knowledge.Knowledge
-import compuquest.simulation.intellect.knowledge.getTargetRange
 import compuquest.simulation.intellect.navigation.NavigationState
 import compuquest.simulation.intellect.navigation.fromRecastVector3
 import compuquest.simulation.intellect.navigation.getNavigationPath

@@ -37,7 +37,7 @@ fun getOwnerAccessories(deck: Deck, owner: Id): Table<Accessory> =
 fun getOwnerAccessory(deck: Deck, owner: Id, accessory: Id): Accessory? =
 	deck.containers[owner]?.accessories?.getOrDefault(accessory, null)
 
-fun updateContainers(world: World, events: Events): (Id, AccessoryContainer) -> AccessoryContainer =
+fun updateContainer(world: World, events: Events): (Id, AccessoryContainer) -> AccessoryContainer =
 	{ actor, container ->
 		val deck = world.deck
 		val actorEvents = filterEventsByTarget(actor, events)

@@ -102,9 +102,11 @@ fun respawnPlayer(world: World, actor: Id): Events {
 	return if (respawner != null) {
 		val dice = world.dice
 		val location = respawner.globalTransform.origin + getRandomizedSpawnOffset(dice)
+		val body = world.deck.bodies[actor]
+		body?.transform = respawner.globalTransform
 		listOf(
 			newEvent(restoreFullHealthEvent, actor),
-			Event(setLocationEvent, actor, location),
+//			Event(setLocationEvent, actor, location),
 		)
 	} else
 		listOf()

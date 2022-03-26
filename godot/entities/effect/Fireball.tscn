@@ -6,6 +6,7 @@
 radius = 0.3
 
 [node name="fireball" type="Area"]
+collision_mask = 3
 
 [node name="shape" type="CollisionShape" parent="."]
 shape = SubResource( 1 )

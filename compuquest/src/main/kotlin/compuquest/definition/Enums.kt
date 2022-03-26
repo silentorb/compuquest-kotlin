@@ -3,6 +3,7 @@ package compuquest.definition
 object Accessories {
 
 	// Usable Items
+	val banana = "banana"
 	val berries = "berries"
 	val bite = "bite"
 	val burger = "burger"
@@ -31,6 +32,8 @@ object EquipmentFrames {
 	const val burger = 9
 	const val invisibility = 10
 	const val sai = 12
+	const val summonIceWall = 14
+	const val banana = 16
 }
 
 object Characters {

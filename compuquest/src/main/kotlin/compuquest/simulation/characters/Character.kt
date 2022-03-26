@@ -49,7 +49,6 @@ data class Character(
 	override val frame: Int = 0,
 	val activeAccessory: Id = emptyId,
 	val previousActiveAccessory: Id = emptyId,
-	val toolOffset: Vector3 = Vector3.ZERO,
 ) : SpriteState, Relational {
 	val isAlive: Boolean = isCharacterAlive(health)
 	val health: Int get() = destructible.health
@@ -128,7 +127,6 @@ fun selectActiveAccessoryFromTable(accessories: Table<Accessory>): Id =
 fun newCharacter(
 	definition: CharacterDefinition,
 	accessories: Table<Accessory>,
-	toolOffset: Vector3,
 	name: String = definition.name,
 	relationships: Relationships = listOf(),
 ) = Character(
@@ -139,11 +137,10 @@ fun newCharacter(
 		maxHealth = definition.health,
 		drainDuration = healthTimeDrainDuration,
 	),
+	relationships = relationships,
 	depiction = definition.depiction,
 	frame = definition.frame,
 	activeAccessory = selectActiveAccessoryFromTable(accessories),
-	relationships = relationships,
-	toolOffset = toolOffset,
 )
 
 fun shiftActiveAction(accessories: Table<Accessory>, accessory: Id, offset: Int): Id {
@@ -245,8 +242,7 @@ fun addCharacter(
 		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
 		characterBody.sprite
 		val allAccessories = accessories + newCharacterAccessories(definitions, nextId, definition.accessories)
-		val toolOffset = characterBody.toolOffset
-		val character = newCharacter(definition, accessories, toolOffset, name, relationships = relationships)
+		val character = newCharacter(definition, accessories, name, relationships = relationships)
 		sprite.animation = character.depiction
 		sprite.frame = character.frame.toLong()
 

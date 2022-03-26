@@ -23,7 +23,7 @@ fun filterEnemyTargets(
 ): Table<Character> {
 	val deck = world.deck
 	val bodies = deck.bodies
-	val body = bodies[actor] ?: return mapOf()
+	val body = bodies[actor] as? CharacterBody ?: return mapOf()
 	val godotBody = deck.bodies[actor] as? CharacterBody ?: return mapOf()
 	// Add a random offset as a heuristic to deal with complex terrain and a lack of sphere casting.
 	// Occasionally, a spirit will try to attack a character through a space that is wide enough
@@ -32,7 +32,7 @@ fun filterEnemyTargets(
 	// It also mixes up visibility checks when the target would be barely visible
 	val r = 0.4f
 	val randomPadding = Vector3(world.dice.getFloat(-r, r), world.dice.getFloat(-r, r), world.dice.getFloat(-r, r))
-	val headLocation = body.translation + character.toolOffset + randomPadding
+	val headLocation = body.getToolTransform().origin + randomPadding
 	return deck.characters
 		.filter { (other, otherCharacter) ->
 			other != actor

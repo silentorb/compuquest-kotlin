@@ -1,6 +1,8 @@
 package compuquest.simulation.combat
 
 import compuquest.simulation.characters.Accessory
+import compuquest.simulation.characters.AccessoryContainer
+import compuquest.simulation.characters.noDuration
 import compuquest.simulation.general.*
 import compuquest.simulation.general.World
 import godot.*
@@ -21,54 +23,63 @@ data class Missile(
 	val diameter: Float,
 	val damageRadius: Float = 0f, // 0f for no AOE
 	val damageFalloff: Float = 0f, // Falloff Exponent
+	val isSelfPropelled: Boolean,
 	val damage: Int,
+	val timer: Int = noDuration,
 //  val damages: List<DamageDefinition>
 )
 
-fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Vector3?, targetEntity: Id?): Events {
-	val (origin, velocity) = getAttackerOriginAndFacing(world, actor, targetLocation, targetEntity, 0.8f)
-	return if (origin != null) {
-		val deck = world.deck
-		val definition = weapon.definition
-		val effect = definition.actionEffects.first()
-		val projectile = instantiateScene<Spatial>(effect.spawnsScene!!)!!
-		projectile.translation = origin
-		val shape = projectile.findNode("shape") as? CollisionShape
-		if (shape == null)
-			listOf()
-		else {
-			val radius = getCollisionShapeRadius(shape)
-			val characterBody = deck.bodies[actor]!!.getInstanceId()
-			val damage = calculateDamage(deck, actor, weapon, effect)
-			listOf(
-				newHandEvent(
-					Hand(
-						components = listOf(
-							projectile,
-							Missile(
-								velocity = velocity * effect.speed,
-								damage = damage,
-								origin = origin,
-								range = definition.range,
-								diameter = radius * 2f,
-								ignore = characterBody,
-							),
-						)
+fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Vector3?): Events {
+	val deck = world.deck
+	val definition = weapon.definition
+	val effect = definition.actionEffects.first()
+	val projectile = instantiateScene<Spatial>(effect.spawnsScene!!)!!
+	val transform = applyEffectTransform(effect, getAttackerOriginAndFacing(deck, actor, targetLocation))
+	projectile.transform = transform
+	val isSelfPropelled = projectile !is RigidBody
+	val shape = projectile.findNode("shape") as? CollisionShape
+	return if (isSelfPropelled && shape == null)
+		listOf()
+	else {
+		val velocity = -transform.basis.z * effect.speed
+		val radius = if (shape != null)
+			getCollisionShapeRadius(shape)
+		else
+			0f
+
+//		val characterBody = deck.bodies[actor]!!.getInstanceId()
+		val damage = calculateDamage(deck, actor, weapon, effect)
+		if (!isSelfPropelled) {
+			(projectile as RigidBody).linearVelocity = velocity
+		}
+		listOf(
+			newHandEvent(
+				Hand(
+					components = listOf(
+						projectile,
+						Missile(
+							velocity = velocity,
+							damage = damage,
+							origin = transform.origin,
+							range = definition.range,
+							diameter = radius * 2f,
+							ignore = projectile.getInstanceId(),
+							isSelfPropelled = isSelfPropelled,
+							timer = if (effect.duration > 0f) effect.durationInt else noDuration,
+						),
 					)
 				)
 			)
-		}
-	} else
-		listOf()
+		)
+	}
 }
 
-fun updateMissile(deck: Deck, actor: Id, missile: Missile, body: Area, offset: Vector3): Events {
-	body.translate(offset)
-	val collisions = (body.getOverlappingBodies() as VariantArray<Spatial>)
+fun updateMissile(deck: Deck, actor: Id, missile: Missile, area: Area): Events {
+	val collisions = (area.getOverlappingBodies() as VariantArray<Spatial>)
 		.filter { (it as? Spatial)?.getInstanceId() != missile.ignore }
 	val hit = collisions.any()
-	val distanceTraveled = missile.origin.distanceTo(body.transform.origin)
-	val deletions = if (hit || distanceTraveled > missile.range) {
+	val distanceTraveled = missile.origin.distanceTo(area.globalTransform.origin)
+	val deletions = if (hit || distanceTraveled > missile.range || missile.timer == 0) {
 		if (!hit) {
 			val k = 0
 		}
@@ -90,19 +101,38 @@ fun updateMissile(deck: Deck, actor: Id, missile: Missile, body: Area, offset: V
 	return deletions + damages
 }
 
+
 fun eventsFromMissile(deck: Deck, delta: Float): (Id, Missile) -> Events = { actor, missile ->
-	val body = deck.bodies[actor] as? Area
+	val body = deck.bodies[actor]
+	val area = body as? Area ?: body?.getChild(0) as? Area
 	val ccdPadding = 1.1f
-	if (body != null) {
-		val iterations = ceil(missile.velocity.length() * delta * missile.diameter * ccdPadding).toInt()
-		var events: Events = listOf()
-		val offset = missile.velocity * delta / iterations.toFloat()
-		for (i in (0 until iterations)) {
-			events = updateMissile(deck, actor, missile, body, offset)
-			if (events.any())
-				break
+	if (body != null && area != null) {
+		// Implement basic CCD since Godot doesn't support that for areas
+		if (missile.isSelfPropelled) {
+			val iterations = ceil(missile.velocity.length() * delta * missile.diameter * ccdPadding).toInt()
+			var events: Events = listOf()
+			val offset = missile.velocity * delta / iterations.toFloat()
+			for (i in (0 until iterations)) {
+				body.translation += offset
+				events = updateMissile(deck, actor, missile, area)
+				if (events.any())
+					break
+			}
+			events
+		} else {
+			// If the missile is propelled by physics then it can use Godot's built-in RigidBody CCD
+			updateMissile(deck, actor, missile, area)
 		}
-		events
 	} else
 		listOf()
 }
+
+fun updateMissile(): (Missile) -> Missile =
+	{ missile ->
+		if (missile.timer > 0)
+			missile.copy(
+				timer = missile.timer - 1,
+			)
+		else
+			missile
+	}

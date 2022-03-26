@@ -11,7 +11,6 @@ import silentorb.mythic.ent.Id
 interface CharacterBody : AnimatedSprite3DOwner {
 	var head: Spatial?
 	var velocity: Vector3
-	var toolOffset: Vector3
 	var isSlowed: Boolean
 	var isAlive: Boolean
 	var headRestingState: Transform
@@ -28,6 +27,7 @@ interface CharacterBody : AnimatedSprite3DOwner {
 	var isFlying: Boolean
 	var playerController: PlayerController?
 
+	fun getToolTransform(): Transform
 	fun update(input: PlayerInput, character: Character, delta: Float)
 	fun directionInput(moveAxis: Vector3): Vector3
 }

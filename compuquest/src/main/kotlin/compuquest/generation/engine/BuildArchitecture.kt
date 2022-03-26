@@ -29,7 +29,7 @@ fun transformBlockOutput(block: Block, position: Vector3i, bundle: GenerationBun
 	val location = absoluteCellPosition(position)
 	return bundle.copy(
 		spatials = bundle.spatials.map {
-			it.translate(location)
+			it.translation += location
 			it.rotateY(rotation.toDouble())
 			it
 		}

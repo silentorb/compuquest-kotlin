@@ -71,9 +71,11 @@ fun summonAtLocation(world: World, actor: Id, effect: AccessoryEffect, transform
 }
 
 fun summonInFrontOfActor(world: World, actor: Id, accessory: Accessory): Events {
-	val (origin, _) = getAttackerOriginAndFacing(world, actor, null, null, 1.6f)
-	return if (origin != null) {
-		forEachSummonEffect(accessory.definition) { summonAtLocation(world, actor, it, Transform().translated(origin)) }
+	val transform = getToolTransform(world.deck, actor)
+	return if (transform != null) {
+		forEachSummonEffect(accessory.definition) { effect ->
+			summonAtLocation(world, actor, effect, applyEffectTransform(effect, transform))
+		}
 	} else
 		listOf()
 }
