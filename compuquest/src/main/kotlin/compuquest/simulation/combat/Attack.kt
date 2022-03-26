@@ -10,6 +10,9 @@ import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
+import silentorb.mythic.spatial.minMax
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 const val attackEvent = "attackEvent"
 
@@ -84,4 +87,28 @@ fun getAttackerOriginAndFacing(deck: Deck, actor: Id, targetLocation: Vector3?):
 		toolTransform
 	else
 		toolTransform.lookingAt(targetLocation, Vector3.UP)
+}
+
+fun applyFalloff(fallOff: Float, range: Float, damages: List<Damage>, distance: Float): List<Damage> {
+	val fallOffModifier = fallOff.pow(minMax(distance / range, 0f, 1f))
+	return damages.map { damage ->
+		damage.copy(
+			amount = (damage.amount.toFloat() * fallOffModifier).roundToInt()
+		)
+	}
+}
+
+fun applyAreaDamage(deck: Deck, origin: Vector3, missile: Missile): Events {
+	val damageRadius = missile.damageRadius
+	return deck.bodies
+		.filter { it.value.translation.distanceTo(origin) < damageRadius }
+		.flatMap { (target, targetBody) ->
+			val damaged = deck.characters[target]
+			if (damaged != null) {
+				val distance = targetBody.translation.distanceTo(origin).toFloat()
+				val damages = applyFalloff(missile.damageFalloff, damageRadius, missile.damages, distance)
+				newDamageEvents(target, damages, position = targetBody.translation)
+			} else
+				listOf()
+		}
 }

@@ -14,7 +14,7 @@ fun useAction(accessory: Id, goal: Goal): Goal =
 
 fun useActionOnTarget(world: World, actor: Id, accessory: TableEntry<Accessory>, target: Id, goal: Goal): Goal? =
 	if (requiresTarget(accessory.value)) {
-		val range = accessory.value.definition.range
+		val range = accessory.value.definition.useRange
 		moveWithinRange(world, actor, target, range, goal) {
 			goal.copy(
 				focusedAction = accessory.key,

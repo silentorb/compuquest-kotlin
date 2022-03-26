@@ -23,10 +23,11 @@ data class Destructible(
 // It overrides any other health modifying events.
 const val restoreFullHealthEvent = "restoreFullHealth"
 
-fun damageDestructible(damages: List<Damage>): (Destructible) -> Destructible = { destructible ->
-	if (damages.none()) {
+fun damageDestructible(damageEvents: List<DamageEvent>): (Destructible) -> Destructible = { destructible ->
+	if (damageEvents.none()) {
 		destructible
 	} else {
+		val damages = damageEvents.flatMap { it.damages }
 		val healthMod = aggregateHealthModifiers(destructible, damages)
 		val nextHealth = modifyResource(destructible.health, destructible.maxHealth, healthMod)
 		destructible.copy(
@@ -48,7 +49,7 @@ fun modifyDestructible(events: List<ModifyResource>, destructible: Destructible,
 fun modifyHealth(actor: Id, amount: Int) =
 	newEvent(modifyResourceEvent, actor, ModifyResource(ResourceTypes.health, amount))
 
-fun prioritizeDamageSourceAttribution(damages: List<Damage>): Damage? =
+fun prioritizeDamageSourceAttribution(damages: List<DamageEvent>): DamageEvent? =
 	if (damages.size < 2)
 		damages.firstOrNull()
 	else
@@ -58,7 +59,7 @@ fun prioritizeDamageSourceAttribution(damages: List<Damage>): Damage? =
 
 fun updateDestructible(actorEvents: Events, isAlive: Boolean, destructible: Destructible): Destructible {
 	val damages = if (isAlive)
-		filterEventValues<Damage>(damageEvent, actorEvents)
+		filterEventValues<DamageEvent>(damageEvent, actorEvents)
 	else
 		listOf()
 

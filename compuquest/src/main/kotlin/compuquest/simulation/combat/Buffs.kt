@@ -15,11 +15,11 @@ fun isIntervalStep(step: Long, interval: Int): Boolean {
 	return step - b == 0L
 }
 
-fun eventsFromPassiveBuffEffect(owner: Id, effect: AccessoryEffect): Events =
+fun eventsFromPassiveBuffEffect(deck: Deck, actor: Id, effect: AccessoryEffect): Events =
 	when (effect.type) {
 		AccessoryEffects.damage ->
 			if (effect.recipient == EffectRecipient.self)
-				listOf(newDamage(owner, Damage(effect.strengthInt)))
+				newDamageEvents(actor, newDamages(deck, actor, effect))
 			else
 				listOf()
 
@@ -34,7 +34,7 @@ fun eventsFromBuffs(deck: Deck, filter: (AccessoryEffect) -> Boolean): Events =
 				accessory.definition.passiveEffects
 					.filter(filter)
 					.flatMap { effect ->
-						eventsFromPassiveBuffEffect(actor, effect)
+						eventsFromPassiveBuffEffect(deck, actor, effect)
 					}
 			}
 		}

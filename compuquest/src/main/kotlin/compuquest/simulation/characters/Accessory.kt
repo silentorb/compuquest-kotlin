@@ -1,5 +1,8 @@
 package compuquest.simulation.characters
 
+import compuquest.simulation.combat.DamageDefinition
+import compuquest.simulation.combat.DamageDefinitions
+import compuquest.simulation.combat.Damages
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Deck
 import compuquest.simulation.general.ResourceMap
@@ -41,6 +44,7 @@ object AccessoryEffects {
 data class AccessoryEffect(
 	val type: String,
 	val strength: Float = 0f,
+	val damages: DamageDefinitions = listOf(),
 	val spawnsCharacter: Key? = null,
 	val spawnsScene: String? = null,
 	val buff: Key = "",
@@ -49,6 +53,7 @@ data class AccessoryEffect(
 	val duration: Float = 0f,
 	val recipient: EffectRecipient,
 	val transform: Transform? = null,
+	val range: Float = 0f,
 ) {
 	val strengthInt: Int get() = strength.toInt()
 	val durationInt: Int get() = floatToIntTime(duration)
@@ -59,7 +64,7 @@ data class AccessoryDefinition(
 	val cooldown: Float = 0f,
 	val key: String,
 	val name: String = key,
-	val range: Float = 0f,
+	val useRange: Float = 0f,
 	val cost: ResourceMap = mapOf(),
 	val attributes: Set<Key> = setOf(),
 	val actionEffects: List<AccessoryEffect> = listOf(),

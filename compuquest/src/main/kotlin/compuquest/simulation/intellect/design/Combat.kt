@@ -80,7 +80,7 @@ fun updateSelectedAttack(readyActions: Table<Accessory>): Map.Entry<Id, Accessor
 				it.isAttack || it.type == AccessoryEffects.summon
 			}
 		}
-	return actions.maxByOrNull { it.value.definition.range }
+	return actions.maxByOrNull { it.value.definition.useRange }
 }
 
 fun requiresTarget(accessory: Accessory): Boolean =

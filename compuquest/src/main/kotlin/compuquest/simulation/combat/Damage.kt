@@ -11,21 +11,65 @@ import silentorb.mythic.happening.Events
 
 const val defaultDamageMultiplier = 100
 typealias DamageMultipliers = Map<DamageType, Percentage>
+typealias DamageType = String
+
+data class DamageDefinition(
+	val amount: Int,
+	val type: DamageType,
+)
 
 data class Damage(
 	val amount: Int,
-	val type: DamageType = "",
+	val type: DamageType,
 	val source: Id = emptyId,
 	val sourceLocation: Vector3? = null
 )
 
+typealias Damages = List<Damage>
+typealias DamageDefinitions = List<DamageDefinition>
+
 const val damageEvent = "damage"
 
-fun newDamage(actor: Id, damage: Damage) =
-	Event(damageEvent, actor, damage)
+data class DamageEvent(
+	val damages: Damages,
+	val position: Vector3? = null,
+	val sourceLocation: Vector3? = null,
+) {
+	val source: Id
+		get() = damages.firstOrNull { it.source != emptyId }?.source ?: emptyId
 
-fun calculateDamage(deck: Deck, actor: Id, weapon: Accessory, effect: AccessoryEffect): Int {
-	val baseDamage = effect.strengthInt
+	val amount: Int
+		get() = damages.sumOf { it.amount }
+}
+
+fun damagesOf(vararg damages: Pair<DamageType, Int>): DamageDefinitions =
+	damages.map {
+		DamageDefinition(
+			type = it.first,
+			amount = it.second,
+		)
+	}
+
+fun newDamageEvents(
+	target: Id,
+	damages: List<Damage>,
+	position: Vector3? = null,
+	sourceLocation: Vector3? = null
+): Events =
+	listOf(
+		Event(
+			type = damageEvent,
+			target = target,
+			value = DamageEvent(
+				damages = damages,
+				position = position,
+				sourceLocation = sourceLocation,
+			)
+		)
+	)
+
+fun calculateDamage(deck: Deck, actor: Id, damage: DamageDefinition): Int {
+	val baseDamage = damage.amount
 	val accessories = getOwnerAccessories(deck, actor)
 	val backStabModifier = if (
 		hasPassiveEffect(accessories, AccessoryEffects.invisible) &&
@@ -37,6 +81,20 @@ fun calculateDamage(deck: Deck, actor: Id, weapon: Accessory, effect: AccessoryE
 
 	return baseDamage * backStabModifier
 }
+
+fun newDamages(
+	deck: Deck,
+	actor: Id,
+	effect: AccessoryEffect
+): Damages =
+	effect.damages
+		.map { definition ->
+			Damage(
+				type = definition.type,
+				amount = calculateDamage(deck, actor, definition),
+				source = actor,
+			)
+		}
 
 //fun applyDamage(deck: Deck, actor: Id, characterEvents: Events): Int {
 //	val damages = filterEventValues<Int>(damageEvent, characterEvents)
@@ -88,10 +146,16 @@ fun calculateDamageMultipliers(
 	}.associate { it }
 }
 
-fun applyDamage(deck: Deck, source: Id, sourceLocation: Vector3?, target: Id, node: Node, amount: Int): Events {
-	val damageNodeEvents = getDamageNodeEvents(node, amount)
+fun applyDamage(
+	deck: Deck,
+	sourceLocation: Vector3?,
+	target: Id,
+	node: Node,
+	damages: List<Damage>
+): Events {
+	val damageNodeEvents = getDamageNodeEvents(node, damages)
 	return if (deck.characters.containsKey(target))
-		damageNodeEvents + newDamage(target, Damage(amount = amount, source = source, sourceLocation = sourceLocation))
+		damageNodeEvents + newDamageEvents(target, damages, null, sourceLocation)
 	else
 		damageNodeEvents
 }

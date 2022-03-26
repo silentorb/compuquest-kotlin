@@ -26,7 +26,7 @@ fun useHealingSpell(world: World, recipient: Id, effect: AccessoryEffect): Event
 
 fun raycastHeal(world: World, actor: Id, accessory: Accessory, effect: AccessoryEffect): Events {
 	val definition = accessory.definition
-	val recipient = castRayForId(world, actor, definition.range)
+	val recipient = castRayForId(world, actor, definition.useRange)
 	return if (recipient != null)
 		useHealingSpell(world, recipient, effect)
 	else

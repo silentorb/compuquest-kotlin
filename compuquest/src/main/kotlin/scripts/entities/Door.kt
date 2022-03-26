@@ -1,6 +1,7 @@
 package scripts.entities
 
 import compuquest.simulation.combat.DamageTarget
+import compuquest.simulation.combat.Damages
 import compuquest.simulation.general.*
 import compuquest.simulation.intellect.navigation.CrowdAgentNode
 import compuquest.simulation.intellect.navigation.agentHeight
@@ -13,7 +14,7 @@ import silentorb.mythic.ent.Id
 
 @RegisterClass
 class Door : Spatial(), DamageTarget, Interactive, EntityNode, CrowdAgentNode {
-	override fun onDamage(world: World, amount: Int, source: Id) {
+	override fun onDamage(world: World, damages: Damages) {
 	}
 
 	override fun getInteractable(world: World): Interactable? =

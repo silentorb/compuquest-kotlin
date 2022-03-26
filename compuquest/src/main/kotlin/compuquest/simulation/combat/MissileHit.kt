@@ -8,15 +8,6 @@ import silentorb.mythic.spatial.minMax
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-fun applyFalloff(fallOff: Float, range: Float, damages: List<DamageDefinition>, distance: Float): List<DamageDefinition> {
-  val fallOffModifier = fallOff.pow(minMax(distance / range, 0f, 1f))
-  return damages.map { damage ->
-    damage.copy(
-        amount = (damage.amount.toFloat() * fallOffModifier).roundToInt()
-    )
-  }
-}
-
 //fun eventsFromMissileCollision(world: World, id: Id, missile: Missile, collision: Collision): Events {
 //  val deck = world.deck
 //  val origin = deck.bodies[id]!!.translation

@@ -8,25 +8,25 @@ import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventValues
 
 interface DamageTarget {
-	fun onDamage(world: World, amount: Int, source: Id)
+	fun onDamage(world: World, damages: Damages)
 }
 
 const val damageNodeEvent = "damageNode"
 
 data class DamageNodeInfo(
 	val node: DamageTarget,
-	val amount: Int,
+	val damages: Damages,
 )
 
-fun getDamageNodeEvents(node: Node, amount: Int): Events =
+fun getDamageNodeEvents(node: Node, damages: Damages): Events =
 	if (node is DamageTarget)
-		listOf(Event(damageNodeEvent, null, DamageNodeInfo(node, amount)))
+		listOf(Event(damageNodeEvent, null, DamageNodeInfo(node, damages)))
 	else
 		listOf()
 
 fun applyDamageNodeEvents(world: World, events: Events) {
 	filterEventValues<DamageNodeInfo>(damageNodeEvent, events)
 		.forEach { info ->
-			info.node.onDamage(world, info.amount, 0L)
+			info.node.onDamage(world, info.damages)
 		}
 }

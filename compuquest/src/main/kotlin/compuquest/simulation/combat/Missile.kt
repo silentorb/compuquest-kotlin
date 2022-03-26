@@ -1,7 +1,6 @@
 package compuquest.simulation.combat
 
 import compuquest.simulation.characters.Accessory
-import compuquest.simulation.characters.AccessoryContainer
 import compuquest.simulation.characters.noDuration
 import compuquest.simulation.general.*
 import compuquest.simulation.general.World
@@ -24,9 +23,8 @@ data class Missile(
 	val damageRadius: Float = 0f, // 0f for no AOE
 	val damageFalloff: Float = 0f, // Falloff Exponent
 	val isSelfPropelled: Boolean,
-	val damage: Int,
+	val damages: Damages,
 	val timer: Int = noDuration,
-//  val damages: List<DamageDefinition>
 )
 
 fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Vector3?): Events {
@@ -47,8 +45,8 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 		else
 			0f
 
-//		val characterBody = deck.bodies[actor]!!.getInstanceId()
-		val damage = calculateDamage(deck, actor, weapon, effect)
+		val damages = newDamages(deck, actor, effect)
+
 		if (!isSelfPropelled) {
 			(projectile as RigidBody).linearVelocity = velocity
 		}
@@ -59,9 +57,9 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 						projectile,
 						Missile(
 							velocity = velocity,
-							damage = damage,
+							damages = damages,
 							origin = transform.origin,
-							range = definition.range,
+							range = effect.range,
 							diameter = radius * 2f,
 							ignore = projectile.getInstanceId(),
 							isSelfPropelled = isSelfPropelled,
@@ -79,7 +77,7 @@ fun updateMissile(deck: Deck, actor: Id, missile: Missile, area: Area): Events {
 		.filter { (it as? Spatial)?.getInstanceId() != missile.ignore }
 	val hit = collisions.any()
 	val distanceTraveled = missile.origin.distanceTo(area.globalTransform.origin)
-	val deletions = if (hit || distanceTraveled > missile.range || missile.timer == 0) {
+	val deletions = if (hit || (missile.range > 0f && distanceTraveled > missile.range) || missile.timer == 0) {
 		if (!hit) {
 			val k = 0
 		}
@@ -93,7 +91,7 @@ fun updateMissile(deck: Deck, actor: Id, missile: Missile, area: Area): Events {
 		.flatMap { collision ->
 			val collisionId = getBodyEntityId(deck, collision)
 			if (collisionId != null)
-				applyDamage(deck, actor, attackerLocation, collisionId, collision, missile.damage)
+				applyDamage(deck, attackerLocation, collisionId, collision, missile.damages)
 			else
 				listOf()
 		}.take(1)

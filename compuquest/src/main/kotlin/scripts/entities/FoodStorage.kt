@@ -1,8 +1,11 @@
 package scripts.entities
 
+import compuquest.definition.DamageTypes
 import compuquest.simulation.characters.newAccessory
 import compuquest.simulation.characters.newAccessoryForContainer
 import compuquest.simulation.combat.DamageTarget
+import compuquest.simulation.combat.DamageType
+import compuquest.simulation.combat.Damages
 import compuquest.simulation.general.*
 import godot.AnimatedSprite3D
 import godot.CollisionShape
@@ -92,9 +95,11 @@ class FoodStorage : Spatial(), DamageTarget, Interactive, EntityNode {
 		}
 	}
 
-	override fun onDamage(world: World, amount: Int, source: Id) {
-		if (mode == Mode.normal || mode == Mode.hasFood) {
-			mode = Mode.fire
+	override fun onDamage(world: World, damages: Damages) {
+		if (damages.any { it.type == DamageTypes.fire }) {
+			if (mode == Mode.normal || mode == Mode.hasFood) {
+				mode = Mode.fire
+			}
 		}
 	}
 

@@ -71,7 +71,7 @@ fun checkSelfHealing(deck: Deck, actor: Id, character: Character, spirit: Spirit
 fun checkHealing(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val goal = spirit.goal
 	val accessory = getHealingAccessories(world.deck, actor, EffectRecipient.raycast)
-		.maxByOrNull { it.value.definition.range }
+		.maxByOrNull { it.value.definition.useRange }
 
 	return if (accessory != null) {
 		val visibleTarget = knowledge.visibleAllies
