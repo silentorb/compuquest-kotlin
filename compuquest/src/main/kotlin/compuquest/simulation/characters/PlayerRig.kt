@@ -43,7 +43,7 @@ fun playerDeathCollapse(body: Spatial, head: Spatial, killerLocation: Vector3? =
 		head.rotation {
 			x = GD.lerp(head.rotation.x.toFloat(), pitch, 0.1f).toDouble()
 			y = GD.lerp(head.rotation.y.toFloat(), targetYaw, 0.1f).toDouble()
-			z = GD.lerp(head.rotation.z.toFloat(), 0.5f, 0.05f).toDouble()
+			z = GD.lerp(head.rotation.z.toFloat(), 0.3f, 0.05f).toDouble()
 		}
 	}
 	else {

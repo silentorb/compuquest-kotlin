@@ -3,7 +3,7 @@ package compuquest.definition
 object Accessories {
 
 	// Usable Items
-	val banana = "banana"
+	val grenade = "banana"
 	val berries = "berries"
 	val bite = "bite"
 	val burger = "burger"

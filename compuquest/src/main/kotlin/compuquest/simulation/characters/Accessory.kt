@@ -45,6 +45,8 @@ data class AccessoryEffect(
 	val type: String,
 	val strength: Float = 0f,
 	val damages: DamageDefinitions = listOf(),
+	val damageRadius: Float = 0f, // 0f for no AOE
+	val damageFalloff: Float = 0f, // Falloff Exponent
 	val spawnsCharacter: Key? = null,
 	val spawnsScene: String? = null,
 	val buff: Key = "",
@@ -54,6 +56,7 @@ data class AccessoryEffect(
 	val recipient: EffectRecipient,
 	val transform: Transform? = null,
 	val range: Float = 0f,
+	val spawnOnEnd: String = "",
 ) {
 	val strengthInt: Int get() = strength.toInt()
 	val durationInt: Int get() = floatToIntTime(duration)

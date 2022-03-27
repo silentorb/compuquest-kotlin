@@ -1,9 +1,10 @@
 package compuquest.simulation.combat
 
 import compuquest.simulation.characters.*
-import compuquest.simulation.general.Deck
-import compuquest.simulation.general.World
+import compuquest.simulation.general.*
 import compuquest.simulation.happening.UseAction
+import compuquest.simulation.physics.intersectsSphere
+import godot.Spatial
 import godot.core.Transform
 import godot.core.Vector3
 import scripts.entities.CharacterBody
@@ -98,17 +99,57 @@ fun applyFalloff(fallOff: Float, range: Float, damages: List<Damage>, distance: 
 	}
 }
 
-fun applyAreaDamage(deck: Deck, origin: Vector3, missile: Missile): Events {
-	val damageRadius = missile.damageRadius
-	return deck.bodies
-		.filter { it.value.translation.distanceTo(origin) < damageRadius }
-		.flatMap { (target, targetBody) ->
+fun applyAreaDamage(
+	world: World,
+	attacker: Id,
+	effect: AccessoryEffect,
+	location: Vector3,
+	attackerLocation: Vector3
+): Events {
+	val deck = world.deck
+	val damageRadius = effect.damageRadius
+	val collisions = mapBodies(deck, intersectsSphere(world.space, location, damageRadius))
+	val damages = newDamages(deck, attacker, effect)
+
+	return collisions
+		.flatMap { (target, collision) ->
 			val damaged = deck.characters[target]
 			if (damaged != null) {
-				val distance = targetBody.translation.distanceTo(origin).toFloat()
-				val damages = applyFalloff(missile.damageFalloff, damageRadius, missile.damages, distance)
-				newDamageEvents(target, damages, position = targetBody.translation)
+				val distance = collision.translation.distanceTo(location).toFloat()
+				val fallenDamages = applyFalloff(effect.damageFalloff, damageRadius, damages, distance)
+				newDamageEvents(target, fallenDamages, position = collision.translation, sourceLocation = attackerLocation)
 			} else
 				listOf()
 		}
+}
+
+fun applyDirectDamage(
+	deck: Deck,
+	actor: Id,
+	effect: AccessoryEffect,
+	collisions: List<Spatial>,
+	attackerLocation: Vector3?
+): Events =
+	if (collisions.any()) {
+		val damages = newDamages(deck, actor, effect)
+		val bodies = mapBodies(deck, collisions)
+		bodies.flatMap { (collisionId, collision) ->
+			applyDamage(deck, attackerLocation, collisionId, collision, damages)
+		}
+	} else
+		listOf()
+
+fun applyDamage(
+	world: World,
+	location: Vector3,
+	actor: Id,
+	effect: AccessoryEffect,
+	collisions: List<Spatial>
+): Events {
+	val deck = world.deck
+	val attackerLocation = deck.bodies[actor]?.globalTransform?.origin
+	return if (effect.damageRadius == 0f)
+		applyDirectDamage(deck, actor, effect, collisions, attackerLocation)
+	else
+		applyAreaDamage(world, actor, effect, location, attackerLocation!!)
 }

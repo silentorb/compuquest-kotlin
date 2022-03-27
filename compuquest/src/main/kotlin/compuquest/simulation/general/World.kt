@@ -55,3 +55,15 @@ fun getPlayer(world: World?) =
 
 fun getBodyEntityId(deck: Deck, body: Node): Id? =
 	deck.bodies.entries.firstOrNull { it.value == body }?.key
+
+typealias BodyIds = List<Pair<Id, Spatial>>
+
+fun mapBodies(deck: Deck, bodies: Collection<Spatial>): BodyIds =
+	bodies
+		.mapNotNull { body ->
+			val target = getBodyEntityId(deck, body)
+			if (target != null)
+				target to body
+			else
+				null
+		}

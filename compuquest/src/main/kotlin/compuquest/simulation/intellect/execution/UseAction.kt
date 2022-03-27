@@ -3,6 +3,7 @@ package compuquest.simulation.intellect.execution
 import compuquest.simulation.characters.AccessoryEffects
 import compuquest.simulation.characters.getOwnerAccessories
 import compuquest.simulation.characters.getOwnerAccessory
+import compuquest.simulation.combat.getToolTransform
 import compuquest.simulation.general.World
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
@@ -39,7 +40,11 @@ fun tryUseAction(world: World, actor: Id, goal: Goal): Events {
 						listOf()
 				}
 				else -> {
-					listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = action, targetEntity = goal.targetEntity)))
+					val target = goal.targetEntity
+					val targetLocation = getToolTransform(deck, target)?.origin
+					listOf(newEvent(tryActionEvent, actor,
+						TryActionEvent(action = action, targetEntity = target, targetLocation = targetLocation)
+					))
 				}
 			}
 		}

@@ -4,70 +4,27 @@ import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.intellect.knowledge.Personality
 import silentorb.mythic.ent.KeyTable
 
-val playerProfessionDefinitions: KeyTable<CharacterDefinition> = listOf(
-	CharacterDefinition(
-		key = Characters.playerCleric,
-		name = "Cleric",
-		depiction = "deevee",
-		health = 100,
-		accessories = listOf(
-			Accessories.heal,
-			Accessories.summonSquid,
-		),
-	),
-	CharacterDefinition(
-		key = Characters.ninja,
-		name = "Ninja",
-		depiction = "sprites",
-		frame = 8,
-		health = 100,
-		accessories = listOf(
-			Accessories.backstab,
-			Accessories.sai,
-			Accessories.invisibility,
-		),
-	),
-	CharacterDefinition(
-		key = Characters.playerViking,
-		name = "Viking",
-		depiction = "viking",
-		health = 100,
-		accessories = listOf(
-			Accessories.rifle,
-			Accessories.summonFox,
-		),
-	),
-	CharacterDefinition(
-		key = Characters.wizard,
-		name = "Wizard",
-		depiction = "sprites",
-		frame = 7,
-		health = 100,
-		accessories = listOf(
-			Accessories.banana,
-			Accessories.summonIceWall,
-		),
-	),
-).associateBy { it.key }
+object CharacterDefinitions {
 
-fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
-	CharacterDefinition(
+	val cleric = CharacterDefinition(
 		key = Characters.cleric,
 		depiction = "viking",
 		health = 40,
 		accessories = listOf(
 			Accessories.heal,
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val child = CharacterDefinition(
 		key = Characters.child,
 		depiction = "sprites",
 		frame = 2,
 		health = 30,
 		accessories = listOf(
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val fox = CharacterDefinition(
 		key = Characters.fox,
 		depiction = "sprites",
 		frame = 3,
@@ -78,23 +35,26 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
 		personality = Personality(
 			roaming = true,
 		)
-	),
-	CharacterDefinition(
+	)
+
+	val player = CharacterDefinition(
 		key = Characters.player,
 		depiction = "deevee",
 		health = 100,
 		accessories = listOf(
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val skeleton = CharacterDefinition(
 		key = Characters.skeleton,
 		depiction = "skeleton",
 		health = 50,
 		accessories = listOf(
 			Accessories.fireStaff,
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val skeletonAssassin = CharacterDefinition(
 		key = Characters.skeletonAssassin,
 		depiction = "sprites",
 		frame = 10,
@@ -103,8 +63,9 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
 			Accessories.sai,
 			Accessories.invisibility,
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val skeletonSage = CharacterDefinition(
 		key = Characters.skeletonSage,
 		depiction = "sprites",
 		frame = 9,
@@ -112,16 +73,18 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
 		accessories = listOf(
 			Accessories.summonSquid,
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val viking = CharacterDefinition(
 		key = Characters.viking,
 		depiction = "viking",
 		health = 50,
 		accessories = listOf(
 			Accessories.fireStaff,
 		),
-	),
-	CharacterDefinition(
+	)
+
+	val squid = CharacterDefinition(
 		key = Characters.squid,
 		depiction = "sprites",
 		frame = 5,
@@ -133,7 +96,55 @@ fun characterDefinitions(): KeyTable<CharacterDefinition> = listOf(
 		personality = Personality(
 			roaming = true,
 		)
-	),
-).associateBy { it.key }
+	)
+}
 
-val staticCharacterDefinitions = playerProfessionDefinitions + characterDefinitions()
+object PlayerProfessionDefinitions {
+
+	val playerCleric = CharacterDefinition(
+		key = Characters.playerCleric,
+		name = "Cleric",
+		depiction = "deevee",
+		health = 100,
+		accessories = listOf(
+			Accessories.heal,
+			Accessories.summonSquid,
+		),
+	)
+
+	val ninja = CharacterDefinition(
+		key = Characters.ninja,
+		name = "Ninja",
+		depiction = "sprites",
+		frame = 8,
+		health = 100,
+		accessories = listOf(
+			Accessories.backstab,
+			Accessories.sai,
+			Accessories.invisibility,
+		),
+	)
+
+	val playerViking = CharacterDefinition(
+		key = Characters.playerViking,
+		name = "Viking",
+		depiction = "viking",
+		health = 100,
+		accessories = listOf(
+			Accessories.rifle,
+			Accessories.summonFox,
+		),
+	)
+
+	val wizard = CharacterDefinition(
+		key = Characters.wizard,
+		name = "Wizard",
+		depiction = "sprites",
+		frame = 7,
+		health = 100,
+		accessories = listOf(
+			Accessories.grenade,
+			Accessories.summonIceWall,
+		),
+	)
+}

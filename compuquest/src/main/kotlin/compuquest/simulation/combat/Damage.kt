@@ -22,7 +22,6 @@ data class Damage(
 	val amount: Int,
 	val type: DamageType,
 	val source: Id = emptyId,
-	val sourceLocation: Vector3? = null
 )
 
 typealias Damages = List<Damage>
