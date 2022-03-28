@@ -1,15 +1,13 @@
 package compuquest.simulation.characters
 
-import compuquest.simulation.combat.DamageDefinition
 import compuquest.simulation.combat.DamageDefinitions
-import compuquest.simulation.combat.Damages
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Deck
+import compuquest.simulation.general.Int100
 import compuquest.simulation.general.ResourceMap
 import compuquest.simulation.happening.UseAction
 import compuquest.simulation.happening.useActionEvent
 import godot.core.Transform
-import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.*
@@ -44,6 +42,7 @@ object AccessoryEffects {
 
 data class AccessoryEffect(
 	val type: String,
+	val proficiencies: Set<Key> = setOf(),
 	val strength: Float = 0f,
 	val damages: DamageDefinitions = listOf(),
 	val damageRadius: Float = 0f, // 0f for no AOE
@@ -59,8 +58,10 @@ data class AccessoryEffect(
 	val range: Float = 0f,
 	val spawnOnEnd: String = "",
 ) {
-	val strengthInt: Int get() = strength.toInt()
 	val durationInt: Int get() = floatToIntTime(duration)
+	fun getStrength(mod: Int100) = strength.toInt() * mod / 100
+	fun getDuration(mod: Int100) = floatToIntTime(duration) * mod / 100
+	fun getDamages(mod: Int100) = damages.map { it.copy(amount = it.amount * mod / 100) }
 	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.projectile
 }
 
@@ -107,10 +108,11 @@ data class Accessory(
 	fun hasActiveEffect(effect: Key): Boolean = definition.hasActiveEffect(effect)
 }
 
-fun newPassiveEffect(type: Key) =
+fun newPassiveEffect(type: Key, proficiencies: Set<Key> = setOf()) =
 	AccessoryEffect(
 		type = type,
 		recipient = EffectRecipient.self,
+		proficiencies = proficiencies,
 	)
 
 fun newPassiveEffects(vararg types: Key) =

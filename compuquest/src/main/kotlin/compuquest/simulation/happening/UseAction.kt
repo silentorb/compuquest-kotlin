@@ -23,12 +23,15 @@ fun applyAccessoryEffect(
 	targetEntity: Id,
 	accessory: Accessory,
 	effect: AccessoryEffect
-): Events =
-	when (effect.type) {
+): Events {
+	val deck = world.deck
+	val mod = getProficienceyModifier(deck, effect, actor)
+
+	return when (effect.type) {
 		AccessoryEffects.heal -> when (effect.recipient) {
-			EffectRecipient.self -> listOf(modifyHealth(actor, effect.strengthInt))
+			EffectRecipient.self -> listOf(modifyHealth(actor, effect.getStrength(mod)))
 			EffectRecipient.raycast -> if (targetEntity != 0L)
-				useHealingSpell(world, targetEntity, effect)
+				useHealingSpell(world, targetEntity, effect, mod)
 			else
 				raycastHeal(world, actor, accessory, effect)
 			else -> listOf()
@@ -40,7 +43,7 @@ fun applyAccessoryEffect(
 					actor, newAccessory(
 						world.definitions,
 						effect.buff,
-						duration = effect.durationInt
+						duration = effect.getDuration(mod)
 					)
 				)
 			)
@@ -48,6 +51,7 @@ fun applyAccessoryEffect(
 		AccessoryEffects.equipPrevious -> listOf(newEvent(equipPrevious, actor))
 		else -> listOf()
 	}
+}
 
 fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor, event ->
 	val deck = world.deck
@@ -63,6 +67,7 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 				)
 				else -> listOf()
 			}
+
 
 		val effectEvents = accessory.definition.actionEffects
 			.flatMap { effect ->

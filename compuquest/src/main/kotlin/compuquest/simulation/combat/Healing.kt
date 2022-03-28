@@ -2,6 +2,7 @@ package compuquest.simulation.combat
 
 import compuquest.simulation.characters.Accessory
 import compuquest.simulation.characters.AccessoryEffect
+import compuquest.simulation.characters.getProficienceyModifier
 import compuquest.simulation.general.*
 import compuquest.simulation.physics.castRayForId
 import godot.Spatial
@@ -9,10 +10,11 @@ import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.happening.Events
 
-fun useHealingSpell(world: World, recipient: Id, effect: AccessoryEffect): Events {
+fun useHealingSpell(world: World, recipient: Id, effect: AccessoryEffect, mod: Int100): Events {
+	val deck =world.deck
 	val scene = effect.spawnsScene
 	if (scene != null) {
-		val location = world.deck.bodies[recipient]?.globalTransform?.origin
+		val location = deck.bodies[recipient]?.globalTransform?.origin
 		if (location != null) {
 			val node = instantiateScene<Spatial>(scene)!!
 			node.translation = location
@@ -20,7 +22,7 @@ fun useHealingSpell(world: World, recipient: Id, effect: AccessoryEffect): Event
 		}
 	}
 	return listOfNotNull(
-		modifyHealth(recipient, effect.strengthInt)
+		modifyHealth(recipient, effect.getStrength(mod))
 	)
 }
 
@@ -28,7 +30,7 @@ fun raycastHeal(world: World, actor: Id, accessory: Accessory, effect: Accessory
 	val definition = accessory.definition
 	val recipient = castRayForId(world, actor, definition.useRange)
 	return if (recipient != null)
-		useHealingSpell(world, recipient, effect)
+		useHealingSpell(world, recipient, effect, getProficienceyModifier(world.deck, effect, actor))
 	else
 		listOf()
 }

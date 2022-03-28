@@ -29,6 +29,7 @@ object AccessoryDefinitions {
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
+				proficiencies = setOf(Proficiencies.closeCombat, Proficiencies.nature),
 				recipient = EffectRecipient.projectile,
 				range = 5f,
 				damages = damagesOf(
@@ -63,6 +64,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.summonAtTarget,
 				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.magic),
 				duration = 4f,
 				spawnsScene = "res://entities/effect/FireRing.tscn",
 			),
@@ -79,6 +81,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
 				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.mechanics),
 				damages = damagesOf(
 					DamageTypes.fire to 10,
 					DamageTypes.physical to 10,
@@ -104,6 +107,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.heal,
 				recipient = EffectRecipient.raycast,
+				proficiencies = setOf(Proficiencies.nature),
 				strength = 25f,
 				spawnsScene = "res://entities/effect/Heal.tscn",
 			),
@@ -120,6 +124,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.buff,
 				recipient = EffectRecipient.self,
+				proficiencies = setOf(Proficiencies.cunning),
 				buff = Accessories.invisible,
 				duration = 4f,
 			),
@@ -151,6 +156,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
 				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.mechanics),
 				range = 30f,
 				damages = damagesOf(
 					DamageTypes.physical to 10,
@@ -171,6 +177,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
 				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.magic, Proficiencies.rangedCombat),
 				damages = damagesOf(
 					DamageTypes.fire to 20,
 				),
@@ -190,6 +197,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.damage,
 				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.cunning, Proficiencies.closeCombat),
 				range = 3f,
 				damages = damagesOf(
 					DamageTypes.physical to 30,
@@ -210,6 +218,7 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.summon,
 				recipient = EffectRecipient.inFront,
+				proficiencies = setOf(Proficiencies.nature),
 				spawnsCharacter = Characters.fox,
 				duration = 19f,
 				transform = summonOffset,
@@ -225,6 +234,7 @@ object AccessoryDefinitions {
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summon,
+				proficiencies = setOf(Proficiencies.magic),
 				recipient = EffectRecipient.inFront,
 				spawnsScene = "res://entities/actor/IceWall.tscn",
 				duration = 5f,
@@ -242,6 +252,7 @@ object AccessoryDefinitions {
 		actionEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.summon,
+				proficiencies = setOf(Proficiencies.nature),
 				recipient = EffectRecipient.inFront,
 				spawnsCharacter = Characters.squid,
 				duration = 14f,
@@ -256,8 +267,8 @@ object BuffDefinitions {
 	val backstab = AccessoryDefinition(
 		key = Accessories.backstab,
 		slot = AccessorySlot.passive,
-		passiveEffects = newPassiveEffects(
-			AccessoryEffects.backstab,
+		passiveEffects = listOf(
+			newPassiveEffect(AccessoryEffects.backstab, setOf(Proficiencies.cunning)),
 		),
 	)
 

@@ -86,7 +86,7 @@ fun newDamages(
 	actor: Id,
 	effect: AccessoryEffect
 ): Damages =
-	effect.damages
+	effect.getDamages(getProficienceyModifier(deck, effect, actor))
 		.map { definition ->
 			Damage(
 				type = definition.type,

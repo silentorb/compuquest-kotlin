@@ -16,18 +16,22 @@ fun getHealingAccessories(deck: Deck, actor: Id, recipient: EffectRecipient): Ta
 			}
 		}
 
-fun getAccessoryHealAmount(accessory: Accessory): Int =
+fun getAccessoryHealAmount(accessory: Accessory, proficiencies: ProficiencyLevels): Int =
 	accessory.definition.actionEffects
 		.sumOf {
 			if (it.type == AccessoryEffects.heal)
-				it.strengthInt
+				it.getStrength(getProficienceyModifier(it, proficiencies))
 			else
 				0
 		}
 
-fun getMostEfficientHealingAccessory(accessories: Table<Accessory>, gap: Int): Map.Entry<Id, Accessory> =
+fun getMostEfficientHealingAccessory(
+	accessories: Table<Accessory>,
+	proficiencies: ProficiencyLevels,
+	gap: Int
+): Map.Entry<Id, Accessory> =
 	accessories.map { entry ->
-		val amount = getAccessoryHealAmount(entry.value)
+		val amount = getAccessoryHealAmount(entry.value, proficiencies)
 		Pair(entry, abs(gap - amount))
 	}.minByOrNull { it.second }!!
 		.first
@@ -35,7 +39,7 @@ fun getMostEfficientHealingAccessory(accessories: Table<Accessory>, gap: Int): M
 fun getMostEfficientHealingAccessory(deck: Deck, actor: Id, gap: Int): Map.Entry<Id, Accessory>? {
 	val healingAccessories = getHealingAccessories(deck, actor, EffectRecipient.self)
 	return if (healingAccessories.any())
-		getMostEfficientHealingAccessory(healingAccessories, gap)
+		getMostEfficientHealingAccessory(healingAccessories, getCharacterProficiencies(deck, actor), gap)
 	else
 		null
 }
@@ -46,7 +50,7 @@ fun checkSelfHealing(deck: Deck, actor: Id, character: Character): Id? {
 	val gap = maxHealth - health
 	val mostEfficient = getMostEfficientHealingAccessory(deck, actor, gap)
 	return if (mostEfficient != null) {
-		val healAmount = getAccessoryHealAmount(mostEfficient.value)
+		val healAmount = getAccessoryHealAmount(mostEfficient.value, character.definition.proficiencies)
 		val excess = health + healAmount - maxHealth
 		if (excess < maxHealth + (maxHealth / 10) || health < maxHealth / 3)
 			mostEfficient.key

@@ -35,6 +35,7 @@ data class CharacterDefinition(
 	val accessories: List<Key> = listOf(),
 	val personality: Personality? = null,
 	val speed: Float = 10f,
+	val proficiencies: ProficiencyLevels = mapOf(),
 )
 
 typealias SlotAssignments = Map<AccessorySlot, Id>

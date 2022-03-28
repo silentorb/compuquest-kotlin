@@ -2,13 +2,15 @@ package compuquest.definition
 
 import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.intellect.knowledge.Personality
-import silentorb.mythic.ent.KeyTable
 
 object CharacterDefinitions {
 
 	val cleric = CharacterDefinition(
 		key = Characters.cleric,
-		depiction = "viking",
+		proficiencies = mapOf(
+			Proficiencies.nature to 1,
+		),
+		depiction = "deevee",
 		health = 40,
 		accessories = listOf(
 			Accessories.heal,
@@ -26,6 +28,10 @@ object CharacterDefinitions {
 
 	val fox = CharacterDefinition(
 		key = Characters.fox,
+		proficiencies = mapOf(
+			Proficiencies.closeCombat to 1,
+			Proficiencies.nature to 1,
+		),
 		depiction = "sprites",
 		frame = 3,
 		health = 30,
@@ -47,6 +53,10 @@ object CharacterDefinitions {
 
 	val skeleton = CharacterDefinition(
 		key = Characters.skeleton,
+		proficiencies = mapOf(
+			Proficiencies.rangedCombat to 1,
+			Proficiencies.nature to 1,
+		),
 		depiction = "skeleton",
 		health = 50,
 		accessories = listOf(
@@ -56,6 +66,10 @@ object CharacterDefinitions {
 
 	val skeletonAssassin = CharacterDefinition(
 		key = Characters.skeletonAssassin,
+		proficiencies = mapOf(
+			Proficiencies.closeCombat to 1,
+			Proficiencies.cunning to 1,
+		),
 		depiction = "sprites",
 		frame = 10,
 		health = 40,
@@ -67,6 +81,10 @@ object CharacterDefinitions {
 
 	val skeletonSage = CharacterDefinition(
 		key = Characters.skeletonSage,
+		proficiencies = mapOf(
+			Proficiencies.magic to 1,
+			Proficiencies.nature to 1,
+		),
 		depiction = "sprites",
 		frame = 9,
 		health = 50,
@@ -77,6 +95,9 @@ object CharacterDefinitions {
 
 	val viking = CharacterDefinition(
 		key = Characters.viking,
+		proficiencies = mapOf(
+			Proficiencies.rangedCombat to 1,
+		),
 		depiction = "viking",
 		health = 50,
 		accessories = listOf(
@@ -86,6 +107,10 @@ object CharacterDefinitions {
 
 	val squid = CharacterDefinition(
 		key = Characters.squid,
+		proficiencies = mapOf(
+			Proficiencies.nature to 1,
+			Proficiencies.closeCombat to 1,
+		),
 		depiction = "sprites",
 		frame = 5,
 		health = 50,
@@ -103,6 +128,9 @@ object PlayerProfessionDefinitions {
 
 	val playerCleric = CharacterDefinition(
 		key = Characters.playerCleric,
+		proficiencies = mapOf(
+			Proficiencies.nature to 2,
+		),
 		name = "Cleric",
 		depiction = "deevee",
 		health = 100,
@@ -114,6 +142,10 @@ object PlayerProfessionDefinitions {
 
 	val ninja = CharacterDefinition(
 		key = Characters.ninja,
+		proficiencies = mapOf(
+			Proficiencies.closeCombat to 1,
+			Proficiencies.cunning to 1,
+		),
 		name = "Ninja",
 		depiction = "sprites",
 		frame = 8,
@@ -127,6 +159,9 @@ object PlayerProfessionDefinitions {
 
 	val playerViking = CharacterDefinition(
 		key = Characters.playerViking,
+		proficiencies = mapOf(
+			Proficiencies.closeCombat to 2,
+		),
 		name = "Viking",
 		depiction = "viking",
 		health = 100,
@@ -138,6 +173,9 @@ object PlayerProfessionDefinitions {
 
 	val wizard = CharacterDefinition(
 		key = Characters.wizard,
+		proficiencies = mapOf(
+			Proficiencies.magic to 2,
+		),
 		name = "Wizard",
 		depiction = "sprites",
 		frame = 7,
