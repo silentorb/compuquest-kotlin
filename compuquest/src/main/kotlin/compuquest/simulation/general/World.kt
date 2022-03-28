@@ -53,8 +53,23 @@ fun getPlayer(deck: Deck?) =
 fun getPlayer(world: World?) =
 	getPlayer(world?.deck)
 
-fun getBodyEntityId(deck: Deck, body: Node): Id? =
-	deck.bodies.entries.firstOrNull { it.value == body }?.key
+fun getBodyEntityId(deck: Deck, body: Node): Id? {
+	val bodies = deck.bodies
+
+	// First check using a direct comparison
+	val first = bodies.entries.firstOrNull { it.value == body }?.key
+	return if (first != null)
+		first
+	else {
+		// There seems to be a bug with Godot-Kotlin or something where sometimes there will be different Kotlin
+		// instances of the same Godot object.
+		// Because of that, also check using Godot instance Id.
+		// This operation is more expensive so it is only done as a second pass.
+		// The Godot instance Id does not seem to be stored on the Godot-Kotlin side by default.
+		val id = body.getInstanceId()
+		return bodies.entries.firstOrNull { it.value.getInstanceId() == id }?.key
+	}
+}
 
 typealias BodyIds = List<Pair<Id, Spatial>>
 

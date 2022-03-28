@@ -7,7 +7,7 @@ import silentorb.mythic.ent.Key
 
 typealias ProficiencyLevels = Map<Key, Int>
 
-const val baseProficienciesLevelIncrement = 20
+const val baseProficienciesLevelIncrement = 30
 
 fun getProficiencyModifier(required: Set<Key>, available: ProficiencyLevels): Int100 =
 	if (required.none())

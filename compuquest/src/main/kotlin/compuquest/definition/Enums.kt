@@ -3,20 +3,22 @@ package compuquest.definition
 object Accessories {
 
 	// Usable Items
-	val grenade = "banana"
 	val berries = "berries"
 	val bite = "bite"
 	val burger = "burger"
 	val fireRing = "fireRing"
 	val fireStaff = "fireStaff"
+	val grenade = "grenade"
 	val heal = "heal"
 	val invisibility = "invisibility"
 	val jump = "jump"
+	val mortar = "mortar"
 	val rifle = "rifle"
 	val sai = "sai"
 	val summonFox = "summonFox"
 	val summonIceWall = "summonIceWall"
 	val summonSquid = "summonSquid"
+	val sword = "sword"
 
 	// Buffs and Passive Abilities
 	val backstab = "backstab"
@@ -51,5 +53,6 @@ object Characters {
 	const val playerCleric = "playerCleric"
 	const val ninja = "ninja"
 	const val playerViking = "playerViking"
+	const val spaceMarine = "spaceMarine"
 	const val wizard = "wizard"
 }

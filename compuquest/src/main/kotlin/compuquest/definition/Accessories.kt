@@ -73,8 +73,8 @@ object AccessoryDefinitions {
 
 	val grenade = AccessoryDefinition(
 		key = Accessories.grenade,
-		slot = AccessorySlot.primary,
-		cooldown = 0.6f,
+		slot = AccessorySlot.utility,
+		cooldown = 3f,
 		useRange = 10f,
 		equippedFrame = EquipmentFrames.banana,
 		actionEffects = listOf(
@@ -83,12 +83,12 @@ object AccessoryDefinitions {
 				recipient = EffectRecipient.projectile,
 				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.mechanics),
 				damages = damagesOf(
-					DamageTypes.fire to 10,
-					DamageTypes.physical to 10,
+					DamageTypes.fire to 30,
+					DamageTypes.physical to 30,
 				),
 				spawnsScene = "res://entities/effect/Grenade.tscn",
 				duration = 1.5f,
-				damageRadius = 3f,
+				damageRadius = 5f,
 				damageFalloff = 0.8f,
 				speed = 30f,
 				spawnOnEnd = "res://entities/effect/Explosion.tscn",
@@ -142,6 +142,32 @@ object AccessoryDefinitions {
 			AccessoryEffect(
 				type = AccessoryEffects.jump,
 				recipient = EffectRecipient.self,
+			),
+		)
+	)
+
+	val mortar = AccessoryDefinition(
+		key = Accessories.mortar,
+		slot = AccessorySlot.primary,
+		cooldown = 0.6f,
+		useRange = 10f,
+		equippedFrame = EquipmentFrames.banana,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.mechanics),
+				damages = damagesOf(
+					DamageTypes.fire to 10,
+					DamageTypes.physical to 10,
+				),
+				spawnsScene = "res://entities/effect/Grenade.tscn",
+				duration = 1.5f,
+				damageRadius = 3f,
+				damageFalloff = 0.8f,
+				speed = 30f,
+				spawnOnEnd = "res://entities/effect/Explosion.tscn",
+				transform = Transform().translated(Vector3(0, 0, -1)).rotated(Vector3.RIGHT, PI / 5),
 			),
 		)
 	)
@@ -260,6 +286,27 @@ object AccessoryDefinitions {
 			),
 		)
 	)
+
+	val sword = AccessoryDefinition(
+		key = Accessories.sword,
+		slot = AccessorySlot.primary,
+		cooldown = 0.6f,
+		useRange = 3f,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.damage,
+				proficiencies = setOf(Proficiencies.closeCombat),
+				recipient = EffectRecipient.projectile,
+				range = 5f,
+				damages = damagesOf(
+					DamageTypes.physical to 15,
+				),
+				spawnsScene = "res://entities/effect/Bite.tscn",
+				speed = 15f,
+			),
+		)
+	)
+
 }
 
 object BuffDefinitions {

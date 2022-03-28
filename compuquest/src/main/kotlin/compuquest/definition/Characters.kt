@@ -142,14 +142,14 @@ object PlayerProfessionDefinitions {
 
 	val ninja = CharacterDefinition(
 		key = Characters.ninja,
+		name = "Ninja",
 		proficiencies = mapOf(
 			Proficiencies.closeCombat to 1,
 			Proficiencies.cunning to 1,
 		),
-		name = "Ninja",
 		depiction = "sprites",
 		frame = 8,
-		health = 100,
+		health = 80,
 		accessories = listOf(
 			Accessories.backstab,
 			Accessories.sai,
@@ -159,29 +159,44 @@ object PlayerProfessionDefinitions {
 
 	val playerViking = CharacterDefinition(
 		key = Characters.playerViking,
+		name = "Viking",
 		proficiencies = mapOf(
 			Proficiencies.closeCombat to 2,
 		),
-		name = "Viking",
 		depiction = "viking",
-		health = 100,
+		health = 120,
+		accessories = listOf(
+			Accessories.sword,
+			Accessories.summonFox,
+		),
+	)
+
+	val spaceMarine = CharacterDefinition(
+		key = Characters.spaceMarine,
+		name = "Space Marine",
+		proficiencies = mapOf(
+			Proficiencies.rangedCombat to 1,
+			Proficiencies.mechanics to 1,
+		),
+		depiction = "viking",
+		health = 120,
 		accessories = listOf(
 			Accessories.rifle,
-			Accessories.summonFox,
+			Accessories.grenade,
 		),
 	)
 
 	val wizard = CharacterDefinition(
 		key = Characters.wizard,
+		name = "Wizard",
 		proficiencies = mapOf(
 			Proficiencies.magic to 2,
 		),
-		name = "Wizard",
 		depiction = "sprites",
 		frame = 7,
 		health = 100,
 		accessories = listOf(
-			Accessories.grenade,
+			Accessories.mortar,
 			Accessories.summonIceWall,
 		),
 	)
