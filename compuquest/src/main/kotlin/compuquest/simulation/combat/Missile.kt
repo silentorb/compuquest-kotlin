@@ -22,6 +22,7 @@ data class Missile(
 	val ignore: Long, // Id of Ignored body
 	val diameter: Float,
 	val source: Id,
+	val damages: Damages,
 	val sourceEffect: AccessoryEffect,
 	val isSelfPropelled: Boolean,
 	val timer: Int = noDuration,
@@ -62,6 +63,7 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 							sourceEffect = effect,
 							origin = transform.origin,
 							diameter = radius * 2f,
+							damages = newDamages(deck, actor, effect),
 							ignore = projectile.getInstanceId(),
 							isSelfPropelled = isSelfPropelled,
 							timer = if (effect.duration > 0f) effect.durationInt else noDuration,
@@ -97,9 +99,10 @@ fun getMissilePostEvents(spawnOnEnd: String, location: Vector3) =
 		listOf()
 
 fun updateMissile(world: World, actor: Id, missile: Missile, area: Area): Events {
+	val origin = area.globalTransform.origin
 	val collisions = (area.getOverlappingBodies() as VariantArray<Spatial>)
 		.filter { (it as? Spatial)?.getInstanceId() != missile.ignore }
-	val distanceTraveled = missile.origin.distanceTo(area.globalTransform.origin)
+	val distanceTraveled = missile.origin.distanceTo(origin)
 	val isFinished = collisions.any() || (missile.range > 0f && distanceTraveled > missile.range) || missile.timer == 0
 	val deletions = if (isFinished) {
 		listOf(newEvent(deleteEntityCommand, actor))
@@ -107,8 +110,8 @@ fun updateMissile(world: World, actor: Id, missile: Missile, area: Area): Events
 		listOf()
 
 	val damageEvents = if (isFinished) {
-		val postEvents = getMissilePostEvents(missile.sourceEffect.spawnOnEnd, area.globalTransform.origin)
-		postEvents + applyDamage(world, area.globalTransform.origin, missile.source, missile.sourceEffect, collisions)
+		val postEvents = getMissilePostEvents(missile.sourceEffect.spawnOnEnd, origin)
+		postEvents + applyDamage(world, origin, missile.source, missile.damages, missile.sourceEffect, collisions)
 	} else
 		listOf()
 

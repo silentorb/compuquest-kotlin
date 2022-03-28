@@ -101,7 +101,7 @@ fun applyFalloff(fallOff: Float, range: Float, damages: List<Damage>, distance: 
 
 fun applyAreaDamage(
 	world: World,
-	attacker: Id,
+	damages: Damages,
 	effect: AccessoryEffect,
 	location: Vector3,
 	attackerLocation: Vector3
@@ -109,7 +109,6 @@ fun applyAreaDamage(
 	val deck = world.deck
 	val damageRadius = effect.damageRadius
 	val collisions = mapBodies(deck, intersectsSphere(world.space, location, damageRadius))
-	val damages = newDamages(deck, attacker, effect)
 
 	return collisions
 		.flatMap { (target, collision) ->
@@ -125,13 +124,11 @@ fun applyAreaDamage(
 
 fun applyDirectDamage(
 	deck: Deck,
-	actor: Id,
-	effect: AccessoryEffect,
+	damages: Damages,
 	collisions: List<Spatial>,
 	attackerLocation: Vector3?
 ): Events =
 	if (collisions.any()) {
-		val damages = newDamages(deck, actor, effect)
 		val bodies = mapBodies(deck, collisions)
 		bodies.flatMap { (collisionId, collision) ->
 			applyDamage(deck, attackerLocation, collisionId, collision, damages)
@@ -143,13 +140,14 @@ fun applyDamage(
 	world: World,
 	location: Vector3,
 	actor: Id,
+	damages: Damages,
 	effect: AccessoryEffect,
 	collisions: List<Spatial>
 ): Events {
 	val deck = world.deck
 	val attackerLocation = deck.bodies[actor]?.globalTransform?.origin
 	return if (effect.damageRadius == 0f)
-		applyDirectDamage(deck, actor, effect, collisions, attackerLocation)
+		applyDirectDamage(deck, damages, collisions, attackerLocation)
 	else
-		applyAreaDamage(world, actor, effect, location, attackerLocation!!)
+		applyAreaDamage(world, damages, effect, location, attackerLocation!!)
 }
