@@ -53,7 +53,7 @@ const val interactionMaxDistance = 4f
 fun canGiveToCharacter(world: World, actor: Id, target: Id): Boolean {
 	val character = world.deck.characters[actor]
 	return character != null &&
-			character.activeAccessory != emptyId
+			character.primaryAccessory != emptyId
 }
 
 fun getInteractable(world: World, actor: Id): Interactable? {
@@ -91,7 +91,7 @@ fun getInteractable(world: World, actor: Id): Interactable? {
 
 fun getPlayerInteractionEvents(deck: Deck, actor: Id, player: Player): Events {
 	val interaction = player.canInteractWith
-	val accessory = deck.characters[actor]?.activeAccessory
+	val accessory = deck.characters[actor]?.primaryAccessory
 	return if (interaction?.target != null && accessory != null)
 		when (interaction.onInteract) {
 			InteractionBehaviors.give -> {

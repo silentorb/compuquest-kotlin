@@ -29,6 +29,7 @@ object AccessoryEffects {
 	val armor = "armor"
 	val damage = "damage"
 	val heal = "heal"
+	val jump = "jump"
 	val resurrect = "resurrect"
 	val summon = "summon"
 	val summonAtTarget = "summonAtTarget"
@@ -63,10 +64,19 @@ data class AccessoryEffect(
 	val isAttack: Boolean = type == AccessoryEffects.damage && recipient == EffectRecipient.projectile
 }
 
+enum class AccessorySlot {
+	consumable,
+	mobility,
+	passive,
+	primary,
+	utility,
+}
+
 data class AccessoryDefinition(
 	val cooldown: Float = 0f,
 	val key: String,
 	val name: String = key,
+	val slot: AccessorySlot,
 	val useRange: Float = 0f,
 	val cost: ResourceMap = mapOf(),
 	val attributes: Set<Key> = setOf(),
@@ -75,12 +85,12 @@ data class AccessoryDefinition(
 	val duration: Float = 0f,
 	val animation: Key? = null,
 	val stackable: Boolean = false,
-	val consumable: Boolean = false,
 	val equippedFrame: Int = -1,
 	val cooldownDelayEffect: Key? = null, // Cooldown does not decrease while the actor is under this effect
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
 	fun hasActiveEffect(effect: Key): Boolean = actionEffects.any { it.type == effect }
+	val consumable: Boolean get() = slot == AccessorySlot.consumable
 
 	val isAttack: Boolean = actionEffects.any { it.isAttack }
 }

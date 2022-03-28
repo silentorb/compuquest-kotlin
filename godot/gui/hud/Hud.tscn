@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/main/kotlin/scripts/gui/Hud.kt" type="Script" id=1]
 [ext_resource path="res://gui/fonts/large-font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://gui/hud/BlackBackground.tres" type="StyleBox" id=3]
 [ext_resource path="res://gui/hud/PlayerInfo.tscn" type="PackedScene" id=4]
 [ext_resource path="res://gui/style/Theme.tres" type="Theme" id=5]
+[ext_resource path="res://gui/SpriteFill.gd" type="Script" id=6]
+[ext_resource path="res://assets/images/props/equipped.pxo" type="SpriteFrames" id=7]
+[ext_resource path="res://gui/components/ResponsiveMarginContainer.tscn" type="PackedScene" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 0, 0, 0.231373 )
@@ -60,6 +63,42 @@ text = "Hello World"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="margin" parent="." instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1024.0
+margin_bottom = 600.0
+left = 50
+top = 80
+
+[node name="debug-background" type="Panel" parent="margin"]
+visible = false
+margin_left = 512.0
+margin_top = 480.0
+margin_right = 1024.0
+margin_bottom = 600.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="utility-wrapper" type="MarginContainer" parent="margin"]
+margin_left = 512.0
+margin_top = 480.0
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="utility" type="AnimatedSprite" parent="margin/utility-wrapper"]
+visible = false
+position = Vector2( 256, 60 )
+scale = Vector2( 7.5, 7.5 )
+frames = ExtResource( 7 )
+frame = 10
+script = ExtResource( 6 )
+
+[node name="equipment-container" type="Control" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
 
 [node name="reticle-center" type="CenterContainer" parent="."]
 visible = false

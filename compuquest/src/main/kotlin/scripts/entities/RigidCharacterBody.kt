@@ -201,7 +201,7 @@ override 	var equippedSprite: AnimatedSprite3D? = null
 			val deck = world.deck
 			val character = deck.characters[actor]
 			val activeAccessory = if (character?.isAlive == true)
-				character.activeAccessory
+				character.primaryAccessory
 			else
 				emptyId
 

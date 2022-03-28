@@ -112,18 +112,19 @@ object StandardAxisCommands {
 
 fun getFlyingInput(bindings: Bindings, gamepad: Int): Int =
 	when {
-		isButtonPressed(bindings, gamepad, Commands.jump) -> 1
+		isButtonPressed(bindings, gamepad, Commands.mobilityAction) -> 1
 		isButtonPressed(bindings, gamepad, Commands.crouch) -> -1
 		else -> 0
 	}
 
 fun newPlayerInput(bindings: Bindings, gamepad: Int, accessoryIsEngaged: Boolean): PlayerInput {
 	return PlayerInput(
-		jump = isButtonJustPressed(bindings, gamepad, Commands.jump),
+		mobilityAction = isButtonJustPressed(bindings, gamepad, Commands.mobilityAction),
 		primaryAction = if (accessoryIsEngaged)
 			isButtonPressed(bindings, gamepad, Commands.primaryAction)
 		else
 			isButtonJustPressed(bindings, gamepad, Commands.primaryAction),
+		utilityAction = isButtonJustPressed(bindings, gamepad, Commands.utilityAction),
 		lookX = getAxisState(bindings, gamepad, StandardAxisCommands.lookX),
 		lookY = getAxisState(bindings, gamepad, StandardAxisCommands.lookY),
 		moveLengthwise = getAxisState(bindings, gamepad, StandardAxisCommands.moveLengthwise),

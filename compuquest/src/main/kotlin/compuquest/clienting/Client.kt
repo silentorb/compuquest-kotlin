@@ -59,7 +59,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		val playerMap = updatePlayerMap(deck, players)
 		val activeAccessories = playerMap
 			.mapValues { (player, _) ->
-				world.deck.characters[player]?.activeAccessory ?: 0L
+				world.deck.characters[player]?.primaryAccessory ?: 0L
 			}
 
 		val prunedEngagedAccessories = client.engagedAccessories

@@ -37,6 +37,8 @@ data class CharacterDefinition(
 	val speed: Float = 10f,
 )
 
+typealias SlotAssignments = Map<AccessorySlot, Id>
+
 data class Character(
 	val definition: CharacterDefinition,
 	val name: String,
@@ -47,11 +49,12 @@ data class Character(
 	override val relationships: Relationships = listOf(),
 	override val depiction: String,
 	override val frame: Int = 0,
-	val activeAccessory: Id = emptyId,
-	val previousActiveAccessory: Id = emptyId,
+	val activeAccessories: SlotAssignments = mapOf(),
+	val previousPrimaryAccessory: Id = emptyId,
 ) : SpriteState, Relational {
 	val isAlive: Boolean = isCharacterAlive(health)
 	val health: Int get() = destructible.health
+	val primaryAccessory: Id get() = activeAccessories[AccessorySlot.primary] ?: emptyId
 }
 
 fun isCharacterAlive(health: Int): Boolean =
@@ -118,11 +121,24 @@ fun newCharacterAccessories(
 			nextId() to newAccessory(definitions, accessory)
 		}
 
-fun selectActiveAccessoryFromTable(accessories: Table<Accessory>): Id =
+fun findAccessoryForSlot(accessories: Table<Accessory>, slot: AccessorySlot): Id =
 	accessories.entries
 		.firstOrNull { (_, accessory) ->
-			accessory.canBeActivated
+			accessory.definition.slot == slot
 		}?.key ?: emptyId
+
+fun initializeActiveAccessories(accessories: Table<Accessory>): SlotAssignments =
+	AccessorySlot.values()
+		.associateWith { findAccessoryForSlot(accessories, it) }
+
+fun getAccessoryInSlot(deck: Deck, actor: Id, slot: AccessorySlot): Accessory? {
+	val character = deck.characters[actor]
+	val container = deck.containers[actor]
+	return if (character != null && container != null)
+		container.accessories[character.activeAccessories[slot]]
+	else
+		null
+}
 
 fun newCharacter(
 	definition: CharacterDefinition,
@@ -140,7 +156,7 @@ fun newCharacter(
 	relationships = relationships,
 	depiction = definition.depiction,
 	frame = definition.frame,
-	activeAccessory = selectActiveAccessoryFromTable(accessories),
+	activeAccessories = initializeActiveAccessories(accessories),
 )
 
 fun shiftActiveAction(accessories: Table<Accessory>, accessory: Id, offset: Int): Id {
@@ -153,28 +169,29 @@ fun shiftActiveAction(accessories: Table<Accessory>, accessory: Id, offset: Int)
 
 const val equipPrevious = "equipPrevious"
 
-fun updateActiveAccessory(
+fun updateActiveAccessories(
 	accessories: Table<Accessory>,
 	characterEvents: Events,
 	input: PlayerInput,
-	active: Id,
-	previous: Id
-): Id =
-	if (active != emptyId && accessories.containsKey(active))
-		when (input.actionChange) {
-			ActionChange.noChange ->
-				if (characterEvents.any { it.type == equipPrevious } && accessories.containsKey(previous))
-					previous
-				else
-					active
-			ActionChange.previous -> shiftActiveAction(accessories, active, -1)
-			ActionChange.next -> shiftActiveAction(accessories, active, 1)
-		}
-	else if (accessories.containsKey(previous))
-		previous
-	else
-		accessories.entries.firstOrNull { it.value.canBeActivated }
-			?.key ?: emptyId
+	previous: Id,
+	activeAccessories: SlotAssignments
+): SlotAssignments =
+	activeAccessories.mapValues { (slot, active) ->
+		if (active != emptyId && accessories.containsKey(active))
+			when (input.actionChange) {
+				ActionChange.noChange ->
+					if (characterEvents.any { it.type == equipPrevious } && accessories.containsKey(previous))
+						previous
+					else
+						active
+				ActionChange.previous -> shiftActiveAction(accessories, active, -1)
+				ActionChange.next -> shiftActiveAction(accessories, active, 1)
+			}
+		else if (accessories.containsKey(previous))
+			previous
+		else
+			findAccessoryForSlot(accessories, slot)
+	}
 
 fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Character) -> Character =
 	{ actor, character ->
@@ -205,25 +222,28 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 			character.definition.frame
 
 		val accessories = getOwnerAccessories(deck, actor)
-		val activeAccessory = updateActiveAccessory(
+		val activeAccessories = updateActiveAccessories(
 			accessories,
 			actorEvents,
 			input,
-			character.activeAccessory,
-			character.previousActiveAccessory
+			character.previousPrimaryAccessory,
+			character.activeAccessories
 		)
 
-		val previousActiveAccessory = if (activeAccessory != character.activeAccessory && activeAccessory != 0L)
-			activeAccessory
-		else
-			character.previousActiveAccessory
+		val nextPrimaryAccessory = activeAccessories[AccessorySlot.primary] ?: emptyId
+
+		val previousActiveAccessory =
+			if (nextPrimaryAccessory != character.primaryAccessory && nextPrimaryAccessory != emptyId)
+				nextPrimaryAccessory
+			else
+				character.previousPrimaryAccessory
 
 		character.copy(
 			destructible = destructible,
 			depiction = depiction,
 			frame = frame,
-			activeAccessory = activeAccessory,
-			previousActiveAccessory = previousActiveAccessory,
+			activeAccessories = activeAccessories,
+			previousPrimaryAccessory = previousActiveAccessory,
 		)
 	}
 
@@ -242,7 +262,7 @@ fun addCharacter(
 		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
 		characterBody.sprite
 		val allAccessories = accessories + newCharacterAccessories(definitions, nextId, definition.accessories)
-		val character = newCharacter(definition, accessories, name, relationships = relationships)
+		val character = newCharacter(definition, allAccessories, name, relationships = relationships)
 		sprite.animation = character.depiction
 		sprite.frame = character.frame.toLong()
 

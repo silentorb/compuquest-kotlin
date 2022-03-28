@@ -3,6 +3,9 @@ package scripts.gui
 import compuquest.clienting.Client
 import compuquest.clienting.gui.getPlayerMenuStack
 import compuquest.clienting.gui.syncGuiToState
+import compuquest.simulation.characters.AccessorySlot
+import compuquest.simulation.characters.canUse
+import compuquest.simulation.characters.getAccessoryInSlot
 import compuquest.simulation.characters.isCharacterAlive
 import compuquest.simulation.combat.damageEvent
 import compuquest.simulation.general.World
@@ -32,6 +35,16 @@ class Hud : Control() {
 	var painOverlay: Panel? = null
 	var damageWeight: Float = 0f
 	var actor: Id = 0L
+	var utility: AnimatedSprite? = null
+	var utilityFrame = -1
+		set(value) {
+			if (field != value) {
+				field = value
+				utility?.visible = value >= 0
+				if (value > 0)
+					utility?.frame = value.toLong()
+			}
+		}
 
 	@RegisterFunction
 	override fun _ready() {
@@ -42,6 +55,7 @@ class Hud : Control() {
 		debugText = findNode("debug") as? Label
 		lowerThird = findNode("lower-third") as? Control
 		painOverlay = findNode("pain-overlay") as? Panel
+		utility = findNode("utility") as? AnimatedSprite
 	}
 
 	fun updateMenus(client: Client) {
@@ -99,7 +113,8 @@ class Hud : Control() {
 		tempCatch {
 			val client = Global.instance?.client
 			val world = Global.world
-			val player = world?.deck?.players?.getOrDefault(actor, null)
+			val deck = world?.deck
+			val player = deck?.players?.getOrDefault(actor, null)
 			if (player != null) {
 				val canInteractWith = player.canInteractWith
 				interact!!.visible = canInteractWith != null
@@ -117,6 +132,17 @@ class Hud : Control() {
 			val overlay = painOverlay
 			if (overlay != null && world != null) {
 				updateOverlay(world, overlay)
+			}
+
+			if (deck != null) {
+				val utilityAccessory = getAccessoryInSlot(deck, actor, AccessorySlot.utility)
+				utilityFrame = if (utilityAccessory != null)
+					if (canUse(utilityAccessory))
+						utilityAccessory.definition.equippedFrame
+					else
+						utilityAccessory.definition.equippedFrame + 1
+				else
+					-1
 			}
 		}
 	}

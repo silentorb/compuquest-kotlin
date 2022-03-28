@@ -1,5 +1,6 @@
 package compuquest.simulation.input
 
+import compuquest.simulation.characters.AccessorySlot
 import compuquest.simulation.general.*
 import compuquest.simulation.happening.TryActionEvent
 import compuquest.simulation.happening.tryActionEvent
@@ -15,12 +16,13 @@ enum class ActionChange {
 }
 
 data class PlayerInput(
-	val jump: Boolean,
 	val lookX: Float,
 	val lookY: Float,
 	val moveLengthwise: Float,
 	val moveLateral: Float,
 	val primaryAction: Boolean,
+	val utilityAction: Boolean,
+	val mobilityAction: Boolean,
 	val interact: Boolean,
 	val actionChange: ActionChange,
 	val fly: Int, // 1 for up, -1 for down, 0 for no change
@@ -29,21 +31,23 @@ data class PlayerInput(
 typealias PlayerInputs = Map<Id, PlayerInput>
 
 val emptyPlayerInput = PlayerInput(
-	jump = false,
 	lookX = 0f,
 	lookY = 0f,
 	moveLengthwise = 0f,
 	moveLateral = 0f,
 	primaryAction = false,
+	utilityAction = false,
+	mobilityAction = false,
 	interact = false,
 	actionChange = ActionChange.noChange,
 	fly = 0,
 )
 
-fun getPlayerPrimaryActionEvents(deck: Deck, actor: Id): Events {
+fun getPlayerActionEvents(deck: Deck, actor: Id, slot: AccessorySlot): Events {
 	val character = deck.characters[actor]
-	return if (character != null && character.activeAccessory != emptyId)
-		listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = character.activeAccessory)))
+	val accessory = character?.activeAccessories?.getOrDefault(slot, emptyId) ?: emptyId
+	return if (accessory != emptyId)
+		listOf(newEvent(tryActionEvent, actor, TryActionEvent(action = accessory)))
 	else
 		listOf()
 }
@@ -55,7 +59,8 @@ fun gatherPlayerUseActions(deck: Deck, playerInputs: PlayerInputs): Events =
 			if (input != null) {
 				when {
 					input.interact -> getPlayerInteractionEvents(deck, actor, player)
-					input.primaryAction -> getPlayerPrimaryActionEvents(deck, actor)
+					input.primaryAction -> getPlayerActionEvents(deck, actor, AccessorySlot.primary)
+					input.utilityAction -> getPlayerActionEvents(deck, actor, AccessorySlot.utility)
 					else -> listOf()
 				}
 			} else

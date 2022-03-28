@@ -15,8 +15,9 @@ object Commands {
   val navigate = "navigate"
   val drillDown = "drillDown"
   val primaryAction = "primaryAction"
-  val jump = "jump"
-  val secondaryAction = "secondaryAction"
+  val utilityAction = "utilityAction"
+  val mobilityAction = "mobilityAction"
+
   val nextAction = "nextAction"
   val previousAction = "previousAction"
 

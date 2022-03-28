@@ -10,7 +10,7 @@ object AccessoryDefinitions {
 
 	val berries = AccessoryDefinition(
 		key = Accessories.berries,
-		consumable = true,
+		slot = AccessorySlot.consumable,
 		equippedFrame = EquipmentFrames.berries,
 		actionEffects = listOf(
 			AccessoryEffect(
@@ -23,6 +23,7 @@ object AccessoryDefinitions {
 
 	val bite = AccessoryDefinition(
 		key = Accessories.bite,
+		slot = AccessorySlot.primary,
 		cooldown = 0.6f,
 		useRange = 5f,
 		actionEffects = listOf(
@@ -41,7 +42,7 @@ object AccessoryDefinitions {
 
 	val burger = AccessoryDefinition(
 		key = Accessories.burger,
-		consumable = true,
+		slot = AccessorySlot.consumable,
 		equippedFrame = EquipmentFrames.burger,
 		actionEffects = listOf(
 			AccessoryEffect(
@@ -54,6 +55,7 @@ object AccessoryDefinitions {
 
 	val fireRing = AccessoryDefinition(
 		key = Accessories.fireRing,
+		slot = AccessorySlot.primary,
 		cooldown = 8f,
 		useRange = 15f,
 		equippedFrame = EquipmentFrames.fireStaff,
@@ -69,6 +71,7 @@ object AccessoryDefinitions {
 
 	val grenade = AccessoryDefinition(
 		key = Accessories.grenade,
+		slot = AccessorySlot.primary,
 		cooldown = 0.6f,
 		useRange = 10f,
 		equippedFrame = EquipmentFrames.banana,
@@ -82,7 +85,7 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/Grenade.tscn",
 				duration = 1.5f,
-				damageRadius = 2f,
+				damageRadius = 3f,
 				damageFalloff = 0.8f,
 				speed = 30f,
 				spawnOnEnd = "res://entities/effect/Explosion.tscn",
@@ -93,6 +96,7 @@ object AccessoryDefinitions {
 
 	val heal = AccessoryDefinition(
 		key = Accessories.heal,
+		slot = AccessorySlot.primary,
 		cooldown = 1.5f,
 		useRange = 6f,
 		equippedFrame = EquipmentFrames.heal,
@@ -105,8 +109,10 @@ object AccessoryDefinitions {
 			),
 		)
 	)
+
 	val invisibility = AccessoryDefinition(
 		key = Accessories.invisibility,
+		slot = AccessorySlot.utility,
 		cooldown = 3f,
 		equippedFrame = EquipmentFrames.invisibility,
 		cooldownDelayEffect = Accessories.invisible,
@@ -124,8 +130,20 @@ object AccessoryDefinitions {
 		)
 	)
 
+	val jump = AccessoryDefinition(
+		key = Accessories.jump,
+		slot = AccessorySlot.mobility,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.jump,
+				recipient = EffectRecipient.self,
+			),
+		)
+	)
+
 	val rifle = AccessoryDefinition(
 		key = Accessories.rifle,
+		slot = AccessorySlot.primary,
 		cooldown = 0.2f,
 		useRange = 30f,
 		equippedFrame = EquipmentFrames.fireStaff,
@@ -145,6 +163,7 @@ object AccessoryDefinitions {
 
 	val fireStaff = AccessoryDefinition(
 		key = Accessories.fireStaff,
+		slot = AccessorySlot.primary,
 		cooldown = 1f,
 		useRange = 15f,
 		equippedFrame = EquipmentFrames.fireStaff,
@@ -163,6 +182,7 @@ object AccessoryDefinitions {
 
 	val sai = AccessoryDefinition(
 		key = Accessories.sai,
+		slot = AccessorySlot.primary,
 		cooldown = 1f,
 		useRange = 3f,
 		equippedFrame = EquipmentFrames.sai,
@@ -182,6 +202,7 @@ object AccessoryDefinitions {
 
 	val summonFox = AccessoryDefinition(
 		key = Accessories.summonFox,
+		slot = AccessorySlot.utility,
 		cooldown = 5f,
 		useRange = 1f,
 		equippedFrame = EquipmentFrames.summonFox,
@@ -197,6 +218,7 @@ object AccessoryDefinitions {
 	)
 	val summonIceWall = AccessoryDefinition(
 		key = Accessories.summonIceWall,
+		slot = AccessorySlot.utility,
 		cooldown = 7f,
 		useRange = 1f,
 		equippedFrame = EquipmentFrames.summonIceWall,
@@ -213,6 +235,7 @@ object AccessoryDefinitions {
 
 	val summonSquid = AccessoryDefinition(
 		key = Accessories.summonSquid,
+		slot = AccessorySlot.utility,
 		cooldown = 5f,
 		useRange = 1f,
 		equippedFrame = EquipmentFrames.summonSquid,
@@ -232,6 +255,7 @@ object BuffDefinitions {
 
 	val backstab = AccessoryDefinition(
 		key = Accessories.backstab,
+		slot = AccessorySlot.passive,
 		passiveEffects = newPassiveEffects(
 			AccessoryEffects.backstab,
 		),
@@ -239,6 +263,7 @@ object BuffDefinitions {
 
 	val burning = AccessoryDefinition(
 		key = Accessories.burning,
+		slot = AccessorySlot.passive,
 		duration = 4f,
 		passiveEffects = listOf(
 			AccessoryEffect(
@@ -252,6 +277,7 @@ object BuffDefinitions {
 
 	val invisible = AccessoryDefinition(
 		key = Accessories.invisible,
+		slot = AccessorySlot.passive,
 		passiveEffects = listOf(
 			newPassiveEffect(AccessoryEffects.invisible),
 			removeOnUseAny,

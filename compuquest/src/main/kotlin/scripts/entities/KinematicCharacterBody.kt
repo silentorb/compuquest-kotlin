@@ -166,7 +166,7 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 			if (velocity.y < 0f)
 				velocity.y = 0.0
 
-			if (input.jump) {
+			if (input.mobilityAction) {
 				velocity.y = jumpHeight.toDouble()
 				snap = Vector3.ZERO
 			} else {
@@ -234,7 +234,7 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 			val deck = world.deck
 			val character = deck.characters[actor]
 			val activeAccessory = if (character?.isAlive == true)
-				character.activeAccessory
+				character.primaryAccessory
 			else
 				emptyId
 

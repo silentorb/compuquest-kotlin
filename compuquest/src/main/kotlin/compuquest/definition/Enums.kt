@@ -11,6 +11,7 @@ object Accessories {
 	val fireStaff = "fireStaff"
 	val heal = "heal"
 	val invisibility = "invisibility"
+	val jump = "jump"
 	val rifle = "rifle"
 	val sai = "sai"
 	val summonFox = "summonFox"
