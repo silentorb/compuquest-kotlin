@@ -2,6 +2,7 @@ package compuquest.clienting.gui
 
 import compuquest.simulation.characters.Character
 import compuquest.simulation.general.*
+import scripts.gui.AccessoriesBrowser
 import scripts.gui.Management
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
@@ -261,5 +262,17 @@ fun conversationMenu() =
 					emptyConversation()
 			} else
 				emptyConversation()
+		}
+	)
+
+fun characterInfoScreen() =
+	GameScreen(
+		title = staticTitle("Character Info"),
+		content = { context, argument ->
+			val deck = context.world.deck
+			val container = deck.containers[context.actor]!!
+			val screen = instantiateScene<AccessoriesBrowser>("res://gui/menus/AccessoriesBrowser.tscn")!!
+			screen.accessories = container.accessories.mapValues { it.value.definition }.entries.toList()
+			screen
 		}
 	)

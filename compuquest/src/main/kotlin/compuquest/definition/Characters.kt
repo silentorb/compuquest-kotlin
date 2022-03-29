@@ -126,7 +126,7 @@ object CharacterDefinitions {
 
 object PlayerProfessionDefinitions {
 
-	val playerCleric = CharacterDefinition(
+	val cleric = CharacterDefinition(
 		key = Characters.playerCleric,
 		proficiencies = mapOf(
 			Proficiencies.nature to 2,
@@ -137,6 +137,22 @@ object PlayerProfessionDefinitions {
 		accessories = listOf(
 			Accessories.heal,
 			Accessories.summonSquid,
+		),
+	)
+
+	val marine = CharacterDefinition(
+		key = Characters.marine,
+		name = "Marine",
+		proficiencies = mapOf(
+			Proficiencies.rangedCombat to 1,
+			Proficiencies.mechanics to 1,
+		),
+		depiction = "medium",
+		frame = 1,
+		health = 120,
+		accessories = listOf(
+			Accessories.rifle,
+			Accessories.grenade,
 		),
 	)
 
@@ -157,7 +173,7 @@ object PlayerProfessionDefinitions {
 		),
 	)
 
-	val playerViking = CharacterDefinition(
+	val viking = CharacterDefinition(
 		key = Characters.playerViking,
 		name = "Viking",
 		proficiencies = mapOf(
@@ -168,21 +184,6 @@ object PlayerProfessionDefinitions {
 		accessories = listOf(
 			Accessories.sword,
 			Accessories.summonFox,
-		),
-	)
-
-	val spaceMarine = CharacterDefinition(
-		key = Characters.spaceMarine,
-		name = "Space Marine",
-		proficiencies = mapOf(
-			Proficiencies.rangedCombat to 1,
-			Proficiencies.mechanics to 1,
-		),
-		depiction = "viking",
-		health = 120,
-		accessories = listOf(
-			Accessories.rifle,
-			Accessories.grenade,
 		),
 	)
 

@@ -27,6 +27,7 @@ object DefaultBindings {
 			GlobalConstants.KEY_F11 to Commands.addPlayer,
 			GlobalConstants.KEY_CONTROL to Commands.crouch,
 			GlobalConstants.KEY_KP_ADD to Commands.nextLevel,
+			GlobalConstants.KEY_C to AdvancedCommand(Commands.navigate, argument = Screens.characterInfo),
 		)
 	else
 		mapOf()

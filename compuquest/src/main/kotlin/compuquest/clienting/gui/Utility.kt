@@ -5,6 +5,7 @@ import compuquest.clienting.isPrimaryPlayer
 import scripts.Global
 import silentorb.mythic.debugging.getDebugBoolean
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.capitalize
 import silentorb.mythic.haft.PlayerMap
 
 fun getMenuItemTitle(context: GameContext, item: GameMenuItem): String {
@@ -35,3 +36,10 @@ fun getFocusMode(playerCount: Int): FocusMode =
 		FocusMode.custom
 	else
 		FocusMode.native
+
+private val camelCaseToTitlePattern = Regex("([a-z])([A-Z])")
+
+fun camelCaseToTitle(text: String): String =
+	capitalize(text).replace(camelCaseToTitlePattern) { match ->
+		"${match.groupValues[1]} ${match.groupValues[2]}"
+	}

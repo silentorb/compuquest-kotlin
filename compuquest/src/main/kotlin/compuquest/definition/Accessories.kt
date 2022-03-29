@@ -5,6 +5,7 @@ import compuquest.simulation.combat.damagesOf
 import godot.core.Transform
 import godot.core.Vector3
 import godot.global.PI
+import silentorb.mythic.localization.DevText
 
 object AccessoryDefinitions {
 
@@ -18,7 +19,8 @@ object AccessoryDefinitions {
 				recipient = EffectRecipient.self,
 				strength = 10f,
 			),
-		)
+		),
+		description = DevText("Provides a small amount of nutrition."),
 	)
 
 	val bite = AccessoryDefinition(
@@ -38,7 +40,8 @@ object AccessoryDefinitions {
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
 			),
-		)
+		),
+		description = DevText("Deals damage"),
 	)
 
 	val burger = AccessoryDefinition(

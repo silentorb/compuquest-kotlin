@@ -6,6 +6,8 @@ export var top = 0 setget set_top
 export var right = 0 setget set_right
 export var bottom = 0 setget set_bottom
 
+export(String, "parent,screen") var scaling_context = "parent" setget set_scaling_context
+
 func set_left(value):
 	if left != value:
 		left = value
@@ -30,6 +32,12 @@ func set_bottom(value):
 		resize_children()
 		minimum_size_changed()
 
+func set_scaling_context(value):
+	if scaling_context != value:
+		scaling_context = value
+		resize_children()
+		minimum_size_changed()
+
 class Margins:
 	var left
 	var top
@@ -42,24 +50,32 @@ class Margins:
 		self.right = right
 		self.bottom = bottom
 
+func get_context_size():
+	match scaling_context:
+		"parent":
+			return get_size()
+		"screen":
+			var screen = get_viewport().size
+			if screen.x < screen.y:
+				return Vector2(screen.x, screen.x)
+			else:
+				return Vector2(screen.y, screen.y)
+
 func get_resolved_margin():
-	var size = get_size()
-	print(str(size.x) + ", " + str(size.y))
-	return Margins.new(left * size.x / 100, top * size.y / 100, right * size.x / 100,bottom * size.y / 100)
+	var size = get_context_size()
+	return Margins.new(left * size.x / 100, top * size.y / 100, right * size.x / 100, bottom * size.y / 100)
 
 func _get_minimum_size():
 	var result = Vector2()
 	
 	for i in range(0, get_child_count()):
 		var child = get_child(i) as Control
-		print(child.name)
 		if child == null || child.is_set_as_toplevel():
 			continue
 		
 		if !child.is_visible_in_tree():
 			continue
 		
-		print("using child")
 		var size = child.get_combined_minimum_size()
 		if size.x > result.x:
 			result.x = size.x
@@ -74,7 +90,6 @@ func _get_minimum_size():
 	return result
 
 func resize_children():
-	print("hey")
 	var size = get_size()
 
 	for i in range(0, get_child_count()):
@@ -83,10 +98,6 @@ func resize_children():
 			continue
 		
 		var margins = get_resolved_margin()
-		print(margins.left)
-		print(margins.top)
-		print(margins.right)
-		print(margins.bottom)
 		var w = size.x - margins.left - margins.right
 		var h = size.y - margins.top - margins.bottom
 		fit_child_in_rect(child, Rect2(margins.left, margins.top, w, h))

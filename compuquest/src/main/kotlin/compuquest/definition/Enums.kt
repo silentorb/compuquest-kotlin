@@ -53,6 +53,6 @@ object Characters {
 	const val playerCleric = "playerCleric"
 	const val ninja = "ninja"
 	const val playerViking = "playerViking"
-	const val spaceMarine = "spaceMarine"
+	const val marine = "marine"
 	const val wizard = "wizard"
 }

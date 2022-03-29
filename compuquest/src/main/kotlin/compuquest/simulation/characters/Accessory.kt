@@ -1,5 +1,6 @@
 package compuquest.simulation.characters
 
+import compuquest.clienting.gui.camelCaseToTitle
 import compuquest.simulation.combat.DamageDefinitions
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Deck
@@ -11,6 +12,8 @@ import godot.core.Transform
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.happening.*
+import silentorb.mythic.localization.DevText
+import silentorb.mythic.localization.Text
 import silentorb.mythic.timing.floatToIntTime
 import kotlin.math.max
 
@@ -76,7 +79,7 @@ enum class AccessorySlot {
 data class AccessoryDefinition(
 	val cooldown: Float = 0f,
 	val key: String,
-	val name: String = key,
+	val name: Text = DevText(camelCaseToTitle(key)),
 	val slot: AccessorySlot,
 	val useRange: Float = 0f,
 	val cost: ResourceMap = mapOf(),
@@ -88,6 +91,7 @@ data class AccessoryDefinition(
 	val stackable: Boolean = false,
 	val equippedFrame: Int = -1,
 	val cooldownDelayEffect: Key? = null, // Cooldown does not decrease while the actor is under this effect
+	val description: Text = DevText("Call 123-4567 to see your description here!"),
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
 	fun hasActiveEffect(effect: Key): Boolean = actionEffects.any { it.type == effect }

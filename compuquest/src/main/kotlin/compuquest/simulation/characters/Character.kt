@@ -261,11 +261,13 @@ fun addCharacter(
 ): Hands {
 	return tempCatch {
 		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
-		characterBody.sprite
 		val allAccessories = accessories + newCharacterAccessories(definitions, nextId, definition.accessories)
 		val character = newCharacter(definition, allAccessories, name, relationships = relationships)
 		sprite.animation = character.depiction
 		sprite.frame = character.frame.toLong()
+		if (character.depiction == "medium") {
+			sprite.pixelSize = 0.05
+		}
 
 		listOf(
 			Hand(

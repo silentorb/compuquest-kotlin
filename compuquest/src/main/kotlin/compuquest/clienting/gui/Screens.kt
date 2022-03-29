@@ -10,6 +10,7 @@ object Screens {
 	const val manageQuests = "manageQuests"
 	const val manageMembers = "manageMembers"
 	const val shopping = "shopping"
+	const val characterInfo = "characterInfo"
 
 	const val mainMenu = "mainMenu"
 	const val options = "options"
@@ -30,6 +31,7 @@ val managementScreens = listOf(
 val gameScreens: Map<Key, GameScreen> = mapOf(
 	// App
 	Screens.mainMenu to mainMenu(),
+	Screens.characterInfo to characterInfoScreen(),
 	Screens.options to optionsMenu(),
 	Screens.optionsInput to optionsInputMenu(),
 	Screens.optionsInputProfiles to optionsInputProfilesMenu(),
