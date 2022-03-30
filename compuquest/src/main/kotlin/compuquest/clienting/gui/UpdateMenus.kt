@@ -5,10 +5,8 @@ import compuquest.simulation.general.World
 import compuquest.simulation.input.Commands
 import godot.Node
 import scripts.Global
-import scripts.gui.Management
 import scripts.gui.MenuScreen
 import silentorb.mythic.ent.Id
-import silentorb.mythic.ent.Key
 import silentorb.mythic.godoting.clearChildren
 import silentorb.mythic.godoting.instantiateScene
 import silentorb.mythic.godoting.tempCatch
@@ -89,16 +87,6 @@ fun syncGuiToState(slot: Node, actor: Id, world: World, lastMenu: Any?, menuStac
 		if (address != null) {
 			if (!slotHasMenu || lastMenu != address) {
 				val screen = gameScreens[address.key]
-//        val screen = when (menu) {
-//          gameOverScreen -> showGameOverScreen()
-//          ManagementScreens.members.name -> newManagementMenu(slot, ManagementScreens.members)
-//          ManagementScreens.quests.name -> newManagementMenu(slot, ManagementScreens.quests)
-//          is MenuAddress -> when (menu.key) {
-//            Screens.conversation -> conversationMenu(actor, menu.context as? Id)
-//            else -> null
-//          }
-//          else -> null
-//        }
 
 				if (screen != null) {
 					val context = GameContext(
@@ -117,6 +105,10 @@ fun syncGuiToState(slot: Node, actor: Id, world: World, lastMenu: Any?, menuStac
 			}
 			listOf(address)
 		} else if (slotHasMenu) {
+			val screen = slot.getChild(0)
+			if (screen is HasOnClose) {
+				screen.onClose()
+			}
 			slot.getChild(0)?.queueFree()
 			val playerMenus = Global.instance!!.playerMenus
 			playerMenus.remove(actor)

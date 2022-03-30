@@ -56,3 +56,7 @@ enum class FocusMode {
 	custom,
 	native,
 }
+
+interface HasOnClose {
+	fun onClose()
+}

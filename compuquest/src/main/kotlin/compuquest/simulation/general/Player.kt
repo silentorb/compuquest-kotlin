@@ -5,15 +5,12 @@ import compuquest.simulation.combat.Attack
 import compuquest.simulation.combat.attackEvent
 import compuquest.simulation.combat.restoreFullHealthEvent
 import compuquest.simulation.input.Commands
-import compuquest.simulation.physics.setLocationEvent
 import compuquest.simulation.updating.simulationFps
-import godot.core.Vector3
 import scripts.entities.PlayerSpawner
 import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.emptyId
-import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.happening.newEvent
@@ -129,10 +126,14 @@ fun spawnNewPlayerCharacter(world: World, actor: Id, playerIndex: Int, faction: 
 	return if (scene != null && !deck.characters.containsKey(actor)) {
 		val nextId = world.nextId.source()
 		val name = newPlayerName(playerIndex)
-		val debugAccessories = newCharacterAccessories(
-			world.definitions, nextId,
-			getDebugString("PLAYER_ITEMS")?.split(",") ?: listOf()
-		)
+		val debugPlayerEquipment = getDebugString("PLAYER_ITEMS")?.split(",")
+
+		val accessories = if (debugPlayerEquipment != null)
+			newCharacterAccessories(world.definitions, nextId, debugPlayerEquipment)
+		else if (world.scenario.characterCustomization)
+			mapOf()
+		else
+			null
 
 		val relationships = if (spawner.relationships.any())
 			spawner.relationships
@@ -147,7 +148,7 @@ fun spawnNewPlayerCharacter(world: World, actor: Id, playerIndex: Int, faction: 
 			relationships,
 			name,
 			actor,
-			accessories = debugAccessories
+			accessories = accessories
 		)
 	} else
 		listOf()

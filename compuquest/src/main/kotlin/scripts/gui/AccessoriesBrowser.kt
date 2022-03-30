@@ -1,25 +1,27 @@
 package scripts.gui
 
 import compuquest.clienting.gui.*
-import compuquest.simulation.characters.AccessoryDefinition
-import compuquest.simulation.characters.ProficiencyLevels
-import compuquest.simulation.characters.getProficiences
+import compuquest.simulation.characters.*
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
 import godot.core.variantArrayOf
+import scripts.Global
+import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.clearChildren
 import silentorb.mythic.localization.Text
 
 typealias AccessoryList = List<Map.Entry<Any, AccessoryDefinition>>
 
 @RegisterClass
-class AccessoriesBrowser : Control() {
+class AccessoriesBrowser : Control(), HasOnClose {
 
 	var accessoryLists: List<AccessoryList> = listOf()
 	var proficiencies: ProficiencyLevels = mapOf()
 	var listNodes: MutableList<ItemList> = mutableListOf()
 	var maxTransfers: Int = 0
+	var actor: Id = emptyId
 
 	fun setLabel(key: String, text: String) {
 		val label = (findNode(key) as? Label)
@@ -36,6 +38,17 @@ class AccessoriesBrowser : Control() {
 
 	fun setLabel(key: String, text: Text) =
 		setLabel(key, resolveText(text))
+
+	fun updateLeftListEnabled() {
+		if (accessoryLists.size == 2) {
+			val enabled = maxTransfers == 0 || accessoryLists[1].size < maxTransfers
+
+			val leftList = listNodes[0]
+			for (i in 0 until leftList.getItemCount()) {
+				leftList.setItemDisabled(i, !enabled)
+			}
+		}
+	}
 
 	@RegisterFunction
 	fun on_item_selected(itemIndex: Int, listIndex: Int) {
@@ -89,6 +102,7 @@ class AccessoriesBrowser : Control() {
 		otherListNode.addItem(resolveText(accessory.name))
 		otherListNode.grabFocus()
 		otherListNode.select((accessoryLists[otherListIndex].size - 1).toLong())
+		updateLeftListEnabled()
 	}
 
 	fun populateList(list: ItemList, accessories: AccessoryList) {
@@ -111,6 +125,7 @@ class AccessoriesBrowser : Control() {
 			listNodes.forEachIndexed { index, list ->
 				list.connect("item_activated", this, "on_item_activated", variantArrayOf(index))
 			}
+			updateLeftListEnabled()
 		}
 
 		if (accessoryLists.any()) {
@@ -119,6 +134,16 @@ class AccessoriesBrowser : Control() {
 			list.select(selection.toLong())
 			list.grabFocus()
 			on_item_selected(selection, 0)
+		}
+	}
+
+	override fun onClose() {
+		if (accessoryLists.size == 2) {
+			val events = accessoryLists[1].map {
+				val accessory = newAccessory(Global.world!!.definitions, it.value.key)
+				newAccessoryForContainer(actor, accessory)
+			}
+			Global.addEvents(events)
 		}
 	}
 }

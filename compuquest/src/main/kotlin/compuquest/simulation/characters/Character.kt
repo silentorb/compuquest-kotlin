@@ -257,13 +257,12 @@ fun addCharacter(
 	characterBody: CharacterBody,
 	name: String = definition.name,
 	relationships: Relationships = listOf(),
-	accessories: Table<Accessory> = mapOf(),
+	accessories: Table<Accessory> = newCharacterAccessories(definitions, nextId, definition.accessories),
 	additional: List<Any> = listOf()
 ): Hands {
 	return tempCatch {
 		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
-		val allAccessories = accessories + newCharacterAccessories(definitions, nextId, definition.accessories)
-		val character = newCharacter(definition, allAccessories, name, relationships = relationships)
+		val character = newCharacter(definition, accessories, name, relationships = relationships)
 		sprite.animation = character.depiction
 		sprite.frame = character.frame.toLong()
 		if (character.depiction == "medium") {
@@ -277,7 +276,7 @@ fun addCharacter(
 					character,
 					sprite,
 					characterBody,
-					AccessoryContainer(accessories = allAccessories),
+					AccessoryContainer(accessories = accessories),
 				) + additional
 			)
 		)
@@ -299,7 +298,7 @@ fun spawnCharacter(
 	relationships: Relationships = listOf(),
 	name: String? = null,
 	id: Id? = null,
-	accessories: Table<Accessory> = mapOf(),
+	accessories: Table<Accessory>? = null,
 	additional: List<Any> = listOf()
 ): Hands {
 	val definitions = world.definitions
@@ -324,9 +323,11 @@ fun spawnCharacter(
 	// Godot does not call _ready until the node is added to the scene tree
 	world.scene.addChild(body as Node)
 
+	val accessories2 = accessories ?: newCharacterAccessories(definitions, nextId, definition.accessories)
+
 	return addCharacter(
 		definitions, definition, actor, nextId, body,
-		name ?: definition.name, relationships, accessories, additional
+		name ?: definition.name, relationships, accessories2, additional
 	)
 }
 

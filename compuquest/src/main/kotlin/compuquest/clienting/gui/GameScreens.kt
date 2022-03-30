@@ -269,6 +269,7 @@ fun conversationMenu() =
 fun newAccessoriesBrowser(deck: Deck, actor: Id): AccessoriesBrowser {
 	val character = deck.characters[actor]!!
 	val screen = instantiateScene<AccessoriesBrowser>("res://gui/menus/AccessoriesBrowser.tscn")!!
+	screen.actor = actor
 	screen.proficiencies = character.proficiencies
 	return screen
 }
@@ -295,6 +296,7 @@ fun equipNewCharacterScreen() =
 			val deck = context.world.deck
 			val container = deck.containers[context.actor]!!
 			val screen = newAccessoriesBrowser(deck, context.actor)
+			screen.maxTransfers = 2
 			val ownedDefinitions = getAccessoryDefinitions(container)
 			val options = context.world.definitions.accessories
 				.filterValues { !it.isConsumable }
