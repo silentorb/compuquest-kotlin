@@ -95,7 +95,7 @@ data class AccessoryDefinition(
 ) {
 	fun hasAttribute(attribute: String): Boolean = attributes.contains(attribute)
 	fun hasActiveEffect(effect: Key): Boolean = actionEffects.any { it.type == effect }
-	val consumable: Boolean get() = slot == AccessorySlot.consumable
+	val isConsumable: Boolean get() = slot == AccessorySlot.consumable
 
 	val isAttack: Boolean = actionEffects.any { it.isAttack }
 }
@@ -198,7 +198,7 @@ fun getConsumedAccessories(deck: Deck, events: Events): Collection<Id> =
 			deck.containers[it.target]
 				?.accessories
 				?.getOrDefault(it.value.action, null)
-				?.definition?.consumable == true
+				?.definition?.isConsumable == true
 		}
 		.map { it.value.action }
 
@@ -244,3 +244,8 @@ fun forEachEffectOfType(type: Key): (AccessoryDefinition, (AccessoryEffect) -> E
 		.filter { it.type == type }
 		.flatMap(map)
 }
+
+fun getProficiences(definition: AccessoryDefinition) =
+	(definition.actionEffects.flatMap { it.proficiencies } +
+			definition.passiveEffects.flatMap { it.proficiencies })
+		.distinct()

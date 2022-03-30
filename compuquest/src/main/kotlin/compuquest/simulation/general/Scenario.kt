@@ -6,4 +6,5 @@ data class Scenario(
 	val name: String,
 	val defaultPlayerFaction: Key,
 	val playerRespawning: Boolean,
+	val characterCustomization: Boolean
 )

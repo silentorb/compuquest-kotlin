@@ -32,7 +32,7 @@ fun getProficienceyModifier(effect: AccessoryEffect, available: ProficiencyLevel
 	getProficiencyModifier(effect.proficiencies, available)
 
 fun getCharacterProficiencies(deck: Deck, actor: Id) =
-	deck.characters[actor]!!.definition.proficiencies
+	deck.characters[actor]!!.proficiencies
 
 fun getProficienceyModifier(deck: Deck, effect: AccessoryEffect, actor: Id): Int100 =
 	getProficienceyModifier(effect, getCharacterProficiencies(deck, actor))

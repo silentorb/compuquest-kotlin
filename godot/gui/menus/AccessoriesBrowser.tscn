@@ -25,29 +25,46 @@ __meta__ = {
 margin_right = 1024.0
 margin_bottom = 600.0
 
-[node name="items-margin" parent="HBoxContainer" instance=ExtResource( 2 )]
+[node name="items-panel" parent="HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 431.0
+margin_right = 224.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 left = 5
 top = 5
-right = 5
 bottom = 5
 scaling_context = "screen"
 
-[node name="items" type="ItemList" parent="HBoxContainer/items-margin"]
-margin_left = 42.95
-margin_top = 42.95
-margin_right = 388.05
-margin_bottom = 557.05
+[node name="items" type="ItemList" parent="HBoxContainer/items-panel"]
+margin_left = 32.25
+margin_top = 32.25
+margin_right = 224.0
+margin_bottom = 567.75
+
+[node name="items-panel2" parent="HBoxContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 228.0
+margin_right = 452.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+left = 5
+top = 5
+bottom = 5
+scaling_context = "screen"
+
+[node name="items2" type="ItemList" parent="HBoxContainer/items-panel2"]
+margin_left = 32.25
+margin_top = 32.25
+margin_right = 224.0
+margin_bottom = 567.75
 
 [node name="info-margin" parent="HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 435.0
-margin_right = 1024.9
+margin_left = 456.0
+margin_right = 1024.5
 margin_bottom = 600.0
 size_flags_horizontal = 3
 left = 5
@@ -57,10 +74,10 @@ bottom = 5
 scaling_context = "screen"
 
 [node name="info" type="VBoxContainer" parent="HBoxContainer/info-margin"]
-margin_left = 42.95
-margin_top = 42.95
-margin_right = 546.95
-margin_bottom = 557.05
+margin_left = 32.25
+margin_top = 32.25
+margin_right = 536.25
+margin_bottom = 567.75
 custom_constants/separation = 20
 
 [node name="name" type="Label" parent="HBoxContainer/info-margin/info"]
@@ -72,7 +89,7 @@ text = "Name"
 [node name="grid" type="GridContainer" parent="HBoxContainer/info-margin/info"]
 margin_top = 122.0
 margin_right = 504.0
-margin_bottom = 352.0
+margin_bottom = 318.0
 custom_constants/vseparation = 30
 custom_constants/hseparation = 30
 columns = 2
@@ -83,61 +100,63 @@ margin_bottom = 25.0
 size_flags_vertical = 0
 text = "Slot"
 
-[node name="slot" type="Label" parent="HBoxContainer/info-margin/info/grid"]
+[node name="slot" type="Button" parent="HBoxContainer/info-margin/info/grid"]
 margin_left = 211.0
-margin_right = 504.0
-margin_bottom = 25.0
+margin_right = 279.0
+margin_bottom = 31.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 text = "slot"
 
 [node name="label2" type="Label" parent="HBoxContainer/info-margin/info/grid"]
-margin_top = 55.0
+margin_top = 61.0
 margin_right = 181.0
-margin_bottom = 80.0
+margin_bottom = 86.0
 size_flags_vertical = 0
 text = "Proficiencies"
 
-[node name="proficiencies" type="VBoxContainer" parent="HBoxContainer/info-margin/info/grid"]
+[node name="proficiencies" type="HBoxContainer" parent="HBoxContainer/info-margin/info/grid"]
 margin_left = 211.0
-margin_top = 55.0
+margin_top = 61.0
 margin_right = 504.0
-margin_bottom = 120.0
-custom_constants/separation = 15
+margin_bottom = 86.0
+custom_constants/separation = 20
 
 [node name="first" type="Label" parent="HBoxContainer/info-margin/info/grid/proficiencies"]
-margin_right = 293.0
+margin_right = 69.0
 margin_bottom = 25.0
 text = "first"
 
 [node name="second" type="Label" parent="HBoxContainer/info-margin/info/grid/proficiencies"]
-margin_top = 40.0
-margin_right = 293.0
-margin_bottom = 65.0
+margin_left = 89.0
+margin_right = 173.0
+margin_bottom = 25.0
 text = "second"
 
 [node name="cooldown-label" type="Label" parent="HBoxContainer/info-margin/info/grid"]
-margin_top = 150.0
+margin_top = 116.0
 margin_right = 181.0
-margin_bottom = 175.0
+margin_bottom = 141.0
 size_flags_vertical = 0
 text = "Cooldown"
 
 [node name="cooldown" type="Label" parent="HBoxContainer/info-margin/info/grid"]
 margin_left = 211.0
-margin_top = 150.0
+margin_top = 116.0
 margin_right = 504.0
-margin_bottom = 175.0
+margin_bottom = 141.0
 text = "0.1"
 
 [node name="label3" type="Label" parent="HBoxContainer/info-margin/info/grid"]
-margin_top = 205.0
+margin_top = 171.0
 margin_right = 181.0
-margin_bottom = 230.0
+margin_bottom = 196.0
 size_flags_vertical = 0
 text = "Description"
 
 [node name="description" type="Label" parent="HBoxContainer/info-margin/info/grid"]
 margin_left = 211.0
-margin_top = 205.0
+margin_top = 171.0
 margin_right = 504.0
-margin_bottom = 230.0
+margin_bottom = 196.0
 text = "This is a description"

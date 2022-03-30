@@ -11,6 +11,7 @@ object Screens {
 	const val manageMembers = "manageMembers"
 	const val shopping = "shopping"
 	const val characterInfo = "characterInfo"
+	const val equipCharacter = "equipCharacter"
 
 	const val mainMenu = "mainMenu"
 	const val options = "options"
@@ -31,7 +32,6 @@ val managementScreens = listOf(
 val gameScreens: Map<Key, GameScreen> = mapOf(
 	// App
 	Screens.mainMenu to mainMenu(),
-	Screens.characterInfo to characterInfoScreen(),
 	Screens.options to optionsMenu(),
 	Screens.optionsInput to optionsInputMenu(),
 	Screens.optionsInputProfiles to optionsInputProfilesMenu(),
@@ -39,6 +39,10 @@ val gameScreens: Map<Key, GameScreen> = mapOf(
 	Screens.chooseProfession to chooseProfessionMenu(),
 
 	// Game
+	Screens.characterInfo to characterInfoScreen(),
+	Screens.equipCharacter to equipNewCharacterScreen(),
+
+	// Old
 //	Screens.completeQuest to completeQuestConversation(),
 	Screens.jobInterview to jobInterviewConversation(),
 	Screens.conversation to conversationMenu(),
@@ -46,4 +50,9 @@ val gameScreens: Map<Key, GameScreen> = mapOf(
 	Screens.manageQuests to questManagementScreen(),
 	Screens.manageMembers to memberManagementScreen(),
 //	Screens.shopping to shoppingConversation(),
+)
+
+// Screens that cannot be cancelled out of and require a selection once visited
+val uncancellableScreens = setOf(
+	Screens.chooseProfession,
 )

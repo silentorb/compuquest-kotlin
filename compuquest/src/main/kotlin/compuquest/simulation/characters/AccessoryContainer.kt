@@ -58,7 +58,7 @@ fun updateContainer(world: World, events: Events): (Id, AccessoryContainer) -> A
 						|| (
 						it.type == useActionEvent
 								&& it.value is UseAction
-								&& container.accessories[it.value.action]?.definition?.consumable == true
+								&& container.accessories[it.value.action]?.definition?.isConsumable == true
 						)
 			}
 			.map { (it.value as? UseAction)?.action ?: it.target as Id } +

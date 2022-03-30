@@ -50,7 +50,7 @@ fun checkSelfHealing(deck: Deck, actor: Id, character: Character): Id? {
 	val gap = maxHealth - health
 	val mostEfficient = getMostEfficientHealingAccessory(deck, actor, gap)
 	return if (mostEfficient != null) {
-		val healAmount = getAccessoryHealAmount(mostEfficient.value, character.definition.proficiencies)
+		val healAmount = getAccessoryHealAmount(mostEfficient.value, character.proficiencies)
 		val excess = health + healAmount - maxHealth
 		if (excess < maxHealth + (maxHealth / 10) || health < maxHealth / 3)
 			mostEfficient.key

@@ -1,5 +1,6 @@
 package compuquest.clienting.gui
 
+import compuquest.simulation.characters.AccessoryContainer
 import compuquest.simulation.characters.Character
 import compuquest.simulation.general.*
 import scripts.gui.AccessoriesBrowser
@@ -265,14 +266,45 @@ fun conversationMenu() =
 		}
 	)
 
+fun newAccessoriesBrowser(deck: Deck, actor: Id): AccessoriesBrowser {
+	val character = deck.characters[actor]!!
+	val screen = instantiateScene<AccessoriesBrowser>("res://gui/menus/AccessoriesBrowser.tscn")!!
+	screen.proficiencies = character.proficiencies
+	return screen
+}
+
+fun getAccessoryDefinitions(container: AccessoryContainer) =
+	container.accessories.mapValues { it.value.definition }.entries.toList()
+
 fun characterInfoScreen() =
 	GameScreen(
 		title = staticTitle("Character Info"),
 		content = { context, argument ->
 			val deck = context.world.deck
 			val container = deck.containers[context.actor]!!
-			val screen = instantiateScene<AccessoriesBrowser>("res://gui/menus/AccessoriesBrowser.tscn")!!
-			screen.accessories = container.accessories.mapValues { it.value.definition }.entries.toList()
+			val screen = newAccessoriesBrowser(deck, context.actor)
+			screen.accessoryLists = listOf(getAccessoryDefinitions(container))
+			screen
+		}
+	)
+
+fun equipNewCharacterScreen() =
+	GameScreen(
+		title = staticTitle("Equip Character"),
+		content = { context, argument ->
+			val deck = context.world.deck
+			val container = deck.containers[context.actor]!!
+			val screen = newAccessoriesBrowser(deck, context.actor)
+			val ownedDefinitions = getAccessoryDefinitions(container)
+			val options = context.world.definitions.accessories
+				.filterValues { !it.isConsumable }
+				.filterKeys { key -> ownedDefinitions.none { it.value.key == key } }
+				.mapValues { it.value }.entries.toList()
+
+			screen.accessoryLists = listOf(
+				options,
+				ownedDefinitions,
+			)
 			screen
 		}
 	)

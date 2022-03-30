@@ -68,11 +68,14 @@ fun toMenuAddress(value: Any?): MenuAddress =
 		else -> throw Error("$value cannot be converted to a MenuAddress")
 	}
 
+fun tryNavigateBack(menuStack: MenuStack) =
+	if (!uncancellableScreens.contains(menuStack.lastOrNull()?.key)) menuStack.dropLast(1) else menuStack
+
 fun updateMenuStack(player: Player) = handleEvents<MenuStack> { event, menuStack ->
 	when (event.type) {
 		Commands.interact -> listOfNotNull(interactionAddress(player))
 		Commands.finishInteraction -> listOf()
-		Commands.menuBack -> menuStack.dropLast(1)
+		Commands.menuBack -> tryNavigateBack(menuStack)
 		Commands.drillDown -> menuStack.plus(toMenuAddress(event.value))
 		Commands.navigate -> listOf(toMenuAddress(event.value))
 		else -> menuStack
@@ -107,8 +110,7 @@ fun syncGuiToState(slot: Node, actor: Id, world: World, lastMenu: Any?, menuStac
 					val playerMenus = Global.instance!!.playerMenus
 					if (content is MenuScreen) {
 						playerMenus[actor] = content
-					}
-					else {
+					} else {
 						playerMenus.remove(actor)
 					}
 				}

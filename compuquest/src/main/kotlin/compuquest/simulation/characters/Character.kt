@@ -56,6 +56,7 @@ data class Character(
 	val isAlive: Boolean = isCharacterAlive(health)
 	val health: Int get() = destructible.health
 	val primaryAccessory: Id get() = activeAccessories[AccessorySlot.primary] ?: emptyId
+	val proficiencies: ProficiencyLevels get() = definition.proficiencies
 }
 
 fun isCharacterAlive(health: Int): Boolean =

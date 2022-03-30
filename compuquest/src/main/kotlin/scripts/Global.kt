@@ -181,6 +181,7 @@ class Global : Node() {
 					name = "Dev Scenario",
 					defaultPlayerFaction = scenarioNode?.defaultPlayerFaction ?: Factions.player,
 					playerRespawning = getDebugBoolean("PLAYER_RESPAWN"),
+					characterCustomization = getDebugBoolean("CHARACTER_CUSTOMIZATION"),
 				)
 				newGame(scene, scenario, definitions, client!!.materials)
 			} else
@@ -289,7 +290,7 @@ class Global : Node() {
 		// Need to release any references to Godot objects or there will be memory leaks
 		worlds = listOf()
 		client?.materials?.clear()
-//		client?.viewports?.forEach { it.rigCamera?.queueFree() }
+		client?.viewports?.forEach { it.rigCamera?.queueFree() }
 		client = null
 		environments.clear()
 	}
