@@ -70,6 +70,7 @@ val gamepadJoinGameButtons = listOf(
 	GamepadChannels.JOY_XBOX_B.toInt(),
 	GamepadChannels.JOY_XBOX_X.toInt(),
 	GamepadChannels.JOY_XBOX_Y.toInt(),
+	GamepadChannels.JOY_SELECT.toInt(),
 	GamepadChannels.JOY_START.toInt(),
 )
 

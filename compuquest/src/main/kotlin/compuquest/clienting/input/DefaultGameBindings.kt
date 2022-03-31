@@ -87,6 +87,7 @@ object DefaultBindings {
 			)
 		),
 		GamepadChannels.JOY_START to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
+		GamepadChannels.JOY_SELECT to AdvancedCommand(Commands.navigate, argument = Screens.characterInfo),
 		GamepadChannels.JOY_XBOX_X to Commands.primaryAction,
 		GamepadChannels.JOY_XBOX_Y to Commands.utilityAction,
 		GamepadChannels.JOY_XBOX_B to Commands.interact,

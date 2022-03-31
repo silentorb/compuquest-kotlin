@@ -8,10 +8,12 @@ import compuquest.definition.playerProfessionDefinitions
 import compuquest.simulation.general.*
 import compuquest.simulation.input.Commands
 import silentorb.mythic.debugging.getDebugString
+import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.PlayerMap
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.filterEventTargets
+import silentorb.mythic.happening.newEvent
 
 fun updatePlayerMap(deck: Deck, players: List<Int>): PlayerMap =
 	deck.players
@@ -33,26 +35,31 @@ fun updateClientPlayers(events: Events, players: List<Int>): List<Int> {
 		players
 }
 
-fun addNewPlayer(playerIndex: Int): Event {
-	val defaultProfession = getDebugString("DEFAULT_PLAYER_PROFESSION")
-	val characterRequest = if (defaultProfession != null && playerProfessionDefinitions.containsKey(defaultProfession))
-		NewPlayerCharacter(
-			type = defaultProfession,
+fun addNewPlayer(playerIndex: Int): Event =
+	Event(newPlayerEvent, null, NewPlayer(playerIndex))
+
+fun addNewPlayerCharacter(scenario: Scenario, actor: Id): Events {
+	val defaultProfession = scenario.defaultPlayerProfession
+	return if (defaultProfession != null && playerProfessionDefinitions.containsKey(defaultProfession))
+		listOfNotNull(
+			newEvent(
+				newPlayerCharacterEvent, actor, NewPlayerCharacter(
+					type = defaultProfession,
+				)
+			),
+			if (scenario.characterCustomization)
+				Event(Commands.navigate, actor, Screens.equipCharacter)
+			else
+				null
 		)
 	else
-		null
-
-	val request = NewPlayer(
-		index = playerIndex,
-		character = characterRequest,
-	)
-	return Event(newPlayerEvent, null, request)
+		listOf(Event(Commands.navigate, actor, Screens.chooseProfession))
 }
 
-fun newPlayerEvents(client: Client, deck: Deck): Events =
+fun newPlayerEvents(client: Client, scenario: Scenario, deck: Deck): Events =
 	client.players
 		.filter { index -> deck.players.none { it.value.index == index } }
 		.map(::addNewPlayer) +
 			client.playerMap.keys
 				.filter { !deck.characters.containsKey(it) && getPlayerMenuStack(client, it).none() }
-				.map { Event(Commands.navigate, it, Screens.chooseProfession) }
+				.flatMap { addNewPlayerCharacter(scenario, it) }

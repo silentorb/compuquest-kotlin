@@ -1,7 +1,9 @@
 package scripts.gui
 
 import compuquest.clienting.gui.*
+import compuquest.clienting.input.uiMenuNavigationBindingMap
 import compuquest.simulation.characters.*
+import compuquest.simulation.input.Commands
 import godot.*
 import godot.annotation.RegisterClass
 import godot.annotation.RegisterFunction
@@ -10,12 +12,16 @@ import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.clearChildren
+import silentorb.mythic.haft.Bindings
+import silentorb.mythic.haft.RelativeButtonState
+import silentorb.mythic.haft.getButtonState
+import silentorb.mythic.haft.isButtonJustReleased
 import silentorb.mythic.localization.Text
 
 typealias AccessoryList = List<Map.Entry<Any, AccessoryDefinition>>
 
 @RegisterClass
-class AccessoriesBrowser : Control(), HasOnClose {
+class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 
 	var accessoryLists: List<AccessoryList> = listOf()
 	var proficiencies: ProficiencyLevels = mapOf()
@@ -57,7 +63,7 @@ class AccessoriesBrowser : Control(), HasOnClose {
 
 		setLabel("name", accessory.name)
 		setLabel("description", accessory.description)
-		setLabel("slot", camelCaseToTitle(accessory.slot.name))
+		(findNode("slot") as? Button)?.text = camelCaseToTitle(accessory.slot.name)
 		val proficienciesList = findNode("proficiencies")!!
 		clearChildren(proficienciesList)
 
@@ -65,6 +71,7 @@ class AccessoriesBrowser : Control(), HasOnClose {
 			val label = Button()
 			label.text = camelCaseToTitle(proficiency)
 			label.disabled = !proficiencies.containsKey(proficiency)
+			label.sizeFlagsHorizontal = 0
 			proficienciesList.addChild(label)
 		}
 
@@ -128,12 +135,42 @@ class AccessoriesBrowser : Control(), HasOnClose {
 			updateLeftListEnabled()
 		}
 
-		if (accessoryLists.any()) {
+		if (accessoryLists.any { it.any() }) {
 			val selection = 0
 			val list = listNodes.first()
 			list.select(selection.toLong())
 			list.grabFocus()
 			on_item_selected(selection, 0)
+		}
+	}
+
+	override fun updateFocus(bindings: Bindings, gamepad: Int) {
+		val list = listNodes.firstOrNull { it.hasFocus() } ?: return
+
+		val itemCount = list.getItemCount().toInt()
+		val focusIndex = list.getSelectedItems().toList().firstOrNull() ?: 0
+		val newIndex = uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
+			val state = getButtonState(bindings, gamepad, command)
+			if (state == RelativeButtonState.justReleased) {
+				when (command) {
+					Commands.moveUp -> wrapIndex(itemCount, index - 1)
+					Commands.moveDown -> wrapIndex(itemCount, index + 1)
+					else -> index
+				}
+			} else
+				index
+		}
+
+		if (newIndex != focusIndex) {
+			list.select(newIndex.toLong())
+
+			// There seems to be a bug with Godot where the above code does not fire the notification,
+			// so the callback needs to be directly invoked
+			on_item_selected(newIndex, listNodes.indexOf(list))
+		}
+
+		if (isButtonJustReleased(bindings, gamepad, Commands.activate)) {
+			on_item_activated(newIndex, listNodes.indexOf(list))
 		}
 	}
 

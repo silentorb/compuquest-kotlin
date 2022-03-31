@@ -3,17 +3,18 @@ package scripts
 import compuquest.app.newGame
 import compuquest.clienting.*
 import compuquest.clienting.display.applyDisplayOptions
+import compuquest.clienting.gui.HasCustomFocus
 import compuquest.clienting.input.updateMouseMode
 import compuquest.definition.newDefinitions
 import compuquest.population.nextLevel
 import compuquest.population.nextLevelEvent
 import compuquest.simulation.definition.Factions
-import silentorb.mythic.godoting.tempCatch
-import compuquest.simulation.input.Commands
-import compuquest.simulation.general.*
+import compuquest.simulation.general.Hand
+import compuquest.simulation.general.Scenario
 import compuquest.simulation.general.World
+import compuquest.simulation.general.newHandEvent
+import compuquest.simulation.input.Commands
 import compuquest.simulation.input.PlayerInputs
-import silentorb.mythic.happening.Event
 import compuquest.simulation.updating.updateWorld
 import godot.*
 import godot.annotation.RegisterClass
@@ -21,14 +22,16 @@ import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector2
 import godot.global.GD
-import scripts.gui.MenuScreen
 import scripts.world.ScenarioNode
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
+import silentorb.mythic.debugging.getDebugString
 import silentorb.mythic.ent.Id
 import silentorb.mythic.godoting.findChildrenOfType
+import silentorb.mythic.godoting.tempCatch
 import silentorb.mythic.haft.globalMouseOffset
 import silentorb.mythic.haft.updateButtonPressHistory
+import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
 
 enum class InitMode {
@@ -44,7 +47,7 @@ class Global : Node() {
 	var worlds: List<World> = listOf()
 	val definitions = newDefinitions()
 	var client: Client? = null
-	var playerMenus: MutableMap<Id, MenuScreen> = mutableMapOf()
+	var playerMenus: MutableMap<Id, HasCustomFocus> = mutableMapOf()
 	val environments: MutableMap<String, Environment> = mutableMapOf()
 
 	//	var sceneNode: Spatial? = null
@@ -182,6 +185,7 @@ class Global : Node() {
 					defaultPlayerFaction = scenarioNode?.defaultPlayerFaction ?: Factions.player,
 					playerRespawning = getDebugBoolean("PLAYER_RESPAWN"),
 					characterCustomization = getDebugBoolean("CHARACTER_CUSTOMIZATION"),
+					defaultPlayerProfession = getDebugString("DEFAULT_PLAYER_PROFESSION"),
 				)
 				newGame(scene, scenario, definitions, client!!.materials)
 			} else

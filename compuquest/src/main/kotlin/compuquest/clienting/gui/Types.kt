@@ -3,6 +3,7 @@ package compuquest.clienting.gui
 import compuquest.simulation.general.World
 import godot.Node
 import silentorb.mythic.ent.Id
+import silentorb.mythic.haft.Bindings
 import silentorb.mythic.happening.Events
 
 typealias ConversationEventSource<Context> = (Context) -> Events
@@ -59,4 +60,8 @@ enum class FocusMode {
 
 interface HasOnClose {
 	fun onClose()
+}
+
+interface HasCustomFocus {
+	fun updateFocus(bindings: Bindings, gamepad: Int)
 }

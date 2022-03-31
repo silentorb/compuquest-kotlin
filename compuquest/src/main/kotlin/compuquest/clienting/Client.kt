@@ -95,7 +95,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 fun serverEventsFromClient(client: Client, world: World?): Events =
 	getUiCommandEvents(client) +
 			if (world != null)
-				newPlayerEvents(client, world.deck)
+				newPlayerEvents(client, world.scenario, world.deck)
 			else
 				listOf()
 

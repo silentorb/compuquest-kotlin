@@ -16,6 +16,7 @@ object GamepadChannels {
 	const val JOY_XBOX_Y = GlobalConstants.JOY_XBOX_Y + gamepadButtonOffset
 	const val JOY_XBOX_A = GlobalConstants.JOY_XBOX_A + gamepadButtonOffset
 	const val JOY_XBOX_B = GlobalConstants.JOY_XBOX_B + gamepadButtonOffset
+	const val JOY_SELECT = GlobalConstants.JOY_SELECT + gamepadButtonOffset
 	const val JOY_START = GlobalConstants.JOY_START + gamepadButtonOffset
 	const val JOY_LEFT_TRIGGER = GlobalConstants.JOY_L2 + gamepadButtonOffset
 	const val JOY_RIGHT_TRIGGER = GlobalConstants.JOY_R2 + gamepadButtonOffset

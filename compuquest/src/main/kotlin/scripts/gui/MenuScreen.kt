@@ -1,6 +1,8 @@
 package scripts.gui
 
 import compuquest.clienting.gui.*
+import compuquest.clienting.input.uiMenuNavigationBindingMap
+import compuquest.simulation.input.Commands
 import godot.Button
 import godot.Control
 import godot.Label
@@ -10,9 +12,13 @@ import godot.annotation.RegisterFunction
 import godot.core.variantArrayOf
 import scripts.Global
 import silentorb.mythic.ent.Id
+import silentorb.mythic.haft.Bindings
+import silentorb.mythic.haft.RelativeButtonState
+import silentorb.mythic.haft.getButtonState
+import silentorb.mythic.haft.isButtonJustReleased
 
 @RegisterClass
-class MenuScreen : Node() {
+class MenuScreen : Node(), HasCustomFocus {
 
 	var title: String = ""
 	var message: List<String> = listOf()
@@ -61,5 +67,29 @@ class MenuScreen : Node() {
 		}
 
 		buttons.firstOrNull()?.grabFocus()
+	}
+
+	override fun updateFocus(bindings: Bindings, gamepad: Int) {
+		val itemCount = items.size
+		val newIndex = uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
+			val state = getButtonState(bindings, gamepad, command)
+			if (state == RelativeButtonState.justReleased) {
+				when (command) {
+					Commands.moveUp -> wrapIndex(itemCount, index - 1)
+					Commands.moveDown -> wrapIndex(itemCount, index + 1)
+					else -> index
+				}
+			} else
+				index
+		}
+
+		if (newIndex != focusIndex) {
+			(itemsContainer?.getChild(newIndex.toLong()) as? Control)?.grabFocus()
+			focusIndex = newIndex
+		}
+
+		if (isButtonJustReleased(bindings, gamepad, Commands.activate)) {
+			on_pressed(newIndex)
+		}
 	}
 }

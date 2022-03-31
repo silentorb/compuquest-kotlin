@@ -96,7 +96,7 @@ fun syncGuiToState(slot: Node, actor: Id, world: World, lastMenu: Any?, menuStac
 					val content = screen.content(context, address.argument)
 					mountScreen(slot, content)
 					val playerMenus = Global.instance!!.playerMenus
-					if (content is MenuScreen) {
+					if (content is HasCustomFocus) {
 						playerMenus[actor] = content
 					} else {
 						playerMenus.remove(actor)
