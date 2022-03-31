@@ -19,7 +19,7 @@ object DefaultBindings {
 		GlobalConstants.KEY_S to Commands.moveBackward,
 		GlobalConstants.KEY_SPACE to Commands.mobilityAction,
 		GlobalConstants.KEY_E to Commands.interact,
-		GlobalConstants.KEY_F to Commands.utilityAction,
+		GlobalConstants.KEY_Q to Commands.utilityAction,
 		GlobalConstants.KEY_ESCAPE to AdvancedCommand(Commands.navigate, argument = Screens.mainMenu),
 	) + if (getDebugBoolean("DEV_MODE"))
 		mapOf(

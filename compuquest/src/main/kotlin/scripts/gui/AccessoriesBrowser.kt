@@ -10,6 +10,7 @@ import godot.annotation.RegisterFunction
 import godot.core.variantArrayOf
 import scripts.Global
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.capitalize
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.clearChildren
 import silentorb.mythic.haft.Bindings
@@ -25,9 +26,10 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 
 	var accessoryLists: List<AccessoryList> = listOf()
 	var proficiencies: ProficiencyLevels = mapOf()
-	var listNodes: MutableList<ItemList> = mutableListOf()
+	var columnNodes: List<List<ItemList>> = listOf()
 	var maxTransfers: Int = 0
 	var actor: Id = emptyId
+	var selectedItem: Any? = null
 
 	fun setLabel(key: String, text: String) {
 		val label = (findNode(key) as? Label)
@@ -49,17 +51,17 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 		if (accessoryLists.size == 2) {
 			val enabled = maxTransfers == 0 || accessoryLists[1].size < maxTransfers
 
-			val leftList = listNodes[0]
-			for (i in 0 until leftList.getItemCount()) {
-				leftList.setItemDisabled(i, !enabled)
+			val column = columnNodes[0]
+			for (list in column) {
+				for (i in 0 until list.getItemCount()) {
+					list.setItemDisabled(i, !enabled)
+				}
 			}
 		}
 	}
 
-	@RegisterFunction
-	fun on_item_selected(itemIndex: Int, listIndex: Int) {
-		val accessories = accessoryLists[listIndex]
-		val accessory = accessories[itemIndex].value
+	fun onItemSelected(list: Control, itemIndex: Int) {
+		val accessory = (list.getChild(itemIndex.toLong()) as AccessoryUiItem).accessory!!
 
 		setLabel("name", accessory.name)
 		setLabel("description", accessory.description)
@@ -91,11 +93,23 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 	}
 
 	@RegisterFunction
-	fun on_item_activated(itemIndex: Int, listIndex: Int) {
+	fun on_item_selected(itemIndex: Int, columnIndex: Int, listIndex: Int) {
+		val column = columnNodes[columnIndex]
+		val list = column[listIndex]
+		onItemSelected(list, itemIndex)
+	}
+
+	@RegisterFunction
+	fun on_item_activated(itemIndex: Int, columnIndex: Int, listIndex: Int) {
+		val column = columnNodes[columnIndex]
 		val accessories = accessoryLists[listIndex]
 		val accessoryEntry = accessories[itemIndex]
+		if (accessoryEntry.key != selectedItem) {
+			on_item_selected(itemIndex, columnIndex, listIndex)
+			return
+		}
 		val accessory = accessoryEntry.value
-		val otherListIndex = 1 - listIndex
+		val otherColumn = columnNodes[1 - columnIndex]
 		accessoryLists = accessoryLists.mapIndexed { index, list ->
 			if (index == listIndex)
 				list - accessoryEntry
@@ -103,8 +117,9 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 				list + accessoryEntry
 		}
 
-		val listNode = listNodes[listIndex]
-		val otherListNode = listNodes[otherListIndex]
+		val otherListIndex = 1 - listIndex
+		val listNode = column[listIndex]
+		val otherListNode = otherColumn[listIndex]
 		listNode.removeItem(itemIndex.toLong())
 		otherListNode.addItem(resolveText(accessory.name))
 		otherListNode.grabFocus()
@@ -112,43 +127,70 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 		updateLeftListEnabled()
 	}
 
-	fun populateList(list: ItemList, accessories: AccessoryList) {
-		accessories.map { (_, accessory) ->
-			list.addItem(resolveText(accessory.name))
+	fun populateList(list: Control, accessories: AccessoryList, columnIndex: Int, index: Int) {
+		accessories.map { (key, accessory) ->
+//			list.addItem(resolveText(accessory.name))
+			val button = AccessoryUiItem()
+			button.key = key
+			button.accessory = accessory
+			button.text = resolveText(accessory.name)
+			button.name = "button"
+//			button.disabled = !(enabled == null || enabled(context, null))
+			button.connect("focus_entered", this, "on_item_selected", variantArrayOf(columnIndex, index))
+			button.connect("pressed", this, "on_item_activated", variantArrayOf(columnIndex, index))
+			list.addChild(button)
 		}
-		list.visible = true
-		list.connect("item_selected", this, "on_item_selected", variantArrayOf(listNodes.indexOf(list)))
 	}
 
 	@RegisterFunction
 	override fun _ready() {
-		listNodes.add(findNode("items") as ItemList)
-		listNodes.add(findNode("items2") as ItemList)
-		accessoryLists.zip(listNodes) { accessories, list ->
-			populateList(list, accessories)
+		columnNodes = accessoryLists.mapIndexed { columnIndex, accessories ->
+			val vbox = findNode("items${columnIndex + 1}") as ItemList
+			AccessorySlot.values().map { slot ->
+				val panel = VBoxContainer()
+				vbox.addChild(panel)
+				val label = Label()
+				label.text = capitalize(slot.name)
+				panel.addChild(label)
+				val list = ItemList()
+				panel.addChild(list)
+				val slotAccessories = accessories.filter { it.value.slot == slot }
+				populateList(list, slotAccessories, columnIndex, slot.ordinal)
+				panel.visible = slotAccessories.any()
+				list
+			}
 		}
 
 		if (accessoryLists.size == 2) {
-			listNodes.forEachIndexed { index, list ->
-				list.connect("item_activated", this, "on_item_activated", variantArrayOf(index))
+			columnNodes.forEachIndexed { columnIndex, column ->
+				column.forEachIndexed { listIndex, list ->
+					list.connect(
+						"item_activated", this, "on_item_activated",
+						variantArrayOf(columnIndex, listIndex)
+					)
+				}
 			}
 			updateLeftListEnabled()
 		}
 
-		if (accessoryLists.any { it.any() }) {
+		val list = columnNodes.firstNotNullOfOrNull { c -> c.firstOrNull { it.getItemCount() > 0 } }
+		if (list != null) {
 			val selection = 0
-			val list = listNodes.first()
 			list.select(selection.toLong())
 			list.grabFocus()
-			on_item_selected(selection, 0)
+			onItemSelected(list, selection)
 		}
 	}
 
 	override fun updateFocus(bindings: Bindings, gamepad: Int) {
-		val list = listNodes.firstOrNull { it.hasFocus() } ?: return
+		val focused = getFocusOwner() as? AccessoryUiItem ?: return
+		val list = focused.getParent() as Control
+//		val list = listNodes.firstNotNullOfOrNull { c -> c.firstOrNull { it.hasFocus() } } ?: return
+		val columnIndex = columnNodes.indexOfFirst { it.contains(list) }
+		val items = accessoryLists[columnIndex]
 
-		val itemCount = list.getItemCount().toInt()
-		val focusIndex = list.getSelectedItems().toList().firstOrNull() ?: 0
+		val itemCount = items.size
+		val focusIndex = items.indexOfFirst { it.key == focused.key }
 		val newIndex = uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
 			val state = getButtonState(bindings, gamepad, command)
 			if (state == RelativeButtonState.justReleased) {
@@ -162,15 +204,16 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 		}
 
 		if (newIndex != focusIndex) {
-			list.select(newIndex.toLong())
-
-			// There seems to be a bug with Godot where the above code does not fire the notification,
-			// so the callback needs to be directly invoked
-			on_item_selected(newIndex, listNodes.indexOf(list))
+			
+////			list.select(newIndex.toLong())
+//
+//			// There seems to be a bug with Godot where the above code does not fire the notification,
+//			// so the callback needs to be directly invoked
+//			on_item_selected(newIndex, columnNodes.indexOf(list))
 		}
 
 		if (isButtonJustReleased(bindings, gamepad, Commands.activate)) {
-			on_item_activated(newIndex, listNodes.indexOf(list))
+			on_item_activated(newIndex, columnNodes.indexOf(list))
 		}
 	}
 
