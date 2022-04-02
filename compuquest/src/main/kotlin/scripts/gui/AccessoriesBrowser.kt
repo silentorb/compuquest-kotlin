@@ -1,7 +1,6 @@
 package scripts.gui
 
 import compuquest.clienting.gui.*
-import compuquest.clienting.input.uiMenuNavigationBindingMap
 import compuquest.simulation.characters.*
 import compuquest.simulation.input.Commands
 import godot.*
@@ -10,26 +9,36 @@ import godot.annotation.RegisterFunction
 import godot.core.variantArrayOf
 import scripts.Global
 import silentorb.mythic.ent.Id
+import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.capitalize
 import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.clearChildren
 import silentorb.mythic.haft.Bindings
-import silentorb.mythic.haft.RelativeButtonState
-import silentorb.mythic.haft.getButtonState
 import silentorb.mythic.haft.isButtonJustReleased
 import silentorb.mythic.localization.Text
+import java.lang.Integer.min
 
-typealias AccessoryList = List<Map.Entry<Any, AccessoryDefinition>>
+typealias AccessoryList = List<Pair<Any, AccessoryDefinition>>
 
 @RegisterClass
-class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
+class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 
 	var accessoryLists: List<AccessoryList> = listOf()
 	var proficiencies: ProficiencyLevels = mapOf()
-	var columnNodes: List<List<ItemList>> = listOf()
+	var columnNodes: List<List<Control>> = listOf()
 	var maxTransfers: Int = 0
 	var actor: Id = emptyId
 	var selectedItem: Any? = null
+	val itemLookup: MutableMap<Int, AccessoryUiItem> = mutableMapOf()
+	var slotLimits: Map<AccessorySlot, Int> = mapOf()
+
+	val slots = listOf(
+		AccessorySlot.primary,
+		AccessorySlot.utility,
+		AccessorySlot.mobility,
+		AccessorySlot.passive,
+		AccessorySlot.consumable,
+	)
 
 	fun setLabel(key: String, text: String) {
 		val label = (findNode(key) as? Label)
@@ -49,19 +58,24 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 
 	fun updateLeftListEnabled() {
 		if (accessoryLists.size == 2) {
-			val enabled = maxTransfers == 0 || accessoryLists[1].size < maxTransfers
+			val rightList = accessoryLists[1]
+			val underMaxTransfers = maxTransfers == 0 || rightList.size < maxTransfers
 
 			val column = columnNodes[0]
 			for (list in column) {
-				for (i in 0 until list.getItemCount()) {
-					list.setItemDisabled(i, !enabled)
+				for (i in 0 until list.getChildCount()) {
+					val item = list.getChild(i) as AccessoryUiItem
+					val slot = item.accessory!!.slot
+					val slotLimit = slotLimits.getOrDefault(slot, -1)
+					val enabled = underMaxTransfers && (slotLimit == -1 || rightList.count { it.second.slot == slot } < slotLimit)
+					item.disabled = !enabled
 				}
 			}
 		}
 	}
 
-	fun onItemSelected(list: Control, itemIndex: Int) {
-		val accessory = (list.getChild(itemIndex.toLong()) as AccessoryUiItem).accessory!!
+	fun onItemSelected(item: AccessoryUiItem) {
+		val accessory = item.accessory!!
 
 		setLabel("name", accessory.name)
 		setLabel("description", accessory.description)
@@ -90,45 +104,93 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 		}
 		coolDownLabel?.visible = showCooldown
 		(findNode("cooldown-label") as? Label)?.visible = showCooldown
+		selectedItem = item.key
 	}
 
 	@RegisterFunction
-	fun on_item_selected(itemIndex: Int, columnIndex: Int, listIndex: Int) {
-		val column = columnNodes[columnIndex]
-		val list = column[listIndex]
-		onItemSelected(list, itemIndex)
+	fun on_item_selected(id: Int) {
+		val item = itemLookup[id]!!
+		onItemSelected(item)
 	}
 
-	@RegisterFunction
-	fun on_item_activated(itemIndex: Int, columnIndex: Int, listIndex: Int) {
+	fun getItemHierarchy(item: AccessoryUiItem): Pair<Int, Int> {
+		val parent = item.getParent()
+		columnNodes.forEachIndexed { columnIndex, column ->
+			column.forEachIndexed { listIndex, list ->
+				if (list == parent) {
+					return columnIndex to listIndex
+				}
+			}
+		}
+
+		return -1 to -1
+	}
+
+	fun updateSlotPanelVisibility() {
+		for (column in columnNodes) {
+			for (list in column) {
+				val panel = list.getParent() as Control
+				panel.visible = list.getChildCount() > 0
+			}
+		}
+	}
+
+	fun updateAccessoryLists() {
+		accessoryLists = columnNodes
+			.map { column ->
+				column.flatMap { list ->
+					list.getChildren().filterIsInstance<AccessoryUiItem>()
+						.map { it.key to it.accessory!! }
+				}
+			}
+	}
+
+	fun getItemByHierarchyIndices(columnIndex: Int, rowIndex: Int): AccessoryUiItem? {
 		val column = columnNodes[columnIndex]
-		val accessories = accessoryLists[listIndex]
-		val accessoryEntry = accessories[itemIndex]
-		if (accessoryEntry.key != selectedItem) {
-			on_item_selected(itemIndex, columnIndex, listIndex)
+		var i = 0
+		for (list in column) {
+			for (itemIndex in (0 until list.getChildCount())) {
+				if (i++ == rowIndex) {
+					return list.getChild(itemIndex) as? AccessoryUiItem
+				}
+			}
+		}
+
+		return null
+	}
+
+	fun onItemActivated(item: AccessoryUiItem) {
+		if (item.key != selectedItem) {
+			onItemSelected(item)
 			return
 		}
-		val accessory = accessoryEntry.value
+		val (columnIndex, listIndex) = getItemHierarchy(item)
+		if (columnIndex == -1) return
 		val otherColumn = columnNodes[1 - columnIndex]
-		accessoryLists = accessoryLists.mapIndexed { index, list ->
-			if (index == listIndex)
-				list - accessoryEntry
-			else
-				list + accessoryEntry
-		}
-
-		val otherListIndex = 1 - listIndex
-		val listNode = column[listIndex]
 		val otherListNode = otherColumn[listIndex]
-		listNode.removeItem(itemIndex.toLong())
-		otherListNode.addItem(resolveText(accessory.name))
-		otherListNode.grabFocus()
-		otherListNode.select((accessoryLists[otherListIndex].size - 1).toLong())
+		item.getParent()!!.removeChild(item)
+		val index = accessoryLists[columnIndex].indexOfFirst { it.first == item.key }
+		otherListNode.addChild(item)
+		updateAccessoryLists()
+		updateSlotPanelVisibility()
 		updateLeftListEnabled()
+
+		val newSelectedIndex = min(index, accessoryLists[columnIndex].size - 1)
+		if (newSelectedIndex > -1) {
+			getItemByHierarchyIndices(columnIndex, newSelectedIndex)?.grabFocus()
+		}
+		else {
+			item.grabFocus() // This seems like a Godot bug but focus is lost when the focused item changes parents
+		}
+	}
+	@RegisterFunction
+	fun on_item_activated(id: Int) {
+		val item = itemLookup[id]!!
+		onItemActivated(item)
 	}
 
-	fun populateList(list: Control, accessories: AccessoryList, columnIndex: Int, index: Int) {
-		accessories.map { (key, accessory) ->
+	fun populateList(list: Control, accessories: AccessoryList) {
+		accessories.forEach { (key, accessory) ->
 //			list.addItem(resolveText(accessory.name))
 			val button = AccessoryUiItem()
 			button.key = key
@@ -136,92 +198,86 @@ class AccessoriesBrowser : Control(), HasOnClose, HasCustomFocus {
 			button.text = resolveText(accessory.name)
 			button.name = "button"
 //			button.disabled = !(enabled == null || enabled(context, null))
-			button.connect("focus_entered", this, "on_item_selected", variantArrayOf(columnIndex, index))
-			button.connect("pressed", this, "on_item_activated", variantArrayOf(columnIndex, index))
+			val id = button.getInstanceId().toInt()
+			if (accessoryLists.size == 2) {
+				button.connect("focus_entered", this, "on_item_selected", variantArrayOf(id))
+				button.connect("pressed", this, "on_item_activated", variantArrayOf(id))
+			}
 			list.addChild(button)
+			itemLookup[id] = button
 		}
 	}
 
 	@RegisterFunction
 	override fun _ready() {
 		columnNodes = accessoryLists.mapIndexed { columnIndex, accessories ->
-			val vbox = findNode("items${columnIndex + 1}") as ItemList
-			AccessorySlot.values().map { slot ->
+			val vbox = findNode("items${columnIndex + 1}") as Control
+			(vbox.getParent()!!.getParent() as Control).visible = true
+			slots.map { slot ->
 				val panel = VBoxContainer()
 				vbox.addChild(panel)
 				val label = Label()
 				label.text = capitalize(slot.name)
 				panel.addChild(label)
-				val list = ItemList()
+				val list = VBoxContainer()
 				panel.addChild(list)
-				val slotAccessories = accessories.filter { it.value.slot == slot }
-				populateList(list, slotAccessories, columnIndex, slot.ordinal)
+				val slotAccessories = accessories.filter { it.second.slot == slot }
+				populateList(list, slotAccessories)
 				panel.visible = slotAccessories.any()
 				list
 			}
 		}
 
 		if (accessoryLists.size == 2) {
-			columnNodes.forEachIndexed { columnIndex, column ->
-				column.forEachIndexed { listIndex, list ->
-					list.connect(
-						"item_activated", this, "on_item_activated",
-						variantArrayOf(columnIndex, listIndex)
-					)
-				}
-			}
+//			columnNodes.forEachIndexed { columnIndex, column ->
+//				column.forEachIndexed { listIndex, list ->
+//					list.connect(
+//						"item_activated", this, "on_item_activated",
+//						variantArrayOf(columnIndex, listIndex)
+//					)
+//				}
+//			}
 			updateLeftListEnabled()
+			updateAccessoryLists()
 		}
 
-		val list = columnNodes.firstNotNullOfOrNull { c -> c.firstOrNull { it.getItemCount() > 0 } }
+		val list = columnNodes.firstNotNullOfOrNull { c -> c.firstOrNull { it.getChildCount() > 0 } }
 		if (list != null) {
 			val selection = 0
-			list.select(selection.toLong())
-			list.grabFocus()
-			onItemSelected(list, selection)
+			val item = list.getChild(selection.toLong()) as AccessoryUiItem
+			item.grabFocus()
+			onItemSelected(item)
 		}
 	}
 
-	override fun updateFocus(bindings: Bindings, gamepad: Int) {
+	override fun applyInput(bindings: Bindings, gamepad: Int) {
 		val focused = getFocusOwner() as? AccessoryUiItem ?: return
-		val list = focused.getParent() as Control
-//		val list = listNodes.firstNotNullOfOrNull { c -> c.firstOrNull { it.hasFocus() } } ?: return
-		val columnIndex = columnNodes.indexOfFirst { it.contains(list) }
+		val (columnIndex, _) = getItemHierarchy(focused)
 		val items = accessoryLists[columnIndex]
-
-		val itemCount = items.size
-		val focusIndex = items.indexOfFirst { it.key == focused.key }
-		val newIndex = uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
-			val state = getButtonState(bindings, gamepad, command)
-			if (state == RelativeButtonState.justReleased) {
-				when (command) {
-					Commands.moveUp -> wrapIndex(itemCount, index - 1)
-					Commands.moveDown -> wrapIndex(itemCount, index + 1)
-					else -> index
-				}
-			} else
-				index
-		}
+		val focusIndex = items.indexOfFirst { it.first == focused.key }
+		val newIndex = getNewMenuFocusIndex(bindings, gamepad, items.size, focusIndex)
 
 		if (newIndex != focusIndex) {
-			
-////			list.select(newIndex.toLong())
-//
-//			// There seems to be a bug with Godot where the above code does not fire the notification,
-//			// so the callback needs to be directly invoked
-//			on_item_selected(newIndex, columnNodes.indexOf(list))
+			getItemByHierarchyIndices(columnIndex, newIndex)?.grabFocus()
 		}
 
 		if (isButtonJustReleased(bindings, gamepad, Commands.activate)) {
-			on_item_activated(newIndex, columnNodes.indexOf(list))
+			val item = getItemByHierarchyIndices(columnIndex, newIndex)
+			if (item != null) {
+				onItemActivated(item)
+			}
 		}
 	}
 
 	override fun onClose() {
 		if (accessoryLists.size == 2) {
-			val events = accessoryLists[1].map {
-				val accessory = newAccessory(Global.world!!.definitions, it.value.key)
-				newAccessoryForContainer(actor, accessory)
+			val events = accessoryLists[1].mapNotNull {
+				val key = it.first
+				if (key is Key) {
+					val accessory = newAccessory(Global.world!!.definitions, key)
+					newAccessoryForContainer(actor, accessory)
+				} else
+					null
 			}
 			Global.addEvents(events)
 		}

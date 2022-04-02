@@ -36,11 +36,17 @@ top = 5
 bottom = 5
 scaling_context = "screen"
 
-[node name="items" type="ItemList" parent="HBoxContainer/items-panel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/items-panel"]
 margin_left = 42.95
 margin_top = 42.95
 margin_right = 510.0
 margin_bottom = 557.05
+scroll_horizontal_enabled = false
+
+[node name="items1" type="VBoxContainer" parent="HBoxContainer/items-panel/ScrollContainer"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="items-panel2" parent="HBoxContainer" instance=ExtResource( 2 )]
 visible = false
@@ -55,11 +61,14 @@ top = 5
 bottom = 5
 scaling_context = "screen"
 
-[node name="items2" type="ItemList" parent="HBoxContainer/items-panel2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/items-panel2"]
 margin_left = 42.95
 margin_top = 42.95
 margin_right = 339.0
 margin_bottom = 557.05
+scroll_horizontal_enabled = false
+
+[node name="items2" type="VBoxContainer" parent="HBoxContainer/items-panel2/ScrollContainer"]
 
 [node name="info-margin" parent="HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0

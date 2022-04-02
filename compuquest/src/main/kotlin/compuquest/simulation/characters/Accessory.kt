@@ -86,7 +86,6 @@ data class AccessoryDefinition(
 	val attributes: Set<Key> = setOf(),
 	val actionEffects: List<AccessoryEffect> = listOf(),
 	val passiveEffects: List<AccessoryEffect> = listOf(),
-	val duration: Float = 0f,
 	val animation: Key? = null,
 	val stackable: Boolean = false,
 	val equippedFrame: Int = -1,
@@ -137,7 +136,6 @@ fun newAccessory(definitions: Definitions, type: Key, duration: Int = noDuration
 		definition = definition,
 		duration = when {
 			duration != noDuration -> duration
-			definition.duration != 0f -> floatToIntTime(definition.duration)
 			else -> noDuration
 		}
 	)

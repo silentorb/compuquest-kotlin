@@ -1,7 +1,6 @@
 package scripts.gui
 
 import compuquest.clienting.gui.*
-import compuquest.clienting.input.uiMenuNavigationBindingMap
 import compuquest.simulation.input.Commands
 import godot.Button
 import godot.Control
@@ -13,12 +12,10 @@ import godot.core.variantArrayOf
 import scripts.Global
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.Bindings
-import silentorb.mythic.haft.RelativeButtonState
-import silentorb.mythic.haft.getButtonState
 import silentorb.mythic.haft.isButtonJustReleased
 
 @RegisterClass
-class MenuScreen : Node(), HasCustomFocus {
+class MenuScreen : Node(), CustomInputHandler {
 
 	var title: String = ""
 	var message: List<String> = listOf()
@@ -69,19 +66,8 @@ class MenuScreen : Node(), HasCustomFocus {
 		buttons.firstOrNull()?.grabFocus()
 	}
 
-	override fun updateFocus(bindings: Bindings, gamepad: Int) {
-		val itemCount = items.size
-		val newIndex = uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
-			val state = getButtonState(bindings, gamepad, command)
-			if (state == RelativeButtonState.justReleased) {
-				when (command) {
-					Commands.moveUp -> wrapIndex(itemCount, index - 1)
-					Commands.moveDown -> wrapIndex(itemCount, index + 1)
-					else -> index
-				}
-			} else
-				index
-		}
+	override fun applyInput(bindings: Bindings, gamepad: Int) {
+		val newIndex = getNewMenuFocusIndex(bindings, gamepad, items.size, focusIndex)
 
 		if (newIndex != focusIndex) {
 			(itemsContainer?.getChild(newIndex.toLong()) as? Control)?.grabFocus()

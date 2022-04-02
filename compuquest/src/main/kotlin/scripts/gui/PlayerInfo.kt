@@ -50,15 +50,15 @@ class PlayerInfo : Control() {
 	fun updateBuffs(deck: Deck, actor: Id) {
 		val grid = buffsGrid!!
 		clearChildren(grid)
-		val buffs = getOwnerAccessories(deck, actor)
-			.filter { it.value.definition.duration > 0f }
-
-		for (buff in buffs) {
-			val label = Label()
-			label.text = buff.value.definition.key
-			label.name = label.text
-			grid.addChild(label)
-		}
+//		val buffs = getOwnerAccessories(deck, actor)
+//			.filter { it.value.definition.duration > 0f }
+//
+//		for (buff in buffs) {
+//			val label = Label()
+//			label.text = buff.value.definition.key
+//			label.name = label.text
+//			grid.addChild(label)
+//		}
 	}
 
 	@RegisterFunction

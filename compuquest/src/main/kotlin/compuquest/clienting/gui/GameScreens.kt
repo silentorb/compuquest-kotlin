@@ -1,6 +1,8 @@
 package compuquest.clienting.gui
 
+import compuquest.definition.getBuffDefinitions
 import compuquest.simulation.characters.AccessoryContainer
+import compuquest.simulation.characters.AccessorySlot
 import compuquest.simulation.characters.Character
 import compuquest.simulation.general.*
 import scripts.gui.AccessoriesBrowser
@@ -275,7 +277,8 @@ fun newAccessoriesBrowser(deck: Deck, actor: Id): AccessoriesBrowser {
 }
 
 fun getAccessoryDefinitions(container: AccessoryContainer) =
-	container.accessories.mapValues { it.value.definition }.entries.toList()
+	container.accessories.mapValues { it.value.definition }
+		.map { it.key to it.value }
 
 fun characterInfoScreen() =
 	GameScreen(
@@ -298,14 +301,21 @@ fun equipNewCharacterScreen() =
 			val screen = newAccessoriesBrowser(deck, context.actor)
 			screen.maxTransfers = 2
 			val ownedDefinitions = getAccessoryDefinitions(container)
+			val buffs = getBuffDefinitions()
 			val options = context.world.definitions.accessories
 				.filterValues { !it.isConsumable }
-				.filterKeys { key -> ownedDefinitions.none { it.value.key == key } }
-				.mapValues { it.value }.entries.toList()
+				.filterKeys { key -> ownedDefinitions.none { it.second.key == key } }
+				.minus(buffs.keys)
+				.map { it.key to it.value }
 
 			screen.accessoryLists = listOf(
 				options,
 				ownedDefinitions,
+			)
+			screen.slotLimits = mapOf(
+				AccessorySlot.primary to 1,
+				AccessorySlot.utility to 1,
+				AccessorySlot.mobility to 1,
 			)
 			screen
 		}

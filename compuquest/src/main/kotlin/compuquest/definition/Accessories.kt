@@ -312,7 +312,7 @@ object AccessoryDefinitions {
 
 }
 
-object BuffDefinitions {
+object PassiveDefinitions {
 
 	val backstab = AccessoryDefinition(
 		key = Accessories.backstab,
@@ -322,10 +322,13 @@ object BuffDefinitions {
 		),
 	)
 
+}
+
+object BuffDefinitions {
+
 	val burning = AccessoryDefinition(
 		key = Accessories.burning,
 		slot = AccessorySlot.passive,
-		duration = 4f,
 		passiveEffects = listOf(
 			AccessoryEffect(
 				type = AccessoryEffects.damage,

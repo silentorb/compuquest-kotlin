@@ -3,7 +3,7 @@ package scripts
 import compuquest.app.newGame
 import compuquest.clienting.*
 import compuquest.clienting.display.applyDisplayOptions
-import compuquest.clienting.gui.HasCustomFocus
+import compuquest.clienting.gui.CustomInputHandler
 import compuquest.clienting.input.updateMouseMode
 import compuquest.definition.newDefinitions
 import compuquest.population.nextLevel
@@ -47,7 +47,7 @@ class Global : Node() {
 	var worlds: List<World> = listOf()
 	val definitions = newDefinitions()
 	var client: Client? = null
-	var playerMenus: MutableMap<Id, HasCustomFocus> = mutableMapOf()
+	var playerMenus: MutableMap<Id, CustomInputHandler> = mutableMapOf()
 	val environments: MutableMap<String, Environment> = mutableMapOf()
 
 	//	var sceneNode: Spatial? = null

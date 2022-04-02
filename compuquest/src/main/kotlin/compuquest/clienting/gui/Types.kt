@@ -62,6 +62,6 @@ interface HasOnClose {
 	fun onClose()
 }
 
-interface HasCustomFocus {
-	fun updateFocus(bindings: Bindings, gamepad: Int)
+interface CustomInputHandler {
+	fun applyInput(bindings: Bindings, gamepad: Int)
 }

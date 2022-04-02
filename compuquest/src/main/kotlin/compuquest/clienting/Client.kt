@@ -76,7 +76,7 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 		}
 
 		syncGodotUiEvents(playerMap, menuStacks, input)
-		updateCustomFocus(playerMap, menuStacks, input)
+		updateCustomInputHandlers(playerMap, menuStacks, input)
 		updateDev()
 
 		client.copy(

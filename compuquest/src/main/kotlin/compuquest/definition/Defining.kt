@@ -16,16 +16,17 @@ fun characterDefinitions() =
 
 val staticCharacterDefinitions = playerProfessionDefinitions + characterDefinitions()
 
-fun actionDefinitions() =
-	reflectProperties<AccessoryDefinition>(AccessoryDefinitions)
-		.associateBy { it.key }
+fun getBuffDefinitions() =
+	reflectAccessoryDefinitions(BuffDefinitions)
 
-fun buffDefinitions() =
-	reflectProperties<AccessoryDefinition>(BuffDefinitions)
+fun reflectAccessoryDefinitions(definitions: Any) =
+	reflectProperties<AccessoryDefinition>(definitions)
 		.associateBy { it.key }
 
 fun accessoryDefinitions(): KeyTable<AccessoryDefinition> =
-	actionDefinitions() + buffDefinitions()
+	reflectAccessoryDefinitions(AccessoryDefinitions) +
+			reflectAccessoryDefinitions(PassiveDefinitions) +
+			getBuffDefinitions()
 
 fun newDefinitions() =
 	Definitions(
