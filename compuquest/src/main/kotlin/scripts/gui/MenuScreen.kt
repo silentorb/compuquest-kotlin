@@ -67,7 +67,7 @@ class MenuScreen : Node(), CustomInputHandler {
 	}
 
 	override fun applyInput(bindings: Bindings, gamepad: Int) {
-		val newIndex = getNewMenuFocusIndex(bindings, gamepad, items.size, focusIndex)
+		val newIndex = updateMenuFocusVertical(bindings, gamepad, items.size, focusIndex)
 
 		if (newIndex != focusIndex) {
 			(itemsContainer?.getChild(newIndex.toLong()) as? Control)?.grabFocus()

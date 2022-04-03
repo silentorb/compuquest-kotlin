@@ -31,6 +31,7 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 	var selectedItem: Any? = null
 	val itemLookup: MutableMap<Int, AccessoryUiItem> = mutableMapOf()
 	var slotLimits: Map<AccessorySlot, Int> = mapOf()
+	var isEditing: Boolean = false
 
 	val slots = listOf(
 		AccessorySlot.primary,
@@ -57,7 +58,7 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 		setLabel(key, resolveText(text))
 
 	fun updateLeftListEnabled() {
-		if (accessoryLists.size == 2) {
+		if (isEditing) {
 			val rightList = accessoryLists[1]
 			val underMaxTransfers = maxTransfers == 0 || rightList.size < maxTransfers
 
@@ -178,11 +179,11 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 		val newSelectedIndex = min(index, accessoryLists[columnIndex].size - 1)
 		if (newSelectedIndex > -1) {
 			getItemByHierarchyIndices(columnIndex, newSelectedIndex)?.grabFocus()
-		}
-		else {
+		} else {
 			item.grabFocus() // This seems like a Godot bug but focus is lost when the focused item changes parents
 		}
 	}
+
 	@RegisterFunction
 	fun on_item_activated(id: Int) {
 		val item = itemLookup[id]!!
@@ -199,7 +200,7 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 			button.name = "button"
 //			button.disabled = !(enabled == null || enabled(context, null))
 			val id = button.getInstanceId().toInt()
-			if (accessoryLists.size == 2) {
+			if (isEditing) {
 				button.connect("focus_entered", this, "on_item_selected", variantArrayOf(id))
 				button.connect("pressed", this, "on_item_activated", variantArrayOf(id))
 			}
@@ -210,6 +211,7 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 
 	@RegisterFunction
 	override fun _ready() {
+		isEditing = accessoryLists.size == 2
 		columnNodes = accessoryLists.mapIndexed { columnIndex, accessories ->
 			val vbox = findNode("items${columnIndex + 1}") as Control
 			(vbox.getParent()!!.getParent() as Control).visible = true
@@ -228,7 +230,7 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 			}
 		}
 
-		if (accessoryLists.size == 2) {
+		if (isEditing) {
 //			columnNodes.forEachIndexed { columnIndex, column ->
 //				column.forEachIndexed { listIndex, list ->
 //					list.connect(
@@ -253,16 +255,25 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 	override fun applyInput(bindings: Bindings, gamepad: Int) {
 		val focused = getFocusOwner() as? AccessoryUiItem ?: return
 		val (columnIndex, _) = getItemHierarchy(focused)
+		if (columnIndex == -1) return
+
 		val items = accessoryLists[columnIndex]
 		val focusIndex = items.indexOfFirst { it.first == focused.key }
-		val newIndex = getNewMenuFocusIndex(bindings, gamepad, items.size, focusIndex)
+		val newColumnIndex = if (isEditing)
+			updateMenuFocusHorizontal(bindings, gamepad, 2, columnIndex)
+		else
+			columnIndex
 
-		if (newIndex != focusIndex) {
-			getItemByHierarchyIndices(columnIndex, newIndex)?.grabFocus()
+		val newIndex = updateMenuFocusVertical(bindings, gamepad, items.size, focusIndex)
+
+		if (newColumnIndex != columnIndex || newIndex != focusIndex) {
+			// For when the column is changed
+			val clippedIndex = min(newIndex, accessoryLists[newColumnIndex].size - 1)
+			getItemByHierarchyIndices(newColumnIndex, clippedIndex)?.grabFocus()
 		}
 
-		if (isButtonJustReleased(bindings, gamepad, Commands.activate)) {
-			val item = getItemByHierarchyIndices(columnIndex, newIndex)
+		if (isEditing && isButtonJustReleased(bindings, gamepad, Commands.activate)) {
+			val item = getItemByHierarchyIndices(newColumnIndex, newIndex)
 			if (item != null) {
 				onItemActivated(item)
 			}
@@ -270,7 +281,7 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 	}
 
 	override fun onClose() {
-		if (accessoryLists.size == 2) {
+		if (isEditing) {
 			val events = accessoryLists[1].mapNotNull {
 				val key = it.first
 				if (key is Key) {

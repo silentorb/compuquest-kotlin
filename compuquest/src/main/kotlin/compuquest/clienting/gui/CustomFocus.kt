@@ -4,6 +4,7 @@ import compuquest.clienting.input.getPlayerBindings
 import compuquest.clienting.input.uiMenuNavigationBindingMap
 import compuquest.simulation.input.Commands
 import scripts.Global
+import silentorb.mythic.ent.Key
 import silentorb.mythic.haft.*
 
 fun wrapIndex(size: Int, index: Int): Int =
@@ -22,15 +23,20 @@ fun updateCustomInputHandlers(playerMap: PlayerMap, menuStacks: MenuStacks, inpu
 	}
 }
 
-fun getNewMenuFocusIndex(bindings: Bindings, gamepad: Int, itemCount: Int, focusIndex: Int) =
-	uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
-		val state = getButtonState(bindings, gamepad, command)
-		if (state == RelativeButtonState.justReleased) {
-			when (command) {
-				Commands.moveUp -> wrapIndex(itemCount, index - 1)
-				Commands.moveDown -> wrapIndex(itemCount, index + 1)
-				else -> index
-			}
-		} else
-			index
+fun getNewMenuFocusIndex(decrementCommand: Key, incrementCommand: Key): (Bindings, Int, Int, Int) -> Int =
+	{ bindings, gamepad, itemCount, focusIndex ->
+		uiMenuNavigationBindingMap.keys.fold(focusIndex) { index, command ->
+			val state = getButtonState(bindings, gamepad, command)
+			if (state == RelativeButtonState.justReleased) {
+				when (command) {
+					decrementCommand -> wrapIndex(itemCount, index - 1)
+					incrementCommand -> wrapIndex(itemCount, index + 1)
+					else -> index
+				}
+			} else
+				index
+		}
 	}
+
+val updateMenuFocusVertical = getNewMenuFocusIndex(Commands.moveUp, Commands.moveDown)
+val updateMenuFocusHorizontal = getNewMenuFocusIndex(Commands.moveLeft, Commands.moveRight)

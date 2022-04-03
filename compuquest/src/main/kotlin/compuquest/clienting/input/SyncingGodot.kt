@@ -11,6 +11,8 @@ import silentorb.mythic.haft.*
 val uiMenuNavigationBindingMap: Map<String, String> = mapOf(
 	Commands.moveUp to "ui_up",
 	Commands.moveDown to "ui_down",
+	Commands.moveLeft to "ui_left",
+	Commands.moveRight to "ui_right",
 )
 
 val uiBindingMap: Map<String, String> = mapOf(
