@@ -31,8 +31,17 @@ fun tempCatchStatement(action: () -> Unit): Unit {
 	}
 }
 
-fun deleteNode(node: Node) {
+interface UnparentOnParentDeletion
+
+fun deleteNode(node: Node, root: Node? = null) {
 	tempCatch {
+		for (i in (node.getChildCount() - 1) downTo 0) {
+			val child = node.getChild(i)
+			if (child is UnparentOnParentDeletion) {
+				node.removeChild(child)
+				root?.callDeferred("add_child", child)
+			}
+		}
 		node.queueFree()
 	}
 }

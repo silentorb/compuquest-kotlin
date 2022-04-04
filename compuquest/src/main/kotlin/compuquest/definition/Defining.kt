@@ -19,12 +19,16 @@ val staticCharacterDefinitions = playerProfessionDefinitions + characterDefiniti
 fun getBuffDefinitions() =
 	reflectAccessoryDefinitions(BuffDefinitions)
 
+fun getAiOnlyDefinitions() =
+	reflectAccessoryDefinitions(AiOnlyAccessories)
+
 fun reflectAccessoryDefinitions(definitions: Any) =
 	reflectProperties<AccessoryDefinition>(definitions)
 		.associateBy { it.key }
 
 fun accessoryDefinitions(): KeyTable<AccessoryDefinition> =
 	reflectAccessoryDefinitions(AccessoryDefinitions) +
+			getAiOnlyDefinitions() +
 			reflectAccessoryDefinitions(PassiveDefinitions) +
 			getBuffDefinitions()
 

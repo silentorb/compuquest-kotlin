@@ -151,7 +151,7 @@ object PlayerProfessionDefinitions {
 		frame = 1,
 		health = 120,
 		accessories = listOf(
-			Accessories.rifle,
+			Accessories.energyStaff,
 			Accessories.grenade,
 		),
 	)

@@ -62,10 +62,8 @@ bottom = 5
 scaling_context = "screen"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/items-panel2"]
-margin_left = 42.95
-margin_top = 42.95
 margin_right = 339.0
-margin_bottom = 557.05
+margin_bottom = 600.0
 scroll_horizontal_enabled = false
 
 [node name="items2" type="VBoxContainer" parent="HBoxContainer/items-panel2/ScrollContainer"]

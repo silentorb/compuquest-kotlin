@@ -180,17 +180,18 @@ fun updateActiveAccessories(
 ): SlotAssignments =
 	activeAccessories.mapValues { (slot, active) ->
 		if (active != emptyId && accessories.containsKey(active))
-			when (input.actionChange) {
-				ActionChange.noChange ->
-					if (characterEvents.any { it.type == equipPrevious } && accessories.containsKey(previous))
-						previous
-					else
-						active
-				ActionChange.previous -> shiftActiveAction(accessories, active, -1)
-				ActionChange.next -> shiftActiveAction(accessories, active, 1)
-			}
-		else if (accessories.containsKey(previous))
-			previous
+			active
+//			when (input.actionChange) {
+//				ActionChange.noChange ->
+//					if (characterEvents.any { it.type == equipPrevious } && accessories.containsKey(previous))
+//						previous
+//					else
+//						active
+//				ActionChange.previous -> shiftActiveAction(accessories, active, -1)
+//				ActionChange.next -> shiftActiveAction(accessories, active, 1)
+//			}
+//		else if (accessories.containsKey(previous))
+//			previous
 		else
 			findAccessoryForSlot(accessories, slot)
 	}

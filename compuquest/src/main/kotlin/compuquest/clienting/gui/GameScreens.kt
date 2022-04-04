@@ -1,5 +1,6 @@
 package compuquest.clienting.gui
 
+import compuquest.definition.getAiOnlyDefinitions
 import compuquest.definition.getBuffDefinitions
 import compuquest.simulation.characters.AccessoryContainer
 import compuquest.simulation.characters.AccessorySlot
@@ -301,11 +302,11 @@ fun equipNewCharacterScreen() =
 			val screen = newAccessoriesBrowser(deck, context.actor)
 			screen.maxTransfers = 2
 			val ownedDefinitions = getAccessoryDefinitions(container)
-			val buffs = getBuffDefinitions()
+			val omitted = getBuffDefinitions() + getAiOnlyDefinitions()
 			val options = context.world.definitions.accessories
 				.filterValues { !it.isConsumable }
 				.filterKeys { key -> ownedDefinitions.none { it.second.key == key } }
-				.minus(buffs.keys)
+				.minus(omitted.keys)
 				.map { it.key to it.value }
 
 			screen.accessoryLists = listOf(

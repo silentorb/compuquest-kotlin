@@ -1,5 +1,7 @@
 package compuquest.clienting
 
+import compuquest.clienting.audio.AudioPlayerPool
+import compuquest.clienting.audio.updateAudio
 import compuquest.clienting.dev.updateDev
 import compuquest.clienting.gui.*
 import compuquest.clienting.input.*
@@ -26,6 +28,7 @@ data class Client(
 	val viewports: SplitViewports = listOf(), // Does not include the root viewport
 	val materials: MaterialMap = mutableMapOf(),
 	val engagedAccessories: Map<Id, Id> = mapOf(), // Contains the ids of each player who has used their active accessory since last selected
+	val audioPool: AudioPlayerPool = AudioPlayerPool(),
 )
 
 fun newClient(): Client {
@@ -52,45 +55,48 @@ fun restartClient(client: Client) =
 		viewports = listOf(),
 	)
 
-fun updateClient(world: World?, events: Events, delta: Float, client: Client): Client {
-	return if (world != null) {
-		val deck = world.deck
-		val players = updateClientPlayers(events, client.players)
-		val playerMap = updatePlayerMap(deck, players)
-		val activeAccessories = playerMap
-			.mapValues { (player, _) ->
-				world.deck.characters[player]?.primaryAccessory ?: 0L
-			}
-
-		val prunedEngagedAccessories = client.engagedAccessories
-			.filter { (player, accessory) ->
-				activeAccessories[player] == accessory
-			}
-
-		val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
-		val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
-		val input = updateInput(delta, players, playerInputContexts, events, client.input)
-		val playerInputs = newPlayerInputs(menuStacks, client.input, playerMap, prunedEngagedAccessories)
-		val populatedEngagedAccessories = activeAccessories.filter { (player, _) ->
-			playerInputs[player]?.primaryAction == true || prunedEngagedAccessories.contains(player)
+fun updateClientWithWorld(world: World, events: Events, delta: Float, client: Client): Client {
+	val deck = world.deck
+	val players = updateClientPlayers(events, client.players)
+	val playerMap = updatePlayerMap(deck, players)
+	val activeAccessories = playerMap
+		.mapValues { (player, _) ->
+			world.deck.characters[player]?.primaryAccessory ?: 0L
 		}
 
-		syncGodotUiEvents(playerMap, menuStacks, input)
-		updateCustomInputHandlers(playerMap, menuStacks, input)
-		updateDev()
+	val prunedEngagedAccessories = client.engagedAccessories
+		.filter { (player, accessory) ->
+			activeAccessories[player] == accessory
+		}
 
-		client.copy(
-			players = players,
-			playerMap = playerMap,
-			menuStacks = menuStacks,
-			input = input,
-			playerInputs = playerInputs,
-			viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
-			engagedAccessories = populatedEngagedAccessories,
-		)
-	} else
-		client
+	val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
+	val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
+	val input = updateInput(delta, players, playerInputContexts, events, client.input)
+	val playerInputs = newPlayerInputs(menuStacks, client.input, playerMap, prunedEngagedAccessories)
+	val populatedEngagedAccessories = activeAccessories.filter { (player, _) ->
+		playerInputs[player]?.primaryAction == true || prunedEngagedAccessories.contains(player)
+	}
+
+	syncGodotUiEvents(playerMap, menuStacks, input)
+	updateCustomInputHandlers(playerMap, menuStacks, input)
+	updateAudio(world.scene, client.audioPool, world.previousEvents)
+
+	return client.copy(
+		players = players,
+		playerMap = playerMap,
+		menuStacks = menuStacks,
+		input = input,
+		playerInputs = playerInputs,
+		viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
+		engagedAccessories = populatedEngagedAccessories,
+	)
 }
+
+fun updateClient(world: World?, events: Events, delta: Float, client: Client): Client =
+	if (world != null)
+		updateClientWithWorld(world, events, delta, client)
+	else
+		client
 
 fun serverEventsFromClient(client: Client, world: World?): Events =
 	getUiCommandEvents(client) +

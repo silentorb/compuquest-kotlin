@@ -57,19 +57,24 @@ object AccessoryDefinitions {
 		)
 	)
 
-	val fireRing = AccessoryDefinition(
-		key = Accessories.fireRing,
+	val energyStaff = AccessoryDefinition(
+		key = Accessories.energyStaff,
 		slot = AccessorySlot.primary,
-		cooldown = 8f,
-		useRange = 15f,
-		equippedFrame = EquipmentFrames.fireStaff,
+		cooldown = 0.15f,
+		useRange = 25f,
+		equippedFrame = EquipmentFrames.energyStaff,
 		actionEffects = listOf(
 			AccessoryEffect(
-				type = AccessoryEffects.summonAtTarget,
+				type = AccessoryEffects.damage,
 				recipient = EffectRecipient.projectile,
 				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.magic),
-				duration = 4f,
-				spawnsScene = "res://entities/effect/FireRing.tscn",
+				range = 25f,
+				damages = damagesOf(
+					DamageTypes.magic to 8,
+				),
+				spawnsScene = "res://entities/effect/EnergyBall.tscn",
+				speed = 60f,
+				sound = Sounds.shootEnergy,
 			),
 		)
 	)
@@ -171,47 +176,6 @@ object AccessoryDefinitions {
 				speed = 30f,
 				spawnOnEnd = "res://entities/effect/Explosion.tscn",
 				transform = Transform().translated(Vector3(0, 0, -1)).rotated(Vector3.RIGHT, PI / 5),
-			),
-		)
-	)
-
-	val rifle = AccessoryDefinition(
-		key = Accessories.rifle,
-		slot = AccessorySlot.primary,
-		cooldown = 0.2f,
-		useRange = 30f,
-		equippedFrame = EquipmentFrames.fireStaff,
-		actionEffects = listOf(
-			AccessoryEffect(
-				type = AccessoryEffects.damage,
-				recipient = EffectRecipient.projectile,
-				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.mechanics),
-				range = 30f,
-				damages = damagesOf(
-					DamageTypes.physical to 10,
-				),
-				spawnsScene = "res://entities/effect/Fireball.tscn",
-				speed = 60f,
-			),
-		)
-	)
-
-	val fireStaff = AccessoryDefinition(
-		key = Accessories.fireStaff,
-		slot = AccessorySlot.primary,
-		cooldown = 1f,
-		useRange = 15f,
-		equippedFrame = EquipmentFrames.fireStaff,
-		actionEffects = listOf(
-			AccessoryEffect(
-				type = AccessoryEffects.damage,
-				recipient = EffectRecipient.projectile,
-				proficiencies = setOf(Proficiencies.magic, Proficiencies.rangedCombat),
-				damages = damagesOf(
-					DamageTypes.fire to 20,
-				),
-				spawnsScene = "res://entities/effect/Fireball.tscn",
-				speed = 20f,
 			),
 		)
 	)
@@ -320,6 +284,47 @@ object PassiveDefinitions {
 		passiveEffects = listOf(
 			newPassiveEffect(AccessoryEffects.backstab, setOf(Proficiencies.cunning)),
 		),
+	)
+
+}
+
+object AiOnlyAccessories {
+
+	val fireRing = AccessoryDefinition(
+		key = Accessories.fireRing,
+		slot = AccessorySlot.primary,
+		cooldown = 8f,
+		useRange = 15f,
+		equippedFrame = EquipmentFrames.fireStaff,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.summonAtTarget,
+				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.rangedCombat, Proficiencies.magic),
+				duration = 4f,
+				spawnsScene = "res://entities/effect/FireRing.tscn",
+			),
+		)
+	)
+
+	val fireStaff = AccessoryDefinition(
+		key = Accessories.fireStaff,
+		slot = AccessorySlot.primary,
+		cooldown = 1f,
+		useRange = 15f,
+		equippedFrame = EquipmentFrames.fireStaff,
+		actionEffects = listOf(
+			AccessoryEffect(
+				type = AccessoryEffects.damage,
+				recipient = EffectRecipient.projectile,
+				proficiencies = setOf(Proficiencies.magic, Proficiencies.rangedCombat),
+				damages = damagesOf(
+					DamageTypes.fire to 20,
+				),
+				spawnsScene = "res://entities/effect/Fireball.tscn",
+				speed = 20f,
+			),
+		)
 	)
 
 }

@@ -13,7 +13,7 @@ object Accessories {
 	val invisibility = "invisibility"
 	val jump = "jump"
 	val mortar = "mortar"
-	val rifle = "rifle"
+	val energyStaff = "energyStaff"
 	val sai = "sai"
 	val summonFox = "summonFox"
 	val summonIceWall = "summonIceWall"
@@ -37,6 +37,7 @@ object EquipmentFrames {
 	const val sai = 12
 	const val summonIceWall = 14
 	const val banana = 16
+	const val energyStaff = 18
 }
 
 object Characters {

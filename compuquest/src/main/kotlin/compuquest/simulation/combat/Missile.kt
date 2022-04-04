@@ -1,5 +1,7 @@
 package compuquest.simulation.combat
 
+import compuquest.clienting.audio.SpatialSound
+import compuquest.clienting.audio.playSound
 import compuquest.simulation.characters.Accessory
 import compuquest.simulation.characters.AccessoryEffect
 import compuquest.simulation.characters.noDuration
@@ -48,11 +50,12 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 		else
 			0f
 
+		val sound = effect.sound
 
 		if (!isSelfPropelled) {
 			(projectile as RigidBody).linearVelocity = velocity
 		}
-		listOf(
+		listOfNotNull(
 			newHandEvent(
 				Hand(
 					components = listOf(
@@ -70,7 +73,17 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 						),
 					)
 				)
-			)
+			),
+			if (sound != null)
+				playSound(
+					SpatialSound(
+						name = sound,
+						location = transform.origin,
+//						parent = projectile,
+					)
+				)
+			else
+				null
 		)
 	}
 }

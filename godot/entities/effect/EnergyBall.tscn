@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://entities/actor/Sprite.tscn" type="PackedScene" id=1]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.3
+
+[node name="fireball" type="Area"]
+collision_mask = 3
+
+[node name="shape" type="CollisionShape" parent="."]
+shape = SubResource( 1 )
+
+[node name="sprite" parent="." instance=ExtResource( 1 )]
+pixel_size = 0.06
+animation = "sprites"
+frame = 11

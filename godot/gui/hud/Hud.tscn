@@ -70,12 +70,12 @@ anchor_bottom = 0.0
 margin_right = 1024.0
 margin_bottom = 600.0
 left = 50
-top = 80
+top = 90
 
 [node name="debug-background" type="Panel" parent="margin"]
 visible = false
 margin_left = 512.0
-margin_top = 480.0
+margin_top = 540.0
 margin_right = 1024.0
 margin_bottom = 600.0
 __meta__ = {
@@ -84,14 +84,14 @@ __meta__ = {
 
 [node name="utility-wrapper" type="MarginContainer" parent="margin"]
 margin_left = 512.0
-margin_top = 480.0
+margin_top = 540.0
 margin_right = 1024.0
 margin_bottom = 600.0
 
 [node name="utility" type="AnimatedSprite" parent="margin/utility-wrapper"]
 visible = false
-position = Vector2( 256, 60 )
-scale = Vector2( 7.5, 7.5 )
+position = Vector2( 256, 30 )
+scale = Vector2( 3.75, 3.75 )
 frames = ExtResource( 7 )
 frame = 10
 script = ExtResource( 6 )

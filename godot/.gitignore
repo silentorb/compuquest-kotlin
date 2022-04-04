@@ -24,3 +24,6 @@ autosave
 
 # External Git repos are placed here
 /scenarios
+
+# Prototype audio files kept separate from the main repos
+assets/audio/prototype

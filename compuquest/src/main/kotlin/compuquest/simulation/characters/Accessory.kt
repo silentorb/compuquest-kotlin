@@ -59,6 +59,7 @@ data class AccessoryEffect(
 	val recipient: EffectRecipient,
 	val transform: Transform? = null,
 	val range: Float = 0f,
+	val sound: Key? = null,
 	val spawnOnEnd: String = "",
 ) {
 	val durationInt: Int get() = floatToIntTime(duration)

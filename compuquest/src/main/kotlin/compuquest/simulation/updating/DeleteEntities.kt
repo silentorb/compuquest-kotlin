@@ -19,7 +19,7 @@ fun deleteEntities(events: Events, world: World): World {
 	for (deletion in distinctBodyDeletions) {
 		val body = world.deck.bodies[deletion]
 		if (body != null) {
-			deleteNode(body)
+			deleteNode(body, world.scene)
 		}
 	}
 	val newDeck = removeEntities(deletions)(deck)
