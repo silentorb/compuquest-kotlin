@@ -54,7 +54,7 @@ fun <T> normalizeRanges(slotCount: Int, ranges: Map<T, Int>): Map<T, Int> {
   return finalNormalized
 }
 
-fun <T> distributeToSlots(dice: Dice, slotCount: Int, scaling: Map<T, Int>, fixed: Map<T, Int>): List<T> {
+fun <T> distributeToSlots(dice: Dice, slotCount: Int, scaling: Map<T, Int>, fixed: Map<T, Int> = mapOf()): List<T> {
   val fixedSlotCount = fixed.entries.sumBy { it.value }
   val scalingSlotCount = slotCount - fixedSlotCount
   assert(scalingSlotCount > -1)
@@ -69,19 +69,19 @@ fun <T> distributeToSlots(dice: Dice, slotCount: Int, scaling: Map<T, Int>, fixe
 }
 
 fun <T> distributeToRaritySlots(dice: Dice, slotCount: Int, scaling: Map<T, Rarity>): List<T> {
-  val rarities = scaling.values
-      .distinct()
-      .sortedByDescending { it.probability }
+//  val rarities = scaling.values
+//      .distinct()
+//      .sortedByDescending { it.probability }
+//
+//  val rarityTotal = rarities.sumOf { it.probability }
+//
+//  val distribution = rarities
+//      .flatMap { rarity ->
+//        val raritySize = slotCount * rarity.probability / rarityTotal
+//        val rarityPool = scaling.filter { it.value == rarity }.keys
+//        (0 until raritySize).map { dice.takeOne(rarityPool) }
+//      }
+//      .take(slotCount)
 
-  val rarityTotal = rarities.sumBy { it.probability }
-
-  val distribution = rarities
-      .flatMap { rarity ->
-        val raritySize = slotCount * rarity.probability / rarityTotal
-        val rarityPool = scaling.filter { it.value == rarity }.keys
-        (0 until raritySize).map { dice.takeOne(rarityPool) }
-      }
-      .take(slotCount)
-
-  return dice.shuffle(distribution)
+  return distributeToSlots(dice, slotCount, scaling.mapValues { it.value.probability })
 }

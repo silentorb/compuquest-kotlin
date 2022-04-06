@@ -4,6 +4,7 @@ import compuquest.simulation.characters.RelationshipType
 import compuquest.simulation.general.World
 import compuquest.simulation.general.interactionMaxDistance
 import compuquest.simulation.intellect.Spirit
+import compuquest.simulation.intellect.knowledge.Roaming
 import compuquest.simulation.intellect.navigation.NavigationState
 import compuquest.simulation.intellect.navigation.fromRecastVector3
 import compuquest.simulation.intellect.navigation.getNavigationPath
@@ -126,7 +127,11 @@ fun newRoamingDestination(world: World, actor: Id, location: Vector3): Vector3? 
 
 fun checkRoaming(world: World, actor: Id, spirit: Spirit): Goal {
 	val goal = spirit.goal
-	return if (spirit.personality.roaming) {
+	val roaming = spirit.personality.roaming
+	if (goal.destination != null && goal.readyTo == ReadyMode.none)
+		return goal.copy(destination = null)
+
+	return if (roaming == Roaming.roaming || (roaming == Roaming.roamWhenAlerted && goal.isAlerted)) {
 		val deck = world.deck
 		val body = deck.bodies[actor] as? CharacterBody
 		if (body != null) {

@@ -28,6 +28,9 @@ data class Goal(
 	// A value of zero means there is currently no pause.
 	val pause: Frames = 0,
 
+	// Has the AI enemy become aware of enemies?
+	val isAlerted: Boolean = false,
+
 	// * * * End design-only fields
 
 	// * * * The following fields are used for both design and execution

@@ -1,5 +1,6 @@
 package compuquest.simulation.intellect
 
+import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.general.World
 import compuquest.simulation.intellect.design.Goal
 import compuquest.simulation.intellect.design.ReadyMode
@@ -36,6 +37,9 @@ fun newSpirit(personality: Personality = Personality()): Spirit =
 		intervalOffset = nextNewSpiritInterval(),
 		personality = personality,
 	)
+
+fun newSpirit(definition: CharacterDefinition) =
+	newSpirit(definition.personality ?: Personality())
 
 fun getSpiritIntervalStep(step: Long): Int =
 	(step % spiritUpdateInterval.toLong()).toInt()

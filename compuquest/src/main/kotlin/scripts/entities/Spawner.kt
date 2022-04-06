@@ -72,11 +72,10 @@ class Spawner : Spatial() {
 			val multiplier = getDebugInt("MONSTER_SPAWN_MULTIPLIER") ?: 1
 
 			for (i in (0 until quantity * multiplier)) {
-				val spirit = newSpirit().copy(
+				val spirit = newSpirit(definition).copy(
 					goal = Goal(
 						pathDestinations = pathDestinations,
 					),
-					personality = definition.personality ?: Personality()
 				)
 
 				val id = world.nextId.source()()

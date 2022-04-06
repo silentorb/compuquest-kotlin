@@ -1,5 +1,11 @@
 package compuquest.simulation.intellect.knowledge
 
+enum class Roaming {
+	none,
+	roaming,
+	roamWhenAlerted,
+}
+
 data class Personality(
-	val roaming: Boolean = false,
+	val roaming: Roaming = Roaming.none,
 )

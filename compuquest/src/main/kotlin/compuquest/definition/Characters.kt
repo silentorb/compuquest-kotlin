@@ -2,6 +2,7 @@ package compuquest.definition
 
 import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.intellect.knowledge.Personality
+import compuquest.simulation.intellect.knowledge.Roaming
 
 object CharacterDefinitions {
 
@@ -39,7 +40,7 @@ object CharacterDefinitions {
 			Accessories.bite,
 		),
 		personality = Personality(
-			roaming = true,
+			roaming = Roaming.roaming,
 		)
 	)
 
@@ -62,6 +63,9 @@ object CharacterDefinitions {
 		accessories = listOf(
 			Accessories.fireStaff,
 		),
+		personality = Personality(
+			roaming = Roaming.roamWhenAlerted,
+		),
 	)
 
 	val skeletonAssassin = CharacterDefinition(
@@ -76,6 +80,9 @@ object CharacterDefinitions {
 		accessories = listOf(
 			Accessories.sai,
 			Accessories.invisibility,
+		),
+		personality = Personality(
+			roaming = Roaming.roamWhenAlerted,
 		),
 	)
 
@@ -119,7 +126,7 @@ object CharacterDefinitions {
 			Accessories.bite,
 		),
 		personality = Personality(
-			roaming = true,
+			roaming = Roaming.roaming,
 		)
 	)
 }

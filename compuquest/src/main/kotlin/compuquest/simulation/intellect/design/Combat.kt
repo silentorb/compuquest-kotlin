@@ -86,22 +86,31 @@ fun updateSelectedAttack(readyActions: Table<Accessory>): Map.Entry<Id, Accessor
 fun requiresTarget(accessory: Accessory): Boolean =
 	accessory.definition.actionEffects.any { it.recipient == EffectRecipient.projectile }
 
-fun checkCombat(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
+fun processCombatTarget(world: World, actor: Id, knowledge: Knowledge, goal: Goal, target: Id): Goal? {
 	val deck = world.deck
+	val readyActions = getReadyAccessories(deck, actor)
+	val invisibility = readyActions.entries.firstOrNull { it.value.definition.key == Accessories.invisibility }
+	return if (invisibility != null) {
+		useAction(invisibility.key, goal)
+	} else {
+		val accessory = updateSelectedAttack(readyActions)
+		if (accessory != null)
+			useActionOnTarget(world, actor, knowledge, accessory, target, goal) ?: wait(goal)
+		else
+			wait(goal)
+	}
+}
+
+fun checkCombat(world: World, actor: Id, spirit: Spirit, knowledge: Knowledge): Goal? {
 	val goal = spirit.goal
 	val target = getVisibleEnemy(world, goal, knowledge.visibleEnemies, actor)
 	return if (target != null) {
-		val readyActions = getReadyAccessories(deck, actor)
-		val invisibility = readyActions.entries.firstOrNull { it.value.definition.key == Accessories.invisibility }
-		if (invisibility != null) {
-			useAction(invisibility.key, goal)
-		} else {
-			val accessory = updateSelectedAttack(readyActions)
-			if (accessory != null)
-				useActionOnTarget(world, actor, knowledge, accessory, target, goal) ?: wait(goal)
-			else
-				wait(goal)
-		}
+		val goal2 = if (!goal.isAlerted)
+			goal.copy(isAlerted = true)
+		else
+			goal
+
+		processCombatTarget(world, actor, knowledge, goal2, target)
 	} else
 		null
 }

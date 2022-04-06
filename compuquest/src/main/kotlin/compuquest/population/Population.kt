@@ -59,7 +59,9 @@ fun populateNewMonsters(world: PreWorld, config: GenerationConfig, dice: Dice, l
 			.zip(distributions) { transform, type ->
 //				val groupSize = dice.getInt(1, 3)
 //				(0 until groupSize).map {
-				spawnAiCharacter(world, transform, type, relationships = relationships, additional = listOf(newSpirit()))
+				val definition = world.definitions.characters[type]!!
+				val spirit = newSpirit(definition)
+				spawnAiCharacter(world, transform, type, relationships = relationships, additional = listOf(spirit))
 //				}
 			}
 			.flatten()
