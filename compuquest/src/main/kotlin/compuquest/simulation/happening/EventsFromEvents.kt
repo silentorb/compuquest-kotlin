@@ -33,7 +33,7 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 				mapEvents(tryActionEvent, eventsFromTryAction(world)),
 				mapEvents(attackEvent, eventsFromAttacks(world)),
 			)
-				.fold(events) { a, b -> a + b(a) } +
+				.fold(listOf()) { a, b -> a + b(events + a) } +
 			filterEventsByType<NewPlayer>(newPlayerEvent, events)
 				.groupBy { it.value.index }
 				.flatMap { (_, it) ->
@@ -44,7 +44,7 @@ fun eventsFromEvents(world: World, previous: World?, events: Events): Events {
 						val characterEvents = if (characterRequest != null) {
 							spawnNewPlayerCharacter(world, actor, request.index, characterRequest)
 						} else
-							listOf()
+							listOf(newEvent(playerAddedEvent, actor))
 
 						newHandEvents(newPlayerHands) + characterEvents
 					} else

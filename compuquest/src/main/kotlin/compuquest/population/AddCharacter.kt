@@ -1,14 +1,15 @@
 package compuquest.population
 
-import compuquest.simulation.characters.addCharacter
+import compuquest.simulation.characters.newCharacter
 import compuquest.simulation.characters.newCharacterAccessories
+import compuquest.simulation.characters.newCharacterAndAccessories
+import compuquest.simulation.characters.newCharacterHands
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
 import compuquest.simulation.general.*
 import godot.Node
 import godot.Resource
-import godot.core.Vector3
 import scripts.entities.AttachCharacter
 import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
@@ -54,7 +55,14 @@ fun addExistingCharacter(
 		val parent = node.getParent()
 		val type = node.type
 		val definition = definitions.characters[type] ?: throw Error("Unknown character type: $type")
-		val characterBody = parent as CharacterBody
-		addCharacter(definitions, definition, id, nextId, characterBody, relationships = listOf(), additional = additional)
+		val (character, accessories) = newCharacterAndAccessories(definitions, definition, nextId, name = node.name)
+
+		val body = parent as CharacterBody
+		newCharacterHands(
+			id,
+			character,
+			accessories,
+			additional = additional + body
+		)
 	}
 }

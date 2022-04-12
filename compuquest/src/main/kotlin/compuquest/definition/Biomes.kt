@@ -69,7 +69,7 @@ val commonIndoorBiomeBlocks = setOf(
 )
 
 val defaultBiomeBlocks: BiomeBlockNames = mapOf(
-	Biomes.dungeon to commonIndoorBiomeBlocks,
+//	Biomes.dungeon to commonIndoorBiomeBlocks,
 	Biomes.graveyard to commonBiomeBlocks,
 	Biomes.lagoon to commonBiomeBlocks,
 )

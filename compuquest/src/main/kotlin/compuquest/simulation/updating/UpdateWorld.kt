@@ -2,7 +2,8 @@ package compuquest.simulation.updating
 
 import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
-import compuquest.simulation.happening.gatherEvents
+import compuquest.simulation.happening.eventsFromEvents
+import compuquest.simulation.happening.gatherWorldEvents
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.intellect.getSpiritIntervalStep
 import compuquest.simulation.intellect.navigation.updateNavigation
@@ -53,21 +54,24 @@ fun updateWorld(events: Events, playerInputs: PlayerInputs, delta: Float, worlds
 			spirits = mapTable(world.deck.spirits, updateSpirit(world, getSpiritIntervalStep(world.step))),
 		)
 	)
-
-	val events2 = gatherEvents(world2, worlds.dropLast(1).lastOrNull(), playerInputs, delta, events)
+	val previousWorld = worlds.dropLast(1).lastOrNull()
+	val worldEvents = gatherWorldEvents(world2, previousWorld, playerInputs, delta)
+	val eventsFromEvents = eventsFromEvents(world, previousWorld, events + worldEvents)
+	val allWorldGeneratedEvents = worldEvents + eventsFromEvents
+	val allEvents = events + allWorldGeneratedEvents
 	val navigation = if (world2.navigation != null)
 		updateNavigation(world2.deck, world.deck, delta, world2.navigation)
 	else
 		null
 
-	val deck = updateDeck(events2, world2, playerInputs, delta)
+	val deck = updateDeck(allEvents, world2, playerInputs, delta)
 	val world3 = world2.copy(
 		deck = deck,
 		navigation = navigation,
 	)
 	updateDepictions(world.deck, world3.deck)
-	val world4 = deleteEntities(events2, world3)
-	val world5 = newEntities(events2, world4)
-	syncGodot(world5, events2, playerInputs)
-	return world5.copy(previousEvents = events2)
+	val world4 = deleteEntities(allEvents, world3)
+	val world5 = newEntities(allEvents, world4)
+	syncGodot(world5, allEvents, playerInputs)
+	return world5.copy(previousEvents = allEvents, outputEvents = allWorldGeneratedEvents)
 }

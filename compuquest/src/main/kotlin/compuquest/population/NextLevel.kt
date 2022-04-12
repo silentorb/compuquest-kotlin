@@ -3,6 +3,7 @@ package compuquest.population
 import compuquest.serving.newWorldNavigation
 import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.copyEntity
+import compuquest.simulation.combat.restoreFullHealth
 import compuquest.simulation.general.*
 import compuquest.simulation.updating.attachBodiesToScene
 import godot.Node
@@ -35,7 +36,7 @@ fun persistDeck(deck: Deck): Deck =
 		groups = deck.groups,
 	)
 
-fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck) {
+fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck): Deck {
 	for (actor in deck.players.keys) {
 		val body = deck.bodies[actor]
 		val spawner = getPlayerRespawnPoint(playerSpawners, deck, actor)
@@ -43,6 +44,17 @@ fun spawnExistingPlayers(playerSpawners: List<PlayerSpawner>, deck: Deck) {
 			body.transform = spawner.globalTransform
 		}
 	}
+
+	return deck.copy(
+		characters = deck.characters.mapValues { (actor, character) ->
+			if (deck.players.containsKey(actor) && !character.isAlive)
+				character.copy(
+					destructible = restoreFullHealth(character.destructible)
+				)
+			else
+				character
+		}
+	)
 }
 
 fun nextLevel(world: World, materials: MaterialMap): World {
@@ -64,12 +76,12 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	val generationConfig = newGenerationConfig(definitions, deck.groups, materials, level)
 	val generationHands = generateWorld(world, generationConfig)
 	val playerSpawners = getPlayerSpawners(scene, deck)
-	spawnExistingPlayers(playerSpawners, deck)
-	val deck2 = allHandsToDeck(nextId, generationHands, deck)
-	attachBodiesToScene(world.scene, deck2.bodies.values)
+	val deck2 = spawnExistingPlayers(playerSpawners, deck)
+	val deck3 = allHandsToDeck(nextId, generationHands, deck2)
+	attachBodiesToScene(world.scene, deck3.bodies.values)
 
 	return world.copy(
-		deck = deck2,
+		deck = deck3,
 		playerSpawners = playerSpawners,
 		navigation = newWorldNavigation(scene),
 		global = global.copy(

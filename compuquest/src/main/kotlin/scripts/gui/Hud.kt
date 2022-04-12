@@ -9,7 +9,6 @@ import compuquest.simulation.characters.getAccessoryInSlot
 import compuquest.simulation.characters.isCharacterAlive
 import compuquest.simulation.combat.damageEvent
 import compuquest.simulation.general.World
-import compuquest.simulation.general.playerRespawnTime
 import compuquest.simulation.updating.simulationFps
 import godot.*
 import godot.annotation.RegisterClass
@@ -56,6 +55,7 @@ class Hud : Control() {
 		lowerThird = findNode("lower-third") as? Control
 		painOverlay = findNode("pain-overlay") as? Panel
 		utility = findNode("utility") as? AnimatedSprite
+		Global.instance!!.huds.add(this)
 	}
 
 	fun updateMenus(client: Client) {
@@ -93,7 +93,7 @@ class Hud : Control() {
 		}
 	}
 
-	fun updateRespawnCountdown(respawnTimer: Int) {
+	fun updateRespawnCountdown(playerRespawnTime: Int, respawnTimer: Int) {
 		val countdown = respawnCountdown!!
 		if (respawnTimer > respawnCountdownDelay) {
 			val remainingTime = (playerRespawnTime - respawnTimer) / simulationFps + 1
@@ -108,8 +108,7 @@ class Hud : Control() {
 		}
 	}
 
-	@RegisterFunction
-	override fun _process(delta: Double) {
+	 fun updateHud() {
 		tempCatch {
 			val client = Global.instance?.client
 			val world = Global.world
@@ -121,7 +120,7 @@ class Hud : Control() {
 				if (canInteractWith != null) {
 					interactLabel!!.text = capitalize(canInteractWith.action)
 				}
-				updateRespawnCountdown(player.respawnTimer)
+				updateRespawnCountdown(world.scenario.playerRespawnTime, player.respawnTimer)
 			}
 
 			debugText?.text = Global.instance?.debugText ?: ""
@@ -145,5 +144,9 @@ class Hud : Control() {
 					-1
 			}
 		}
+	}
+
+	override fun _onDestroy() {
+		Global.instance!!.huds.remove(this)
 	}
 }

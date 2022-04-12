@@ -13,10 +13,10 @@ import silentorb.mythic.happening.Events
 fun <K, V> tableEvents(transform: (K, V) -> Events, table: Map<K, V>): Events =
 	table.flatMap { (id, record) -> transform(id, record) }
 
-fun gatherEvents(world: World, previous: World?, playerInputs: PlayerInputs, delta: Float, events: Events): Events {
+fun gatherWorldEvents(world: World, previous: World?, playerInputs: PlayerInputs, delta: Float): Events {
 	val deck = world.deck
 
-	val events2 = deck.spirits.flatMap { pursueGoals(world, it.key) } +
+	return deck.spirits.flatMap { pursueGoals(world, it.key) } +
 			gatherPlayerUseActions(deck, playerInputs) +
 			tableEvents(eventsFromMissile(world, delta), deck.missiles) +
 			tableEvents(eventsFromPlayer(world), deck.players) +
@@ -25,10 +25,4 @@ fun gatherEvents(world: World, previous: World?, playerInputs: PlayerInputs, del
 				tableEvents(eventsFromCharacter(previous), deck.characters)
 			else
 				listOf()
-//      tableEvents(eventsFromHomingMissile(world, delta), deck.homingMissiles) +
-//      tableEvents(eventsFromFaction(), deck.factions) +
-//      eventsFromWares(deck) +
-//      eventsFromQuests(deck) +
-
-	return eventsFromEvents(world, previous, events + events2)
 }

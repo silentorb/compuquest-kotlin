@@ -29,6 +29,7 @@ data class World(
 	val step: Long = 0L, // With an update rate of 60 frames per second, this variable can safely track 48745201446 years
 	val day: DayState,
 	val previousEvents: Events = listOf(),
+	val outputEvents: Events = listOf(),
 	val space: PhysicsDirectSpaceState,
 	val playerSpawners: List<PlayerSpawner> = listOf(),
 	val navigation: NavigationState? = null,

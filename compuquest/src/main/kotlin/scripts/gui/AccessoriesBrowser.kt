@@ -15,6 +15,7 @@ import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.clearChildren
 import silentorb.mythic.haft.Bindings
 import silentorb.mythic.haft.isButtonJustReleased
+import silentorb.mythic.happening.newEvent
 import silentorb.mythic.localization.Text
 import java.lang.Integer.min
 
@@ -282,15 +283,9 @@ class AccessoriesBrowser : Control(), HasOnClose, CustomInputHandler {
 
 	override fun onClose() {
 		if (isEditing) {
-			val events = accessoryLists[1].mapNotNull {
-				val key = it.first
-				if (key is Key) {
-					val accessory = newAccessory(Global.world!!.definitions, key)
-					newAccessoryForContainer(actor, accessory)
-				} else
-					null
-			}
-			Global.addEvents(events)
+			val accessories = accessoryLists[1].map { it.second }
+			val event = newEvent(setCharacterCreationAccessories, actor, accessories)
+			Global.addEvent(event)
 		}
 	}
 }

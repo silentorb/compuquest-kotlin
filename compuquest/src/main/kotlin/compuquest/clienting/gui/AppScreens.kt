@@ -123,11 +123,6 @@ fun chooseProfessionMenu() =
 			else
 				playerProfessionDefinitions - deck.players.keys.mapNotNull { deck.characters[it]?.definition?.key }
 
-			val address = if (world.scenario.characterCustomization)
-				MenuAddress(Screens.equipCharacter)
-			else
-				null
-
 			newPopupMenu(
 				"Choose Profession",
 				context.actor,
@@ -136,14 +131,10 @@ fun chooseProfessionMenu() =
 						GameMenuItem(
 							title = definition.name,
 							events = { context2 ->
-								val request = NewPlayerCharacter(
-									type = definition.key,
-								)
 								listOf(
-									newEvent(newPlayerCharacterEvent, context2.actor, request),
+									newEvent(setCharacterCreationProfession, context2.actor, definition.key),
 								)
-							},
-							address = address,
+							}
 						)
 					}
 			)

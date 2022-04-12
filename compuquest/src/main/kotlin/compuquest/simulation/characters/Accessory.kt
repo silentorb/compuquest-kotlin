@@ -130,16 +130,18 @@ object AccessoryIntervals {
 
 const val detrimentalEffectCommand = "detrementalEffect"
 
-fun newAccessory(definitions: Definitions, type: Key, duration: Int = noDuration): Accessory {
-	val definition = definitions.accessories[type] ?: throw Error("Invalid accessory type $type")
-
-	return Accessory(
+fun newAccessory(definition: AccessoryDefinition, duration: Int = noDuration): Accessory =
+	Accessory(
 		definition = definition,
 		duration = when {
 			duration != noDuration -> duration
 			else -> noDuration
 		}
 	)
+
+fun newAccessory(definitions: Definitions, type: Key, duration: Int = noDuration): Accessory {
+	val definition = definitions.accessories[type] ?: throw Error("Invalid accessory type $type")
+	return newAccessory(definition = definition, duration)
 }
 
 fun getUsedAccessories(events: Events): Collection<GenericEvent<UseAction>> =

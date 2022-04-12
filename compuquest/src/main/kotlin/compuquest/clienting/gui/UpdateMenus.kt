@@ -74,6 +74,7 @@ fun updateMenuStack(player: Player) = handleEvents<MenuStack> { event, menuStack
 		Commands.interact -> listOfNotNull(interactionAddress(player))
 		Commands.finishInteraction -> listOf()
 		Commands.menuBack -> tryNavigateBack(menuStack)
+		Commands.forceMenuBack -> menuStack.dropLast(1)
 		Commands.drillDown -> menuStack.plus(toMenuAddress(event.value))
 		Commands.navigate -> listOf(toMenuAddress(event.value))
 		else -> menuStack

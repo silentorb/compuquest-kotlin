@@ -5,7 +5,7 @@ import scripts.Global
 import silentorb.mythic.ent.Id
 
 fun navigateBack(player: Id) {
-	Global.addPlayerEvent(Commands.menuBack, player)
+	Global.addPlayerEvent(Commands.forceMenuBack, player)
 }
 
 fun <Context> activateMenuItem(context: Context, player: Id, item: MenuItem<Context>) {

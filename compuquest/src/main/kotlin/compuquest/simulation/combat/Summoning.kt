@@ -29,7 +29,7 @@ fun summonAtLocation(world: World, actor: Id, effect: AccessoryEffect, transform
 		val definition = world.definitions.characters[characterType]
 		val personality = definition?.personality ?: Personality()
 		newHandEvents(
-			spawnCharacter(
+			spawnCharacterWithBody(
 				world, GD.load(scene)!!, transform, characterType,
 				relationships = listOf(Relationship(RelationshipType.master, actor)),
 				additional = listOf(newSpirit(personality)),

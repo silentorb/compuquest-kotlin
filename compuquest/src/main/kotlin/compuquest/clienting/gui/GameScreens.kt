@@ -6,6 +6,7 @@ import compuquest.simulation.characters.AccessoryContainer
 import compuquest.simulation.characters.AccessorySlot
 import compuquest.simulation.characters.Character
 import compuquest.simulation.general.*
+import scripts.Global
 import scripts.gui.AccessoriesBrowser
 import scripts.gui.Management
 import silentorb.mythic.ent.Id
@@ -269,11 +270,15 @@ fun conversationMenu() =
 		}
 	)
 
-fun newAccessoriesBrowser(deck: Deck, actor: Id): AccessoriesBrowser {
-	val character = deck.characters[actor]!!
+fun newAccessoriesBrowser(world: World, actor: Id): AccessoriesBrowser {
+	val deck = world.deck
+	val character = deck.characters[actor]
 	val screen = instantiateScene<AccessoriesBrowser>("res://gui/menus/AccessoriesBrowser.tscn")!!
 	screen.actor = actor
-	screen.proficiencies = character.proficiencies
+	screen.proficiencies = character?.proficiencies
+		?: world.definitions.characters[Global.instance!!.client!!.characterCreationStates[actor]?.type]?.proficiencies
+				?: mapOf()
+
 	return screen
 }
 
@@ -287,7 +292,7 @@ fun characterInfoScreen() =
 		content = { context, argument ->
 			val deck = context.world.deck
 			val container = deck.containers[context.actor]!!
-			val screen = newAccessoriesBrowser(deck, context.actor)
+			val screen = newAccessoriesBrowser(context.world, context.actor)
 			screen.accessoryLists = listOf(getAccessoryDefinitions(container))
 			screen
 		}
@@ -297,11 +302,16 @@ fun equipNewCharacterScreen() =
 	GameScreen(
 		title = staticTitle("Equip Character"),
 		content = { context, argument ->
-			val deck = context.world.deck
-			val container = deck.containers[context.actor]!!
-			val screen = newAccessoriesBrowser(deck, context.actor)
+			val world = context.world
+			val deck = world.deck
+			val container = deck.containers[context.actor]
+			val screen = newAccessoriesBrowser(world, context.actor)
 			screen.maxTransfers = 2
-			val ownedDefinitions = getAccessoryDefinitions(container)
+			val ownedDefinitions = if (container != null)
+				getAccessoryDefinitions(container)
+			else
+				listOf()
+
 			val omitted = getBuffDefinitions() + getAiOnlyDefinitions()
 			val options = context.world.definitions.accessories
 				.filterValues { !it.isConsumable }

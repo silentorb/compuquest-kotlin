@@ -22,6 +22,7 @@ import godot.annotation.RegisterFunction
 import godot.annotation.RegisterProperty
 import godot.core.Vector2
 import godot.global.GD
+import scripts.gui.Hud
 import scripts.world.ScenarioNode
 import silentorb.mythic.debugging.checkDotEnvChanged
 import silentorb.mythic.debugging.getDebugBoolean
@@ -49,6 +50,7 @@ class Global : Node() {
 	var client: Client? = null
 	var playerMenus: MutableMap<Id, CustomInputHandler> = mutableMapOf()
 	val environments: MutableMap<String, Environment> = mutableMapOf()
+	val huds: MutableList<Hud> = mutableListOf()
 
 	//	var sceneNode: Spatial? = null
 	val partyUi: Boolean = false
@@ -147,6 +149,7 @@ class Global : Node() {
 			restartGame()
 		} else {
 			val nextWorld = updateWorld(events, input, delta, worlds)
+			clientEventQueue.addAll(nextWorld.outputEvents)
 
 			// Wait to apply the next level until after the world is updated to ensure any critical events are incorporated
 			this.worlds = if (events.any { it.type == nextLevelEvent })
@@ -196,8 +199,14 @@ class Global : Node() {
 	fun updateClient(delta: Float) {
 		if (initMode == InitMode.readyInitOrInitialized) {
 			val localClient = client ?: newClient()
-			val nextClient = updateClient(worlds.lastOrNull(), updateClientEvents(), delta, localClient)
-			val clientEvents = serverEventsFromClient(nextClient, world)
+			val world = worlds.lastOrNull()
+			val eventsForClient = updateClientEvents()
+			val nextClient = updateClient(world, eventsForClient, delta, localClient)
+			val clientEvents = serverEventsFromClient(nextClient, world, eventsForClient)
+			for (hud in huds) {
+				hud.updateMenus(nextClient)
+			}
+
 			updateButtonPressHistory()
 			addEvents(clientEvents)
 			checkSaveOptions(localClient, nextClient)
@@ -297,6 +306,7 @@ class Global : Node() {
 		client?.viewports?.forEach { it.rigCamera?.queueFree() }
 		client = null
 		environments.clear()
+		huds.clear()
 	}
 }
 

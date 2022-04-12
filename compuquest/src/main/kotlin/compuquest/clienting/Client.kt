@@ -2,13 +2,13 @@ package compuquest.clienting
 
 import compuquest.clienting.audio.AudioPlayerPool
 import compuquest.clienting.audio.updateAudio
-import compuquest.clienting.dev.updateDev
 import compuquest.clienting.gui.*
 import compuquest.clienting.input.*
 import compuquest.clienting.multiplayer.*
 import compuquest.population.MaterialMap
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
+import scripts.Global
 import silentorb.mythic.ent.HashedMap
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
@@ -29,6 +29,7 @@ data class Client(
 	val materials: MaterialMap = mutableMapOf(),
 	val engagedAccessories: Map<Id, Id> = mapOf(), // Contains the ids of each player who has used their active accessory since last selected
 	val audioPool: AudioPlayerPool = AudioPlayerPool(),
+	val characterCreationStates: Map<Id, CharacterCreation> = mapOf(),
 )
 
 fun newClient(): Client {
@@ -69,17 +70,23 @@ fun updateClientWithWorld(world: World, events: Events, delta: Float, client: Cl
 			activeAccessories[player] == accessory
 		}
 
-	val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
-	val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(menuStacks, player) }
+	val playerInputContexts = playerMap.mapValues { (player, _) -> getPlayerInputContext(client.menuStacks, player) }
 	val input = updateInput(delta, players, playerInputContexts, events, client.input)
-	val playerInputs = newPlayerInputs(menuStacks, client.input, playerMap, prunedEngagedAccessories)
+	val playerInputs = newPlayerInputs(client.menuStacks, client.input, playerMap, prunedEngagedAccessories)
 	val populatedEngagedAccessories = activeAccessories.filter { (player, _) ->
 		playerInputs[player]?.primaryAction == true || prunedEngagedAccessories.contains(player)
 	}
 
-	syncGodotUiEvents(playerMap, menuStacks, input)
-	updateCustomInputHandlers(playerMap, menuStacks, input)
+	val scenario = world.scenario
+	val characterCreationStates = updateCharacterCreationStates(scenario, deck, events, client.characterCreationStates)
+
+	syncGodotUiEvents(playerMap, client.menuStacks, input)
+	updateCustomInputHandlers(playerMap, client.menuStacks, input)
 	updateAudio(world.scene, client.audioPool, world.previousEvents)
+
+	// updating menuStacks is one of the last steps to make sure the rest of the client code
+	// is considering the current menu and not the next menu that hasn't been displayed yet
+	val menuStacks = updateMenuStacks(playerMap, deck, events, client.menuStacks)
 
 	return client.copy(
 		players = players,
@@ -89,6 +96,7 @@ fun updateClientWithWorld(world: World, events: Events, delta: Float, client: Cl
 		playerInputs = playerInputs,
 		viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
 		engagedAccessories = populatedEngagedAccessories,
+		characterCreationStates = characterCreationStates,
 	)
 }
 
@@ -98,10 +106,11 @@ fun updateClient(world: World?, events: Events, delta: Float, client: Client): C
 	else
 		client
 
-fun serverEventsFromClient(client: Client, world: World?): Events =
+fun serverEventsFromClient(client: Client, world: World?, events: Events): Events =
 	getUiCommandEvents(client) +
 			if (world != null)
-				newPlayerEvents(client, world.scenario, world.deck)
+				newPlayerEvents(client, world.deck) +
+						characterCreationNavigation(client, world.scenario, world.deck, events)
 			else
 				listOf()
 

@@ -16,7 +16,7 @@ fun updateDeck(events: Events, world: World, inputs: PlayerInputs, delta: Float)
 		characters = mapTable(deck.characters, updateCharacter(world, inputs, events)),
 		containers = mapTable(deck.containers, updateContainer(world, events)),
 		missiles = mapTableValues(deck.missiles, updateMissile()),
-		players = mapTable(deck.players, updatePlayer(world, events, delta)),
+		players = mapTable(deck.players, updatePlayer(world, events)),
 		quests = mapTable(deck.quests, updateQuest(events)),
 		timers = mapTableValues(deck.timers, updateTimer),
 		wares = mapTable(deck.wares, updateWare(events)),

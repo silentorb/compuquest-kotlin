@@ -5,7 +5,6 @@ import compuquest.simulation.combat.updateDestructible
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.*
-import compuquest.simulation.input.ActionChange
 import compuquest.simulation.input.PlayerInput
 import compuquest.simulation.input.PlayerInputs
 import compuquest.simulation.input.emptyPlayerInput
@@ -123,6 +122,15 @@ fun newCharacterAccessories(
 			nextId() to newAccessory(definitions, accessory)
 		}
 
+fun newCharacterAccessories(
+	nextId: NextId,
+	accessories: List<AccessoryDefinition>
+): Table<Accessory> =
+	accessories
+		.associate { accessory ->
+			nextId() to newAccessory(accessory)
+		}
+
 fun findAccessoryForSlot(accessories: Table<Accessory>, slot: AccessorySlot): Id =
 	accessories.entries
 		.firstOrNull { (_, accessory) ->
@@ -141,25 +149,6 @@ fun getAccessoryInSlot(deck: Deck, actor: Id, slot: AccessorySlot): Accessory? {
 	else
 		null
 }
-
-fun newCharacter(
-	definition: CharacterDefinition,
-	accessories: Table<Accessory>,
-	name: String = definition.name,
-	relationships: Relationships = listOf(),
-) = Character(
-	definition = definition,
-	name = name,
-	destructible = Destructible(
-		health = if (getDebugBoolean("HALF_HEALTH")) definition.health / 2 else definition.health,
-		maxHealth = definition.health,
-		drainDuration = healthTimeDrainDuration,
-	),
-	relationships = relationships,
-	depiction = definition.depiction,
-	frame = definition.frame,
-	activeAccessories = initializeActiveAccessories(accessories),
-)
 
 fun shiftActiveAction(accessories: Table<Accessory>, accessory: Id, offset: Int): Id {
 	val actions = accessories.filter { it.value.canBeActivated }.entries.toList()
@@ -250,40 +239,6 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 		)
 	}
 
-fun addCharacter(
-	definitions: Definitions,
-	definition: CharacterDefinition,
-	id: Id,
-	nextId: NextId,
-	characterBody: CharacterBody,
-	name: String = definition.name,
-	relationships: Relationships = listOf(),
-	accessories: Table<Accessory> = newCharacterAccessories(definitions, nextId, definition.accessories),
-	additional: List<Any> = listOf()
-): Hands {
-	return tempCatch {
-		val sprite = (characterBody as Node).findNode("sprite") as AnimatedSprite3D
-		val character = newCharacter(definition, accessories, name, relationships = relationships)
-		sprite.animation = character.depiction
-		sprite.frame = character.frame.toLong()
-		if (character.depiction == "medium") {
-			sprite.pixelSize = 0.05
-		}
-
-		listOf(
-			Hand(
-				id = id,
-				components = listOfNotNull(
-					character,
-					sprite,
-					characterBody,
-					AccessoryContainer(accessories = accessories),
-				) + additional
-			)
-		)
-	}
-}
-
 fun getRandomizedSpawnOffset(dice: Dice) =
 	Vector3(
 		dice.getFloat(-0.1f, 0.1f),
@@ -291,29 +246,66 @@ fun getRandomizedSpawnOffset(dice: Dice) =
 		dice.getFloat(-0.1f, 0.1f)
 	)
 
-fun spawnCharacter(
+fun newCharacter(
+	definition: CharacterDefinition,
+	accessories: Table<Accessory>,
+	name: String = definition.name,
+	relationships: Relationships = listOf(),
+) = Character(
+	definition = definition,
+	name = name,
+	destructible = Destructible(
+		health = if (getDebugBoolean("HALF_HEALTH")) definition.health / 2 else definition.health,
+		maxHealth = definition.health,
+		drainDuration = healthTimeDrainDuration,
+	),
+	relationships = relationships,
+	depiction = definition.depiction,
+	frame = definition.frame,
+	activeAccessories = initializeActiveAccessories(accessories),
+)
+
+fun newCharacterAndAccessories(
+	definitions: Definitions,
+	definition: CharacterDefinition,
+	nextId: NextId,
+	accessories: Table<Accessory>? = null,
+	name: String?,
+	relationships: Relationships = listOf(),
+): Pair<Character, Table<Accessory>> {
+	val accessories2 = accessories ?: newCharacterAccessories(definitions, nextId, definition.accessories)
+	val character = newCharacter(definition, accessories2, name ?: definition.name, relationships = relationships)
+	return character to accessories2
+}
+
+fun newCharacterAndAccessories(
+	world: PreWorld,
+	type: Key,
+	accessories: Table<Accessory>? = null,
+	name: String?,
+	relationships: Relationships = listOf(),
+): Pair<Character, Table<Accessory>> {
+	val definitions = world.definitions
+	val definition = definitions.characters[type]!!
+	val nextId = world.nextId.source()
+	return newCharacterAndAccessories(definitions, definition, nextId, accessories, name, relationships)
+}
+
+fun spawnCharacterBody(
 	world: PreWorld,
 	scene: PackedScene,
+	actor: Id,
+	character: Character,
 	transform: Transform,
-	type: String,
-	relationships: Relationships = listOf(),
-	name: String? = null,
-	id: Id? = null,
-	accessories: Table<Accessory>? = null,
-	additional: List<Any> = listOf()
-): Hands {
-	val definitions = world.definitions
-	val definition = definitions.characters[type] ?: return listOf()
-	val nextId = world.nextId.source()
-	val actor = id ?: nextId()
-
-	println("*** ${type}")
+): CharacterBody? {
 	val body: CharacterBody = try {
 		val node = scene.instance()
 		node as? CharacterBody
 	} catch (e: Throwable) {
 		throw Error("Error instantiating character scene")
-	} ?: return listOf()
+	} ?: return null
+
+	val definition = character.definition
 
 	body.actor = actor
 	body.globalTransform = transform
@@ -324,16 +316,69 @@ fun spawnCharacter(
 	// Godot does not call _ready until the node is added to the scene tree
 	world.scene.addChild(body as Node)
 
-	val accessories2 = accessories ?: newCharacterAccessories(definitions, nextId, definition.accessories)
+	val sprite = body.findNode("sprite") as AnimatedSprite3D
+	sprite.animation = character.depiction
+	sprite.frame = character.frame.toLong()
+	if (character.depiction == "medium") {
+		sprite.pixelSize = 0.05
+	}
 
-	return addCharacter(
-		definitions, definition, actor, nextId, body,
-		name ?: definition.name, relationships, accessories2, additional
-	)
+	return body
+}
+
+fun newCharacterHands(
+	id: Id,
+	character: Character,
+	accessories: Table<Accessory>,
+	additional: List<Any> = listOf()
+): Hands {
+	return tempCatch {
+
+		listOf(
+			Hand(
+				id = id,
+				components = listOfNotNull(
+					character,
+					AccessoryContainer(accessories = accessories),
+				) + additional
+			)
+		)
+	}
+}
+
+fun spawnCharacterWithBody(
+	world: PreWorld,
+	scene: PackedScene,
+	transform: Transform,
+	type: String,
+	relationships: Relationships = listOf(),
+	name: String? = null,
+	id: Id? = null,
+	accessories: Table<Accessory>? = null,
+	additional: List<Any> = listOf()
+): Hands {
+	val (character, accessories2) = newCharacterAndAccessories(world, type, accessories, name, relationships)
+	val actor = id ?: world.nextId.source()()
+	val body = spawnCharacterBody(world, scene, actor, character, transform) ?: return listOf()
+	return newCharacterHands(actor, character, accessories2, additional + body)
+}
+
+fun spawnCharacterWithoutBody(
+	world: PreWorld,
+	type: String,
+	relationships: Relationships = listOf(),
+	name: String? = null,
+	id: Id? = null,
+	accessories: Table<Accessory>? = null,
+	additional: List<Any> = listOf()
+): Hands {
+	val (character, accessories2) = newCharacterAndAccessories(world, type, accessories, name, relationships)
+	val actor = id ?: world.nextId.source()()
+	return newCharacterHands(actor, character, accessories2, additional)
 }
 
 fun getAiBodyScene() =
-	GD.load<PackedScene>("res://entities/actor/ActorBodyCapsuleRigid.tscn")!!
+	GD.load<PackedScene>("res://entities/actor/ActorBodyCapsule.tscn")!!
 
 fun spawnAiCharacter(
 	world: PreWorld,
@@ -344,7 +389,7 @@ fun spawnAiCharacter(
 	id: Id? = null,
 	additional: List<Any> = listOf()
 ): Hands =
-	spawnCharacter(world, getAiBodyScene(), transform, type, relationships, name, id, additional = additional)
+	spawnCharacterWithBody(world, getAiBodyScene(), transform, type, relationships, name, id, additional = additional)
 
 fun getCharacterGroupRelationships(deck: Deck, character: Character): Collection<Relationship> =
 	character.relationships

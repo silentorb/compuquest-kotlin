@@ -6,6 +6,7 @@ object Commands {
   val interact = "interact"
   val finishInteraction = "finishInteraction"
   val menuBack = "back"
+  val forceMenuBack = "forceMenuBack"
   val activate = "activate"
 //  val manageMembers = "manageMembers"
 //  val manageQuests = "manageQuests"
