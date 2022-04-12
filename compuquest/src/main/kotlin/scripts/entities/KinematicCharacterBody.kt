@@ -1,5 +1,8 @@
 package scripts.entities
 
+import compuquest.clienting.audio.SpatialSound
+import compuquest.clienting.audio.playSound
+import compuquest.definition.Sounds
 import compuquest.simulation.characters.Character
 import compuquest.simulation.characters.getOwnerAccessory
 import compuquest.simulation.input.PlayerInput
@@ -21,6 +24,7 @@ import silentorb.mythic.ent.emptyId
 import silentorb.mythic.godoting.getCollisionShapeRadius
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 @RegisterClass
 class KinematicCharacterBody : KinematicBody(), CharacterBody {
@@ -163,9 +167,17 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 
 	fun walk(input: PlayerInput, direction: Vector3, delta: Float) {
 		if (isOnFloor()) {
-			if (velocity.y < 0f)
-				velocity.y = 0.0
+			if (velocity.y < 0f) {
+				if (velocity.y < -4f) {
 
+					Global.addEvent(playSound(SpatialSound(
+						name = Sounds.feetLanding,
+						location = globalTransform.origin,
+						gain = min(1f, -velocity.y.toFloat() / 6f),
+					)))
+				}
+				velocity.y = 0.0
+			}
 			if (input.mobilityAction) {
 				velocity.y = jumpHeight.toDouble()
 				snap = Vector3.ZERO

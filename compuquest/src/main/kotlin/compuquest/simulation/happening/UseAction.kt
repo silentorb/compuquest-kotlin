@@ -1,9 +1,13 @@
 package compuquest.simulation.happening
 
+import compuquest.clienting.audio.SpatialSound
+import compuquest.clienting.audio.playSound
 import compuquest.simulation.characters.*
 import compuquest.simulation.combat.*
+import compuquest.simulation.general.Deck
 import compuquest.simulation.general.World
 import compuquest.simulation.general.deleteEntityCommand
+import godot.core.Vector3
 import silentorb.mythic.ent.Id
 import silentorb.mythic.happening.Event
 import silentorb.mythic.happening.Events
@@ -53,6 +57,26 @@ fun applyAccessoryEffect(
 	}
 }
 
+fun playAccessoryEffectSound(deck: Deck, actor: Id, effect: AccessoryEffect): Events {
+	val sound = effect.sound
+	return if (sound != null) {
+		val location = getToolTransform(deck, actor)
+		if (location != null) {
+			listOf(
+				playSound(
+					SpatialSound(
+						name = sound,
+						location = location.origin,
+//						parent = projectile,
+					)
+				)
+			)
+		} else
+			listOf()
+	} else
+		listOf()
+}
+
 fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor, event ->
 	val deck = world.deck
 	val action = event.action
@@ -71,7 +95,8 @@ fun eventsFromTryAction(world: World): (Id, TryActionEvent) -> Events = { actor,
 
 		val effectEvents = accessory.definition.actionEffects
 			.flatMap { effect ->
-				applyAccessoryEffect(world, actor, targetEntity, accessory, effect)
+				applyAccessoryEffect(world, actor, targetEntity, accessory, effect) +
+						playAccessoryEffectSound(deck, actor, effect)
 			}
 		val cost = definition.cost
 //  val paymentEvents = if (cost.isNotEmpty())

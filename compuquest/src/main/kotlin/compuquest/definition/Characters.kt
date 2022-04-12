@@ -60,16 +60,19 @@ object CharacterDefinitions {
 		),
 		depiction = "skeleton",
 		health = 50,
+		speed = 5f,
 		accessories = listOf(
 			Accessories.fireStaff,
 		),
 		personality = Personality(
 			roaming = Roaming.roamWhenAlerted,
 		),
+		sounds = CommonCharacterSounds.skeleton,
 	)
 
 	val skeletonAssassin = CharacterDefinition(
 		key = Characters.skeletonAssassin,
+		speed = 8f,
 		proficiencies = mapOf(
 			Proficiencies.closeCombat to 1,
 			Proficiencies.cunning to 1,
@@ -84,6 +87,7 @@ object CharacterDefinitions {
 		personality = Personality(
 			roaming = Roaming.roamWhenAlerted,
 		),
+		sounds = CommonCharacterSounds.skeleton,
 	)
 
 	val skeletonSage = CharacterDefinition(
@@ -98,6 +102,7 @@ object CharacterDefinitions {
 		accessories = listOf(
 			Accessories.summonSquid,
 		),
+		sounds = CommonCharacterSounds.skeleton,
 	)
 
 	val viking = CharacterDefinition(

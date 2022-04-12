@@ -205,6 +205,7 @@ class Global : Node() {
 			val clientEvents = serverEventsFromClient(nextClient, world, eventsForClient)
 			for (hud in huds) {
 				hud.updateMenus(nextClient)
+				hud.updateHud()
 			}
 
 			updateButtonPressHistory()

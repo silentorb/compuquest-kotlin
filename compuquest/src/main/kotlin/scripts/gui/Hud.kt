@@ -108,7 +108,7 @@ class Hud : Control() {
 		}
 	}
 
-	 fun updateHud() {
+	fun updateHud() {
 		tempCatch {
 			val client = Global.instance?.client
 			val world = Global.world
@@ -135,12 +135,20 @@ class Hud : Control() {
 
 			if (deck != null) {
 				val utilityAccessory = getAccessoryInSlot(deck, actor, AccessorySlot.utility)
-				utilityFrame = if (utilityAccessory != null)
-					if (canUse(utilityAccessory))
-						utilityAccessory.definition.equippedFrame
+				utilityFrame = if (utilityAccessory != null) {
+					val rawEquippedFrame = utilityAccessory.definition.equippedFrame
+					val equippedFrame = if (rawEquippedFrame == -1)
+						22
 					else
-						utilityAccessory.definition.equippedFrame + 1
-				else
+						rawEquippedFrame
+
+					val adjustment = if (canUse(utilityAccessory))
+						0
+					else
+						1
+
+					equippedFrame + adjustment
+				} else
 					-1
 			}
 		}

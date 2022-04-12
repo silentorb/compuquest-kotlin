@@ -74,16 +74,6 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 					)
 				)
 			),
-			if (sound != null)
-				playSound(
-					SpatialSound(
-						name = sound,
-						location = transform.origin,
-//						parent = projectile,
-					)
-				)
-			else
-				null
 		)
 	}
 }

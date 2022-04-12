@@ -1,5 +1,7 @@
 package compuquest.simulation.characters
 
+import compuquest.clienting.audio.SpatialSound
+import compuquest.clienting.audio.playSound
 import compuquest.simulation.combat.Destructible
 import compuquest.simulation.combat.updateDestructible
 import compuquest.simulation.definition.Definitions
@@ -24,6 +26,10 @@ import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.randomly.Dice
 import silentorb.mythic.timing.newTimer
 
+data class CharacterSounds(
+	val death: Key? = null,
+)
+
 data class CharacterDefinition(
 	val key: Key,
 	val name: String = key,
@@ -35,6 +41,7 @@ data class CharacterDefinition(
 	val personality: Personality? = null,
 	val speed: Float = 10f,
 	val proficiencies: ProficiencyLevels = mapOf(),
+	val sounds: CharacterSounds = CharacterSounds(),
 )
 
 typealias SlotAssignments = Map<AccessorySlot, Id>
@@ -91,9 +98,25 @@ fun canUse(accessory: Accessory): Boolean {
 fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, character ->
 	val deck = previous.deck
 	val a = deck.characters[actor]
-	if (a?.isAlive == true && !character.isAlive && !deck.players.containsKey(actor))
-		listOf(newHandEvent(Hand(id = actor, components = listOf(newTimer(10f)))))
-	else
+	if (a?.isAlive == true && !character.isAlive) {
+		val deathSound = character.definition.sounds.death
+		val body = deck.bodies[actor]
+		listOfNotNull(
+			if (!deck.players.containsKey(actor))
+				newHandEvent(Hand(id = actor, components = listOf(newTimer(10f))))
+			else
+				null,
+			if (deathSound != null && body != null)
+				playSound(
+					SpatialSound(
+						name = deathSound,
+						location = body.globalTransform.origin,
+					)
+				)
+			else
+				null
+		)
+	} else
 		listOf()
 }
 

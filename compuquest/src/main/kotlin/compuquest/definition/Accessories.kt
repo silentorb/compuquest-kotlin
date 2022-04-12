@@ -135,6 +135,7 @@ object AccessoryDefinitions {
 				proficiencies = setOf(Proficiencies.cunning),
 				buff = Accessories.invisible,
 				duration = 4f,
+				sound = Sounds.vanish,
 			),
 			AccessoryEffect(
 				type = AccessoryEffects.equipPrevious,
@@ -197,8 +198,9 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
+				sound = Sounds.swishAttack,
 			),
-		)
+		),
 	)
 
 	val summonFox = AccessoryDefinition(
@@ -270,6 +272,7 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
+				sound = Sounds.swishAttack,
 			),
 		)
 	)
