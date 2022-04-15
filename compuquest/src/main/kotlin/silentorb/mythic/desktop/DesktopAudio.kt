@@ -89,6 +89,7 @@ class DesktopAudio : PlatformAudio {
 
 			val alcCapabilities: ALCCapabilities = ALC.createCapabilities(device)
 			val alCapabilities: ALCapabilities = AL.createCapabilities(alcCapabilities)
+			alDopplerFactor(0f)
 			val sourceBuffer = IntArray(sourceCount)
 			alGenSources(sourceBuffer)
 			sources.addAll(sourceBuffer.toTypedArray())

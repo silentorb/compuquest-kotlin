@@ -7,7 +7,10 @@ import compuquest.simulation.general.World
 import godot.core.Transform
 import silentorb.mythic.audio.*
 import silentorb.mythic.ent.*
+import silentorb.mythic.platforming.LoadSoundResult
 import silentorb.mythic.platforming.PlatformAudio
+import java.nio.file.Files
+import java.nio.file.Path
 
 const val maxSoundDistance: Float = 30f
 
@@ -35,8 +38,15 @@ fun updateAudioStateSounds(
 		state
 }
 
-fun loadAudioResource(audio: PlatformAudio, name: String) =
-	audio.loadSound("assets/audio/prototype/$name.ogg")
+fun loadAudioResource(audio: PlatformAudio, name: String): LoadSoundResult {
+	val defaultPath = "assets/audio/effects/$name.ogg"
+	val filePath = if (Files.exists(Path.of(defaultPath)))
+		defaultPath
+		else
+		"assets/audio/prototype/$name.ogg"
+
+	return audio.loadSound(filePath)
+}
 //audio.loadSound(getResourceUrl("audio/$name.ogg")!!.file.drop(1))
 
 fun loadSounds(audio: PlatformAudio): SoundLibrary =

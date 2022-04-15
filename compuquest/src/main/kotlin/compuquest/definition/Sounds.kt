@@ -5,7 +5,9 @@ import compuquest.simulation.characters.CharacterSounds
 
 object Sounds {
 	val feetLanding = "feetLanding"
+	val grenadeLaunch = "grenadeLaunch"
 	val iceWall = "iceWall"
+	val metalBounce = "metalBounce"
 	val playerHurt = "playerHurt"
 	val shootEnergy = "shootEnergy"
 	val shootFire = "shootFire"

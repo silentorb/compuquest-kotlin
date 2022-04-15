@@ -179,6 +179,7 @@ object AccessoryDefinitions {
 				speed = 30f,
 				spawnOnEnd = "res://entities/effect/Explosion.tscn",
 				transform = Transform().translated(Vector3(0, 0, -1)).rotated(Vector3.RIGHT, PI / 5),
+				sound = SoundDefinition(Sounds.grenadeLaunch),
 			),
 		)
 	)
