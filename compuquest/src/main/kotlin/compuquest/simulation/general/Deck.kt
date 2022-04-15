@@ -7,6 +7,7 @@ import compuquest.simulation.intellect.Spirit
 import compuquest.simulation.intellect.navigation.NavigationDirection
 import compuquest.simulation.updating.extractComponents
 import godot.Spatial
+import silentorb.mythic.audio.Sound
 import silentorb.mythic.ent.NextId
 import silentorb.mythic.ent.Table
 import silentorb.mythic.ent.genericRemoveEntities
@@ -26,6 +27,7 @@ data class Deck(
 	val navigationDirections: Table<NavigationDirection> = mapOf(),
 	val players: Table<Player> = mapOf(),
 	val quests: Table<Quest> = mapOf(),
+	val sounds: Table<Sound> = mapOf(),
 	val spirits: Table<Spirit> = mapOf(),
 	val timers: Table<IntTimer> = mapOf(),
 	val wares: Table<Ware> = mapOf(),
@@ -49,6 +51,7 @@ fun allIdHandsToDeck(idHands: List<Hand>, deck: Deck): Deck {
 		navigationDirections = deck.navigationDirections + extractComponents(idHands),
 		players = deck.players + extractComponents(idHands),
 		quests = deck.quests + extractComponents(idHands),
+		sounds = deck.sounds + extractComponents(idHands),
 		spirits = deck.spirits + extractComponents(idHands),
 		timers = deck.timers + extractComponents(idHands),
 		wares = deck.wares + extractComponents(idHands),

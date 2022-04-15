@@ -1,13 +1,16 @@
 package compuquest.simulation.combat
 
-import compuquest.clienting.audio.SpatialSound
-import compuquest.clienting.audio.playSound
 import compuquest.simulation.characters.Accessory
 import compuquest.simulation.characters.AccessoryEffect
 import compuquest.simulation.characters.noDuration
-import compuquest.simulation.general.*
+import compuquest.simulation.general.Hand
 import compuquest.simulation.general.World
-import godot.*
+import compuquest.simulation.general.deleteEntityCommand
+import compuquest.simulation.general.newHandEvent
+import godot.Area
+import godot.CollisionShape
+import godot.RigidBody
+import godot.Spatial
 import godot.core.VariantArray
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
@@ -49,8 +52,6 @@ fun missileAttack(world: World, actor: Id, weapon: Accessory, targetLocation: Ve
 			getCollisionShapeRadius(shape)
 		else
 			0f
-
-		val sound = effect.sound
 
 		if (!isSelfPropelled) {
 			(projectile as RigidBody).linearVelocity = velocity

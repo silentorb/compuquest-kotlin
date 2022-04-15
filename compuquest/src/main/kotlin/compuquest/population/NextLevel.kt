@@ -6,6 +6,7 @@ import compuquest.simulation.characters.copyEntity
 import compuquest.simulation.combat.restoreFullHealth
 import compuquest.simulation.general.*
 import compuquest.simulation.updating.attachBodiesToScene
+import godot.AudioStreamPlayer3D
 import godot.Node
 import scripts.entities.PlayerSpawner
 
@@ -67,7 +68,7 @@ fun nextLevel(world: World, materials: MaterialMap): World {
 	val deck = allHandsToDeck(nextId, playerHands, persistDeck(world.deck))
 
 	for (child in scene.getChildren().filterIsInstance<Node>()) {
-		if (!deck.bodies.containsValue(child)) {
+		if (!deck.bodies.containsValue(child) && child !is AudioStreamPlayer3D) {
 			scene.removeChild(child)
 			child.queueFree()
 		}

@@ -20,6 +20,15 @@ dependencies {
   api(group = "org.recast4j", name = "recast", version = "1.5.2")
   api(group = "org.recast4j", name = "detour", version = "1.5.2")
   api(group = "org.recast4j", name = "detour-crowd", version = "1.5.2")
+
+  api("org.lwjgl:lwjgl:3.3.1")
+  runtimeOnly("org.lwjgl:lwjgl:3.3.1:natives-windows")
+  implementation("org.lwjgl:lwjgl-glfw:3.3.1")
+  runtimeOnly("org.lwjgl:lwjgl-glfw:3.3.1:natives-windows")
+  implementation("org.lwjgl:lwjgl-stb:3.3.1")
+  runtimeOnly("org.lwjgl:lwjgl-stb:3.3.1:natives-windows")
+  implementation("org.lwjgl:lwjgl-openal:3.3.1")
+  runtimeOnly("org.lwjgl:lwjgl-openal:3.3.1:natives-windows")
 }
 //kotlin.sourceSets.main {
 ////    kotlin.srcDirs("../godot/scripts")

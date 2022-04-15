@@ -1,5 +1,6 @@
 package compuquest.definition
 
+import compuquest.clienting.audio.SoundDefinition
 import compuquest.simulation.characters.*
 import compuquest.simulation.combat.damagesOf
 import godot.core.Transform
@@ -39,6 +40,7 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
+				sound = SoundDefinition(Sounds.swishAttack),
 			),
 		),
 		description = DevText("Deals damage"),
@@ -74,7 +76,7 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/EnergyBall.tscn",
 				speed = 60f,
-				sound = Sounds.shootEnergy,
+				sound = SoundDefinition(Sounds.shootEnergy, 0.3f),
 			),
 		)
 	)
@@ -125,7 +127,7 @@ object AccessoryDefinitions {
 	val invisibility = AccessoryDefinition(
 		key = Accessories.invisibility,
 		slot = AccessorySlot.utility,
-		cooldown = 3f,
+		cooldown = 4f,
 		equippedFrame = EquipmentFrames.invisibility,
 		cooldownDelayEffect = Accessories.invisible,
 		actionEffects = listOf(
@@ -134,8 +136,8 @@ object AccessoryDefinitions {
 				recipient = EffectRecipient.self,
 				proficiencies = setOf(Proficiencies.cunning),
 				buff = Accessories.invisible,
-				duration = 4f,
-				sound = Sounds.vanish,
+				duration = 5f,
+				sound = SoundDefinition(Sounds.vanish),
 			),
 			AccessoryEffect(
 				type = AccessoryEffects.equipPrevious,
@@ -198,7 +200,7 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
-				sound = Sounds.swishAttack,
+				sound = SoundDefinition(Sounds.swishAttack),
 			),
 		),
 	)
@@ -217,6 +219,7 @@ object AccessoryDefinitions {
 				spawnsCharacter = Characters.fox,
 				duration = 19f,
 				transform = summonOffset,
+				sound = SoundDefinition(Sounds.summon),
 			),
 		)
 	)
@@ -234,6 +237,7 @@ object AccessoryDefinitions {
 				spawnsScene = "res://entities/actor/IceWall.tscn",
 				duration = 5f,
 				transform = summonOffset,
+				sound = SoundDefinition(Sounds.iceWall),
 			),
 		)
 	)
@@ -252,6 +256,7 @@ object AccessoryDefinitions {
 				spawnsCharacter = Characters.squid,
 				duration = 14f,
 				transform = summonOffset,
+				sound = SoundDefinition(Sounds.summon),
 			),
 		)
 	)
@@ -272,11 +277,10 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/Bite.tscn",
 				speed = 15f,
-				sound = Sounds.swishAttack,
+				sound = SoundDefinition(Sounds.swishAttack),
 			),
 		)
 	)
-
 }
 
 object PassiveDefinitions {
@@ -326,6 +330,7 @@ object AiOnlyAccessories {
 				),
 				spawnsScene = "res://entities/effect/Fireball.tscn",
 				speed = 20f,
+				sound = SoundDefinition(Sounds.shootFire),
 			),
 		)
 	)

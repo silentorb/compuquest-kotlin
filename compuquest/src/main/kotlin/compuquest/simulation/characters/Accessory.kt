@@ -1,5 +1,6 @@
 package compuquest.simulation.characters
 
+import compuquest.clienting.audio.SoundDefinition
 import compuquest.clienting.gui.camelCaseToTitle
 import compuquest.simulation.combat.DamageDefinitions
 import compuquest.simulation.definition.Definitions
@@ -59,7 +60,7 @@ data class AccessoryEffect(
 	val recipient: EffectRecipient,
 	val transform: Transform? = null,
 	val range: Float = 0f,
-	val sound: Key? = null,
+	val sound: SoundDefinition? = null,
 	val spawnOnEnd: String = "",
 ) {
 	val durationInt: Int get() = floatToIntTime(duration)

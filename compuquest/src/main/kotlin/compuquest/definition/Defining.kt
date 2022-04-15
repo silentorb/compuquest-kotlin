@@ -3,6 +3,7 @@ package compuquest.definition
 import compuquest.simulation.characters.AccessoryDefinition
 import compuquest.simulation.characters.CharacterDefinition
 import compuquest.simulation.definition.Definitions
+import silentorb.mythic.audio.SoundLibrary
 import silentorb.mythic.ent.KeyTable
 import silentorb.mythic.ent.reflectProperties
 
@@ -32,8 +33,9 @@ fun accessoryDefinitions(): KeyTable<AccessoryDefinition> =
 			reflectAccessoryDefinitions(PassiveDefinitions) +
 			getBuffDefinitions()
 
-fun newDefinitions() =
+fun newDefinitions(soundLibrary: SoundLibrary) =
 	Definitions(
 		accessories = accessoryDefinitions(),
 		characters = staticCharacterDefinitions,
+		soundDurations = soundLibrary.mapValues { it.value.duration },
 	)

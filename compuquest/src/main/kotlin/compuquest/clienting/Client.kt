@@ -1,22 +1,24 @@
 package compuquest.clienting
 
 import compuquest.clienting.audio.AudioPlayerPool
+import compuquest.clienting.audio.loadSounds
 import compuquest.clienting.audio.updateAudio
+import compuquest.clienting.audio.updateClientAudio
 import compuquest.clienting.gui.*
 import compuquest.clienting.input.*
 import compuquest.clienting.multiplayer.*
 import compuquest.population.MaterialMap
 import compuquest.simulation.general.World
 import compuquest.simulation.input.PlayerInputs
-import scripts.Global
+import silentorb.mythic.audio.AudioState
+import silentorb.mythic.audio.SoundLibrary
+import silentorb.mythic.audio.newAudioState
+import silentorb.mythic.desktop.DesktopAudio
 import silentorb.mythic.ent.HashedMap
 import silentorb.mythic.ent.Id
 import silentorb.mythic.haft.*
 import silentorb.mythic.happening.Events
-
-data class PlayerGui(
-	val menuStack: MenuStack = listOf(),
-)
+import silentorb.mythic.platforming.PlatformAudio
 
 data class Client(
 	val menuStacks: MenuStacks = mapOf(),
@@ -30,11 +32,17 @@ data class Client(
 	val engagedAccessories: Map<Id, Id> = mapOf(), // Contains the ids of each player who has used their active accessory since last selected
 	val audioPool: AudioPlayerPool = AudioPlayerPool(),
 	val characterCreationStates: Map<Id, CharacterCreation> = mapOf(),
+	val platformAudio: PlatformAudio,
+	val audio: AudioState,
+	val soundLibrary: SoundLibrary,
 )
 
 fun newClient(): Client {
 	val serializedOptions = loadOptions()
 	val profiles = serializedOptions.input.profiles
+	val platformAudio = DesktopAudio()
+	platformAudio.start(50)
+	val soundLibrary = loadSounds(platformAudio)
 	return Client(
 		input = InputState(
 			profileOptions = HashedMap.from(profiles),
@@ -46,6 +54,9 @@ fun newClient(): Client {
 			display = serializedOptions.display,
 			ui = serializedOptions.ui,
 		),
+		platformAudio = platformAudio,
+		audio = newAudioState(1f),
+		soundLibrary = soundLibrary,
 	)
 }
 
@@ -56,7 +67,8 @@ fun restartClient(client: Client) =
 		viewports = listOf(),
 	)
 
-fun updateClientWithWorld(world: World, events: Events, delta: Float, client: Client): Client {
+fun updateClientWithWorld(worlds: List<World>, events: Events, delta: Float, client: Client): Client {
+	val world = worlds.last()
 	val deck = world.deck
 	val players = updateClientPlayers(events, client.players)
 	val playerMap = updatePlayerMap(deck, players)
@@ -82,7 +94,8 @@ fun updateClientWithWorld(world: World, events: Events, delta: Float, client: Cl
 
 	syncGodotUiEvents(playerMap, client.menuStacks, input)
 	updateCustomInputHandlers(playerMap, client.menuStacks, input)
-	updateAudio(world.scene, client.audioPool, world.previousEvents)
+//	updateAudio(client.soundCache, world.scene, client.audioPool, world.previousEvents)
+	val audio = updateClientAudio(client, worlds, client.audio)
 
 	// updating menuStacks is one of the last steps to make sure the rest of the client code
 	// is considering the current menu and not the next menu that hasn't been displayed yet
@@ -97,12 +110,13 @@ fun updateClientWithWorld(world: World, events: Events, delta: Float, client: Cl
 		viewports = updateSplitScreenViewports(world, playerMap, client.viewports),
 		engagedAccessories = populatedEngagedAccessories,
 		characterCreationStates = characterCreationStates,
+		audio = audio,
 	)
 }
 
-fun updateClient(world: World?, events: Events, delta: Float, client: Client): Client =
-	if (world != null)
-		updateClientWithWorld(world, events, delta, client)
+fun updateClient(worlds: List<World>, events: Events, delta: Float, client: Client): Client =
+	if (worlds.any())
+		updateClientWithWorld(worlds, events, delta, client)
 	else
 		client
 
@@ -116,3 +130,9 @@ fun serverEventsFromClient(client: Client, world: World?, events: Events): Event
 
 fun isPrimaryPlayer(playerMap: PlayerMap, player: Id): Boolean =
 	playerMap[player] == 0
+
+fun cleanupClient(client: Client) {
+	client.materials.clear()
+	client.viewports.forEach { it.rigCamera?.queueFree() }
+	client.audioPool.players.clear()
+}

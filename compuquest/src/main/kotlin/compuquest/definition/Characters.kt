@@ -150,6 +150,7 @@ object PlayerProfessionDefinitions {
 			Accessories.heal,
 			Accessories.summonSquid,
 		),
+		sounds = CommonCharacterSounds.player,
 	)
 
 	val marine = CharacterDefinition(
@@ -166,6 +167,7 @@ object PlayerProfessionDefinitions {
 			Accessories.energyStaff,
 			Accessories.grenade,
 		),
+		sounds = CommonCharacterSounds.player,
 	)
 
 	val ninja = CharacterDefinition(
@@ -183,6 +185,7 @@ object PlayerProfessionDefinitions {
 			Accessories.sai,
 			Accessories.invisibility,
 		),
+		sounds = CommonCharacterSounds.player,
 	)
 
 	val viking = CharacterDefinition(
@@ -197,6 +200,7 @@ object PlayerProfessionDefinitions {
 			Accessories.sword,
 			Accessories.summonFox,
 		),
+		sounds = CommonCharacterSounds.player,
 	)
 
 	val wizard = CharacterDefinition(
@@ -212,5 +216,6 @@ object PlayerProfessionDefinitions {
 			Accessories.mortar,
 			Accessories.summonIceWall,
 		),
+		sounds = CommonCharacterSounds.player,
 	)
 }

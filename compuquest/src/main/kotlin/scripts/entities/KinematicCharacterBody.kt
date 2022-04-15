@@ -171,9 +171,9 @@ class KinematicCharacterBody : KinematicBody(), CharacterBody {
 				if (velocity.y < -4f) {
 
 					Global.addEvent(playSound(SpatialSound(
-						name = Sounds.feetLanding,
+						type = Sounds.feetLanding,
 						location = globalTransform.origin,
-						gain = min(1f, -velocity.y.toFloat() / 6f),
+						volume = min(1f, -velocity.y.toFloat() / 6f),
 					)))
 				}
 				velocity.y = 0.0

@@ -1,17 +1,26 @@
 package compuquest.definition
 
+import compuquest.clienting.audio.SoundDefinition
 import compuquest.simulation.characters.CharacterSounds
 
 object Sounds {
-	const val feetLanding = "feetLanding"
-	const val shootEnergy = "shootEnergy"
-	const val skeletonDeath = "skeletonDeath"
-	const val swishAttack = "swishAttack"
-	const val vanish = "vanish"
+	val feetLanding = "feetLanding"
+	val iceWall = "iceWall"
+	val playerHurt = "playerHurt"
+	val shootEnergy = "shootEnergy"
+	val shootFire = "shootFire"
+	val skeletonDeath = "skeletonDeath"
+	val summon = "summon"
+	val swishAttack = "swishAttack"
+	val vanish = "vanish"
 }
 
 object CommonCharacterSounds {
 	val skeleton = CharacterSounds(
-		death = Sounds.skeletonDeath,
+		death = SoundDefinition(Sounds.skeletonDeath),
+	)
+	val player = CharacterSounds(
+		death = SoundDefinition(Sounds.skeletonDeath),
+		injured = SoundDefinition(Sounds.playerHurt, 0.5f),
 	)
 }

@@ -62,15 +62,7 @@ fun playAccessoryEffectSound(deck: Deck, actor: Id, effect: AccessoryEffect): Ev
 	return if (sound != null) {
 		val location = getToolTransform(deck, actor)
 		if (location != null) {
-			listOf(
-				playSound(
-					SpatialSound(
-						name = sound,
-						location = location.origin,
-//						parent = projectile,
-					)
-				)
-			)
+			listOf(playSound(sound, location.origin))
 		} else
 			listOf()
 	} else

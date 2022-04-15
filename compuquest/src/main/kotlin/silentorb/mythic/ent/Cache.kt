@@ -18,26 +18,53 @@ fun <I, O> functionCache(func: (I) -> O): (I) -> O {
 	}
 }
 
-fun <Key, Value> mappedCache(limit: Int, source: (Key) -> Value): (Key) -> Value {
-	val cache: MutableMap<Key, Value> = mutableMapOf()
-	return { key ->
-		val existing = cache[key]
-		if (existing != null)
-			existing
-		else {
-			if (limit > 0 && cache.size >= limit) {
-				cache.entries
-					.take(limit / 10)
-					.forEach { cache.remove(it.key) }
-			}
-			val newEntry = source(key)
-			cache[key] = newEntry
-			newEntry
+fun <Key, Value> nullableMappedCache(
+	cache: MutableMap<Key, Value>,
+	limit: Int,
+	key: Key,
+	source: (Key) -> Value?
+): Value? {
+	val existing = cache[key]
+	return if (existing != null)
+		existing
+	else {
+		if (limit > 0 && cache.size >= limit) {
+			cache.entries
+				.take(limit / 10)
+				.forEach { cache.remove(it.key) }
 		}
+		val newEntry = source(key)
+		if (newEntry != null) {
+			cache[key] = newEntry
+		}
+		newEntry
 	}
 }
 
-fun <Key, Value> mappedCache(source: (Key) -> Value,): (Key) -> Value =
+fun <Key, Value> mappedCache(cache: MutableMap<Key, Value>, limit: Int, key: Key, source: (Key) -> Value): Value {
+	val existing = cache[key]
+	return if (existing != null)
+		existing
+	else {
+		if (limit > 0 && cache.size >= limit) {
+			cache.entries
+				.take(limit / 10)
+				.forEach { cache.remove(it.key) }
+		}
+		val newEntry = source(key)
+		cache[key] = newEntry
+		newEntry
+	}
+}
+
+fun <Key, Value> mappedCache(limit: Int, source: (Key) -> Value): (Key) -> Value {
+	val cache: MutableMap<Key, Value> = mutableMapOf()
+	return { key ->
+		mappedCache(cache, limit, key, source)
+	}
+}
+
+fun <Key, Value> mappedCache(source: (Key) -> Value): (Key) -> Value =
 	mappedCache(0, source)
 
 // Only stores one value at a time.  Using a different input value overwrites the previously stored output value.

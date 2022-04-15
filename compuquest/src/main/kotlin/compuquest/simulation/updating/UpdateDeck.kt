@@ -5,6 +5,7 @@ import compuquest.simulation.characters.updateContainer
 import compuquest.simulation.combat.updateMissile
 import compuquest.simulation.general.*
 import compuquest.simulation.input.PlayerInputs
+import silentorb.mythic.audio.updateSound
 import silentorb.mythic.ent.mapTable
 import silentorb.mythic.ent.mapTableValues
 import silentorb.mythic.happening.Events
@@ -18,6 +19,7 @@ fun updateDeck(events: Events, world: World, inputs: PlayerInputs, delta: Float)
 		missiles = mapTableValues(deck.missiles, updateMissile()),
 		players = mapTable(deck.players, updatePlayer(world, events)),
 		quests = mapTable(deck.quests, updateQuest(events)),
+		sounds = mapTableValues(deck.sounds, updateSound(delta)),
 		timers = mapTableValues(deck.timers, updateTimer),
 		wares = mapTable(deck.wares, updateWare(events)),
 	)

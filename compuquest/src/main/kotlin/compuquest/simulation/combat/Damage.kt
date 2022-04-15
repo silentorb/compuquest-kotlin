@@ -1,7 +1,8 @@
 package compuquest.simulation.combat
 
+import compuquest.clienting.audio.playSound
 import compuquest.simulation.characters.*
-import compuquest.simulation.general.*
+import compuquest.simulation.general.Deck
 import godot.Node
 import godot.core.Vector3
 import silentorb.mythic.ent.Id
@@ -153,8 +154,15 @@ fun applyDamage(
 	damages: List<Damage>
 ): Events {
 	val damageNodeEvents = getDamageNodeEvents(node, damages)
-	return if (deck.characters.containsKey(target))
-		damageNodeEvents + newDamageEvents(target, damages, null, sourceLocation)
-	else
+	val character = deck.characters[target]
+	return if (character != null) {
+		val injuredSound = character.definition.sounds.injured
+		val location = getToolTransform(deck, target)?.origin
+		damageNodeEvents + newDamageEvents(target, damages, null, sourceLocation) +
+				if (character.hurtSoundTimer == 0 && injuredSound != null && location != null)
+					listOf(playSound(injuredSound, location))
+				else
+					listOf()
+	} else
 		damageNodeEvents
 }

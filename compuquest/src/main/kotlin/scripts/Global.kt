@@ -8,6 +8,7 @@ import compuquest.clienting.input.updateMouseMode
 import compuquest.definition.newDefinitions
 import compuquest.population.nextLevel
 import compuquest.population.nextLevelEvent
+import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.general.Hand
 import compuquest.simulation.general.Scenario
@@ -46,7 +47,7 @@ enum class InitMode {
 @RegisterClass
 class Global : Node() {
 	var worlds: List<World> = listOf()
-	val definitions = newDefinitions()
+	var definitions: Definitions? = null
 	var client: Client? = null
 	var playerMenus: MutableMap<Id, CustomInputHandler> = mutableMapOf()
 	val environments: MutableMap<String, Environment> = mutableMapOf()
@@ -60,11 +61,11 @@ class Global : Node() {
 
 	@RegisterFunction
 	fun getCharacterDepiction(type: String): String =
-		definitions.characters[type]!!.depiction
+		definitions!!.characters[type]!!.depiction
 
 	@RegisterFunction
 	fun getCharacterFrame(type: String): Int =
-		definitions.characters[type]!!.frame
+		definitions!!.characters[type]!!.frame
 
 	companion object {
 		var instance: Global? = null
@@ -190,7 +191,10 @@ class Global : Node() {
 					characterCustomization = getDebugBoolean("CHARACTER_CUSTOMIZATION"),
 					defaultPlayerProfession = getDebugString("DEFAULT_PLAYER_PROFESSION"),
 				)
-				newGame(scene, scenario, definitions, client!!.materials)
+				if (definitions == null) {
+					definitions = newDefinitions(client!!.soundLibrary)
+				}
+				newGame(scene, scenario, definitions!!, client!!.materials)
 			} else
 				null
 		}
@@ -201,7 +205,7 @@ class Global : Node() {
 			val localClient = client ?: newClient()
 			val world = worlds.lastOrNull()
 			val eventsForClient = updateClientEvents()
-			val nextClient = updateClient(world, eventsForClient, delta, localClient)
+			val nextClient = updateClient(worlds, eventsForClient, delta, localClient)
 			val clientEvents = serverEventsFromClient(nextClient, world, eventsForClient)
 			for (hud in huds) {
 				hud.updateMenus(nextClient)
@@ -303,8 +307,9 @@ class Global : Node() {
 	override fun _onDestroy() {
 		// Need to release any references to Godot objects or there will be memory leaks
 		worlds = listOf()
-		client?.materials?.clear()
-		client?.viewports?.forEach { it.rigCamera?.queueFree() }
+		if (client != null)
+			cleanupClient(client!!)
+
 		client = null
 		environments.clear()
 		huds.clear()

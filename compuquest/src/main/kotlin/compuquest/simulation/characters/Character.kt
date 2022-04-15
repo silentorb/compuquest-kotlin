@@ -1,6 +1,6 @@
 package compuquest.simulation.characters
 
-import compuquest.clienting.audio.SpatialSound
+import compuquest.clienting.audio.SoundDefinition
 import compuquest.clienting.audio.playSound
 import compuquest.simulation.combat.Destructible
 import compuquest.simulation.combat.updateDestructible
@@ -25,9 +25,11 @@ import silentorb.mythic.happening.Events
 import silentorb.mythic.happening.handleEvents
 import silentorb.mythic.randomly.Dice
 import silentorb.mythic.timing.newTimer
+import kotlin.math.max
 
 data class CharacterSounds(
-	val death: Key? = null,
+	val death: SoundDefinition? = null,
+	val injured: SoundDefinition? = null,
 )
 
 data class CharacterDefinition(
@@ -58,6 +60,7 @@ data class Character(
 	override val frame: Int = 0,
 	val activeAccessories: SlotAssignments = mapOf(),
 	val previousPrimaryAccessory: Id = emptyId,
+	val hurtSoundTimer: Int = 0,
 ) : SpriteState, Relational {
 	val isAlive: Boolean = isCharacterAlive(health)
 	val health: Int get() = destructible.health
@@ -107,12 +110,7 @@ fun eventsFromCharacter(previous: World): (Id, Character) -> Events = { actor, c
 			else
 				null,
 			if (deathSound != null && body != null)
-				playSound(
-					SpatialSound(
-						name = deathSound,
-						location = body.globalTransform.origin,
-					)
-				)
+				playSound(deathSound, body.globalTransform.origin)
 			else
 				null
 		)
@@ -253,12 +251,18 @@ fun updateCharacter(world: World, inputs: PlayerInputs, events: Events): (Id, Ch
 			else
 				character.previousPrimaryAccessory
 
+		val hurtSoundTimer = if (health < character.health && character.hurtSoundTimer == 0)
+			30
+		else
+			max(0, character.hurtSoundTimer - 1)
+
 		character.copy(
 			destructible = destructible,
 			depiction = depiction,
 			frame = frame,
 			activeAccessories = activeAccessories,
 			previousPrimaryAccessory = previousActiveAccessory,
+			hurtSoundTimer = hurtSoundTimer,
 		)
 	}
 
