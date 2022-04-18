@@ -12,6 +12,8 @@ fun newAudioState(volume: Float) =
 		volume = volume
 	)
 
+// If there is more than one listener, a fixed listener position is used
+// and each sound is translated so that the nearest listener for each sound is it's anchor position
 fun updateSoundPlaying(
 	audio: PlatformAudio,
 	previousSounds: Table<Sound>,
@@ -20,9 +22,14 @@ fun updateSoundPlaying(
 	listenerTransforms: List<Transform>,
 	gain: Float
 ): (SoundMap) -> SoundMap = { soundMap ->
-	if (listenerTransforms.size < 2) {
-		audio.update(gain, listenerTransforms.firstOrNull()?.origin)
-	} else {
+//	if (listenerTransforms.size < 2) {
+	val listenerLocation = if (listenerTransforms.size > 1)
+		Vector3.ZERO
+	else
+		listenerTransforms.firstOrNull()?.origin
+
+	audio.update(gain, listenerLocation)
+//	} else {
 //		val soundLocations = soundMap
 //			.mapNotNull { (id, source) ->
 //				val actualLocation = previousSounds[id]?.location
@@ -41,11 +48,18 @@ fun updateSoundPlaying(
 //			else
 //				null
 //		}
-	}
+//	}
+
 	val newSoundMappings = newSounds
 		.mapNotNull { (id, sound) ->
 			val definition = library[sound.type]!!
-			val position = sound.location ?: Vector3.ZERO
+			val actualLocation = sound.location
+			val position = if (actualLocation != null) {
+				val nearestListener = listenerTransforms.minByOrNull { it.origin.distanceTo(actualLocation) }!!
+				(Transform().translated(actualLocation) * nearestListener).origin
+			} else
+				Vector3.ZERO
+
 			val source = audio.play(definition.buffer, sound.volume, position)
 			if (source == null)
 				null

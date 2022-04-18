@@ -125,7 +125,7 @@ object CharacterDefinitions {
 		),
 		depiction = "sprites",
 		frame = 5,
-		health = 50,
+		health = 40,
 		speed = 5f,
 		accessories = listOf(
 			Accessories.bite,

@@ -47,7 +47,7 @@ fun updateCharacterCreationStates(
 			.mapValues { (actor, creation) ->
 				val actorEvents = events.filter {
 					it.target == actor &&
-							it.type == setCharacterCreationAccessories || it.type == setCharacterCreationProfession
+							(it.type == setCharacterCreationAccessories || it.type == setCharacterCreationProfession)
 				}
 
 				if (actorEvents.any())

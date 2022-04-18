@@ -25,11 +25,18 @@ fun updateAudioStateSounds(
 		val newSounds = nextSounds.filterKeys { !previousSounds.keys.contains(it) }
 			.filterValues { sound ->
 				sound.location == null || listenerTransforms.none() ||
-						listenerTransforms.minOf { it.origin.distanceTo(sound.location) < maxSoundDistance }
+						listenerTransforms.minOf { it.origin.distanceTo(sound.location) } < maxSoundDistance
 			}
 
 		val sounds =
-			updateSoundPlaying(audio, previousSounds, newSounds, client.soundLibrary, listenerTransforms, state.volume)(state.sounds)
+			updateSoundPlaying(
+				audio,
+				previousSounds,
+				newSounds,
+				client.soundLibrary,
+				listenerTransforms,
+				state.volume
+			)(state.sounds)
 
 		state.copy(
 			sounds = sounds
@@ -42,7 +49,7 @@ fun loadAudioResource(audio: PlatformAudio, name: String): LoadSoundResult {
 	val defaultPath = "assets/audio/effects/$name.ogg"
 	val filePath = if (Files.exists(Path.of(defaultPath)))
 		defaultPath
-		else
+	else
 		"assets/audio/prototype/$name.ogg"
 
 	return audio.loadSound(filePath)

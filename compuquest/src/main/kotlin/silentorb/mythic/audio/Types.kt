@@ -21,7 +21,7 @@ typealias SoundMap = Map<Id, SoundBuffer>
 
 data class Sound(
     val type: SoundType,
-    val volume: Float,
+    val volume: Float = 1f,
     val progress: Float = 0f,
     val location: Vector3? = null
 )

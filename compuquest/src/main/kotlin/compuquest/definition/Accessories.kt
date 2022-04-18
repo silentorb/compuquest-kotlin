@@ -76,7 +76,7 @@ object AccessoryDefinitions {
 				),
 				spawnsScene = "res://entities/effect/EnergyBall.tscn",
 				speed = 60f,
-				sound = SoundDefinition(Sounds.shootEnergy, 0.3f),
+				sound = SoundDefinition(Sounds.shootEnergy, 0.4f),
 			),
 		)
 	)
@@ -179,7 +179,7 @@ object AccessoryDefinitions {
 				speed = 30f,
 				spawnOnEnd = "res://entities/effect/Explosion.tscn",
 				transform = Transform().translated(Vector3(0, 0, -1)).rotated(Vector3.RIGHT, PI / 5),
-				sound = SoundDefinition(Sounds.grenadeLaunch),
+				sound = SoundDefinition(Sounds.grenadeLaunch, 0.13f),
 			),
 		)
 	)
@@ -224,6 +224,7 @@ object AccessoryDefinitions {
 			),
 		)
 	)
+
 	val summonIceWall = AccessoryDefinition(
 		key = Accessories.summonIceWall,
 		slot = AccessorySlot.utility,
