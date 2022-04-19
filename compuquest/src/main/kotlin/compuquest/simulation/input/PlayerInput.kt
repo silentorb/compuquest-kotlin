@@ -57,12 +57,9 @@ fun gatherPlayerUseActions(deck: Deck, playerInputs: PlayerInputs): Events =
 		.flatMap { (actor, player) ->
 			val input = playerInputs[actor]
 			if (input != null) {
-				when {
-					input.interact -> getPlayerInteractionEvents(deck, actor, player)
-					input.primaryAction -> getPlayerActionEvents(deck, actor, AccessorySlot.primary)
-					input.utilityAction -> getPlayerActionEvents(deck, actor, AccessorySlot.utility)
-					else -> listOf()
-				}
+				(if (input.interact) getPlayerInteractionEvents(deck, actor, player) else listOf()) +
+						(if (input.primaryAction) getPlayerActionEvents(deck, actor, AccessorySlot.primary) else listOf()) +
+						(if (input.utilityAction) getPlayerActionEvents(deck, actor, AccessorySlot.utility) else listOf())
 			} else
 				listOf()
 		}

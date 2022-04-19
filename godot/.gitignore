@@ -27,3 +27,4 @@ autosave
 
 # Prototype audio files kept separate from the main repos
 assets/audio/prototype
+assets/audio/effects/*.import

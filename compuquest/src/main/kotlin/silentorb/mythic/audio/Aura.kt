@@ -54,11 +54,11 @@ fun updateSoundPlaying(
 		.mapNotNull { (id, sound) ->
 			val definition = library[sound.type]!!
 			val actualLocation = sound.location
-			val position = if (actualLocation != null) {
+			val position = if (listenerTransforms.size > 1 && actualLocation != null) {
 				val nearestListener = listenerTransforms.minByOrNull { it.origin.distanceTo(actualLocation) }!!
 				(Transform().translated(actualLocation) * nearestListener).origin
 			} else
-				Vector3.ZERO
+				actualLocation ?: Vector3.ZERO
 
 			val source = audio.play(definition.buffer, sound.volume, position)
 			if (source == null)
