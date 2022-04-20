@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/clip.png-95666a74e0e12e4ac5a8348d47acb9d6.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/images/tiles/special/clip.png"
+dest_files=[ "res://.import/clip.png-95666a74e0e12e4ac5a8348d47acb9d6.stex" ]
+
+[params]
+
+compress/mode=3
+compress/lossy_quality=0.7
+compress/hdr_mode=1
+compress/bptc_ldr=0
+compress/normal_map=2
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=1
+process/fix_alpha_border=false
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

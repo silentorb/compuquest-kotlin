@@ -23,9 +23,7 @@ fun verticesToMeshInstance(vertexPool: PoolVector3Array, primitive: Long): MeshI
 	return meshInstance
 }
 
-fun generateNavMeshInputVisualization(scene: Node): Node {
-	val collisionObjects = getSceneCollisionObjects(scene)
-	val geometry = collisionObjectsToIntermediateMeshes(collisionObjects)
+fun intermediateMeshToMeshInstance(geometry: List<IntermediateMesh>): MeshInstance {
 	val vertices = PoolVector3Array()
 	for (intermediateMesh in geometry) {
 		for (index in intermediateMesh.triangles) {
@@ -33,6 +31,12 @@ fun generateNavMeshInputVisualization(scene: Node): Node {
 		}
 	}
 	return verticesToMeshInstance(vertices, Mesh.PRIMITIVE_TRIANGLES)
+}
+
+fun generateNavMeshInputVisualization(scene: Node): Node {
+	val collisionObjects = getSceneCollisionObjects(scene)
+	val geometry = collisionObjectsToIntermediateMeshes(collisionObjects)
+	return intermediateMeshToMeshInstance(geometry)
 }
 
 fun generateNavMeshVisualization(navMesh: NavMesh): Node {

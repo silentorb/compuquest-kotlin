@@ -1,9 +1,6 @@
 package compuquest.population
 
-import compuquest.simulation.characters.newCharacter
-import compuquest.simulation.characters.newCharacterAccessories
-import compuquest.simulation.characters.newCharacterAndAccessories
-import compuquest.simulation.characters.newCharacterHands
+import compuquest.simulation.characters.*
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.definition.Factions
 import compuquest.simulation.definition.ResourceType
@@ -15,6 +12,7 @@ import scripts.entities.CharacterBody
 import silentorb.mythic.ent.Id
 import silentorb.mythic.ent.Key
 import silentorb.mythic.ent.NextId
+import silentorb.mythic.ent.Table
 import silentorb.mythic.godoting.*
 
 fun parseFaction(faction: Key?, node: Node): Key {
@@ -46,6 +44,7 @@ fun addQuests(nextId: NextId, client: Id, creature: Resource): Hands =
 
 fun addExistingCharacter(
 	definitions: Definitions,
+	groups: Table<Group>,
 	id: Id,
 	nextId: NextId,
 	node: AttachCharacter,
@@ -55,7 +54,18 @@ fun addExistingCharacter(
 		val parent = node.getParent()
 		val type = node.type
 		val definition = definitions.characters[type] ?: throw Error("Unknown character type: $type")
-		val (character, accessories) = newCharacterAndAccessories(definitions, definition, nextId, name = node.name)
+		val group = groups.entries.firstOrNull { it.value.key == node.faction }
+		val relationships = if (group != null)
+			listOf(
+				Relationship(
+					isA = RelationshipType.member,
+					of = group.key,
+				)
+			)
+		else
+			listOf()
+
+		val (character, accessories) = newCharacterAndAccessories(definitions, definition, nextId, name = node.name, relationships = relationships)
 
 		val body = parent as CharacterBody
 		newCharacterHands(

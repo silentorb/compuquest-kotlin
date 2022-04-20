@@ -5,6 +5,7 @@ import compuquest.definition.sideGroups
 import compuquest.definition.traversableSides
 import compuquest.generation.engine.*
 import compuquest.generation.general.*
+import compuquest.generation.organic.windingPathSimple
 import compuquest.simulation.characters.Group
 import compuquest.simulation.definition.Definitions
 import compuquest.simulation.general.Hands

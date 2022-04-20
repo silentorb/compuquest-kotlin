@@ -127,8 +127,6 @@ fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): Wor
 		generateWorld(world, generationConfig)
 	}
 
-	val attachments = findChildrenOfType<AttachCharacter>(scene)
-
 	val world2 = world.copy(
 		deck = world.deck.copy(
 			groups = world.deck.groups + groups,
@@ -142,10 +140,11 @@ fun processSceneEntities(scene: Node, world: World, materials: MaterialMap): Wor
 	val characterHands = if (getDebugBoolean("NO_MONSTERS"))
 		listOf()
 	else
-		attachments
+		findChildrenOfType<AttachCharacter>(scene)
 			.flatMap { attachment ->
 				addExistingCharacter(
 					definitions,
+					groups,
 					nextId(),
 					nextId,
 					attachment,
