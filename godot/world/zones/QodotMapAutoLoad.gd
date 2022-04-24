@@ -46,9 +46,10 @@ func _physics_process(delta):
 			var _map: QodotMap = get_node(map)
 			var resource_path = _map.map_file			
 			if collision_needs_updating and _map.get_child_count() > 0:
-				var map_root = _map.get_child(0)
 				print("setting collision")
-				map_root.set_collision_layer(18)
+				for body in _map.get_children():
+					if body is CollisionObject:
+						body.set_collision_layer(18)
 				collision_needs_updating = false
 			
 			# Ideally this would be checking the .import file hashes but
